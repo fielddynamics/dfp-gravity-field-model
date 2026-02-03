@@ -2,8 +2,23 @@
 GFD Test Framework
 ==================
 
-All tests inherit from GFDTest and return structured data.
-The Renderer handles all display.
+Drop-in replacement for base.py. All existing tests work unchanged.
+
+New optional properties give each test a complete scientific identity:
+
+    equation          WHAT is being computed
+    parameters        FROM WHAT inputs           (use Param for clean specs)
+    assumptions       UNDER WHAT premises
+    derivation        BY WHAT steps              (original)
+    model()           PRODUCING WHAT result      (original)
+    units             IN WHAT units
+    uncertainty       WITH WHAT confidence
+    observations()    COMPARED TO WHAT           (original)
+    test_type         AS WHAT kind of test        (D/P/C/S/E)
+    prediction_target TESTABLE AGAINST WHAT
+    commentary        MEANING WHAT               (original)
+
+Quick start:
 
     class MyTest(GFDTest):
         name = "MOND Scale"
