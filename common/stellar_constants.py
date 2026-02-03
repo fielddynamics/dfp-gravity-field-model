@@ -81,6 +81,20 @@ TOV_LIMIT = 2.2              # Tolman-Oppenheimer-Volkoff limit (solar masses)
 # Magic numbers - nucleon numbers with exceptional nuclear stability
 MAGIC_NUMBERS = {2, 8, 20, 28, 50, 82, 126}
 
+# Doubly magic nuclei (both proton and neutron numbers are magic)
+DOUBLY_MAGIC = {
+    4: (2, 2),     # He-4
+    16: (8, 8),    # O-16
+    40: (20, 20),  # Ca-40
+    48: (20, 28),  # Ca-48
+    56: (28, 28),  # Ni-56
+    132: (50, 82), # Sn-132
+    208: (82, 126),# Pb-208
+}
+
+# Stable k-multiples (A values that are k-multiples with enhanced stability)
+STABLE_K_MULTIPLES = {4, 8, 12, 16, 20, 24, 28, 32, 40, 56}
+
 # Nuclear binding energy peak
 FE_56_BINDING_ENERGY_PER_NUCLEON = 8.79  # MeV/nucleon (most stable)
 
@@ -140,6 +154,24 @@ def get_k_factor(n: int, k: int = K_CLOSURE) -> float:
         n / k as a float
     """
     return n / k
+
+
+# Alias for backward compatibility
+k_factor = get_k_factor
+
+
+def k_remainder(n: int, k: int = K_CLOSURE) -> int:
+    """
+    Calculate the remainder when dividing by k.
+    
+    Args:
+        n: Number to check
+        k: The k-value (default: K_CLOSURE = 4)
+        
+    Returns:
+        n mod k
+    """
+    return n % k
 
 
 def is_magic_number(n: int) -> bool:
@@ -212,15 +244,16 @@ __all__ = [
     # Stellar limits
     "CHANDRASEKHAR_LIMIT", "TOV_LIMIT",
     # Nuclear physics
-    "MAGIC_NUMBERS", "FE_56_BINDING_ENERGY_PER_NUCLEON",
+    "MAGIC_NUMBERS", "DOUBLY_MAGIC", "STABLE_K_MULTIPLES",
+    "FE_56_BINDING_ENERGY_PER_NUCLEON",
     "MASS_ELECTRON_MEV", "MASS_PROTON_MEV", "MASS_NEUTRON_MEV", 
     "MASS_DIFF_NEUTRON_PROTON_MEV",
     # Atomic data
     "ATOM_MASS_NUMBERS", "ATOM_VALENCES",
     # Helper functions
-    "is_k_multiple", "get_k_factor", "is_magic_number",
+    "is_k_multiple", "get_k_factor", "k_factor", "k_remainder", "is_magic_number",
     "fusion_threshold_ratio", "compression_ratio_equilibrium_to_tile",
     "calculate_chandrasekhar_fields",
-    # Re-exported from common
+    # Re-exported from CODATA
     "R_E", "A_0", "K_CLOSURE", "M_E", "C", "HBAR", "G", "M_SOLAR", "M_P",
 ]

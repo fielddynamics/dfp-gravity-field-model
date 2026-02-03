@@ -81,7 +81,19 @@ A_MOND = 1.2e-10         # m/s^2 (Milgrom's constant)
 
 # 8 vertices of the stellated octahedron (unit cube corners)
 # Each vertex is labeled 0-7, corresponding to binary representations
-VERTICES = {0, 1, 2, 3, 4, 5, 6, 7}
+# Coordinates use unit cube corners with -1/+1 encoding
+# Binary representation: bit 0 = z, bit 1 = y, bit 2 = x
+# e.g., V5 = 101 binary -> x=+1, y=-1, z=+1
+VERTICES = {
+    0: {'binary': '000', 'coords': (-1, -1, -1)},  # Even parity -> Tet B
+    1: {'binary': '001', 'coords': (-1, -1, +1)},  # Odd parity  -> Tet A
+    2: {'binary': '010', 'coords': (-1, +1, -1)},  # Odd parity  -> Tet A
+    3: {'binary': '011', 'coords': (-1, +1, +1)},  # Even parity -> Tet B
+    4: {'binary': '100', 'coords': (+1, -1, -1)},  # Odd parity  -> Tet A
+    5: {'binary': '101', 'coords': (+1, -1, +1)},  # Even parity -> Tet B
+    6: {'binary': '110', 'coords': (+1, +1, -1)},  # Even parity -> Tet B
+    7: {'binary': '111', 'coords': (+1, +1, +1)},  # Odd parity  -> Tet A
+}
 
 # Two interlocking tetrahedra based on vertex parity
 # TET_A: odd parity vertices (odd number of 1-bits)
@@ -91,26 +103,29 @@ TET_B = {0, 3, 5, 6}     # Even parity
 
 # 8 faces of the stellated octahedron
 # Each face is a triangular face from one of the two tetrahedra
+# Named by tetrahedron (A/B) and the OPPOSITE vertex (not in the face)
+# e.g., FACE_A7 is the Tet A face opposite vertex 7 (vertices 1,2,4)
 FACES = {
-    0: (1, 2, 4),  # TET_A face
-    1: (1, 2, 7),  # TET_A face
-    2: (1, 4, 7),  # TET_A face
-    3: (2, 4, 7),  # TET_A face
-    4: (0, 3, 5),  # TET_B face
-    5: (0, 3, 6),  # TET_B face
-    6: (0, 5, 6),  # TET_B face
-    7: (3, 5, 6),  # TET_B face
+    'FACE_A1': {2, 4, 7},  # TET_A face opposite V1
+    'FACE_A2': {1, 4, 7},  # TET_A face opposite V2
+    'FACE_A4': {1, 2, 7},  # TET_A face opposite V4
+    'FACE_A7': {1, 2, 4},  # TET_A face opposite V7 (TIME face)
+    'FACE_B0': {3, 5, 6},  # TET_B face opposite V0 (TIME face)
+    'FACE_B3': {0, 5, 6},  # TET_B face opposite V3
+    'FACE_B5': {0, 3, 6},  # TET_B face opposite V5
+    'FACE_B6': {0, 3, 5},  # TET_B face opposite V6
 }
 
 # Complementary pairs: each vertex pairs with its XOR complement (vertex ^ 7)
 # These pairs cross tetrahedra: one from TET_A, one from TET_B
 COMPLEMENTARY_PAIRS = [(0, 7), (1, 6), (2, 5), (3, 4)]
 
-# TIME faces (2 of 8) - faces at the "poles" of the structure
-TIME_FACES = {3, 7}  # (2, 4, 7) and (3, 5, 6)
+# TIME faces (2 of 8) - faces opposite the apexes (V7 and V0)
+# These are "polar" faces at opposite ends of the structure
+TIME_FACES = {'FACE_A7', 'FACE_B0'}
 
-# SPATIAL faces (6 of 8) - faces forming the "equator"
-SPATIAL_FACES = {0, 1, 2, 4, 5, 6}
+# SPATIAL faces (6 of 8) - faces that include an apex vertex
+SPATIAL_FACES = {'FACE_A1', 'FACE_A2', 'FACE_A4', 'FACE_B3', 'FACE_B5', 'FACE_B6'}
 
 # =============================================================================
 # VERTEX HELPER FUNCTIONS
@@ -301,6 +316,56 @@ def calculate_settlement_frequency() -> float:
     return C / (K * R_E)
 
 
+def calculate_bits_per_orbit() -> float:
+    """
+    Calculate the bits of information per complete orbit.
+    
+    Each orbit visits 8 vertices, each requiring 3 bits to specify.
+    With complementary pair redundancy, effective bits = 8 * 3 / 2 = 12.
+    
+    Returns:
+        Bits per orbit (12.0)
+    """
+    bits_per_vertex = 3  # log2(8) = 3
+    vertices_per_orbit = 8
+    redundancy_factor = 2  # Complementary pairs
+    return (bits_per_vertex * vertices_per_orbit) / redundancy_factor
+
+
+def calculate_bits_per_electron() -> float:
+    """
+    Calculate total bits associated with an electron's configuration.
+    
+    Based on orbits to complete one alpha cycle: ~137 orbits.
+    Each orbit has ~12 effective bits.
+    
+    Returns:
+        Bits per electron (~1644)
+    """
+    orbits_per_alpha = int(1 / ALPHA)  # ~137
+    bits_per_orbit = calculate_bits_per_orbit()
+    return orbits_per_alpha * bits_per_orbit
+
+
+def vortex_eye_size(tile_size: float = None) -> float:
+    """
+    Calculate the vortex eye (field origin) size.
+    
+    The vortex eye is the central point of the stellated octahedron
+    through which fields must pass during binding. Its size is
+    approximately r_e / 4.
+    
+    Args:
+        tile_size: Optional tile size (defaults to R_E)
+        
+    Returns:
+        Vortex eye radius in meters
+    """
+    if tile_size is None:
+        tile_size = R_E
+    return tile_size / 4
+
+
 # =============================================================================
 # STELLAR CONSTANTS (re-exported from stellar_constants for convenience)
 # =============================================================================
@@ -323,13 +388,14 @@ try:
         # Stellar limits
         CHANDRASEKHAR_LIMIT, TOV_LIMIT,
         # Nuclear physics
-        MAGIC_NUMBERS, FE_56_BINDING_ENERGY_PER_NUCLEON,
+        MAGIC_NUMBERS, DOUBLY_MAGIC, STABLE_K_MULTIPLES,
+        FE_56_BINDING_ENERGY_PER_NUCLEON,
         MASS_ELECTRON_MEV, MASS_PROTON_MEV, MASS_NEUTRON_MEV,
         MASS_DIFF_NEUTRON_PROTON_MEV,
         # Atomic data
         ATOM_MASS_NUMBERS, ATOM_VALENCES,
         # Helper functions
-        is_k_multiple, get_k_factor, is_magic_number,
+        is_k_multiple, get_k_factor, k_factor, k_remainder, is_magic_number,
         fusion_threshold_ratio, compression_ratio_equilibrium_to_tile,
         calculate_chandrasekhar_fields,
     )
@@ -337,6 +403,9 @@ try:
 except ImportError:
     # Stellar constants not yet available (e.g., during initial import)
     _STELLAR_AVAILABLE = False
+
+# Alias for backward compatibility (some files use ME instead of M_E)
+ME = M_E
 
 
 # =============================================================================
@@ -391,8 +460,12 @@ __all__ = [
     # Pi digits
     "PI_BASE16_DIGITS",
     "pi_base_8", "pi_base_16", "get_pi_base8", "get_pi_digit_base8",
-    # Traversal
+    # Traversal and GFD functions
     "traverse_pi_base8", "calculate_settlement_frequency",
+    "calculate_bits_per_orbit", "calculate_bits_per_electron",
+    "vortex_eye_size",
+    # Backward compatibility aliases
+    "ME",
     # Stellar constants (when available)
     "T_HYDROGEN_FUSION", "T_HELIUM_FUSION", "T_CARBON_FUSION",
     "T_OXYGEN_FUSION", "T_SILICON_FUSION", "T_IRON_PHOTODISINTEGRATION",
@@ -402,11 +475,12 @@ __all__ = [
     "T_SOLAR_CORE", "T_SOLAR_SURFACE", "P_SOLAR_CORE",
     "SOLAR_MASS_LOSS_RATE",
     "CHANDRASEKHAR_LIMIT", "TOV_LIMIT",
-    "MAGIC_NUMBERS", "FE_56_BINDING_ENERGY_PER_NUCLEON",
+    "MAGIC_NUMBERS", "DOUBLY_MAGIC", "STABLE_K_MULTIPLES",
+    "FE_56_BINDING_ENERGY_PER_NUCLEON",
     "MASS_ELECTRON_MEV", "MASS_PROTON_MEV", "MASS_NEUTRON_MEV",
     "MASS_DIFF_NEUTRON_PROTON_MEV",
     "ATOM_MASS_NUMBERS", "ATOM_VALENCES",
-    "is_k_multiple", "get_k_factor", "is_magic_number",
+    "is_k_multiple", "get_k_factor", "k_factor", "k_remainder", "is_magic_number",
     "fusion_threshold_ratio", "compression_ratio_equilibrium_to_tile",
     "calculate_chandrasekhar_fields",
 ]

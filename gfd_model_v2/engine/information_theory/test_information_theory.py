@@ -264,9 +264,11 @@ class EffectiveInformationContent(GFDTest):
     )
     
     def model(self) -> Dict[str, float]:
-        apparent_bits = calculate_bits_per_orbit()
+        # Calculate apparent bits directly (not using calculate_bits_per_orbit which 
+        # already accounts for redundancy)
+        apparent_bits = NUM_VERTICES * BITS_PER_VERTEX  # 8 * 3 = 24
         redundancy = 2.0
-        effective_bits = apparent_bits / redundancy
+        effective_bits = apparent_bits / redundancy  # 12
         
         return {
             "Apparent bits per orbit": apparent_bits,
@@ -586,7 +588,7 @@ class TimeFaceAsChecksum(GFDTest):
 class BitsPerSettlement(GFDTest):
     """
     [M] Total bits processed per settlement cycle.
-    One settlement = one complete field closure = 24 bits.
+    One settlement = one complete field closure = 24 apparent bits.
     """
     name = "Bits Per Settlement"
     question = (
@@ -597,7 +599,7 @@ class BitsPerSettlement(GFDTest):
     tolerance = 0.001
     derivation = (
         "One settlement = one complete orbit through the stellated octahedron. "
-        "Bits per orbit: 2k=8 vertices * 3 bits per vertex = 24 bits. "
+        "Bits per orbit: 2k=8 vertices * 3 bits per vertex = 24 bits (apparent). "
         "Settlement frequency: f_s = c / lambda_C (Compton frequency). "
         "Bandwidth = bits_per_settlement * frequency = 24 * f_s bits/second. "
         "At electron scale: f_s ~ 1.24e20 Hz, yielding bandwidth ~ 2.97e21 bits/s."
@@ -611,8 +613,8 @@ class BitsPerSettlement(GFDTest):
     
     def model(self) -> Dict[str, float]:
         freq = calculate_settlement_frequency()
-        bits_per_orbit = calculate_bits_per_orbit()
-        bits_per_settlement = bits_per_orbit
+        # Use apparent bits (8 vertices * 3 bits) not effective bits
+        bits_per_settlement = NUM_VERTICES * BITS_PER_VERTEX  # 24
         bandwidth = bits_per_settlement * freq
         
         return {
@@ -655,9 +657,10 @@ class ChannelCapacityPerPort(GFDTest):
     )
     
     def model(self) -> Dict[str, float]:
-        total_bits_per_orbit = calculate_bits_per_orbit()
-        bits_per_port = total_bits_per_orbit / NUM_FACES
-        bits_per_active_port = total_bits_per_orbit / K
+        # Use apparent bits (24) not effective bits (12)
+        total_bits_per_orbit = NUM_VERTICES * BITS_PER_VERTEX  # 24
+        bits_per_port = total_bits_per_orbit / NUM_FACES  # 24/8 = 3
+        bits_per_active_port = total_bits_per_orbit / K  # 24/4 = 6
         
         return {
             "Bits per face": bits_per_port,

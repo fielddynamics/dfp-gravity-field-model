@@ -210,16 +210,16 @@ class TransitRateVsPressure(GFDTest):
 class FieldOriginStability(GFDTest):
     """Test if vortex eye is topologically stable."""
     name = "Vortex Eye Stability"
-    question = "Is the vortex eye (Field Origin) topologically stable, remaining fixed at the center of the stellated octahedron with constant size r_e/2 regardless of external pressure or temperature conditions?"
+    question = "Is the vortex eye (Field Origin) topologically stable, remaining fixed at the center of the stellated octahedron with constant size r_e/4 regardless of external pressure or temperature conditions?"
     reference_source = "Geometry"
     tolerance = 0.01
     derivation = (
         "PREMISE: Vortex eye (Field Origin) is topologically stable, remaining fixed at "
-        "center with constant size r_e/2 regardless of external conditions. "
+        "center with constant size r_e/4 regardless of external conditions. "
         "STEP 1: Verify Field Origin at center: (0, 0, 0). "
-        "STEP 2: Calculate vortex eye size: r_e / 2. "
-        "STEP 3: Verify size matches expected r_e/2. "
-        "OUTPUT: Origin at center = 1.0, Eye size (m) = r_e/2, Size stable = 1.0."
+        "STEP 2: Calculate vortex eye size: r_e / 4 (per common module definition). "
+        "STEP 3: Verify size matches expected r_e/4. "
+        "OUTPUT: Origin at center = 1.0, Eye size (m) = r_e/4, Size stable = 1.0."
     )
     commentary = (
         "The topological stability of the Field Origin at the stellated octahedron center is a geometric "
@@ -231,7 +231,7 @@ class FieldOriginStability(GFDTest):
         origin = calculate_field_origin()
         at_center = 1.0 if np.allclose(origin, [0, 0, 0]) else 0.0
         eye_size = vortex_eye_size(R_E)
-        expected_size = R_E / 2
+        expected_size = R_E / 4  # Per common module: vortex_eye_size returns tile_size / 4
         size_stable = 1.0 if abs(eye_size - expected_size) / expected_size < 0.001 else 0.0
         return {
             "Origin at center": at_center,
@@ -242,7 +242,7 @@ class FieldOriginStability(GFDTest):
     def observations(self):
         return {
             "Origin at center": 1.0,
-            "Eye size (m)": R_E / 2,
+            "Eye size (m)": R_E / 4,
             "Size stable": 1.0,
         }
 

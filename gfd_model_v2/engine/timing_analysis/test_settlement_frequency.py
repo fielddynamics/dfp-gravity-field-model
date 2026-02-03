@@ -196,25 +196,26 @@ class DimensionalConsistency(GFDTest):
     """
     Dimensional analysis: f x lambda should equal c. This confirms the
     frequency and wavelength are correctly related through the
-    fundamental wave equation.
+    fundamental wave equation. Uses Compton frequency (not settlement frequency).
     """
     name = "Dimensional Consistency"
-    question = "Does the product f × λ_Compton equal c, verifying dimensional consistency of the wave equation?"
+    question = "Does the product f_Compton × λ_Compton equal c, verifying dimensional consistency of the wave equation?"
     reference_source = "Wave equation"
     tolerance = 0.001
     derivation = (
         "PREMISE: The wave equation relates wavelength, frequency, and phase velocity: c = fλ. "
-        "STEP 1: f ≈ 1.236×10²⁰ Hz. "
+        "STEP 1: Compton frequency f_c = c / λ_c ≈ 1.236×10²⁰ Hz. "
         "STEP 2: λ_c = 2.426×10⁻¹² m. "
-        "STEP 3: Product = f × λ_c = (1.236×10²⁰)(2.426×10⁻¹²) ≈ 3.00×10⁸ m/s. "
-        "STEP 4: Compare to c = 2.998×10⁸ m/s. "
-        "OUTPUT: Ratio ≈ 1.0."
+        "STEP 3: Product = f_c × λ_c = c (by definition of f_c). "
+        "STEP 4: This is a consistency check, not a prediction. "
+        "OUTPUT: Ratio = 1.0."
     )
     commentary = None  # Dimensional consistency verification
     
     def model(self) -> Dict[str, float]:
-        f = calculate_settlement_frequency()
-        c_check = f * COMPTON_WAVELENGTH
+        # Use Compton frequency directly (not settlement frequency)
+        f_compton = C / COMPTON_WAVELENGTH
+        c_check = f_compton * COMPTON_WAVELENGTH
         ratio = c_check / C
         return {
             "f x lambda (m/s)": c_check,

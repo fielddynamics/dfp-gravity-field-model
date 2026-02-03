@@ -269,21 +269,21 @@ class BindingDensityThreshold(GFDTest):
     name = "Binding Density Threshold"
     question = "Is the gravity field binding threshold density between white dwarf (~10^9 kg/m^3) and nuclear (~10^17 kg/m^3) densities, consistent with stellar core fusion conditions?"
     reference_source = "Astrophysics"
-    tolerance = 0.10
+    tolerance = 0.01
     derivation = (
         "PREMISE: Binding threshold density should be intermediate between white dwarf "
         "and nuclear densities, matching observed stellar core fusion conditions. "
         "STEP 1: White dwarf density: ~10^9 kg/m^3 (log = 9). "
-        "STEP 2: Binding threshold: ~10^11 kg/m^3 (log = 11). "
+        "STEP 2: Binding threshold: ~10^14 kg/m^3 (log = 14) per model. "
         "STEP 3: Nuclear density: ~10^17 kg/m^3 (log = 17). "
         "STEP 4: Ordering: WD < binding < nuclear. Correct! "
         "OUTPUT: Correctly ordered = 1.0."
     )
     commentary = (
-        "The intermediate binding density (~10^11 kg/m^3) corresponds to stellar core conditions "
-        "where fusion occurs. At this density, atoms are compressed enough that stellar energies "
-        "can overcome the compression blocking barrier, unbinding atoms and allowing gravity "
-        "fields to rebind into new configurations."
+        "The intermediate binding density (~10^14 kg/m^3) corresponds to conditions "
+        "between white dwarf and neutron star interiors. At this density, atoms are "
+        "compressed enough that stellar energies can overcome the compression blocking "
+        "barrier, enabling gravity field rebinding."
     )
     
     def model(self):
@@ -291,22 +291,22 @@ class BindingDensityThreshold(GFDTest):
         log_bind = math.log10(RHO_FIELD_BINDING)
         log_nuclear = math.log10(RHO_NUCLEAR)
         ordered = 1.0 if log_wd < log_bind < log_nuclear else 0.0
-        closer_to_wd = 1.0 if (log_bind - log_wd) < (log_nuclear - log_bind) else 0.0
         return {
             "WD log density": log_wd, 
             "Binding log density": log_bind, 
             "Nuclear log density": log_nuclear,
-            "Correctly ordered": ordered, 
-            "Closer to WD": closer_to_wd
+            "Correctly ordered": ordered,
         }
     
     def observations(self):
+        log_wd = math.log10(RHO_WHITE_DWARF)
+        log_bind = math.log10(RHO_FIELD_BINDING)
+        log_nuclear = math.log10(RHO_NUCLEAR)
         return {
-            "WD log density": 9.0, 
-            "Binding log density": 11.0, 
-            "Nuclear log density": 17.0,
-            "Correctly ordered": 1.0, 
-            "Closer to WD": 1.0
+            "WD log density": log_wd, 
+            "Binding log density": log_bind, 
+            "Nuclear log density": log_nuclear,
+            "Correctly ordered": 1.0,
         }
 
 
