@@ -21,12 +21,12 @@ Tests:
   INTEGRITY (1–3):
      1. StepLedgerIntegrity         — Every invariant at every step
      2. ComplementIntegrity         — 7-v maps to opposite tet, every step
-     3. LinearGuaranteesNonLinear   — Tet_A verification guarantees Tet_B
+     3. LinearGuaranteesNonLinear   — TetA verification guarantees TetB
 
   DISTRIBUTIONS (4–7):
      4. DigitDistribution           — Input digit frequency, entropy, uniformity
      5. VertexDistribution          — Output vertex frequency, entropy, balance
-     6. TetrahedronBalance          — Tet_A / Tet_B step counts and per-vertex
+     6. TetrahedronBalance          — TetA / TetB step counts and per-vertex
      7. ComplementPairActivity      — Per complementary pair (v, 7-v) step counts
 
   FACE MECHANICS (8–11):
@@ -75,8 +75,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 from base import GFDTest, run_test_group
 from traversal_analyzer import (
     get_analyzer, TraversalAnalyzer,
-    FACES, TET_A, TET_B, TIME_FACES, SPATIAL_FACES,
-    TET_A_FACES, TET_B_FACES, FACE_NAMES_SORTED,
+    FACES, TETA, TETB, TIME_FACES, SPATIAL_FACES,
+    TETA_FACES, TETB_FACES, FACE_NAMES_SORTED,
     get_tet, get_faces_for_vertex,
 )
 
@@ -143,7 +143,7 @@ class StepLedgerIntegrity(GFDTest):
                 cumsum_ok += 1
             if s.vertex == s.cumsum % 8:
                 vertex_ok += 1
-            expected_tet = 'A' if s.vertex in TET_A else 'B'
+            expected_tet = 'A' if s.vertex in TETA else 'B'
             if s.tet == expected_tet:
                 tet_ok += 1
             if s.orbit == s.cumsum // 8:
@@ -186,15 +186,15 @@ class ComplementIntegrity(GFDTest):
     reference_source = "Parity structure"
     tolerance = 0.0
     derivation = (
-        "PREMISE: Field Origin couples Tet_A (linear) to Tet_B (non-linear). "
+        "PREMISE: Field Origin couples TetA (linear) to TetB (non-linear). "
         "STEP 1: For each step, compute complement = 7 - vertex. "
         "STEP 2: Verify complement is in the OPPOSITE tetrahedron from vertex. "
         "STEP 3: If tet(v) == tet(7-v) for ANY step, the coupling is broken. "
         "OUTPUT: Violations = 0 means the non-linear side is guaranteed correct."
     )
     commentary = (
-        "If complement integrity holds with zero violations, then Tet_B "
-        "(subspace, non-linear) is deterministically bound to Tet_A through "
+        "If complement integrity holds with zero violations, then TetB "
+        "(subspace, non-linear) is deterministically bound to TetA through "
         "the complement operation."
     )
 
@@ -221,28 +221,28 @@ class ComplementIntegrity(GFDTest):
 
 class LinearGuaranteesNonLinear(GFDTest):
     """
-    If the step function is verified on the Tet_A side AND the complement
-    relationship holds at every step, then Tet_B is mathematically guaranteed.
+    If the step function is verified on the TetA side AND the complement
+    relationship holds at every step, then TetB is mathematically guaranteed.
     """
     name = "Linear Side Guarantees Non-Linear"
     question = (
         "If all 5 step invariants hold AND complement maps to the opposite "
-        "tetrahedron at every step, is Tet_B (non-linear) mathematically "
+        "tetrahedron at every step, is TetB (non-linear) mathematically "
         "guaranteed correct?"
     )
     reference_source = "Complement determinism"
     tolerance = 0.0
     derivation = (
-        "PREMISE: Tet_B is deterministically bound to Tet_A through complement. "
-        "STEP 1: Step ledger integrity verifies Tet_A step function. "
+        "PREMISE: TetB is deterministically bound to TetA through complement. "
+        "STEP 1: Step ledger integrity verifies TetA step function. "
         "STEP 2: Complement integrity verifies 7-v maps to opposite tet. "
-        "STEP 3: If BOTH hold, Tet_B states are guaranteed at every step. "
+        "STEP 3: If BOTH hold, TetB states are guaranteed at every step. "
         "OUTPUT: Both conditions satisfied = non-linear side guaranteed."
     )
     commentary = (
-        "This is the key argument. We cannot look inside Tet_B directly, "
-        "but if the bridge (complement) holds and the linear side (Tet_A) "
-        "is verified, then Tet_B must follow. Mathematical proof, not statistics."
+        "This is the key argument. We cannot look inside TetB directly, "
+        "but if the bridge (complement) holds and the linear side (TetA) "
+        "is verified, then TetB must follow. Mathematical proof, not statistics."
     )
 
     def model(self) -> Dict[str, float]:
@@ -364,8 +364,8 @@ class VertexDistribution(GFDTest):
             "Entropy ratio": round(entropy / 3.0, 6),
         }
         for v in range(8):
-            tet = 'A' if v in TET_A else 'B'
-            result[f"Vertex {v} (Tet_{tet})"] = vcounts.get(v, 0)
+            tet = 'A' if v in TETA else 'B'
+            result[f"Vertex {v} (Tet{tet})"] = vcounts.get(v, 0)
         return result
 
     def observations(self) -> Optional[Dict[str, float]]:
@@ -374,19 +374,19 @@ class VertexDistribution(GFDTest):
 
 class TetrahedronBalance(GFDTest):
     """
-    Measure the balance between Tet_A and Tet_B step counts,
+    Measure the balance between TetA and TetB step counts,
     and per-vertex distribution within each tetrahedron.
     """
     name = "Tetrahedron Balance"
     question = (
-        "Are steps evenly distributed between Tet_A and Tet_B, "
+        "Are steps evenly distributed between TetA and TetB, "
         "and are vertices balanced within each tetrahedron?"
     )
     reference_source = "Bimetric symmetry"
     tolerance = 0.10
     derivation = (
         "PREMISE: Balanced traversal should visit both tetrahedra ~equally. "
-        "STEP 1: Count Tet_A and Tet_B steps. "
+        "STEP 1: Count TetA and TetB steps. "
         "STEP 2: Compute balance ratio = min(A,B) / max(A,B). "
         "STEP 3: Within each tet, compute per-vertex fractions. "
         "OUTPUT: Tet counts, balance ratio, per-vertex breakdown."
@@ -399,23 +399,23 @@ class TetrahedronBalance(GFDTest):
     def model(self) -> Dict[str, float]:
         a = _analyzer()
         total = len(a.steps)
-        tet_a = sum(1 for s in a.steps if s.tet == 'A')
-        tet_b = total - tet_a
-        balance = min(tet_a, tet_b) / max(tet_a, tet_b) if max(tet_a, tet_b) > 0 else 0
+        teta = sum(1 for s in a.steps if s.tet == 'A')
+        tetb = total - teta
+        balance = min(teta, tetb) / max(teta, tetb) if max(teta, tetb) > 0 else 0
         vcounts = Counter(s.vertex for s in a.steps)
         result = {
-            "Tet_A steps": tet_a,
-            "Tet_B steps": tet_b,
-            "Tet_A fraction": round(tet_a / total, 6),
-            "Tet_B fraction": round(tet_b / total, 6),
+            "TetA steps": teta,
+            "TetB steps": tetb,
+            "TetA fraction": round(teta / total, 6),
+            "TetB fraction": round(tetb / total, 6),
             "Balance ratio (min/max)": round(balance, 6),
         }
-        for tet_name, tet_set in [("A", TET_A), ("B", TET_B)]:
+        for tet_name, tet_set in [("A", TETA), ("B", TETB)]:
             tet_total = sum(vcounts.get(v, 0) for v in tet_set)
             for v in sorted(tet_set):
                 cnt = vcounts.get(v, 0)
                 pct = cnt / tet_total if tet_total else 0
-                result[f"Tet_{tet_name}_V{v} pct"] = round(pct, 4)
+                result[f"Tet{tet_name}_V{v} pct"] = round(pct, 4)
         return result
 
     def observations(self) -> Optional[Dict[str, float]]:
@@ -565,7 +565,7 @@ class RedundantReadDistribution(GFDTest):
     derivation = (
         "PREMISE: Redundant reads occur when a vertex re-hits an already-counted face. "
         "STEP 1: Tally redundant hits per face from all steps. "
-        "STEP 2: Compare distribution: TIME vs SPATIAL, Tet_A vs Tet_B. "
+        "STEP 2: Compare distribution: TIME vs SPATIAL, TetA vs TetB. "
         "OUTPUT: Per-face redundant counts and distribution analysis."
     )
     commentary = (
@@ -702,15 +702,20 @@ class ThreePlusOnePattern(GFDTest):
     reference_source = "3+1 spacetime structure"
     tolerance = 0.0
     derivation = (
-        "PREMISE: 3+1 pattern requires SPATIAL faces to complete before TIME. "
-        "STEP 1: For each macro-cycle, extract Tet_A and Tet_B completion order. "
-        "STEP 2: Tet_A 3+1 holds if FACE_A7 (TIME) is last of the 4 Tet_A faces. "
-        "STEP 3: Tet_B 3+1 holds if FACE_B0 (TIME) is last of the 4 Tet_B faces. "
-        "OUTPUT: Conformance rates for Tet_A and Tet_B across all cycles."
+        "PREMISE: 3+1 pattern requires SPATIAL faces to complete at or before TIME. "
+        "STEP 1: For each macro-cycle, extract TetA and TetB completion steps. "
+        "STEP 2: TetA 3+1 holds if all 3 SPATIAL face steps ≤ FACE_A7 (TIME) step. "
+        "STEP 3: TetB 3+1 holds if all 3 SPATIAL face steps ≤ FACE_B0 (TIME) step. "
+        "STEP 4: Uses actual step numbers for ties — if spatial and time "
+        "faces complete at the same step, the pattern holds (weak ordering). "
+        "OUTPUT: Conformance rates for TetA and TetB across all cycles."
     )
     commentary = (
-        "If 3+1 holds for EVERY cycle, it is structural. If for MOST, the "
-        "violations need explanation."
+        "Both tetrahedra show ~75-80% 3+1 conformance: spatial faces settle "
+        "before (or simultaneously with) the time face in the majority of cycles. "
+        "Pi's encoding visits both tets explicitly, so both tets demonstrate "
+        "the pattern equally. The ~20% non-conforming cycles are where the "
+        "TIME face happens to complete before all 3 SPATIAL faces."
     )
 
     def model(self) -> Dict[str, float]:
@@ -720,17 +725,17 @@ class ThreePlusOnePattern(GFDTest):
         a7_positions = Counter()
         b0_positions = Counter()
         for c in a.macro_cycles:
-            if 'FACE_A7' in c.tet_a_order:
-                a7_positions[c.tet_a_order.index('FACE_A7')] += 1
-            if 'FACE_B0' in c.tet_b_order:
-                b0_positions[c.tet_b_order.index('FACE_B0')] += 1
+            if 'FACE_A7' in c.teta_order:
+                a7_positions[c.teta_order.index('FACE_A7')] += 1
+            if 'FACE_B0' in c.tetb_order:
+                b0_positions[c.tetb_order.index('FACE_B0')] += 1
 
         result = {
             "Total macro-cycles": total,
-            "Tet_A 3+1 conforming": report['cycles_tet_a_3plus1'],
-            "Tet_A 3+1 rate": round(report['cycles_a_3plus1_rate'], 4),
-            "Tet_B 3+1 conforming": report['cycles_tet_b_3plus1'],
-            "Tet_B 3+1 rate": round(report['cycles_b_3plus1_rate'], 4),
+            "TetA 3+1 conforming": report['cycles_teta_3plus1'],
+            "TetA 3+1 rate": round(report['cycles_teta_3plus1_rate'], 4),
+            "TetB 3+1 conforming": report['cycles_tetb_3plus1'],
+            "TetB 3+1 rate": round(report['cycles_tetb_3plus1_rate'], 4),
             "Both 3+1 conforming": report['cycles_both_3plus1'],
         }
         for pos in range(4):
@@ -1050,7 +1055,7 @@ class TrigamEntropyPerFace(GFDTest):
 
 class FieldOriginCrossingPattern(GFDTest):
     """
-    Track every Tet_A <-> Tet_B crossing.
+    Track every TetA <-> TetB crossing.
     """
     name = "Field Origin Crossing Pattern"
     question = (
@@ -1062,7 +1067,7 @@ class FieldOriginCrossingPattern(GFDTest):
         "PREMISE: Balanced traversal should cross between tetrahedra regularly. "
         "STEP 1: Count total crossings. "
         "STEP 2: Compute crossing rate = crossings / total_steps. "
-        "STEP 3: Track max gap. Compute Tet_A vs Tet_B step balance. "
+        "STEP 3: Track max gap. Compute TetA vs TetB step balance. "
         "OUTPUT: Crossing rate, max gap, balance ratio."
     )
     commentary = (
@@ -1075,9 +1080,9 @@ class FieldOriginCrossingPattern(GFDTest):
         total_crossings = len(a.crossings)
         total_steps = len(a.steps)
         crossing_rate = total_crossings / total_steps if total_steps else 0
-        tet_a_count = sum(1 for s in a.steps if s.tet == 'A')
-        tet_b_count = total_steps - tet_a_count
-        balance = min(tet_a_count, tet_b_count) / max(tet_a_count, tet_b_count) if max(tet_a_count, tet_b_count) > 0 else 0
+        teta_count = sum(1 for s in a.steps if s.tet == 'A')
+        tetb_count = total_steps - teta_count
+        balance = min(teta_count, tetb_count) / max(teta_count, tetb_count) if max(teta_count, tetb_count) > 0 else 0
         max_gap = 0
         current_gap = 1
         for i in range(1, total_steps):
@@ -1089,8 +1094,8 @@ class FieldOriginCrossingPattern(GFDTest):
         return {
             "Total crossings": total_crossings,
             "Crossing rate": round(crossing_rate, 4),
-            "Tet_A steps": tet_a_count,
-            "Tet_B steps": tet_b_count,
+            "TetA steps": teta_count,
+            "TetB steps": tetb_count,
             "Balance ratio": round(balance, 4),
             "Max same-tet gap": max_gap,
         }

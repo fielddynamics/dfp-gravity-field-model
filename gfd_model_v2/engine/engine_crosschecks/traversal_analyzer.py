@@ -16,7 +16,7 @@ The analyzer captures:
     2. Face state      — per-face vertex accumulation and completion tracking
     3. Orbit records   — per-orbit face coverage analysis
     4. Macro-cycles    — face completion order across full coverage cycles
-    5. Crossing log    — every Tet_A ↔ Tet_B transition
+    5. Crossing log    — every TetA ↔ TetB transition
     6. Anomaly report  — anything unexpected, with step-level detail
 
 Usage:
@@ -41,8 +41,8 @@ from pi_data import get_pi_base8
 # GEOMETRY CONSTANTS (authoritative definitions)
 # =============================================================================
 
-TET_A = frozenset({1, 2, 4, 7})
-TET_B = frozenset({0, 3, 5, 6})
+TETA = frozenset({1, 2, 4, 7})
+TETB = frozenset({0, 3, 5, 6})
 
 FACES = {
     'FACE_A1': frozenset({2, 4, 7}),
@@ -58,15 +58,15 @@ FACES = {
 TIME_FACES = frozenset({'FACE_A7', 'FACE_B0'})
 SPATIAL_FACES = frozenset(FACES.keys()) - TIME_FACES
 
-TET_A_FACES = frozenset({'FACE_A1', 'FACE_A2', 'FACE_A4', 'FACE_A7'})
-TET_B_FACES = frozenset({'FACE_B0', 'FACE_B3', 'FACE_B5', 'FACE_B6'})
+TETA_FACES = frozenset({'FACE_A1', 'FACE_A2', 'FACE_A4', 'FACE_A7'})
+TETB_FACES = frozenset({'FACE_B0', 'FACE_B3', 'FACE_B5', 'FACE_B6'})
 
 FACE_NAMES_SORTED = sorted(FACES.keys())
 
 
 def get_tet(vertex: int) -> str:
     """Return 'A' or 'B' for a vertex."""
-    return 'A' if vertex in TET_A else 'B'
+    return 'A' if vertex in TETA else 'B'
 
 
 def get_faces_for_vertex(vertex: int) -> List[str]:
@@ -162,8 +162,8 @@ class OrbitRecord:
 
     # Crossing analysis
     tet_crossings: int = 0
-    tet_a_steps: int = 0
-    tet_b_steps: int = 0
+    teta_steps: int = 0
+    tetb_steps: int = 0
     zero_digit_steps: int = 0
 
     # Anomalies detected in this orbit
@@ -183,10 +183,10 @@ class MacroCycleRecord:
     completion_order: List[Tuple[str, int]]   # (face_name, step) in order of completion
 
     # 3+1 analysis per tetrahedron
-    tet_a_order: List[str] = field(default_factory=list)
-    tet_b_order: List[str] = field(default_factory=list)
-    tet_a_3plus1: bool = False    # Did 3 SPATIAL complete before TIME in Tet A?
-    tet_b_3plus1: bool = False    # Did 3 SPATIAL complete before TIME in Tet B?
+    teta_order: List[str] = field(default_factory=list)
+    tetb_order: List[str] = field(default_factory=list)
+    teta_3plus1: bool = False    # Did 3 SPATIAL complete before TIME in TetA?
+    tetb_3plus1: bool = False    # Did 3 SPATIAL complete before TIME in TetB?
 
     # Per-face trigram read order
     trigram_orders: Dict[str, List[Tuple[int, int]]] = field(default_factory=dict)
@@ -194,7 +194,7 @@ class MacroCycleRecord:
 
 @dataclass
 class CrossingRecord:
-    """A single Tet_A ↔ Tet_B transition."""
+    """A single TetA ↔ TetB transition."""
     step: int
     from_tet: str
     to_tet: str
@@ -359,8 +359,8 @@ class TraversalAnalyzer:
         orbit_face_redundant = Counter()
         orbit_face_completions = []
         orbit_tet_crossings = 0
-        orbit_tet_a = 0
-        orbit_tet_b = 0
+        orbit_teta = 0
+        orbit_tetb = 0
         orbit_zero_digits = 0
 
         for s in self.steps:
@@ -375,7 +375,7 @@ class TraversalAnalyzer:
                         orbit_digits, orbit_vertices,
                         orbit_face_new, orbit_face_redundant,
                         orbit_face_completions,
-                        orbit_tet_crossings, orbit_tet_a, orbit_tet_b,
+                        orbit_tet_crossings, orbit_teta, orbit_tetb,
                         orbit_zero_digits,
                     )
 
@@ -388,8 +388,8 @@ class TraversalAnalyzer:
                 orbit_face_redundant = Counter()
                 orbit_face_completions = []
                 orbit_tet_crossings = 0
-                orbit_tet_a = 0
-                orbit_tet_b = 0
+                orbit_teta = 0
+                orbit_tetb = 0
                 orbit_zero_digits = 0
 
             # Accumulate
@@ -403,9 +403,9 @@ class TraversalAnalyzer:
             if s.is_tet_crossing:
                 orbit_tet_crossings += 1
             if s.tet == 'A':
-                orbit_tet_a += 1
+                orbit_teta += 1
             else:
-                orbit_tet_b += 1
+                orbit_tetb += 1
             if s.is_zero_digit:
                 orbit_zero_digits += 1
 
@@ -416,13 +416,13 @@ class TraversalAnalyzer:
                 orbit_digits, orbit_vertices,
                 orbit_face_new, orbit_face_redundant,
                 orbit_face_completions,
-                orbit_tet_crossings, orbit_tet_a, orbit_tet_b,
+                orbit_tet_crossings, orbit_teta, orbit_tetb,
                 orbit_zero_digits,
             )
 
     def _save_orbit(self, orbit_num, start, end, digits, vertices,
                     face_new, face_redundant, face_completions,
-                    tet_crossings, tet_a, tet_b, zero_digits):
+                    tet_crossings, teta, tetb, zero_digits):
         """Package orbit data into an OrbitRecord."""
         record = OrbitRecord(
             orbit_number=orbit_num,
@@ -435,8 +435,8 @@ class TraversalAnalyzer:
             face_redundant_hits=dict(face_redundant),
             face_completions=list(face_completions),
             tet_crossings=tet_crossings,
-            tet_a_steps=tet_a,
-            tet_b_steps=tet_b,
+            teta_steps=teta,
+            tetb_steps=tetb,
             zero_digit_steps=zero_digits,
         )
         self.orbits.append(record)
@@ -489,18 +489,29 @@ class TraversalAnalyzer:
                            completion_order, trackers) -> MacroCycleRecord:
         """Build a MacroCycleRecord with 3+1 analysis."""
         # Separate by tetrahedron
-        tet_a_order = [f for f, _ in completion_order if f in TET_A_FACES]
-        tet_b_order = [f for f, _ in completion_order if f in TET_B_FACES]
+        teta_order = [f for f, _ in completion_order if f in TETA_FACES]
+        tetb_order = [f for f, _ in completion_order if f in TETB_FACES]
 
-        # 3+1 check: SPATIAL faces before TIME face
-        tet_a_3plus1 = (
-            len(tet_a_order) == 4 and
-            tet_a_order[-1] == 'FACE_A7'  # TIME face is last
-        )
-        tet_b_3plus1 = (
-            len(tet_b_order) == 4 and
-            tet_b_order[-1] == 'FACE_B0'  # TIME face is last
-        )
+        # 3+1 check using completion STEPS, not list position.
+        # A tet has 3+1 if all 3 SPATIAL faces complete at or before
+        # the 1 TIME face (weak ordering: ties count as "before").
+        #
+        # Pi's encoding visits both tets explicitly — the step numbers
+        # are the ground truth for completion order.
+        teta_steps = {f: s for f, s in completion_order if f in TETA_FACES}
+        tetb_steps = {f: s for f, s in completion_order if f in TETB_FACES}
+
+        teta_3plus1 = False
+        if len(teta_steps) == 4 and 'FACE_A7' in teta_steps:
+            time_step = teta_steps['FACE_A7']
+            spatial_steps = [s for f, s in teta_steps.items() if f != 'FACE_A7']
+            teta_3plus1 = all(s <= time_step for s in spatial_steps)
+
+        tetb_3plus1 = False
+        if len(tetb_steps) == 4 and 'FACE_B0' in tetb_steps:
+            time_step = tetb_steps['FACE_B0']
+            spatial_steps = [s for f, s in tetb_steps.items() if f != 'FACE_B0']
+            tetb_3plus1 = all(s <= time_step for s in spatial_steps)
 
         # Collect trigram read orders
         trigram_orders = {}
@@ -512,10 +523,10 @@ class TraversalAnalyzer:
             start_step=start,
             end_step=end,
             completion_order=list(completion_order),
-            tet_a_order=tet_a_order,
-            tet_b_order=tet_b_order,
-            tet_a_3plus1=tet_a_3plus1,
-            tet_b_3plus1=tet_b_3plus1,
+            teta_order=teta_order,
+            tetb_order=tetb_order,
+            teta_3plus1=teta_3plus1,
+            tetb_3plus1=tetb_3plus1,
             trigram_orders=trigram_orders,
         )
 
@@ -540,8 +551,8 @@ class TraversalAnalyzer:
                     step=s.step,
                     orbit=s.orbit,
                     description=(
-                        f"Step {s.step}: vertex {s.vertex} (Tet {s.tet}) has "
-                        f"complement {s.complement} also in Tet {s.comp_tet}. "
+                        f"Step {s.step}: vertex {s.vertex} (Tet{s.tet}) has "
+                        f"complement {s.complement} also in Tet{s.comp_tet}. "
                         f"Field Origin coupling is BROKEN."
                     ),
                     details={'vertex': s.vertex, 'complement': s.complement},
@@ -618,7 +629,7 @@ class TraversalAnalyzer:
                         orbit=self.steps[run_start].orbit,
                         description=(
                             f"Steps {run_start}-{run_start + run_length - 1}: "
-                            f"{run_length} consecutive steps in Tet {run_tet}."
+                            f"{run_length} consecutive steps in Tet{run_tet}."
                         ),
                         details={'length': run_length, 'tet': run_tet},
                     ))
@@ -641,11 +652,11 @@ class TraversalAnalyzer:
         info_anomalies = [a for a in self.anomalies if a.severity == 'INFO']
 
         # 3+1 statistics
-        cycles_a_3plus1 = sum(1 for c in self.macro_cycles if c.tet_a_3plus1)
-        cycles_b_3plus1 = sum(1 for c in self.macro_cycles if c.tet_b_3plus1)
+        cycles_a_3plus1 = sum(1 for c in self.macro_cycles if c.teta_3plus1)
+        cycles_b_3plus1 = sum(1 for c in self.macro_cycles if c.tetb_3plus1)
         cycles_both_3plus1 = sum(
             1 for c in self.macro_cycles
-            if c.tet_a_3plus1 and c.tet_b_3plus1
+            if c.teta_3plus1 and c.tetb_3plus1
         )
 
         # Complement integrity
@@ -671,11 +682,11 @@ class TraversalAnalyzer:
             'vertex_errors': sum(1 for a in self.anomalies if a.code == 'VERTEX_MISMATCH'),
 
             # 3+1 pattern
-            'cycles_tet_a_3plus1': cycles_a_3plus1,
-            'cycles_tet_b_3plus1': cycles_b_3plus1,
+            'cycles_teta_3plus1': cycles_a_3plus1,
+            'cycles_tetb_3plus1': cycles_b_3plus1,
             'cycles_both_3plus1': cycles_both_3plus1,
-            'cycles_a_3plus1_rate': cycles_a_3plus1 / len(self.macro_cycles) if self.macro_cycles else 0,
-            'cycles_b_3plus1_rate': cycles_b_3plus1 / len(self.macro_cycles) if self.macro_cycles else 0,
+            'cycles_teta_3plus1_rate': cycles_a_3plus1 / len(self.macro_cycles) if self.macro_cycles else 0,
+            'cycles_tetb_3plus1_rate': cycles_b_3plus1 / len(self.macro_cycles) if self.macro_cycles else 0,
 
             # Anomaly counts by severity
             'anomalies_critical': len(critical_anomalies),
