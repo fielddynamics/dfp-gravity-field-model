@@ -6,7 +6,7 @@ A comprehensive reference for the GFD model terminology.
 Each definition has a short summary and a detailed explanation.
 
 Usage:
-    from gfd_model_v2.common.gfd_definitions import GFD_DEFINITIONS
+    from gfd_model_v2.reference.gfd_definitions import GFD_DEFINITIONS
     
     # Get all definitions
     for term in GFD_DEFINITIONS:

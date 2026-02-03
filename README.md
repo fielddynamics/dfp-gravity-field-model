@@ -1,12 +1,14 @@
-# Gravity Field Dynamics (GFD) Model
+# DFP: Gravity Field Model
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Tests: 813 Passing](https://img.shields.io/badge/Tests-813%20Passing-brightgreen.svg)](#test-suite)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/downloads/)
 
-**A computational validation suite for the Distributed Field Processing (DFP) framework**
+**Distributed Field Processing (DFP)** is a physics framework that derives gravitational dynamics from the topology of spacetime. This repository contains the **Gravity Field Model** - a computational validation suite that tests DFP predictions against physical constants and observations.
 
-This repository implements and validates the physics described in the DFP paper series by Stephen Nelson (2026). The model derives fundamental constants and gravitational dynamics from the topology of spacetime, requiring no dark matter and no free parameters beyond established physical constants.
+**Author:** Stephen Nelson | [fielddynamics.org](https://fielddynamics.org)
+
+The model requires no dark matter and no free parameters beyond established physical constants. All predictions derive from a single geometric fact: in 3+1 dimensions, gravitational field closure requires exactly k=4 coupling channels.
 
 ---
 
@@ -119,10 +121,10 @@ The console provides:
 - View GFD foundations and definitions
 - Explore the chain of logic
 
-### Run All Tests
+### Run All Tests (Quick Mode)
 
 ```bash
-python quick_test.py
+python dfp_console.py --test
 ```
 
 Output:
@@ -131,13 +133,19 @@ Results:
   Passed: 813/813
   Failed: 0
   Errors: 0
+
+By category:
+  [PASS] core_geometry: 185/185
+  [PASS] traversal_engine: 101/101
+  ...
 ```
 
-### Run Specific Category
+### Command-Line Options
 
-```python
-from gfd_model_v2.engine.core_geometry.test_complementary_pairs import run_all_tests
-run_all_tests()
+```bash
+python dfp_console.py          # Interactive console
+python dfp_console.py --test   # Run all tests
+python dfp_console.py --help   # Show help
 ```
 
 ---
@@ -175,20 +183,38 @@ The validation suite contains **813 tests** across 16 categories:
 
 ```
 dfp-gravity-field-model/
-├── dfp_console.py           # Interactive validation console
-├── quick_test.py            # Fast test runner
+├── dfp_console.py           # Validation console (interactive + CLI)
 ├── LICENSE                  # MIT License
 ├── README.md                # This file
 │
-├── common/                  # Shared constants and utilities
-│   ├── __init__.py          # Main exports
-│   ├── constants_codata.py  # CODATA 2022 physical constants
-│   └── stellar_constants.py # Astrophysical constants
-│
-└── gfd_model_v2/
+└── gfd_model_v2/            # Main model package
     ├── base.py              # GFDTest framework
-    ├── engine/              # Core field mechanics
-    └── calculations/        # Physics predictions
+    │
+    ├── common/              # Shared constants and geometry
+    │   ├── __init__.py          # Main exports (K, VERTICES, etc.)
+    │   ├── constants_codata.py  # CODATA 2022 physical constants
+    │   └── stellar_constants.py # Astrophysical constants
+    │
+    ├── engine/              # Core field mechanics (370 tests)
+    │   ├── core_geometry/       # Stellated octahedron structure
+    │   ├── traversal_engine/    # Pi-driven traversal
+    │   ├── timing_analysis/     # Settlement frequency
+    │   ├── information_theory/  # Bits and entropy
+    │   ├── lattice_foundations/ # Axioms and bounds
+    │   └── engine_stress_tests/ # Stability tests
+    │
+    ├── calculations/        # Physics predictions (443 tests)
+    │   ├── stellar_mechanics/      # Fusion, elements
+    │   ├── particle_physics/       # Quarks, masses
+    │   ├── emergent_constants/     # alpha, G, H0
+    │   ├── entanglement_mechanics/ # Quantum correlations
+    │   ├── historical_systems/     # Cultural correspondences
+    │   └── ...                     # Additional modules
+    │
+    └── reference/           # Documentation data
+        ├── gfd_definitions.py   # Terminology
+        ├── gfd_foundations.py   # Chain of logic
+        └── gfd_concepts.py      # How things work
 ```
 
 ---
@@ -226,7 +252,7 @@ This is not a curve fit. It is the unique solution satisfying closure constraint
 All constants derive from CODATA 2022 values:
 
 ```python
-from common import C, HBAR, ALPHA, M_E, R_E, K
+from gfd_model_v2.common import C, HBAR, ALPHA, M_E, R_E, K
 
 C = 299792458        # Speed of light (m/s, exact)
 HBAR = 1.054571817e-34  # Reduced Planck constant (J*s)
@@ -311,6 +337,6 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) for detai
 
 ---
 
-**Gravity Field Dynamics Model v2.0.0**
+**DFP: Gravity Field Model v2.0.0**
 
 *The constants of nature are geometric necessities, not accidents.*

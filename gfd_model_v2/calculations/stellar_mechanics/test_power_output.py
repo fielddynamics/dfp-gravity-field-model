@@ -25,7 +25,7 @@ from gfd_model_v2.base import GFDTest, run_test_group
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))))
 
-from common import C, HBAR, G, K_CLOSURE, M_E, M_SOLAR, R_E
+from gfd_model_v2.common import C, HBAR, G, K_CLOSURE, M_E, M_SOLAR, R_E
 
 # =============================================================================
 # CONSTANTS

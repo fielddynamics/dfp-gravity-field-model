@@ -19,7 +19,7 @@ The argument proceeds:
 10. The field dynamics of this structure explain physics
 
 Usage:
-    from gfd_model_v2.common.gfd_foundations import GFD_FOUNDATIONS
+    from gfd_model_v2.reference.gfd_foundations import GFD_FOUNDATIONS
 """
 
 # =============================================================================

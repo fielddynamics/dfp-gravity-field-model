@@ -873,7 +873,7 @@ def _purple_gradient_text(text):
 def show_definitions_menu():
     """Display the GFD Definitions reference."""
     try:
-        from gfd_model_v2.common.gfd_definitions import GFD_DEFINITIONS, get_all_categories
+        from gfd_model_v2.reference.gfd_definitions import GFD_DEFINITIONS, get_all_categories
     except ImportError:
         print(f"  {C.RED}Error: Could not load GFD definitions module.{C.RESET}")
         print(f"  {C.DIM}Make sure gfd_model_v2/common/gfd_definitions.py exists.{C.RESET}")
@@ -957,7 +957,7 @@ def show_definitions_menu():
 def show_foundations_menu():
     """Display the GFD Foundations (Chain of Logic) reference."""
     try:
-        from gfd_model_v2.common.gfd_foundations import GFD_FOUNDATIONS, get_all_sections, get_foundations_by_section
+        from gfd_model_v2.reference.gfd_foundations import GFD_FOUNDATIONS, get_all_sections, get_foundations_by_section
     except ImportError:
         print(f"  {C.RED}Error: Could not load GFD foundations module.{C.RESET}")
         print(f"  {C.DIM}Make sure gfd_model_v2/common/gfd_foundations.py exists.{C.RESET}")
@@ -1034,7 +1034,7 @@ def show_foundations_menu():
 def show_concepts_menu():
     """Display the GFD Concepts (How Things Work) reference."""
     try:
-        from gfd_model_v2.common.gfd_concepts import GFD_CONCEPTS, get_all_concept_categories
+        from gfd_model_v2.reference.gfd_concepts import GFD_CONCEPTS, get_all_concept_categories
     except ImportError:
         print(f"  {C.RED}Error: Could not load GFD concepts module.{C.RESET}")
         print(f"  {C.DIM}Make sure gfd_model_v2/common/gfd_concepts.py exists.{C.RESET}")
@@ -1283,7 +1283,42 @@ def interactive_mode():
 # =============================================================================
 
 def main():
-    """Main entry point."""
+    """Main entry point.
+    
+    Usage:
+        python dfp_console.py          # Interactive console
+        python dfp_console.py --test   # Run all tests (quick mode)
+        python dfp_console.py --quick  # Run all tests (quick mode)
+    """
+    # Check for command-line arguments
+    if len(sys.argv) > 1:
+        arg = sys.argv[1].lower()
+        if arg in ('--test', '--quick', '-t', '-q'):
+            # Quick test mode
+            results = run_all_tests_quick()
+            print(f"\nResults:")
+            print(f"  Passed: {results['total_passed']}/{results['total']}")
+            print(f"  Failed: {results['total_failed']}")
+            print(f"  Errors: {results['total_errors']}")
+            print(f"\nBy category:")
+            for cat, data in results['by_category'].items():
+                passed = data.get('passed', 0)
+                total = data.get('total', 0)
+                failed = data.get('failed', 0)
+                errors = data.get('errors', 0)
+                status = "PASS" if failed == 0 and errors == 0 else "FAIL"
+                print(f"  [{status}] {cat}: {passed}/{total}")
+            return 0 if results['total_failed'] == 0 else 1
+        elif arg in ('--help', '-h'):
+            print("GFD Validation Console")
+            print()
+            print("Usage:")
+            print("  python dfp_console.py          Interactive console")
+            print("  python dfp_console.py --test   Run all tests (quick mode)")
+            print("  python dfp_console.py --help   Show this help")
+            return 0
+    
+    # Default: interactive mode
     interactive_mode()
     return 0
 

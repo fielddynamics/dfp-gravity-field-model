@@ -23,7 +23,7 @@ from gfd_model_v2.base import GFDTest, run_test_group
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))))
 
-from common import (
+from gfd_model_v2.common import (
     VERTICES, TET_A, TET_B,
     G, C, HBAR, ELECTRON_MASS,
     R_E, M_E, A_0,

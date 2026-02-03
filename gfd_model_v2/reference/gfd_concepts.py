@@ -7,7 +7,7 @@ Unlike definitions (which state WHAT things are), concepts explain
 the working principles and physical mechanisms.
 
 Usage:
-    from gfd_model_v2.common.gfd_concepts import GFD_CONCEPTS
+    from gfd_model_v2.reference.gfd_concepts import GFD_CONCEPTS
     
     for concept in GFD_CONCEPTS:
         print(concept["title"])

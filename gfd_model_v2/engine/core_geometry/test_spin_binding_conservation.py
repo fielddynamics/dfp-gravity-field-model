@@ -41,7 +41,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
 from base import GFDTest, run_test_group
-from common import K_CLOSURE, HBAR
+from gfd_model_v2.common import K_CLOSURE, HBAR
 
 PI = math.pi
 

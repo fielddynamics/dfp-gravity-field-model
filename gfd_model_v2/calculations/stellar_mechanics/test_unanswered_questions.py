@@ -20,8 +20,8 @@ from gfd_model_v2.base import GFDTest, run_test_group
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))))
 
-from common import K, ALPHA
-from common.stellar_constants import (
+from gfd_model_v2.common import K, ALPHA
+from gfd_model_v2.common.stellar_constants import (
     R_E, A_0, K_CLOSURE, MASS_RATIO_PROTON_ELECTRON,
     MAGIC_NUMBERS, is_k_multiple,
 )

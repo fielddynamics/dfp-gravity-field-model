@@ -25,7 +25,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
 from base import GFDTest, GroupResult, Renderer, run_test_group
-from common import (
+from gfd_model_v2.common import (
     VERTICES, TET_A, TET_B, FACES, K, C, HBAR, ALPHA,
     TIME_FACES, SPATIAL_FACES, COMPLEMENTARY_PAIRS,
     ELECTRON_MASS, LAMBDA_C,

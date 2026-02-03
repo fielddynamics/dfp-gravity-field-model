@@ -27,7 +27,7 @@ from gfd_model_v2.base import GFDTest, run_test_group
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))))
 
-from common import (
+from gfd_model_v2.common import (
     K_CLOSURE,
     ELECTRON_MASS,
     MASS_RATIO_PROTON_ELECTRON,

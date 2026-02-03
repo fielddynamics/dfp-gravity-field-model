@@ -23,7 +23,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
 from base import GFDTest, GroupResult, Renderer, run_test_group
-from common import get_pi_base8, get_tetrahedron, TET_A, TET_B
+from gfd_model_v2.common import get_pi_base8, get_tetrahedron, TET_A, TET_B
 
 
 # =============================================================================

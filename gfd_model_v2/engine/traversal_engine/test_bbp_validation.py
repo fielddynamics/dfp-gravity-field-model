@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspa
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
 from base import GFDTest, GroupResult, Renderer, run_test_group
-from common import K, pi_base_8, pi_base_16
+from gfd_model_v2.common import K, pi_base_8, pi_base_16
 
 
 # =============================================================================

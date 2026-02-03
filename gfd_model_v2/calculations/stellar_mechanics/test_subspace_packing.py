@@ -22,7 +22,7 @@ from gfd_model_v2.base import GFDTest, run_test_group
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))))
 
-from common import (
+from gfd_model_v2.common import (
     C, HBAR, ELECTRON_MASS,
     K_CLOSURE, M_E,
     is_k_multiple, k_factor,
