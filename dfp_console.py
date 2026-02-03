@@ -34,62 +34,77 @@ CATEGORIES = {
     # =========================================================================
     # ENGINE - Core GFD Model
     # =========================================================================
-    "system_mechanics": {
-        "name": "System Mechanics",
+    "core_geometry": {
+        "name": "Core Geometry",
         "type": "ENGINE",
-        "description": "Core field closure mechanics, pi traversal, binary encoding, spin derivation",
+        "description": "Structural geometry: triads, vertices, faces, compression, spin binding",
         "modules": [
-            "gfd_model_v2.engine.system_mechanics.test_closure_cycle",
-            "gfd_model_v2.engine.system_mechanics.test_bbp_validation",
-            "gfd_model_v2.engine.system_mechanics.test_face_traversal",
-            "gfd_model_v2.engine.system_mechanics.test_complementary_pairs",
-            "gfd_model_v2.engine.system_mechanics.test_binary_triad",
-            "gfd_model_v2.engine.system_mechanics.test_field_energy",
-            "gfd_model_v2.engine.system_mechanics.test_settlement_frequency",
-            "gfd_model_v2.engine.system_mechanics.test_orbit_statistics",
-            "gfd_model_v2.engine.system_mechanics.test_spin_derivation",
-            "gfd_model_v2.engine.system_mechanics.test_vertex_encoding",
-            "gfd_model_v2.engine.system_mechanics.test_face_classification",
-            "gfd_model_v2.engine.system_mechanics.test_tetrahedron_assignment",
-            "gfd_model_v2.engine.system_mechanics.test_bbp_engine",
-            "gfd_model_v2.engine.system_mechanics.test_information_content",
-            "gfd_model_v2.engine.system_mechanics.test_port_ratio",
-            "gfd_model_v2.engine.system_mechanics.test_pi_base8_traversal",
-            "gfd_model_v2.engine.system_mechanics.test_mond_hexagonal",
-            "gfd_model_v2.engine.system_mechanics.test_sixfold_symmetry",
-            "gfd_model_v2.engine.system_mechanics.test_hubble_electron_mond",
-            "gfd_model_v2.engine.system_mechanics.test_subspace_geometry",
-            "gfd_model_v2.engine.system_mechanics.test_time_face_geometry",
-            "gfd_model_v2.engine.system_mechanics.test_field_closure_runs",
-            "gfd_model_v2.engine.system_mechanics.test_closure_cycle_triforce",
-            "gfd_model_v2.engine.system_mechanics.test_enterprise_field_closure",
-            "gfd_model_v2.engine.system_mechanics.test_parallel_face_traversal",
-            "gfd_model_v2.engine.system_mechanics.test_pi_digits_full",
+            "gfd_model_v2.engine.core_geometry.test_complementary_pairs",
+            "gfd_model_v2.engine.core_geometry.test_binary_triad",
+            "gfd_model_v2.engine.core_geometry.test_vertex_encoding",
+            "gfd_model_v2.engine.core_geometry.test_face_classification",
+            "gfd_model_v2.engine.core_geometry.test_tetrahedron_assignment",
+            "gfd_model_v2.engine.core_geometry.test_subspace_geometry",
+            "gfd_model_v2.engine.core_geometry.test_time_face_geometry",
+            "gfd_model_v2.engine.core_geometry.test_port_ratio",
+            "gfd_model_v2.engine.core_geometry.test_spin_binding_conservation",
+            "gfd_model_v2.engine.core_geometry.test_spin_direction_analysis",
+            "gfd_model_v2.engine.core_geometry.test_triad_stability_simulation",
+            "gfd_model_v2.engine.core_geometry.test_triad_stability_rigorous",
+            "gfd_model_v2.engine.core_geometry.test_triad_fluid_dynamics",
+            "gfd_model_v2.engine.core_geometry.test_triad_falsification_attempts",
+            "gfd_model_v2.engine.core_geometry.test_interface_parity_triads",
+            "gfd_model_v2.engine.core_geometry.test_closure_geometry",
+            "gfd_model_v2.engine.core_geometry.test_binding_hierarchy",
+            "gfd_model_v2.engine.core_geometry.test_coupled_rotation",
+            "gfd_model_v2.engine.core_geometry.test_compression_blocking",
+            "gfd_model_v2.engine.core_geometry.test_bidirectional_compression",
+            "gfd_model_v2.engine.core_geometry.test_stellated_octahedron_symmetries",
+        ]
+    },
+    "traversal_engine": {
+        "name": "Traversal Engine",
+        "type": "ENGINE",
+        "description": "Pi-driven traversal, BBP algorithm, closure cycles, orbit statistics",
+        "modules": [
+            "gfd_model_v2.engine.traversal_engine.test_closure_cycle",
+            "gfd_model_v2.engine.traversal_engine.test_bbp_validation",
+            "gfd_model_v2.engine.traversal_engine.test_bbp_engine",
+            "gfd_model_v2.engine.traversal_engine.test_face_traversal",
+            "gfd_model_v2.engine.traversal_engine.test_pi_base8_traversal",
+            "gfd_model_v2.engine.traversal_engine.test_pi_digits_full",
+            "gfd_model_v2.engine.traversal_engine.test_orbit_statistics",
+            "gfd_model_v2.engine.traversal_engine.test_field_closure_runs",
+            "gfd_model_v2.engine.traversal_engine.test_closure_cycle_triforce",
+            "gfd_model_v2.engine.traversal_engine.test_enterprise_field_closure",
+            "gfd_model_v2.engine.traversal_engine.test_parallel_face_traversal",
         ]
     },
     "timing_analysis": {
         "name": "Timing Analysis",
         "type": "ENGINE",
-        "description": "Closure simultaneity, Compton-scale timing",
+        "description": "Closure simultaneity, Compton-scale timing, settlement frequency",
         "modules": [
             "gfd_model_v2.engine.timing_analysis.test_closure_simultaneity",
+            "gfd_model_v2.engine.timing_analysis.test_settlement_frequency",
         ]
     },
-    "theoretical_insights": {
-        "name": "Theoretical Insights",
+    "information_theory": {
+        "name": "Information Theory",
         "type": "ENGINE",
-        "description": "Information theory, lattice fundamentals",
+        "description": "Bits, entropy, information content, bandwidth",
         "modules": [
-            "gfd_model_v2.engine.theoretical_insights.test_information_theory",
-            "gfd_model_v2.engine.theoretical_insights.test_lattice_fundamentals",
+            "gfd_model_v2.engine.information_theory.test_information_content",
+            "gfd_model_v2.engine.information_theory.test_information_theory",
+            "gfd_model_v2.engine.information_theory.test_bit_propagation",
         ]
     },
-    "information_flow": {
-        "name": "Information Flow",
+    "lattice_foundations": {
+        "name": "Lattice Foundations",
         "type": "ENGINE",
-        "description": "Bit propagation, entropy in field closure",
+        "description": "Axioms and fundamental bounds of the lattice structure",
         "modules": [
-            "gfd_model_v2.engine.information_flow.test_bit_propagation",
+            "gfd_model_v2.engine.lattice_foundations.test_lattice_fundamentals",
         ]
     },
     "engine_stress_tests": {
@@ -191,14 +206,6 @@ CATEGORIES = {
             "gfd_model_v2.calculations.quantum_tunneling.test_tunneling",
         ]
     },
-    "symmetry_operations": {
-        "name": "Symmetry Operations",
-        "type": "CALC",
-        "description": "Stellated octahedron symmetries, transformations",
-        "modules": [
-            "gfd_model_v2.calculations.symmetry_operations.test_stellated_octahedron_symmetries",
-        ]
-    },
     "cross_checks": {
         "name": "Cross Checks",
         "type": "CALC",
@@ -210,10 +217,15 @@ CATEGORIES = {
     "emergent_constants": {
         "name": "Emergent Constants",
         "type": "CALC",
-        "description": "Fundamental parameters derived from geometry: α=1/137, m_p/m_e=1836, Bekenstein-Hawking, Tsirelson, π encoding, Flower of Life",
+        "description": "Fundamental parameters derived from geometry: α=1/137, m_p/m_e=1836, spin, MOND, Hubble, sixfold symmetry",
         "modules": [
             "gfd_model_v2.calculations.emergent_constants.test_emergent_constants",
             "gfd_model_v2.calculations.emergent_constants.test_emergent_constants_extended",
+            "gfd_model_v2.calculations.emergent_constants.test_field_energy",
+            "gfd_model_v2.calculations.emergent_constants.test_spin_derivation",
+            "gfd_model_v2.calculations.emergent_constants.test_mond_hexagonal",
+            "gfd_model_v2.calculations.emergent_constants.test_hubble_electron_mond",
+            "gfd_model_v2.calculations.emergent_constants.test_sixfold_symmetry",
         ]
     },
 }
