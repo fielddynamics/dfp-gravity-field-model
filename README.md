@@ -102,50 +102,52 @@ All four roads lead to the same destination: **two tetrahedra with opposite orie
 ```bash
 git clone https://github.com/your-username/dfp-gravity-field-model.git
 cd dfp-gravity-field-model
-pip install numpy  # Only external dependency
+pip install -r requirements.txt
 ```
+
+**Requirements:**
+- Python 3.10+
+- Flask (for web interface)
+- NumPy (for numerical computations)
 
 ---
 
 ## Usage
 
-### Interactive Console
+### Web Interface (Recommended)
+
+The primary way to explore and run tests is through the web interface:
 
 ```bash
-python dfp_console.py
+cd gfd_model_v2/web_interface
+python run_web.py
 ```
 
-The console provides:
-- Browse test categories with results
-- Run validation tests interactively
-- View GFD foundations and definitions
-- Explore the chain of logic
+This starts a local server at `http://localhost:5005` and opens your browser automatically.
 
-### Run All Tests (Quick Mode)
+The web interface provides:
+- File browser for all test modules
+- Syntax-highlighted code viewing
+- One-click test execution
+- Formatted test results with derivations, models, and observations
+- Support for both legacy (v1) and new framework (v2) tests
+
+### Running Individual Tests
+
+You can also run any test file directly:
 
 ```bash
-python dfp_console.py --test
+python gfd_model_v2/engine_core/geometry/test_port_ratio.py
+python gfd_model_v2/calculations/stellar_mechanics/test_power_output.py
 ```
 
-Output:
-```
-Results:
-  Passed: 813/813
-  Failed: 0
-  Errors: 0
+### Custom Port
 
-By category:
-  [PASS] core_geometry: 185/185
-  [PASS] traversal_engine: 101/101
-  ...
-```
-
-### Command-Line Options
+To run the web interface on a different port:
 
 ```bash
-python dfp_console.py          # Interactive console
-python dfp_console.py --test   # Run all tests
-python dfp_console.py --help   # Show help
+cd gfd_model_v2/web_interface
+python run_web.py --port 8080
 ```
 
 ---
@@ -183,38 +185,47 @@ The validation suite contains **813 tests** across 16 categories:
 
 ```
 dfp-gravity-field-model/
-├── dfp_console.py           # Validation console (interactive + CLI)
 ├── LICENSE                  # MIT License
 ├── README.md                # This file
+├── requirements.txt         # Python dependencies
 │
 └── gfd_model_v2/            # Main model package
-    ├── base.py              # GFDTest framework
     │
-    ├── common/              # Shared constants and geometry
-    │   ├── __init__.py          # Main exports (K, VERTICES, etc.)
+    ├── common/              # Shared constants and data
     │   ├── constants_codata.py  # CODATA 2022 physical constants
+    │   ├── pi_data.py           # Verified pi base-8 digits (10,000)
     │   └── stellar_constants.py # Astrophysical constants
     │
-    ├── engine/              # Core field mechanics (370 tests)
-    │   ├── core_geometry/       # Stellated octahedron structure
-    │   ├── traversal_engine/    # Pi-driven traversal
-    │   ├── timing_analysis/     # Settlement frequency
-    │   ├── information_theory/  # Bits and entropy
-    │   ├── lattice_foundations/ # Axioms and bounds
-    │   └── engine_stress_tests/ # Stability tests
+    ├── engine_core/         # Core field mechanics
+    │   ├── common/              # Traversal and tetragram analyzers
+    │   ├── geometry/            # Stellated octahedron structure
+    │   ├── field_closure/       # Pi-driven traversal, BBP algorithm
+    │   ├── timing/              # Causality, simultaneity, settlement
+    │   ├── information/         # Bits, entropy, channel capacity
+    │   ├── foundations/         # Lattice axioms and bounds
+    │   ├── engine_dynamics/     # Binding, spin, stability
+    │   ├── engine_crosschecks/  # NASA-level traversal verification
+    │   └── stress_tests/        # Determinism, ergodicity tests
     │
-    ├── calculations/        # Physics predictions (443 tests)
-    │   ├── stellar_mechanics/      # Fusion, elements
-    │   ├── particle_physics/       # Quarks, masses
-    │   ├── emergent_constants/     # alpha, G, H0
+    ├── calculations/        # Physics predictions
+    │   ├── stellar_mechanics/      # Fusion, element formation
+    │   ├── particle_physics/       # Quarks, mass derivations
+    │   ├── emergent_constants/     # alpha, G, H0, a0
     │   ├── entanglement_mechanics/ # Quantum correlations
-    │   ├── historical_systems/     # Cultural correspondences
+    │   ├── historical_systems/     # I Ching, Gematria correspondences
     │   └── ...                     # Additional modules
     │
-    └── reference/           # Documentation data
-        ├── gfd_definitions.py   # Terminology
-        ├── gfd_foundations.py   # Chain of logic
-        └── gfd_concepts.py      # How things work
+    ├── web_interface/       # Flask web application
+    │   ├── app.py               # Flask routes and API
+    │   ├── run_web.py           # Server launcher
+    │   ├── templates/           # HTML templates
+    │   └── static/              # CSS and JavaScript
+    │
+    ├── framework.py         # New test framework (v2)
+    ├── base.py              # Legacy test framework (v1)
+    │
+    └── docs/                # Documentation
+        └── Gravity_Field_Dynamics_Textbook.md
 ```
 
 ---
@@ -266,7 +277,41 @@ K = 4                   # Tetrahedral closure constant
 
 ## Writing New Tests
 
-Tests inherit from `GFDTest`:
+### New Framework (v2)
+
+Tests use the builder pattern with `Test`, `Derivation`, `Model`, and `Observed`:
+
+```python
+from gfd_model_v2.framework import *
+from gfd_model_v2.common.constants_codata import C, HBAR
+
+class MyTest(Test):
+    name = "My Test Name"
+    reference = "Source of observed values"
+    level = Level.STANDARD  # or CRITICAL, EXPLORATORY
+    
+    question = "What does this test verify and why does it matter?"
+    
+    derivation = (
+        Derivation()
+        .step("Start with the fundamental relationship")
+        .step("Apply the closure constraint")
+        .conclusion("The result follows from geometry alone")
+    )
+    
+    def model(self):
+        return Model().value("result", 42.0, "units")
+    
+    def observations(self):
+        return Observed().value("result", 42.0, "units")
+
+if __name__ == "__main__":
+    run_tests(MyTest)
+```
+
+### Legacy Framework (v1)
+
+Older tests inherit from `GFDTest`:
 
 ```python
 from gfd_model_v2.base import GFDTest
@@ -278,13 +323,13 @@ class MyTest(GFDTest):
     tolerance = 0.10  # 10% relative error allowed
     
     def model(self):
-        """Return model predictions."""
         return {"value": 42.0}
     
     def observations(self):
-        """Return observed values (or None)."""
         return {"value": 42.0}
 ```
+
+Both frameworks are fully supported by the web interface.
 
 ---
 

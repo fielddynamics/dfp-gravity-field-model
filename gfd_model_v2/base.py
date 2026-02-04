@@ -569,11 +569,17 @@ class Renderer:
         # Comparison
         if result.reference_source:
             print(_c(C.CYAN, "  Comparison"))
-            print(_c(C.DIM, f"    {'Item':<28} {'Model':>12} {'Observed':>12} {'Error':>9}"))
+            # Output JSON table for GFDM parser
+            import json
+            table_data = {
+                "headers": ["Item", "Model", "Observed", "Error", "Status"],
+                "rows": []
+            }
             for item, model, ref, error, passed in result.comparisons:
-                status = _c(C.GREEN, "OK") if passed else _c(C.RED, "FAIL")
+                status = "OK" if passed else "FAIL"
                 error_str = f"{error:.2%}" if error is not None else "--"
-                print(f"    {item:<28} {_fmt(model):>12} {_fmt(ref):>12} {error_str:>9}  {status}")
+                table_data["rows"].append([item, _fmt(model), _fmt(ref), error_str, status])
+            print(json.dumps(table_data))
             print()
         
         # Checks
@@ -585,16 +591,15 @@ class Renderer:
             print(f"    [{s2}] Pass rate {result.pass_rate:.0%} >= 95%")
         else:
             print(_c(C.DIM, "    [--] No observations to compare"))
-        print()
         
-        # Result
+        # Result (part of Checks)
         if result.passed:
-            print(_c(C.GREEN, "  PASS"))
+            print("    <pass>PASS</pass>")
         else:
-            print(_c(C.RED, "  FAIL"))
+            print("    <fail>FAIL</fail>")
             for item, _, _, error, passed in result.comparisons:
                 if not passed:
-                    print(_c(C.DIM, f"    {item}: {error:.2%} error"))
+                    print(f"      {item}: {error:.2%} error")
         print()
         
         # Commentary (academic reflection)

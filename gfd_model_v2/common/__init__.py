@@ -170,19 +170,13 @@ def get_complement(vertex: int) -> int:
 # Always import from this module or directly from pi_data.
 # =============================================================================
 
-# Import verified pi data from authoritative source
-try:
-    from gfd_model_v2.engine.engine_crosschecks.pi_data import (
-        PI_BASE8_FRACTIONAL as _PI_BASE8_FRACTIONAL,
-        PI_INTEGER_PART as _PI_INTEGER_PART,
-        get_pi_base8 as _get_pi_base8_verified,
-    )
-    _PI_DATA_AVAILABLE = True
-except ImportError:
-    # Fallback for when running outside the package structure
-    _PI_DATA_AVAILABLE = False
-    _PI_BASE8_FRACTIONAL = None
-    _PI_INTEGER_PART = 3
+# Import verified pi data from authoritative source (now in common/)
+from gfd_model_v2.common.pi_data import (
+    PI_BASE8_FRACTIONAL as _PI_BASE8_FRACTIONAL,
+    PI_INTEGER_PART as _PI_INTEGER_PART,
+    get_pi_base8 as _get_pi_base8_verified,
+)
+_PI_DATA_AVAILABLE = True
 
 # Pi base-16 digits (verified)
 # Pi (base 16) = 3.243F6A8885A308D313198A2E03707344A4093822299F31D...

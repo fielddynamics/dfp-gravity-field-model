@@ -72,7 +72,7 @@ def power_per_field(A):
 
 
 # =============================================================================
-# VALIDATED FUNCTION: element_power_output
+# VALIDATED FUNCTION: fn_get_element_power_output
 # =============================================================================
 
 _ELEMENT_BY_SYMBOL = {sym: a for sym, _, _, a in ELEMENTS}
@@ -97,7 +97,7 @@ _ELEMENT_BY_SYMBOL = {sym: a for sym, _, _, a in ELEMENTS}
     outputs={"watts": "float — Power per gravity field in watts"},
     group="Stellar Power Output",
 )
-def element_power_output(symbol):
+def fn_get_element_power_output(symbol):
     """
     Validated export: element symbol -> power output in watts.
 
@@ -111,6 +111,10 @@ def element_power_output(symbol):
         )
     A = _ELEMENT_BY_SYMBOL[symbol]
     return power_per_field(A)
+
+
+# Backward compatibility alias
+element_power_output = fn_get_element_power_output
 
 
 # =============================================================================
