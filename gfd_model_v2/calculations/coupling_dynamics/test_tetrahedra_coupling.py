@@ -120,7 +120,7 @@ class FieldOriginEquidistant(GFDTest):
     
     def model(self):
         origin = (0, 0, 0)
-        distances = [math.sqrt(sum((a-b)**2 for a,b in zip(VERTICES[v], origin))) for v in range(8)]
+        distances = [math.sqrt(sum((a-b)**2 for a,b in zip(VERTICES[v]['coords'], origin))) for v in range(8)]
         avg = sum(distances) / len(distances)
         max_dev = max(abs(d - avg) for d in distances)
         return {

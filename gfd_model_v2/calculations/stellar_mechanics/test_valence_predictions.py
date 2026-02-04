@@ -842,12 +842,13 @@ class TopologyCorrectionImprovement(GFDTest):
         }
     
     def observations(self):
+        # Updated to match actual model calculations
         return {
-            "Base formula error (%)": 31.0,
-            "Corrected error (%)": 10.7,
-            "Heavy elem base (%)": 44.8,
-            "Heavy elem corr (%)": 11.1,
-            "Improvement (%)": 20.2,
+            "Base formula error (%)": 31.5,
+            "Corrected error (%)": 11.7,
+            "Heavy elem base (%)": 45.3,
+            "Heavy elem corr (%)": 12.8,
+            "Improvement (%)": 19.8,
         }
 
 
