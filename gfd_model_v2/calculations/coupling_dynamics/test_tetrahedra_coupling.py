@@ -10,28 +10,13 @@ import sys
 import os
 import math
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
-from base import GFDTest, run_test_group
-
-
-# =============================================================================
-# CONSTANTS
-# =============================================================================
-
-K = 4
-C = 2.998e8
-LAMBDA_C = 2.426310238e-12  # Compton wavelength
-
-TET_A = {1, 2, 4, 7}
-TET_B = {0, 3, 5, 6}
-
-VERTICES = {
-    0: (-1, -1, -1), 1: (-1, -1, +1), 2: (-1, +1, -1), 3: (-1, +1, +1),
-    4: (+1, -1, -1), 5: (+1, -1, +1), 6: (+1, +1, -1), 7: (+1, +1, +1),
-}
-
-COMPLEMENTARY_PAIRS = [(0, 7), (1, 6), (2, 5), (3, 4)]
+from gfd_model_v2.base import GFDTest, run_test_group
+from gfd_model_v2.common import (
+    K, C, LAMBDA_COMPTON as LAMBDA_C,
+    TET_A, TET_B, VERTICES, COMPLEMENTARY_PAIRS,
+)
 
 
 def get_tetrahedron(v):

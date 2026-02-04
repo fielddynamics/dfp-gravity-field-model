@@ -18,22 +18,18 @@ import os
 import math
 from typing import Dict, Optional
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
-from base import GFDTest, run_test_group
+from gfd_model_v2.base import GFDTest, run_test_group
+from gfd_model_v2.common import (
+    C, G, M_E as ELECTRON_MASS, R_E, EPSILON_0, E_CHARGE, K,
+)
 
 # =============================================================================
 # CONSTANTS
 # =============================================================================
 
-K = 4  # Topology constant
 PI = math.pi
-C = 2.998e8  # Speed of light (m/s)
-G = 6.674e-11  # Gravitational constant
-ELECTRON_MASS = 9.109e-31  # kg
-R_E = 2.818e-15  # Classical electron radius (m)
-EPSILON_0 = 8.8541878128e-12  # Permittivity (F/m)
-E_CHARGE = 1.602176634e-19  # Elementary charge (C)
 
 # Hubble constant observations
 H_GW170817 = 70.0  # km/s/Mpc (gravitational wave measurement)

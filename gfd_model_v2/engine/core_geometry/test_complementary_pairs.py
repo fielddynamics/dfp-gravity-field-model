@@ -19,10 +19,9 @@ import os
 from typing import Dict, Optional
 import numpy as np
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
-from base import GFDTest, GroupResult, Renderer, run_test_group
+from gfd_model_v2.base import GFDTest, GroupResult, Renderer, run_test_group
 from gfd_model_v2.common import (
     COMPLEMENTARY_PAIRS, TET_A, TET_B, VERTICES,
     get_tetrahedron, traverse_pi_base8

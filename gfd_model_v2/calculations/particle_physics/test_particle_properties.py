@@ -15,29 +15,20 @@ import sys
 import os
 import math
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
-from base import GFDTest, run_test_group
+from gfd_model_v2.base import GFDTest, run_test_group
+from gfd_model_v2.common import (
+    K_CLOSURE, C, HBAR, ALPHA, ALPHA_INVERSE,
+)
 
-
-# =============================================================================
-# CONSTANTS
-# =============================================================================
-
-# Geometric constants from Field Chamber
-K_CLOSURE = 4                    # Tetrahedral face count
+# Geometric counts from Field Chamber
 D = K_CLOSURE - 1                # Spatial dimensions (3)
 VERTICES = 2 * K_CLOSURE         # 8 vertices in stellated octahedron
 FACES = 2 * K_CLOSURE            # 8 faces (4 per tetrahedron)
 TIME_FACES = 2                   # One per tetrahedron
 SPATIAL_FACES = 6                # Three per tetrahedron
 EDGES = 12                       # Stellated octahedron edge count
-
-# Physical constants
-C = 299792458                    # Speed of light (m/s)
-HBAR = 1.054571817e-34           # Reduced Planck (J*s)
-ALPHA = 1 / 137.035999084        # Fine structure constant
-ALPHA_INVERSE = 137.035999084    # 1/alpha
 
 # Particle masses (MeV/c^2)
 M_ELECTRON = 0.511               # Electron mass

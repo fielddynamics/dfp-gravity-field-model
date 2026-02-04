@@ -31,9 +31,13 @@ import os
 import math
 
 # Add parent path for imports
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
-from base import GFDTest, run_test_group
+from gfd_model_v2.base import GFDTest, run_test_group
+from gfd_model_v2.common import (
+    C as C_LIGHT, G as G_NEWTON, HBAR, R_E,
+    M_E as M_ELECTRON, K_CLOSURE, A_MOND as A_0_MOND,
+)
 
 # =============================================================================
 # FUNDAMENTAL CONSTANTS
@@ -43,21 +47,11 @@ PI = math.pi
 SQRT_2 = math.sqrt(2)
 SQRT_3 = math.sqrt(3)
 
-# GFD Parameters
-K_CLOSURE = 4           # Tetrahedral vertices (Field Closure constant)
 D_SPATIAL = 3           # Spatial dimensions
 
-# Physical Constants
-C_LIGHT = 299792458              # Speed of light (m/s)
-G_NEWTON = 6.67430e-11           # Gravitational constant (m³/kg/s²)
-HBAR = 1.054571817e-34           # Reduced Planck constant (J·s)
-R_E = 2.8179403262e-15           # Classical electron radius (m)
-M_ELECTRON = 9.1093837015e-31    # Electron mass (kg)
-H_HUBBLE = 70.0                  # Hubble constant (km/s/Mpc)
+# Hubble constant (observational, not a CODATA constant)
+H_HUBBLE = 70.0                  # km/s/Mpc
 H_HUBBLE_SI = H_HUBBLE * 1000 / (3.086e22)  # In SI units (s⁻¹)
-
-# Derived
-A_0_MOND = 1.2e-10               # MOND acceleration scale (m/s²)
 
 
 # =============================================================================

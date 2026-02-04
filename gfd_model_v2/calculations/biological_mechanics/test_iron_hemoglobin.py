@@ -10,17 +10,10 @@ import sys
 import os
 import math
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
-from base import GFDTest, run_test_group
-
-
-# =============================================================================
-# CONSTANTS
-# =============================================================================
-
-K = 4  # Closure constant
-ALPHA = 1 / 137.036
+from gfd_model_v2.base import GFDTest, run_test_group
+from gfd_model_v2.common import K, ALPHA
 
 def tetrahedral_number(n):
     """Calculate the nth tetrahedral number: T_n = n(n+1)(n+2)/6"""

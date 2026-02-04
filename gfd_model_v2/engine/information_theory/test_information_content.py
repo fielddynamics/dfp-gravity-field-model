@@ -16,9 +16,10 @@ import os
 import math
 from typing import Dict, Optional
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
-from base import GFDTest, run_test_group
+from gfd_model_v2.base import GFDTest, run_test_group
+from gfd_model_v2.common import C, ALPHA, LAMBDA_COMPTON
 
 # =============================================================================
 # CONSTANTS
@@ -26,12 +27,7 @@ from base import GFDTest, run_test_group
 
 BITS_PER_VERTEX = 3
 VERTICES_PER_ORBIT = 8
-ALPHA = 1/137.036
-ORBITS_PER_ELECTRON = 137  # int(1/ALPHA)
-
-# Compton wavelength for frequency calculation
-LAMBDA_COMPTON = 2.426310238e-12  # meters
-C = 2.998e8  # m/s
+ORBITS_PER_ELECTRON = int(1 / ALPHA)  # 137
 
 
 def calculate_settlement_frequency():

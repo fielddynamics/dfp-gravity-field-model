@@ -10,24 +10,16 @@ import sys
 import os
 import math
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
-from base import GFDTest, run_test_group
+from gfd_model_v2.base import GFDTest, run_test_group
+from gfd_model_v2.common import (
+    C, G, HBAR as H_BAR, K_B as K_BOLTZMANN,
+    M_SOLAR as M_SUN, L_PLANCK, M_PLANCK, R_E,
+)
 
-
-# =============================================================================
-# CONSTANTS
-# =============================================================================
-
-C = 2.998e8              # Speed of light (m/s)
-G = 6.674e-11            # Gravitational constant
-H_BAR = 1.055e-34        # Reduced Planck constant
-K_BOLTZMANN = 1.381e-23  # Boltzmann constant
-M_SUN = 1.989e30         # Solar mass (kg)
-L_PLANCK = 1.616e-35     # Planck length (m)
-M_PLANCK = 2.176e-8      # Planck mass (kg)
-R_E = 2.8179403262e-15   # Field Envelope (m)
-CLOSURE_FREQUENCY = 1e23 # Hz
+# Closure frequency: f = c / r_e (Compton-scale frequency)
+CLOSURE_FREQUENCY = C / R_E
 
 
 # =============================================================================

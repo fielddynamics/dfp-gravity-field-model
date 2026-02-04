@@ -10,23 +10,14 @@ import sys
 import os
 import math
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
-from base import GFDTest, run_test_group
+from gfd_model_v2.base import GFDTest, run_test_group
+from gfd_model_v2.common import (
+    C, HBAR as H_BAR, H as H_PLANCK, K_CLOSURE, R_E,
+)
 
-
-# =============================================================================
-# CONSTANTS
-# =============================================================================
-
-C = 2.998e8              # Speed of light (m/s)
-H_BAR = 1.055e-34        # Reduced Planck constant (J*s)
-H_PLANCK = 6.626e-34     # Planck constant (J*s)
-K_CLOSURE = 4            # Tetrahedral coupling
-
-# Field Closure frequency: f = c / r_e (classical electron radius)
-# This gives c = r_e × f_closure (speed of light = field size × closure frequency)
-R_E = 2.8179403262e-15  # classical electron radius (m)
+# Derived constants
 CLOSURE_FREQUENCY = C / R_E  # ≈ 1.06e23 Hz
 
 # Bell inequality limits

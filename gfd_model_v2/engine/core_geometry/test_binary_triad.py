@@ -19,10 +19,9 @@ import os
 from typing import Dict, Optional
 from collections import Counter
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
-from base import GFDTest, GroupResult, Renderer, run_test_group
+from gfd_model_v2.base import GFDTest, GroupResult, Renderer, run_test_group
 from gfd_model_v2.common import VERTICES, TET_A, TET_B, K, get_tetrahedron, get_pi_base8
 
 

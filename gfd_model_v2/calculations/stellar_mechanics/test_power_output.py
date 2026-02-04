@@ -22,23 +22,16 @@ import math
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
 from gfd_model_v2.base import GFDTest, run_test_group, validated_function
-
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))))
-
-from common import (
-    C, HBAR, G, K_CLOSURE, M_E, M_SOLAR, R_E,
-    ELEMENTS_118, BINDING_ENERGIES_BY_A,
+from gfd_model_v2.common import (
+    C, HBAR, G, K_CLOSURE, M_E, M_P as M_PROTON, M_SOLAR, R_E,
+    L_SOLAR, SOLAR_MASS_LOSS_RATE,
+    ELEMENTS_118, BINDING_ENERGIES_BY_A, MEV_TO_JOULES,
     get_binding_energy_by_A,
 )
 
 # =============================================================================
 # CONSTANTS
 # =============================================================================
-
-L_SOLAR = 3.828e26          # Watts
-SOLAR_MASS_LOSS_RATE = 4.26e9  # kg/s
-M_PROTON = 1.67262192e-27   # kg
-MEV_TO_JOULES = 1.60218e-13
 PP_CHAIN_ENERGY = 26.7      # MeV
 TRIPLE_ALPHA_ENERGY = 7.27  # MeV
 SIGMA_SB = 5.670374419e-8   # W/m^2/K^4

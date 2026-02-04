@@ -10,26 +10,17 @@ import sys
 import os
 import math
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
-from base import GFDTest, run_test_group
+from gfd_model_v2.base import GFDTest, run_test_group
+from gfd_model_v2.common import (
+    C, HBAR as H_BAR, H as H_PLANCK, E_CHARGE, M_E, M_P, R_E,
+    EV, MEV_TO_JOULES,
+)
 
-
-# =============================================================================
-# CONSTANTS
-# =============================================================================
-
-C = 2.998e8              # Speed of light (m/s)
-H_BAR = 1.055e-34        # Reduced Planck constant (J*s)
-H_PLANCK = 6.626e-34     # Planck constant (J*s)
-E_CHARGE = 1.602e-19     # Elementary charge (C)
-M_E = 9.109e-31          # Electron mass (kg)
-M_P = 1.673e-27          # Proton mass (kg)
-R_E = 2.8179403262e-15   # Field Envelope (m)
-CLOSURE_FREQUENCY = 1e23 # Hz
-
-EV_TO_JOULES = E_CHARGE
-MEV_TO_JOULES = E_CHARGE * 1e6
+# Derived constants
+CLOSURE_FREQUENCY = C / R_E
+EV_TO_JOULES = EV  # alias for backward compat
 
 
 # =============================================================================

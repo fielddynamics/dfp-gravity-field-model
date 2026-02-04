@@ -404,6 +404,20 @@ except ImportError:
     # Stellar constants not yet available (e.g., during initial import)
     _STELLAR_AVAILABLE = False
 
+# =============================================================================
+# ATOMIC DATA (re-exported from atomic_data for convenience)
+# =============================================================================
+
+from .atomic_data import (
+    MEV_TO_JOULES,
+    ELEMENTS_118,
+    IONIZATION_ENERGIES,
+    ELECTRONEGATIVITIES,
+    ATOMIC_DATA,
+    BINDING_ENERGIES_BY_A,
+    get_binding_energy_by_A,
+)
+
 # Alias for backward compatibility (some files use ME instead of M_E)
 ME = M_E
 
@@ -466,6 +480,14 @@ __all__ = [
     "vortex_eye_size",
     # Backward compatibility aliases
     "ME",
+    # Atomic data
+    "MEV_TO_JOULES",
+    "ELEMENTS_118",
+    "IONIZATION_ENERGIES",
+    "ELECTRONEGATIVITIES",
+    "ATOMIC_DATA",
+    "BINDING_ENERGIES_BY_A",
+    "get_binding_energy_by_A",
     # Stellar constants (when available)
     "T_HYDROGEN_FUSION", "T_HELIUM_FUSION", "T_CARBON_FUSION",
     "T_OXYGEN_FUSION", "T_SILICON_FUSION", "T_IRON_PHOTODISINTEGRATION",

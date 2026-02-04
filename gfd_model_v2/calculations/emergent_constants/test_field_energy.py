@@ -19,28 +19,20 @@ import os
 import math
 from typing import Dict, Optional
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
-from base import GFDTest, GroupResult, Renderer, run_test_group
-
+from gfd_model_v2.base import GFDTest, GroupResult, Renderer, run_test_group
+from gfd_model_v2.common import (
+    C, H as H_PLANCK, HBAR as H_BAR, G, M_E, M_P as M_PROTON,
+    MU_0, EPSILON_0, R_E, E_PLANCK,
+)
 
 # =============================================================================
 # CONSTANTS
 # =============================================================================
 
-C = 2.998e8              # Speed of light (m/s)
-H_PLANCK = 6.626e-34     # Planck constant (J*s)
-H_BAR = 1.055e-34        # Reduced Planck constant (J*s)
-G = 6.674e-11            # Gravitational constant
-M_E = 9.109e-31          # Electron mass (kg)
-M_PROTON = 1.673e-27     # Proton mass (kg)
-MU_0 = 1.257e-6          # Permeability of free space
-EPSILON_0 = 8.854e-12    # Permittivity of free space
-
-CLOSURE_FREQUENCY = 1e23     # Hz
-R_E = 2.818e-15              # Classical electron radius (m)
-E_PLANCK = 1.956e9           # Planck energy (J)
+# Closure frequency: f = c / r_e (Compton-scale frequency)
+CLOSURE_FREQUENCY = C / R_E
 
 
 # =============================================================================

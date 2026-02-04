@@ -21,7 +21,7 @@ from typing import Dict, Optional
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
-from base import GFDTest, GroupResult, Renderer, run_test_group
+from gfd_model_v2.base import GFDTest, GroupResult, Renderer, run_test_group
 from gfd_model_v2.common import FACES, TIME_FACES, SPATIAL_FACES, HBAR
 
 

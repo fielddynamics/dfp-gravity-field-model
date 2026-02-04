@@ -19,26 +19,16 @@ import sys
 import os
 from typing import Dict, Optional
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
-from base import GFDTest, GroupResult, Renderer, run_test_group
+from gfd_model_v2.base import GFDTest, GroupResult, Renderer, run_test_group
+from gfd_model_v2.common import (
+    C, H as H_PLANCK, HBAR as H_BAR, T_PLANCK, L_PLANCK,
+    M_E, ALPHA, R_E,
+)
 
-
-# =============================================================================
-# CONSTANTS
-# =============================================================================
-
-C = 2.998e8              # Speed of light (m/s)
-H_PLANCK = 6.626e-34     # Planck constant (J*s)
-H_BAR = 1.055e-34        # Reduced Planck constant (J*s)
-T_PLANCK = 5.391e-44     # Planck time (s)
-L_PLANCK = 1.616e-35     # Planck length (m)
-M_E = 9.109e-31          # Electron mass (kg)
-ALPHA = 1/137.036        # Fine structure constant
-
-# DFP model parameters
-CLOSURE_FREQUENCY = 1e23     # Hz
-R_E = 2.818e-15              # Classical electron radius (m)
+# Derived model parameters
+CLOSURE_FREQUENCY = C / R_E   # ~1.06e23 Hz
 CLOSURE_PERIOD = 1 / CLOSURE_FREQUENCY
 
 

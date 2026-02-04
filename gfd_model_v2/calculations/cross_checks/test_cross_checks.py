@@ -10,32 +10,18 @@ import sys
 import os
 import math
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
-from base import GFDTest, run_test_group
+from gfd_model_v2.base import GFDTest, run_test_group
+from gfd_model_v2.common import (
+    K, C, HBAR as H_BAR, ALPHA, R_E, LAMBDA_COMPTON as LAMBDA_C, M_E,
+    TET_A, TET_B,
+)
 
-
-# =============================================================================
-# CONSTANTS (from various modules - must agree)
-# =============================================================================
-
-# Topology
-K = 4
-VERTICES = 8
-FACES = 8
-EDGES = 12
-
-# Physics
-C = 2.998e8
-H_BAR = 1.055e-34
-ALPHA = 1 / 137.036
-R_E = 2.8179403262e-15
-LAMBDA_C = 2.426310238e-12
-M_E = 9.109e-31
-
-# Sets
-TET_A = {1, 2, 4, 7}
-TET_B = {0, 3, 5, 6}
+# Topology counts
+VERTICES = 2 * K   # 8
+FACES = 2 * K       # 8
+EDGES = 3 * K       # 12
 
 
 # =============================================================================

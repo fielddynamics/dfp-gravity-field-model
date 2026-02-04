@@ -28,15 +28,11 @@ import math
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 
 from gfd_model_v2.base import GFDTest, run_test_group, validated_function
-
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))))
-
-from common import (
+from gfd_model_v2.common import (
     K_CLOSURE, R_E, M_E, A_0, C, HBAR,
-    # Periodic table data (canonical source in common.py)
     ELEMENTS_118, BINDING_ENERGIES_BY_A,
     IONIZATION_ENERGIES, ELECTRONEGATIVITIES,
-    ATOMIC_DATA,
+    ATOMIC_DATA, MEV_TO_JOULES,
     get_binding_energy_by_A,
 )
 
@@ -53,7 +49,6 @@ ELEMENTS = ELEMENTS_118
 # Field closure constants
 LAMBDA_COMPTON = 2.426310238e-12  # Compton wavelength (m)
 F_CLOSURE = C / LAMBDA_COMPTON    # ~1.24e20 Hz
-MEV_TO_JOULES = 1.60218e-13
 
 
 # =============================================================================
