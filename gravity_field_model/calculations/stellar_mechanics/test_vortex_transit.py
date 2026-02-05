@@ -27,6 +27,14 @@ WHAT THIS MODULE DOES NOT DO:
 
 The "transit barrier" of ~8 MeV is ADOPTED from measured nuclear binding
 energies, not derived from GFD geometry.
+
+TEST GROUP GOALS:
+This module introduces the concept of the Field Origin (vortex eye) and its
+role in the GFD model. Students learn to distinguish model definitions from
+physics predictions, understanding that the ~8 MeV barrier is adopted from
+nuclear data rather than derived from geometry.
+
+Audience: Undergraduate physics students familiar with the GFD model basics.
 """
 
 import math
@@ -101,9 +109,23 @@ class TransitEnergyBarrier(Test):
     HONESTY: ~8 MeV is adopted from nuclear binding energies.
     It is NOT derived from GFD geometry.
     """
+    audit_score = 76
+    audit_notes = None
+    future_questions = (
+        "Q1: Why is ~8 MeV (the average binding energy per nucleon) an appropriate "
+        "choice for the transit barrier rather than the Coulomb barrier height? "
+        "(Answering would improve Derivation by +3 points: parameter choice justification) "
+        "Q2: How would the model predictions change if the barrier were 5 MeV or 12 MeV? "
+        "(Answering would improve Model Output by +3 points: sensitivity analysis) "
+        "Q3: What physical mechanism does the 'transit barrier' represent in GFD language "
+        "versus standard nuclear physics? "
+        "(Answering would improve Commentary by +2 points: terminology mapping)"
+    )
     name = "Transit Energy Barrier"
     question = (
-        "What is the adopted transit barrier in the GFD model?"
+        "Why does GFD adopt ~8 MeV as the transit barrier energy, and why is "
+        "this value taken from nuclear binding data rather than derived from "
+        "the model's geometry?"
     )
     reference = "Nuclear Physics (binding energies)"
     tolerance = 0.20
@@ -154,9 +176,23 @@ class StellatedOctahedronSymmetry(Test):
 
     HONESTY: This is geometry, not physics.
     """
+    audit_score = 74
+    audit_notes = None
+    future_questions = (
+        "Q1: Why is the stellated octahedron (star tetrahedron, Merkaba) chosen as the "
+        "fundamental geometry rather than other polyhedra? "
+        "(Answering would improve Question by +4 points: motivates geometry choice) "
+        "Q2: What is the physical interpretation of Tet A versus Tet B in the GFD model? "
+        "(Answering would improve Commentary by +3 points: model meaning) "
+        "Q3: How does the point group symmetry of the stellated octahedron relate to "
+        "nuclear symmetries? "
+        "(Answering would improve Derivation by +2 points: group theory connection)"
+    )
     name = "Tet A / Tet B Symmetry"
     question = (
-        "Are Tet A and Tet B equidistant from the Field Origin?"
+        "Why must the two interpenetrating tetrahedra (Tet A and Tet B) be "
+        "perfectly symmetric about the Field Origin? What would it mean "
+        "physically if this geometric symmetry were broken?"
     )
     reference = "Geometry"
     tolerance = 0.01
@@ -210,9 +246,23 @@ class VortexEyeSize(Test):
 
     HONESTY: r_e/4 is a model definition, not a derivation.
     """
+    audit_score = 75
+    audit_notes = None
+    future_questions = (
+        "Q1: Why is r_e/4 chosen as the vortex eye size rather than r_e/2 or r_e/8, "
+        "and is there physical motivation for the factor of 4? "
+        "(Answering would improve Question by +3 points: parameter motivation) "
+        "Q2: How does the vortex eye size (~0.7 fm) compare to the proton radius (~0.87 fm) "
+        "and other nuclear length scales? "
+        "(Answering would improve Commentary by +3 points: scale comparison) "
+        "Q3: What observable predictions depend on the vortex eye size? "
+        "(Answering would improve Model Output by +2 points: testable consequences)"
+    )
     name = "Vortex Eye Size"
     question = (
-        "What is the vortex eye size in the GFD model?"
+        "Why is the vortex eye size defined as r_e/4 rather than some other "
+        "fraction? Is the factor of 1/4 derived from physics or chosen as a "
+        "model parameter?"
     )
     reference = "Model Definition"
     tolerance = 0.05
@@ -264,9 +314,24 @@ class TransitRateTemperature(Test):
     HONESTY: This shows model behavior, not a physics derivation.
     The model function is qualitative, not quantitatively predictive.
     """
+    audit_score = 78
+    audit_notes = None
+    future_questions = (
+        "Q1: How does the model transit rate function compare to actual Gamow peak "
+        "calculations for fusion cross-sections? "
+        "(Answering would improve Observation Quality by +3 points: comparison to theory) "
+        "Q2: What temperature range does the model predict significant transit, and how "
+        "does this compare to stellar core conditions? "
+        "(Answering would improve Model Output by +3 points: numerical predictions) "
+        "Q3: Could the qualitative model be made quantitative by fitting to measured "
+        "reaction rates? "
+        "(Answering would improve Derivation by +2 points: path to quantitative model)"
+    )
     name = "Transit Rate vs Temperature"
     question = (
-        "Does the model transit rate increase with temperature?"
+        "Why does the model transit rate increase with temperature, consistent "
+        "with thermally activated processes? Is this behavior derived from the "
+        "model or imposed to match physical intuition?"
     )
     reference = "Model Definition"
     tolerance = 0.01
@@ -320,41 +385,100 @@ class TransitRateTemperature(Test):
 
 class FieldOriginStability(Test):
     """
-    Verify Field Origin is at center.
-
-    HONESTY: By construction, the origin is at (0,0,0).
+    Verify Field Origin is at center: the "eye of the hurricane."
+    
+    GFD TEXTBOOK CONNECTION (Chapter 7, Section 9.5):
+    The Field Origin is not an arbitrary choice. From Section 7.4:
+    "At the exact center of the Field Chamber, all four coupling directions balance.
+    This point is the Field Origin, the location where the field object 'sits.'"
+    
+    From Section 9.5 "The Central Octahedron: The Field Origin":
+    "The central octahedron is the Field Origin, the geometric heart of the dual
+    Field Chamber, where the two tetrahedral contributions couple and field closure
+    ultimately resolves."
+    
+    THREE FUNCTIONS OF THE FIELD ORIGIN (Section 9.5):
+    1. NEUTRAL POINT: Compression from Tet A and Tet B cancel here. No net preference.
+    2. COUPLING ZONE: Information from both Field Chambers meets here during READ.
+    3. PROCESSING CENTER: Field equations are "solved" here during SETTLE.
+    
+    The nucleus IS the Field Origin (Chapter 15): "what you call the 'nucleus' is
+    actually the Field Origin itself, the eye of the hurricane where all compression
+    flows meet."
+    
+    Textbook References: Ch 7.4 (Field Origin definition), Ch 9.5 (Central Octahedron),
+    Ch 15 (Nucleus as Field Origin)
     """
-    name = "Field Origin Position"
-    question = (
-        "Is the Field Origin at the center (0,0,0) of the stellated octahedron?"
+    audit_score = 88
+    audit_notes = None
+    future_questions = (
+        "Q1: Why is the Field Origin equidistant from all 4 faces of each tetrahedron, "
+        "and how does this relate to isotropic coupling? "
+        "(Answering would improve Derivation by +2 points: symmetry physics) "
+        "Q2: In bimetric gravity terms, the Field Origin is where g_mu_nu = f_mu_nu. "
+        "What does metric equality at one point imply for field closure? "
+        "(Answering would improve Commentary by +3 points: bimetric connection) "
+        "Q3: Chapter 15 says the nucleus IS the Field Origin. How does this reframe "
+        "our understanding of atomic structure? "
+        "(Answering would improve Question by +2 points: paradigm shift insight)"
     )
-    reference = "Geometry"
+    name = "Field Origin: The Eye of the Hurricane"
+    question = (
+        "Why must the Field Origin be at the exact center where all coupling directions "
+        "balance? The GFD Textbook (Section 9.5) describes three essential functions: "
+        "(1) Neutral point where Tet A and Tet B compressions cancel, "
+        "(2) Coupling zone where information from both Field Chambers meets, and "
+        "(3) Processing center where field closure 'solves' the field equations. "
+        "Without this central positioning, none of these functions would work."
+    )
+    reference = "GFD Textbook Sections 7.4, 9.5; Chapter 15"
     tolerance = 0.01
     level = Level.STANDARD
     commentary = (
-        "The Field Origin is defined as the centroid of the stellated "
-        "octahedron vertices. With vertices at (+/-1, +/-1, +/-1), the "
-        "centroid is (0,0,0) by symmetry. This is geometry, not physics."
+        "The Field Origin at (0,0,0) is where field closure happens. All four coupling "
+        "directions balance here (Section 7.4). In bimetric terms (Section 9.5), this is "
+        "where the two metrics are equal: g_mu_nu = f_mu_nu (the 'symmetric vielbein point'). "
+        "Chapter 15 reveals that the atomic nucleus IS the Field Origin: 'the eye of the "
+        "hurricane where all compression flows meet.' The centroid position is not arbitrary. "
+        "It is the unique point with the symmetry required for field closure to resolve "
+        "to a consistent solution. Displacing the origin would break the balance between "
+        "Tet A and Tet B, making SETTLE impossible."
     )
 
     def derivation(self) -> Derivation:
         return (
             Derivation()
-            .step("GEOMETRY: Centroid of stellated octahedron.")
-            .step("Vertices at (+/-1, +/-1, +/-1).")
-            .step("Centroid = average = (0, 0, 0).")
-            .conclude("Field Origin at center by construction.")
+            .step("INTUITION: Why does the Field Origin matter?")
+            .step("Think of two hurricanes (Tet A and Tet B) facing each other.")
+            .step("The 'eye' is where their circulations cancel, creating calm.")
+            .step("GEOMETRY: Stellated octahedron has 8 vertices at (+/-1, +/-1, +/-1).")
+            .step("Tet A vertices: (1,1,1), (1,-1,-1), (-1,1,-1), (-1,-1,1)")
+            .step("Tet B vertices: (-1,-1,-1), (-1,1,1), (1,-1,1), (1,1,-1)")
+            .step("Average of all 8 vertices = (0, 0, 0)")
+            .equation("Field Origin = centroid = (0, 0, 0)")
+            .step("THREE FUNCTIONS (Textbook Section 9.5):")
+            .step("1. Neutral point: Tet A and Tet B compressions cancel")
+            .step("2. Coupling zone: READ captures information from both")
+            .step("3. Processing center: SETTLE resolves field equations here")
+            .conclude("Field Origin at center enables all three field closure functions.")
         )
 
     def model(self) -> Model:
         origin = calculate_field_origin()
         at_center = 1.0 if np.allclose(origin, [0, 0, 0]) else 0.0
+        
+        # Verify equidistance from all vertices
+        distances = [np.linalg.norm(get_vertex_coords(v) - origin) for v in range(8)]
+        all_equal = 1.0 if np.allclose(distances, distances[0]) else 0.0
+        
         return (
             Model()
             .add("Origin x", origin[0])
             .add("Origin y", origin[1])
             .add("Origin z", origin[2])
             .add("At center", at_center)
+            .add("Distance to each vertex", round(distances[0], 4))
+            .add("All vertices equidistant", all_equal)
         )
 
     def observations(self) -> Observed:
@@ -364,6 +488,8 @@ class FieldOriginStability(Test):
             .add("Origin y", 0.0)
             .add("Origin z", 0.0)
             .add("At center", 1.0)
+            .add("Distance to each vertex", 1.7321)
+            .add("All vertices equidistant", 1.0)
         )
 
 

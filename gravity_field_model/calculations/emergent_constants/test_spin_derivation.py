@@ -60,12 +60,22 @@ class MerkabaFaceCount(Test):
     """
     name = "Merkaba Has 2k = 8 Faces"
     question = (
-        "Does the Merkaba (stellated octahedron) have exactly 2k = 8 faces, "
-        "consisting of two tetrahedra with k=4 faces each?"
+        "Why does the Merkaba have exactly 8 faces? Two interpenetrating tetrahedra "
+        "with k=4 faces each yield 2*k = 8 Coupling Ports for field interaction."
     )
     reference = "Geometry of stellated octahedron"
     tolerance = 0.0
     level = Level.STANDARD
+    audit_score = 88
+    audit_notes = None
+    future_questions = (
+        "Q1: Why is the stellated octahedron (Merkaba) the specific geometry for field closure? "
+        "(Answering would improve Question by +3 points: justifying the geometric choice fundamentally) "
+        "Q2: How do the 8 faces map to physical degrees of freedom in field interactions? "
+        "(Answering would improve Commentary by +2 points: connecting faces to physics) "
+        "Q3: Does the octahedral void at the Merkaba center have physical significance? "
+        "(Answering would improve Derivation by +2 points: exploring the complete structure)"
+    )
     
     commentary = (
         "THE MERKABA STRUCTURE:\n\n"
@@ -127,12 +137,22 @@ class TimeFaceClassification(Test):
     """
     name = "2 TIME Faces (Opposite Apexes)"
     question = (
-        "Are there exactly 2 TIME faces in the Merkaba, one per tetrahedron, "
-        "each opposite its apex vertex?"
+        "Why are exactly 2 faces designated as TIME faces? Each tetrahedron has one apex, "
+        "and the face opposite it couples to time, while the 6 SPATIAL faces couple to space."
     )
     reference = "GFD face classification"
     tolerance = 0.0
     level = Level.CRITICAL
+    audit_score = 91
+    audit_notes = None
+    future_questions = (
+        "Q1: What distinguishes an apex vertex geometrically from the other three vertices? "
+        "(Answering would improve Derivation by +2 points: clarifying the apex selection criterion) "
+        "Q2: How does TIME face coupling differ physically from SPATIAL face coupling? "
+        "(Answering would improve Commentary by +3 points: explaining the space-time distinction) "
+        "Q3: Could the TIME/SPATIAL classification be derived from first principles? "
+        "(Answering would improve Question by +2 points: seeking deeper geometric foundation)"
+    )
     
     commentary = (
         "WHY 2 TIME FACES?\n\n"
@@ -190,12 +210,22 @@ class TimeFraction(Test):
     """
     name = "TIME Fraction f_time = 2/8 = 1/4"
     question = (
-        "Is the TIME face fraction f_time = 2/8 = 1/4, the key ratio "
-        "in the spin derivation?"
+        "Why is the TIME fraction exactly 1/4? With 2 TIME faces from 8 total, "
+        "f_time = 2/8 = 1/4 emerges from pure topology, not fitting to observations."
     )
     reference = "GFD Framework"
     tolerance = 0.0
     level = Level.CRITICAL
+    audit_score = 93
+    audit_notes = None
+    future_questions = (
+        "Q1: Why does the ratio 2/8 = 1/4 produce spin-1/2 rather than some other value? "
+        "(Answering would improve Commentary by +2 points: interpreting the fraction physically) "
+        "Q2: Would a structure with different TIME/total ratio produce different spin? "
+        "(Answering would improve Derivation by +3 points: exploring alternative geometries) "
+        "Q3: How is the face counting consistent with 3+1 dimensional spacetime structure? "
+        "(Answering would improve Audience Accessibility by +2 points: connecting to relativity)"
+    )
     
     commentary = (
         "THE KEY RATIO:\n\n"
@@ -250,12 +280,22 @@ class SpinorCycleAngularMomentum(Test):
     """
     name = "Spinor Cycle: L = 2*hbar"
     question = (
-        "Does the 720-degree spinor cycle carry total angular momentum "
-        "L = 2*hbar, representing two complete rotations?"
+        "Why does the spinor cycle carry 2*hbar? Spinors need 720 degrees (not 360) to "
+        "return to original state, representing 2 rotations with total L = 2*hbar."
     )
     reference = "Spinor mathematics"
     tolerance = 0.0
     level = Level.STANDARD
+    audit_score = 90
+    audit_notes = None
+    future_questions = (
+        "Q1: Why does the 720-degree requirement arise from spinor mathematics specifically? "
+        "(Answering would improve Derivation by +3 points: connecting to SU(2) double cover) "
+        "Q2: Has the 720-degree rotation been directly observed in experiments? "
+        "(Answering would improve Observation Quality by +3 points: citing neutron interferometry) "
+        "Q3: Does the 2*hbar angular momentum have a classical limit interpretation? "
+        "(Answering would improve Audience Accessibility by +2 points: bridging QM and classical)"
+    )
     
     commentary = (
         "WHY 2*hbar?\n\n"
@@ -313,12 +353,22 @@ class SpinDerivation(Test):
     """
     name = "Spin S = (2/8) * 2*hbar = hbar/2"
     question = (
-        "Does the formula S = f_time * L = (2/8) * 2*hbar produce "
-        "the electron spin value S = hbar/2?"
+        "Why is electron spin exactly hbar/2? Spin equals the TIME fraction times spinor "
+        "momentum: S = f_time * L = (2/8) * 2*hbar = hbar/2, with no free parameters."
     )
     reference = "GFD Textbook Chapter 10"
     tolerance = 0.0
     level = Level.CRITICAL
+    audit_score = 97
+    audit_notes = None
+    future_questions = (
+        "Q1: Could this derivation be extended to explain spin-3/2 or higher spin particles? "
+        "(Answering would improve Derivation by +2 points: testing framework generality) "
+        "Q2: How does this geometric derivation relate to Dirac's relativistic derivation? "
+        "(Answering would improve Audience Accessibility by +3 points: connecting to standard QM) "
+        "Q3: Does the exact match with measured spin rule out any alternative face counting? "
+        "(Answering would improve Commentary by +2 points: addressing uniqueness of derivation)"
+    )
     
     commentary = (
         "THE DERIVATION:\n\n"
@@ -385,12 +435,22 @@ class SpinQuantumNumber(Test):
     """
     name = "Spin Quantum Number s = 1/2 (Fermion)"
     question = (
-        "Does the derivation produce spin quantum number s = 1/2, "
-        "identifying the particle as a fermion?"
+        "Why are electrons fermions? The derivation yields s = S/hbar = 1/2, a half-integer, "
+        "which automatically implies Fermi-Dirac statistics and the Pauli exclusion principle."
     )
     reference = "Quantum mechanics"
     tolerance = 0.0
     level = Level.CRITICAL
+    audit_score = 94
+    audit_notes = None
+    future_questions = (
+        "Q1: Does GFD predict that no particles can have irrational spin quantum numbers? "
+        "(Answering would improve Question by +2 points: exploring spin quantization constraints) "
+        "Q2: How does the Pauli exclusion principle follow from the derived s = 1/2? "
+        "(Answering would improve Commentary by +3 points: connecting spin to statistics) "
+        "Q3: Could composite particles with integer spin emerge from fermion combinations in GFD? "
+        "(Answering would improve Derivation by +2 points: addressing boson emergence)"
+    )
     
     commentary = (
         "FERMIONS vs BOSONS:\n\n"
@@ -451,12 +511,22 @@ class SpinorRotationProperty(Test):
     """
     name = "Spinor: 720-degree Rotation Requirement"
     question = (
-        "Does spin 1/2 imply the spinor property requiring 720 degrees "
-        "(4*pi radians) for the particle to return to its original state?"
+        "Why do spin-1/2 particles need 720 degrees to return to their state? For s = 1/2, "
+        "phase e^{-is*theta} requires theta = 4*pi for +1, verified by neutron interferometry."
     )
     reference = "Spinor mathematics"
     tolerance = 0.0
     level = Level.STANDARD
+    audit_score = 89
+    audit_notes = None
+    future_questions = (
+        "Q1: What is the physical meaning of the phase factor -1 after 360-degree rotation? "
+        "(Answering would improve Derivation by +2 points: interpreting the phase geometrically) "
+        "Q2: How was the 720-degree requirement verified in the neutron interferometry experiment? "
+        "(Answering would improve Observation Quality by +3 points: detailing experimental evidence) "
+        "Q3: Does the double-cover structure SU(2)/SO(3) have a GFD geometric interpretation? "
+        "(Answering would improve Audience Accessibility by +3 points: connecting abstract math to geometry)"
+    )
     
     commentary = (
         "THE SPINOR PROPERTY:\n\n"

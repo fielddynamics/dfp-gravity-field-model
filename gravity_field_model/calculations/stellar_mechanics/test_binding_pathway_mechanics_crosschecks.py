@@ -24,20 +24,22 @@ WHAT REMAINS:
 - Data consistency checks
 - E=mc^2 verification
 - Binding curve shape verification
+
+TEST GROUP GOALS:
+This module validates the consistency of nuclear binding data from multiple
+authoritative sources (CODATA, AME2020). Cross-checks ensure that mass defects
+match binding energies via E=mc^2, and that the binding curve shape (rising
+to Fe-56, falling after) is correctly reproduced.
+
+Audience: Undergraduate physics students and above.
 """
 
 import math
 from gravity_field_model.framework import *
-
-
-# =============================================================================
-# PHYSICAL CONSTANTS
-# =============================================================================
-
-C = 2.998e8                  # Speed of light (m/s)
-M_PROTON_MEV = 938.272       # Proton rest mass (MeV)
-M_NEUTRON_MEV = 939.565      # Neutron rest mass (MeV)
-MEV_TO_JOULES = 1.60218e-13  # Conversion factor
+from gravity_field_model.common import (
+    C, MEV_TO_JOULES,
+    M_P_MEV, M_N_MEV,
+)
 
 # Binding energies (MeV/nucleon) from AME2020
 BINDING_CURVE = [
@@ -69,10 +71,22 @@ class MassEnergyEquivalence(Test):
     This verifies the consistency between mass measurements and
     binding energy values from independent sources.
     """
+    audit_score = 82
+    audit_notes = None
+    future_questions = (
+        "Q1: Why is deuterium the simplest test case for mass-energy equivalence, and what "
+        "makes it ideal for verifying E=mc^2 in nuclear physics? "
+        "(Answering would improve Derivation by +3 points: explains why simplest bound system) "
+        "Q2: How do independent measurement techniques (mass spectrometry vs nuclear reactions) "
+        "confirm the same binding energy value? "
+        "(Answering would improve Observation Quality by +3 points: traces to multiple sources) "
+        "Q3: What systematic uncertainties limit the precision of mass defect measurements? "
+        "(Answering would improve Commentary by +2 points: deeper insight into measurement limits)"
+    )
     name = "E=mc^2 Consistency (Deuterium)"
     question = (
-        "Are the measured mass defect and binding energy of deuterium "
-        "consistent via E=mc^2?"
+        "Why does the mass of a deuterium nucleus not equal the sum of a proton "
+        "and neutron mass? How does the 'missing' mass relate to binding energy?"
     )
     reference = "CODATA, AME2020"
     tolerance = 0.02
@@ -97,7 +111,7 @@ class MassEnergyEquivalence(Test):
         )
 
     def model(self) -> Model:
-        m_constituents = M_PROTON_MEV + M_NEUTRON_MEV
+        m_constituents = M_P_MEV + M_N_MEV
         be_deuterium = 2.22  # MeV
         m_nuclear_calc = m_constituents - be_deuterium
         m_nuclear_measured = 1875.61  # MeV
@@ -135,10 +149,22 @@ class BindingCurvePeak(Test):
 
     This verifies the shape of the binding energy curve from tabulated data.
     """
+    audit_score = 85
+    audit_notes = None
+    future_questions = (
+        "Q1: Why do both Fe-56 and Ni-62 appear at the binding energy peak, and which nucleus "
+        "is technically the most tightly bound? "
+        "(Answering would improve Commentary by +3 points: clarifies subtle distinction) "
+        "Q2: How does the semi-empirical mass formula explain why the peak occurs at A~56? "
+        "(Answering would improve Derivation by +3 points: connects to physical mechanism) "
+        "Q3: What astrophysical consequences follow from iron being the fusion endpoint? "
+        "(Answering would improve Audience Accessibility by +2 points: real-world connection)"
+    )
     name = "Binding Curve Peak Location"
     question = (
-        "Does the binding energy per nucleon peak in the iron group "
-        "(A ~ 56-62) as expected from nuclear data tables?"
+        "Why does the binding energy per nucleon peak at iron and nickel, "
+        "rather than continuing to increase for heavier nuclei? What physical "
+        "mechanisms create this energy valley?"
     )
     reference = "AME2020"
     tolerance = 0.02
@@ -206,10 +232,22 @@ class AlphaClusterEnergy(Test):
     Verify that C-12 binding energy is consistent with 3 alpha particles
     plus additional binding.
     """
+    audit_score = 83
+    audit_notes = None
+    future_questions = (
+        "Q1: Why does the alpha cluster model work so well for light nuclei with A=4n, "
+        "but fail for nuclei like Li-7 or N-14? "
+        "(Answering would improve Derivation by +3 points: explains model applicability) "
+        "Q2: How does the Hoyle state in C-12 provide evidence for alpha clustering? "
+        "(Answering would improve Observation Quality by +3 points: links to experimental signature) "
+        "Q3: What geometric arrangements of alpha particles have been proposed for O-16? "
+        "(Answering would improve Commentary by +2 points: extends to larger nuclei)"
+    )
     name = "Alpha Cluster Binding (C-12)"
     question = (
-        "Is the C-12 binding energy consistent with three alpha particles "
-        "plus inter-alpha binding?"
+        "Why does carbon-12 have more binding energy than three separate "
+        "helium-4 nuclei? What additional binding arises when alpha particles "
+        "cluster together?"
     )
     reference = "Nuclear physics (alpha cluster model)"
     tolerance = 0.05
@@ -268,10 +306,22 @@ class NZTrendVerification(Test):
 
     Verify that our data table shows the expected N/Z increase with mass.
     """
+    audit_score = 80
+    audit_notes = None
+    future_questions = (
+        "Q1: Why does the N/Z ratio plateau around 1.5 to 1.6 for the heaviest stable nuclei "
+        "rather than continuing to increase? "
+        "(Answering would improve Derivation by +3 points: explains asymptotic limit) "
+        "Q2: How does the valley of stability width change with atomic number? "
+        "(Answering would improve Model Output by +2 points: shows full stability landscape) "
+        "Q3: What happens to nuclei that lie far from the valley of stability? "
+        "(Answering would improve Audience Accessibility by +3 points: connects to decay modes)"
+    )
     name = "N/Z Ratio Trend"
     question = (
-        "Does our data table show the expected increase in N/Z ratio with "
-        "atomic number?"
+        "Why do heavy stable nuclei require more neutrons per proton than "
+        "light nuclei? How does the Coulomb repulsion between protons drive "
+        "this trend?"
     )
     reference = "Nuclear data (valley of stability)"
     tolerance = 0.05
@@ -343,10 +393,23 @@ class SEMFComparison(Test):
     Verify that our binding energies are consistent with the semi-empirical
     mass formula (Weizsacker formula).
     """
+    audit_score = 84
+    audit_notes = None
+    future_questions = (
+        "Q1: Which of the five SEMF terms (volume, surface, Coulomb, asymmetry, pairing) "
+        "dominates for light nuclei versus heavy nuclei? "
+        "(Answering would improve Derivation by +3 points: builds physical intuition) "
+        "Q2: Why does the pairing term alternate in sign, and how does this explain "
+        "even-even nuclear stability? "
+        "(Answering would improve Commentary by +3 points: explains odd-even staggering) "
+        "Q3: Where does the SEMF fail most dramatically, and what physics is it missing? "
+        "(Answering would improve Audience Accessibility by +2 points: shows model limitations)"
+    )
     name = "SEMF Consistency Check"
     question = (
-        "Are our tabulated binding energies consistent with the semi-empirical "
-        "mass formula predictions?"
+        "Why does the semi-empirical mass formula (Weizsacker formula) "
+        "accurately predict nuclear binding energies? What physical terms "
+        "(volume, surface, Coulomb, asymmetry) contribute to this success?"
     )
     reference = "Nuclear physics (Weizsacker)"
     tolerance = 0.15

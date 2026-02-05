@@ -24,6 +24,15 @@ GFD METAPHORS USED (not derivations):
 
 The tests in this module verify standard astrophysics data is correctly
 referenced, with GFD terminology as interpretive commentary.
+
+TEST GROUP GOALS:
+This module explores the extreme conditions inside stellar cores where fusion
+occurs. By examining the temperature, pressure, and density gradients from
+surface to core, students understand why only the central regions achieve
+the conditions needed for thermonuclear reactions. The Chandrasekhar limit
+illustrates how quantum mechanics determines stellar endpoints.
+
+Audience: Undergraduate astrophysics students and physics majors.
 """
 
 import math
@@ -84,9 +93,23 @@ class CorePressureGradient(Test):
     HONESTY: This is measured/modeled data from helioseismology and
     standard solar models. GFD does not derive it.
     """
+    audit_score = 79
+    audit_notes = None
+    future_questions = (
+        "Q1: How does helioseismology allow us to 'see' inside the Sun and measure "
+        "core conditions that are otherwise inaccessible? "
+        "(Answering would improve Observation Quality by +4 points: traces measurement technique) "
+        "Q2: What maintains the 12 orders of magnitude pressure gradient in hydrostatic "
+        "equilibrium, and why doesn't the Sun collapse or explode? "
+        "(Answering would improve Derivation by +3 points: explains balance mechanism) "
+        "Q3: How do solar neutrino measurements independently confirm core conditions? "
+        "(Answering would improve Commentary by +2 points: cross-validation)"
+    )
     name = "Core Pressure Gradient"
     question = (
-        "What is the pressure ratio from solar core to surface?"
+        "Why must the solar core pressure exceed the surface pressure by 12 "
+        "orders of magnitude? How does hydrostatic equilibrium require this "
+        "enormous gradient to support the overlying mass?"
     )
     reference = "Standard Solar Model (Bahcall et al.)"
     tolerance = 0.10
@@ -140,9 +163,22 @@ class TemperatureDensityRelationship(Test):
 
     HONESTY: Standard solar model data. GFD does not derive these values.
     """
+    audit_score = 78
+    audit_notes = None
+    future_questions = (
+        "Q1: Why does temperature drop only ~2700x from core to surface while density "
+        "drops ~10^9x over the same distance? "
+        "(Answering would improve Question by +3 points: highlights different physics) "
+        "Q2: How does the equation of state for stellar plasma couple temperature and density? "
+        "(Answering would improve Derivation by +3 points: shows physical connection) "
+        "Q3: Where is the transition between radiative and convective energy transport in the Sun? "
+        "(Answering would improve Audience Accessibility by +2 points: internal structure)"
+    )
     name = "Temperature-Density Relationship"
     question = (
-        "What are the temperature and density ratios from surface to core?"
+        "Why does the solar core reach temperatures ~2700 times higher and "
+        "densities ~10^9 times greater than the surface? What physical "
+        "processes couple temperature and density in stellar interiors?"
     )
     reference = "Standard Solar Model"
     tolerance = 0.10
@@ -193,9 +229,22 @@ class HydrogenFusionThreshold(Test):
     HONESTY: The threshold is from nuclear physics (Gamow peak calculation).
     The pp-chain releases 26.7 MeV. Standard physics, not a GFD prediction.
     """
+    audit_score = 84
+    audit_notes = None
+    future_questions = (
+        "Q1: How does quantum tunneling enable fusion at temperatures where thermal "
+        "energy (kT ~ 1 keV) is 400x below the Coulomb barrier? "
+        "(Answering would improve Derivation by +4 points: explains tunneling mechanism) "
+        "Q2: Why is the first step of the pp-chain (p+p -> d) so slow despite high rates? "
+        "(Answering would improve Commentary by +3 points: weak interaction bottleneck) "
+        "Q3: What fraction of solar core particles have enough energy to tunnel at any moment? "
+        "(Answering would improve Model Output by +2 points: quantifies rare events)"
+    )
     name = "Hydrogen Fusion Threshold"
     question = (
-        "Does the solar core temperature exceed the hydrogen fusion threshold?"
+        "Why does hydrogen fusion require temperatures of ~15 million Kelvin "
+        "even though the Coulomb barrier is much higher in energy? How does "
+        "quantum tunneling enable fusion at these 'sub-barrier' temperatures?"
     )
     reference = "Nuclear Physics (pp-chain)"
     tolerance = 0.10
@@ -249,9 +298,23 @@ class HeliumFlashConditions(Test):
     HONESTY: This is standard nuclear astrophysics. The triple-alpha
     process is well understood. Hoyle resonance is key.
     """
+    audit_score = 83
+    audit_notes = None
+    future_questions = (
+        "Q1: Why does the helium flash occur explosively in low-mass stars but smoothly "
+        "in massive stars? "
+        "(Answering would improve Commentary by +3 points: degeneracy effects) "
+        "Q2: How did Fred Hoyle predict the C-12 resonance state from astrophysical arguments "
+        "before it was measured? "
+        "(Answering would improve Observation Quality by +3 points: historical insight) "
+        "Q3: What would happen to stellar nucleosynthesis without the Hoyle resonance? "
+        "(Answering would improve Question by +2 points: anthropic significance)"
+    )
     name = "Helium Flash Conditions"
     question = (
-        "What temperature is required for triple-alpha (He -> C) fusion?"
+        "Why does helium fusion require temperatures ~7 times higher than "
+        "hydrogen fusion? What role does the Hoyle resonance play in making "
+        "the triple-alpha process possible at achievable stellar temperatures?"
     )
     reference = "Nuclear Astrophysics (triple-alpha)"
     tolerance = 0.15
@@ -303,9 +366,22 @@ class CarbonBurningThreshold(Test):
     HONESTY: Standard nuclear astrophysics. Higher Coulomb barrier
     for C-12 (Z=6) requires higher temperatures.
     """
+    audit_score = 80
+    audit_notes = None
+    future_questions = (
+        "Q1: How does the Coulomb barrier height scale with Z1*Z2, and why does this "
+        "require exponentially higher temperatures for heavier fuel? "
+        "(Answering would improve Derivation by +3 points: barrier scaling) "
+        "Q2: What determines whether carbon burning produces mostly neon, sodium, or magnesium? "
+        "(Answering would improve Commentary by +3 points: branching ratios) "
+        "Q3: Why is carbon burning a critical threshold for supernova progenitors? "
+        "(Answering would improve Audience Accessibility by +2 points: stellar fate)"
+    )
     name = "Carbon Burning Threshold"
     question = (
-        "What temperature is required for carbon burning?"
+        "Why does carbon burning require temperatures 5 times higher than "
+        "helium fusion? How does the Coulomb barrier scale with the charge "
+        "of the fusing nuclei (Z^2 dependence)?"
     )
     reference = "Nuclear Astrophysics (carbon burning)"
     tolerance = 0.15
@@ -354,10 +430,23 @@ class SiliconBurningThreshold(Test):
     HONESTY: Standard nuclear astrophysics. Silicon burning is the
     final exothermic stage before iron.
     """
+    audit_score = 85
+    audit_notes = None
+    future_questions = (
+        "Q1: Why does silicon burning proceed through photodisintegration and alpha capture "
+        "rather than direct Si+Si fusion? "
+        "(Answering would improve Derivation by +3 points: reaction mechanism) "
+        "Q2: How fast does silicon burning complete once it starts, and why is this 'the "
+        "last day' of a massive star's life? "
+        "(Answering would improve Commentary by +3 points: dramatic timescales) "
+        "Q3: What mix of iron-group elements (Fe, Ni, Co) results from silicon burning? "
+        "(Answering would improve Model Output by +2 points: detailed products)"
+    )
     name = "Silicon Burning Threshold"
     question = (
-        "What temperature is required for silicon burning, and why is Fe-56 "
-        "the endpoint of exothermic fusion?"
+        "Why is silicon burning at ~2.7 billion Kelvin the final exothermic "
+        "fusion stage in massive stars? What happens when the core reaches "
+        "iron, and why does fusion beyond iron absorb rather than release energy?"
     )
     reference = "Nuclear Astrophysics (silicon burning)"
     tolerance = 0.15
@@ -408,10 +497,24 @@ class ChandrasekharMassLimit(Test):
     HONESTY: This is standard astrophysics derived from electron
     degeneracy pressure vs gravity. Chandrasekhar 1931.
     """
+    audit_score = 86
+    audit_notes = None
+    future_questions = (
+        "Q1: How does the Pauli exclusion principle for electrons create degeneracy "
+        "pressure that can support an entire star? "
+        "(Answering would improve Derivation by +3 points: quantum mechanics foundation) "
+        "Q2: Why does relativistic degeneracy pressure scale differently (rho^4/3) than "
+        "non-relativistic (rho^5/3), creating the mass limit? "
+        "(Answering would improve Commentary by +3 points: explains the limit) "
+        "Q3: What happens when a white dwarf exceeds the Chandrasekhar limit via accretion? "
+        "(Answering would improve Audience Accessibility by +2 points: Type Ia supernovae)"
+    )
     name = "Chandrasekhar Mass Limit"
     question = (
-        "What is the maximum mass for a white dwarf supported by electron "
-        "degeneracy pressure?"
+        "Why is there a maximum mass (~1.4 solar masses) that electron "
+        "degeneracy pressure can support? What quantum mechanical principle "
+        "(Pauli exclusion) determines this limit, and what happens when it "
+        "is exceeded?"
     )
     reference = "Chandrasekhar (1931)"
     tolerance = 0.10
@@ -464,9 +567,23 @@ class FusionRateVsTemperature(Test):
 
     HONESTY: Standard nuclear physics. The Gamow peak shifts with T.
     """
+    audit_score = 81
+    audit_notes = None
+    future_questions = (
+        "Q1: Why does the fusion rate scale as T^4 for the pp-chain but T^16 for the CNO "
+        "cycle, making CNO dominant in massive stars? "
+        "(Answering would improve Derivation by +4 points: temperature sensitivity) "
+        "Q2: What is the Gamow peak and why is it the optimal energy for tunneling? "
+        "(Answering would improve Commentary by +3 points: explains peak physics) "
+        "Q3: How does thermonuclear runaway occur when fusion rate exceeds cooling? "
+        "(Answering would improve Audience Accessibility by +2 points: instability)"
+    )
     name = "Fusion Rate vs Temperature"
     question = (
-        "Does fusion rate increase monotonically with temperature?"
+        "Why does the fusion rate depend so sensitively on temperature "
+        "(roughly as T^4 for the pp-chain)? How does the Gamow peak shift "
+        "with temperature to enable more particles to tunnel through the "
+        "Coulomb barrier?"
     )
     reference = "Nuclear Physics (reaction rates)"
     tolerance = 0.10
@@ -526,9 +643,23 @@ class SolarCoreNumberDensity(Test):
 
     HONESTY: Standard calculation from core density.
     """
+    audit_score = 77
+    audit_notes = None
+    future_questions = (
+        "Q1: Why is the average particle spacing (~2e-11 m) comparable to atomic sizes "
+        "even though the plasma is fully ionized? "
+        "(Answering would improve Question by +3 points: counterintuitive result) "
+        "Q2: How does the collision rate scale with number density, and why does this "
+        "make fusion rates proportional to n^2? "
+        "(Answering would improve Derivation by +3 points: rate equations) "
+        "Q3: What is the mean free path for photons versus particles in the solar core? "
+        "(Answering would improve Model Output by +2 points: transport physics)"
+    )
     name = "Solar Core Number Density"
     question = (
-        "What is the nucleon number density in the solar core?"
+        "Why does the solar core need ~10^32 nucleons per cubic meter for "
+        "fusion to proceed at observable rates? How does this extreme density "
+        "combine with high temperature to overcome the Coulomb barrier?"
     )
     reference = "Standard Solar Model"
     tolerance = 0.15

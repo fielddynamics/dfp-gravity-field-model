@@ -29,12 +29,15 @@ Pi base-8 traversal visits vertices, completing faces along the way.
 Traversal starts at V3 (from pi integer part 3), then V4 (cumsum=4).
 
 Key observations examined:
-1. Front-Bottom Late: V2 (010) and V6 (110) arrive later in sequence
-2. TIME Faces Complete Late: FACE_A7 and FACE_B0 complete later on average
-3. Burst Completion: Multiple faces may complete at the same traversal step
-4. Critical Vertices: Late-arriving vertices complete multiple faces
-5. 3:1 Ratio: Vertices per face (k-1=3) corresponds to implicit knowledge ratio
+1. Pi digits directly encode vertex addresses (3-bit bijection)
+2. Each vertex belongs to exactly 3 Coupling Ports (tetrahedron geometry)
+3. Complementary vertices (7-v) always cross Field Chambers (parity structure)
+4. Front-Bottom Late: V2 (010) and V6 (110) arrive later in sequence
+5. Burst Completion: Multiple faces may complete at the same traversal step
 6. Field Chamber Asymmetry: Traversal starts in Tet_B but Tet_A may complete first
+
+NOTE: Interpretive tests (TIME faces, 3+1 spacetime correspondence) have been
+moved to cosmological_correspondence/test_spacetime_correspondence.py
 """
 
 from typing import Dict, Optional, List
@@ -43,7 +46,7 @@ from collections import Counter
 from gravity_field_model.framework import *
 from gravity_field_model.common.pi_data import PI_BASE8_FRACTIONAL, get_pi_base8
 from gravity_field_model.common.geometry_constants import (
-    TET_A, TET_B, FACES, TIME_FACES, SPATIAL_FACES,
+    TET_A, TET_B, FACES,
     get_tetrahedron, get_faces_for_vertex
 )
 
@@ -360,85 +363,6 @@ class FrontBottomLate(Test):
         )
 
 
-class TimeFacesCompleteLate(Test):
-    """
-    TIME faces (FACE_A7, FACE_B0) complete later than SPATIAL faces.
-    """
-    name = "TIME Faces Complete Late"
-    question = (
-        "Which faces finish last? "
-        "The Field Chamber has 2 'TIME' faces (perpendicular to the time axis) and 6 'SPATIAL' faces. "
-        "Remarkably, the TIME faces tend to complete later during traversal. "
-        "This test checks whether time settles after space."
-    )
-    reference = "Face completion pattern"
-    level = Standard
-    audit_score = 83
-    audit_notes = (
-        "Question: 14/15 - Good 'which' with space-before-time framing. "
-        "Derivation: 12/15 - Clear calculation but could add more intuition. "
-        "Commentary: 13/15 - Nice connection to relativity. "
-        "Model: 8/10 - Good average comparison. "
-        "Observations: 8/10 - Statistical observation. "
-        "Constants: 10/10 - Now imports from /common/ modules. "
-        "Accessibility: 12/15 - Good for undergrad. "
-        "Header: 8/10 (module level) - Proper imports in place. "
-        "SAMPLE SIZE: 1000 digits - Adequate for statistical claims. "
-    )
-    future_questions = (
-        "Q1: Why are FACE_A7 and FACE_B0 designated as TIME faces based on their geometry? "
-        "Q2: Does 'time settles after space' have any connection to causality in physics? "
-        "Q3: If TIME faces completed first, what would that imply about the traversal dynamics? "
-        "FUTURE: Answering these in commentary/derivation could raise score by ~5 points."
-    )
-    
-    def derivation(self):
-        return (
-            Derivation()
-            .step("PREMISE: A Coupling Port completes when all 3 of its vertices have been visited.")
-            .step("Track face completion steps during traversal.")
-            .step("Compute average completion step for TIME faces: (step_A7 + step_B0) / 2.")
-            .step("Compute average completion step for 6 SPATIAL faces.")
-            .step("Compare: if avg_TIME >= avg_SPATIAL, TIME completes later.")
-            .conclude("TIME Coupling Ports complete later, suggesting temporal structure settles after spatial.")
-        )
-    
-    commentary = (
-        "In physics, we often treat space and time together as 'spacetime.' But they are not identical. "
-        "Here is a curious observation: the faces oriented along the time axis complete later than "
-        "the spatially-oriented faces. Space settles first; time follows. Is this deep or coincidental? "
-        "We report the pattern without claiming to fully understand it. But it echoes a theme from "
-        "relativity: spatial structure can be frozen on a slice, while temporal evolution requires "
-        "additional information to determine."
-    )
-    
-    def model(self):
-        _, face_completed = traverse_and_track_faces(1000)
-        
-        time_faces = ['FACE_A7', 'FACE_B0']
-        time_steps = [face_completed.get(f, 1000) for f in time_faces]
-        spatial_steps = [s for f, s in face_completed.items() if f not in time_faces]
-        
-        avg_time = sum(time_steps) / len(time_steps) if time_steps else 0
-        avg_spatial = sum(spatial_steps) / len(spatial_steps) if spatial_steps else 0
-        
-        return (
-            Model()
-            .add("Avg TIME completion step", avg_time)
-            .add("Avg SPATIAL completion step", avg_spatial)
-            .add("TIME later", 1 if avg_time >= avg_spatial else 0)
-        )
-    
-    def observations(self):
-        # Updated after pi digit sequence fix
-        return (
-            Observed()
-            .add("Avg TIME completion step", 13.0)
-            .add("Avg SPATIAL completion step", 10.5)
-            .add("TIME later", 1)
-        )
-
-
 class BurstCompletion(Test):
     """
     Faces complete in bursts (multiple at same step), not evenly.
@@ -510,88 +434,6 @@ class BurstCompletion(Test):
             Observed()
             .add("Max simultaneous completions", 3)
             .add("Has burst (>=2)", 1)
-        )
-
-
-class KMinus1Ratio(Test):
-    """
-    The 3:1 ratio = (k-1):1 connects to 3+1 spacetime structure.
-    3 explicit reads per implicit knowledge event.
-    """
-    name = "(k-1):1 = 3:1 Ratio"
-    question = (
-        "Why 3 vertices per face? "
-        "A tetrahedron has 4 corners but each face is a triangle with 3 corners. "
-        "This 3:1 relationship (3 vertices per face, 1 face completion) mirrors "
-        "spacetime's 3+1 structure: 3 space dimensions plus 1 time dimension."
-    )
-    reference = "k=4 topology"
-    tolerance = 0.0
-    level = Standard
-    audit_score = 86
-    audit_notes = (
-        "Question: 15/15 - Excellent 'why 3' with spacetime connection. "
-        "Derivation: 14/15 - Clear k-1 derivation. "
-        "Commentary: 14/15 - Great 3+1 spacetime parallel. "
-        "Model: 9/10 - Good ratio output. "
-        "Observations: 10/10 - Clear expected values. "
-        "Constants: 10/10 - Now imports from /common/ modules. "
-        "Accessibility: 13/15 - Great spacetime parallel explanation. "
-        "Header: 8/10 (module level) - Proper imports in place. "
-    )
-    future_questions = (
-        "Q1: Why does k=4 lead to k-1=3 vertices per face, and how is this unavoidable geometry? "
-        "Q2: Is the 3+1 spacetime parallel coincidental or does it suggest deeper structure? "
-        "Q3: If spacetime had 4+1 dimensions, what value of k would preserve this correspondence? "
-        "FUTURE: Answering these in commentary/derivation could raise score by ~5 points."
-    )
-    
-    def derivation(self):
-        return (
-            Derivation()
-            .step("PREMISE: From Field Closure, k=4 determines tetrahedral structure; d=k-1=3 is spatial dimension count.")
-            .step("Each Coupling Port (triangular face) has k-1 = 3 vertices.")
-            .step("Each face completion requires 3 explicit vertex visits.")
-            .step("Face completion itself is 1 implicit event.")
-            .step("Ratio: (k-1) : 1 = 3 : 1, matching 3 spatial + 1 temporal dimensions.")
-            .conclude("The 3:1 ratio parallels the 3+1 spacetime structure.")
-        )
-    
-    commentary = (
-        "Einstein's spacetime has 3 space dimensions and 1 time dimension: 3+1. "
-        "Our Field Chamber faces have 3 vertices each, and completing a face is 1 event: also 3+1. "
-        "This parallel may be coincidence, or it may be a clue. The number 3 = k-1 appears because "
-        "a tetrahedron has k=4 vertices but each face excludes one of them. Nature picked the simplest "
-        "3D shape (the tetrahedron) and gave it exactly the right structure to echo spacetime. "
-        "Three things you can see (vertex visits), one thing that emerges (face completion)."
-    )
-    
-    def model(self):
-        vertices_per_face = 3  # = k-1
-        implicit_per_face = 1  # Gained at 2nd read
-        ratio = vertices_per_face / implicit_per_face
-        
-        # k encodes in structure
-        faces_per_tet = 4  # = k
-        vertices_per_face_check = 3  # = k-1
-        
-        return (
-            Model()
-            .add("Vertices per face", vertices_per_face)
-            .add("Implicit per face", implicit_per_face)
-            .add("Ratio", ratio)
-            .add("k", K)
-            .add("k-1", K - 1)
-        )
-    
-    def observations(self):
-        return (
-            Observed()
-            .add("Vertices per face", 3)
-            .add("Implicit per face", 1)
-            .add("Ratio", 3)
-            .add("k", 4)
-            .add("k-1", 3)
         )
 
 
@@ -701,79 +543,6 @@ class FieldChamberAsymmetry(Test):
         )
 
 
-class ThreePlusOneStructure(Test):
-    """
-    k = 4 = 3+1 corresponds to the GR spacetime decomposition.
-    3 spatial Coupling Ports + 1 TIME Coupling Port per Field Chamber.
-    """
-    name = "3+1 Structure Correspondence"
-    question = (
-        "Why 3+1? Physics tells us spacetime is 3 dimensions of space plus 1 of time. "
-        "Our tetrahedron has 4 faces: 3 spatial ones that include the apex, and 1 time face opposite it. "
-        "This test verifies the 3+1 decomposition appears naturally in tetrahedral geometry."
-    )
-    reference = "General relativity analogy"
-    tolerance = 0.0
-    level = Standard
-    audit_score = 88
-    audit_notes = (
-        "Question: 15/15 - Excellent 'why 3+1' spacetime hook. "
-        "Derivation: 15/15 - Clear face classification. "
-        "Commentary: 15/15 - Brilliant Einstein/tetrahedron connection. "
-        "Model: 10/10 - Clean output. "
-        "Observations: 10/10 - Clear expected values. "
-        "Constants: 10/10 - Now imports from /common/ modules. "
-        "Accessibility: 13/15 - Excellent for undergrad. "
-        "Header: 8/10 (module level) - Proper imports in place. "
-    )
-    future_questions = (
-        "Q1: What geometric property makes the apex-opposite face 'timelike' vs other faces 'spacelike'? "
-        "Q2: Does 3+1 structure in tetrahedra have implications for quantum gravity theories? "
-        "Q3: If the model used octahedra (8 faces) instead, how would the spacetime decomposition change? "
-        "FUTURE: Answering these in commentary/derivation could raise score by ~5 points."
-    )
-    
-    def derivation(self):
-        return (
-            Derivation()
-            .step("PREMISE: Each tetrahedron has k=4 faces. These are classified as SPATIAL or TIME.")
-            .step("SPATIAL faces include an apex vertex: k-1 = 3 per tetrahedron.")
-            .step("TIME face is opposite the apex: 1 per tetrahedron.")
-            .step("Total per tetrahedron: 3 SPATIAL + 1 TIME = 4 = k.")
-            .step("This parallels spacetime: d=3 spatial dimensions + 1 temporal dimension.")
-            .conclude("Tetrahedral face classification mirrors the 3+1 spacetime decomposition.")
-        )
-    
-    commentary = (
-        "Einstein showed us that the universe has 3 space dimensions and 1 time dimension. "
-        "Now look at a tetrahedron: it has 4 faces. Three of them touch the apex (think of them "
-        "as 'pointing in space'), and one faces away from the apex (think of it as 'pointing in time'). "
-        "So we get 3 + 1 = 4, the same decomposition as spacetime. "
-        "Did nature choose the tetrahedron because it encodes 3+1 structure? "
-        "Or is 3+1 a consequence of tetrahedral geometry? Either way, the match is remarkable."
-    )
-    
-    def model(self):
-        spatial_per_tet = 3  # A1, A2, A4 or B3, B5, B6
-        time_per_tet = 1     # A7 or B0
-        total = spatial_per_tet + time_per_tet
-        
-        return (
-            Model()
-            .add("Spatial faces per tet", spatial_per_tet)
-            .add("TIME faces per tet", time_per_tet)
-            .add("Total (k)", total)
-        )
-    
-    def observations(self):
-        return (
-            Observed()
-            .add("Spatial faces per tet", 3)
-            .add("TIME faces per tet", 1)
-            .add("Total (k)", 4)
-        )
-
-
 # =============================================================================
 # RUNNER
 # =============================================================================
@@ -783,11 +552,8 @@ ALL_TESTS = [
     VertexBelongsToThreeFaces,
     ComplementCrossesTetrahedra,
     FrontBottomLate,
-    TimeFacesCompleteLate,
     BurstCompletion,
-    KMinus1Ratio,
     FieldChamberAsymmetry,
-    ThreePlusOneStructure,
 ]
 
 
@@ -796,13 +562,14 @@ def run_all():
     return run_tests(
         title="Field Closure Cycle Mechanics",
         summary=(
-            "These tests examine Coupling Port completion patterns during vertex traversal. "
-            "Observations include: V2 and V6 arrive later in the sequence, TIME Coupling Ports "
-            "complete later on average, faces complete in bursts, and the 3:1 ratio (k-1 "
-            "vertices per face) corresponds to the 3+1 dimensional structure. Field Chamber "
-            "asymmetry shows that starting in Tet_B does not mean Tet_B completes first. "
-            "Each vertex belongs to exactly 3 Coupling Ports, and complements always cross "
-            "Field Chambers."
+            "These tests verify core geometric and observational properties of the Field Closure "
+            "traversal. Pure geometry: Pi digits directly encode 3-bit vertex addresses, each "
+            "vertex belongs to exactly 3 Coupling Ports, and complementary vertices always cross "
+            "Field Chambers. Pi traversal observations: V2 and V6 arrive late (Front-Bottom region), "
+            "faces complete in bursts (information cascades), and Field Chamber asymmetry shows "
+            "starting in Tet_B does not mean Tet_B completes first. "
+            "NOTE: Interpretive spacetime correspondence tests (TIME faces, 3+1 structure) have "
+            "been moved to cosmological_correspondence/test_spacetime_correspondence.py"
         ),
         test_classes=ALL_TESTS
     )

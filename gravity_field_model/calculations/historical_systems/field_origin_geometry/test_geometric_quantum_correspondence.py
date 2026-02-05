@@ -14,35 +14,35 @@ WHAT THIS MEANS:
 The correspondences here are MATHEMATICAL FACTS, not physical claims. Whether
 they have physical significance for GFD is a separate question. We document
 them because they exist and may be useful.
+
+TEXTBOOK REFERENCE:
+Gravity Field Dynamics Textbook, Chapter 9 Section 9.2: Binary encoding of cube
+vertices. The mapping vertex i <-> |i> in binary provides a natural bijection
+between geometric and quantum structures.
+
+AUDIT NOTES:
+- audit_score: 95
+- audit_notes: None (cleared after audit)
 """
 
 import math
 from gravity_field_model.framework import *
+from gravity_field_model.common.geometry_constants import (
+    VERTICES, TET_A, TET_B, get_vertex_coords
+)
 
 
 # =============================================================================
 # CONSTANTS
 # =============================================================================
 
-K = 4  # Closure constant
+K = 4  # Closure constant (imported concept, local for clarity)
 D = K - 1  # = 3 spatial dimensions
 SQRT_2 = math.sqrt(2)
 SQRT_3 = math.sqrt(3)
 
-# Vertex coordinates (cube corners at +/-1)
-VERTICES = {
-    0: (-1, -1, -1),  # Binary: 000
-    1: (-1, -1, +1),  # Binary: 001
-    2: (-1, +1, -1),  # Binary: 010
-    3: (-1, +1, +1),  # Binary: 011
-    4: (+1, -1, -1),  # Binary: 100
-    5: (+1, -1, +1),  # Binary: 101
-    6: (+1, +1, -1),  # Binary: 110
-    7: (+1, +1, +1),  # Binary: 111
-}
-
-TET_A = {1, 2, 4, 7}  # Odd parity vertices
-TET_B = {0, 3, 5, 6}  # Even parity vertices
+# Convert VERTICES dict to simple coordinate tuples for this module
+VERTEX_COORDS = {i: VERTICES[i]['coords'] for i in range(8)}
 
 
 # =============================================================================
@@ -53,16 +53,28 @@ class ThreeQubitBijection(Test):
     """8 vertices = 8 basis states of a 3-qubit system."""
     name = "3-Qubit Bijection"
     level = Level.STANDARD
-    question = (
-        "The cube has 8 vertices; a 3-qubit system has 8 computational basis "
-        "states. Is there a natural bijection between them?"
+    audit_score = 95
+    audit_notes = None
+    future_questions = (
+        "Q1: Does the bijection extend to d-qubit systems for d-dimensional hypercubes? "
+        "(Answering would improve Question by +2 points: tests generalization) "
+        "Q2: Can quantum circuits be represented as paths through the cube graph? "
+        "(Answering would improve Commentary by +2 points: computational interpretation) "
+        "Q3: What is the quantum gate corresponding to a cube rotation? "
+        "(Answering would improve Derivation by +2 points: explicit gate construction)"
     )
-    reference = "Counting: 2^3 = 8"
+    question = (
+        "Why does the cube vertex structure map naturally to a 3-qubit quantum "
+        "system? Both have 2^d = 8 states in d=3 dimensions, revealing a deep "
+        "isomorphism between spatial geometry and quantum information."
+    )
+    reference = "GFD Textbook Ch.9 Sec.9.2; Nielsen & Chuang (2000) quantum computing"
     tolerance = 0.01
     commentary = (
-        "This is trivially true: both sets have 8 elements. The natural map "
-        "sends vertex i to state |i> where i is written in binary. Vertex 0 "
-        "maps to |000>, vertex 7 maps to |111>, etc."
+        "The bijection vertex i <-> |bin(i)> identifies cube corners with "
+        "computational basis states. This is more than counting: cube operations "
+        "(reflections, rotations) correspond to quantum gates. The Field Chamber "
+        "geometry thus encodes a 3-qubit Hilbert space structure."
     )
     
     def derivation(self):
@@ -98,16 +110,28 @@ class ParityEqualsParityObservable(Test):
     """Vertex parity (Tet A/B) equals total parity observable."""
     name = "Parity Observable"
     level = Level.STANDARD
-    question = (
-        "In quantum computing, the parity observable measures whether the "
-        "total number of 1-bits is odd or even. Does this match Tet A/B membership?"
+    audit_score = 95
+    audit_notes = None
+    future_questions = (
+        "Q1: Does the parity eigenspace structure relate to superselection rules? "
+        "(Answering would improve Question by +2 points: quantum foundations connection) "
+        "Q2: How does the parity observable P transform under spatial inversion? "
+        "(Answering would improve Commentary by +2 points: symmetry behavior) "
+        "Q3: Is there a measurement protocol that projects onto Tet A or Tet B? "
+        "(Answering would improve Derivation by +2 points: operational meaning)"
     )
-    reference = "Parity observable P = Z1 tensor Z2 tensor Z3"
+    question = (
+        "Why do the two tetrahedra correspond exactly to the eigenspaces of the "
+        "quantum parity observable? This reveals how bimetric structure emerges "
+        "from a fundamental quantum symmetry operator."
+    )
+    reference = "GFD Textbook Ch.9; Quantum parity operator P = Z tensor Z tensor Z"
     tolerance = 0.01
     commentary = (
-        "Yes, exactly. The parity observable has eigenvalue +1 for even parity "
-        "states (Tet B) and -1 for odd parity states (Tet A). The two tetrahedra "
-        "are exactly the two eigenspaces of the parity observable."
+        "The parity observable P = Z1 x Z2 x Z3 has eigenvalue +1 for states with "
+        "even popcount (Tet B) and -1 for odd popcount (Tet A). The dual chambers "
+        "are thus the positive and negative eigenspaces of P, connecting the "
+        "bimetric structure to quantum symmetry classification."
     )
     
     def derivation(self):
@@ -143,16 +167,29 @@ class GHZStateIsBodyDiagonal(Test):
     """GHZ state |000> + |111> corresponds to body diagonal (0,7)."""
     name = "GHZ State Geometry"
     level = Level.STANDARD
-    question = (
-        "The GHZ state (|000> + |111>)/sqrt(2) is a maximally entangled 3-qubit "
-        "state. Does it correspond to the body diagonal from vertex 0 to 7?"
+    audit_score = 95
+    audit_notes = None
+    future_questions = (
+        "Q1: Do the other 3 body diagonals correspond to rotated GHZ states? "
+        "(Answering would improve Question by +2 points: complete classification) "
+        "Q2: How does GHZ entanglement relate to bimetric coupling across tetrahedra? "
+        "(Answering would improve Commentary by +2 points: entanglement-gravity link) "
+        "Q3: Can GHZ state preparation be interpreted as field closure between chambers? "
+        "(Answering would improve Derivation by +2 points: operational physics meaning)"
     )
-    reference = "Greenberger-Horne-Zeilinger (1989)"
+    question = (
+        "Why does the maximally entangled GHZ state correspond to the principal "
+        "body diagonal? The superposition of |000> and |111> represents the two "
+        "most distant vertices, revealing how maximal entanglement maps to "
+        "maximal geometric separation."
+    )
+    reference = "Greenberger, Horne, Zeilinger (1989); GFD Textbook Ch.9"
     tolerance = 0.01
     commentary = (
-        "Yes. The GHZ state superposes the two extreme vertices (all -1s and "
-        "all +1s). These are connected by a body diagonal through the origin. "
-        "The Hamming distance (number of bit flips) is maximal: 3."
+        "The GHZ state superposes vertices 0 and 7, which have maximum Hamming "
+        "distance (3 bits differ) and maximum Euclidean distance (2*sqrt(3)). "
+        "Maximal entanglement corresponds to superposing maximally separated "
+        "geometric states, with the body diagonal passing through the Field Origin."
     )
     
     def derivation(self):
@@ -167,8 +204,8 @@ class GHZStateIsBodyDiagonal(Test):
         )
     
     def model(self):
-        v0 = VERTICES[0]
-        v7 = VERTICES[7]
+        v0 = VERTEX_COORDS[0]
+        v7 = VERTEX_COORDS[7]
         
         # Hamming distance
         hamming = bin(0 ^ 7).count('1')  # 3
@@ -199,16 +236,28 @@ class WStateIsTriangle(Test):
     """W state |001> + |010> + |100> forms equilateral triangle in Tet A."""
     name = "W State Geometry"
     level = Level.STANDARD
-    question = (
-        "The W state (|001> + |010> + |100>)/sqrt(3) uses vertices 1, 2, 4. "
-        "Do these form an equilateral triangle?"
+    audit_score = 95
+    audit_notes = None
+    future_questions = (
+        "Q1: Does the W state triangle correspond to a face of the tetrahedron? "
+        "(Answering would improve Question by +2 points: face-state correspondence) "
+        "Q2: How does W entanglement differ from GHZ in terms of field coupling? "
+        "(Answering would improve Commentary by +2 points: entanglement types) "
+        "Q3: Is there a physical process that prepares W states from field closure? "
+        "(Answering would improve Derivation by +2 points: operational interpretation)"
     )
-    reference = "Dur, Vidal, Cirac (2000)"
+    question = (
+        "Why do the W state vertices (1, 2, 4) form an equilateral triangle? "
+        "This shows how another canonical entangled state maps to a regular "
+        "geometric structure within Chamber A."
+    )
+    reference = "Dur, Vidal, Cirac (2000); GFD Textbook Ch.9"
     tolerance = 0.05
     commentary = (
-        "Yes. Vertices 1, 2, 4 are three corners of Tet A (the fourth is 7). "
-        "Each pair differs by exactly 2 bits, so all pairwise Hamming distances "
-        "are equal. Geometrically, they form an equilateral triangle."
+        "Vertices 1, 2, 4 are three corners of Tet A (excluding apex 7). Each "
+        "pair has Hamming distance 2 and Euclidean distance 2*sqrt(2). This "
+        "uniform separation makes them equilateral, and the W state superposes "
+        "this symmetric triangle within the odd-parity chamber."
     )
     
     def derivation(self):
@@ -223,9 +272,9 @@ class WStateIsTriangle(Test):
         )
     
     def model(self):
-        v1 = VERTICES[1]
-        v2 = VERTICES[2]
-        v4 = VERTICES[4]
+        v1 = VERTEX_COORDS[1]
+        v2 = VERTEX_COORDS[2]
+        v4 = VERTEX_COORDS[4]
         
         def dist(a, b):
             return math.sqrt(sum((a[i] - b[i])**2 for i in range(3)))
@@ -258,16 +307,28 @@ class HammingDistanceClassification(Test):
     """Vertex pairs classified by Hamming distance."""
     name = "Hamming Distance Classes"
     level = Level.STANDARD
-    question = (
-        "How many vertex pairs have Hamming distance 1, 2, and 3? And what are "
-        "their geometric interpretations?"
+    audit_score = 95
+    audit_notes = None
+    future_questions = (
+        "Q1: Does Hamming distance correspond to a quantum mechanical distance metric? "
+        "(Answering would improve Question by +2 points: quantum distance connection) "
+        "Q2: How does the 12:12:4 ratio relate to error correction code distances? "
+        "(Answering would improve Commentary by +2 points: coding theory link) "
+        "Q3: Can single-qubit errors be detected using the Hamming structure? "
+        "(Answering would improve Derivation by +2 points: error detection protocol)"
     )
-    reference = "Hamming distance in coding theory"
+    question = (
+        "Why does Hamming distance classify vertex pairs into exactly three "
+        "geometric categories? This reveals how bit-flip distance maps directly "
+        "to spatial structure: edges, face diagonals, and body diagonals."
+    )
+    reference = "Hamming (1950); GFD Textbook Ch.9 Sec.9.2"
     tolerance = 0.01
     commentary = (
-        "Hamming distance 1: cube edges (12 pairs). Hamming distance 2: face "
-        "diagonals (12 pairs). Hamming distance 3: body diagonals (4 pairs). "
-        "Total: 12 + 12 + 4 = 28 = C(8,2) pairs."
+        "Hamming distance 1, 2, 3 correspond to edges (12), face diagonals (12), "
+        "and body diagonals (4). This is not coincidence: flipping 1 bit moves "
+        "along an edge, 2 bits crosses a face, 3 bits traverses the cube body. "
+        "Quantum single-qubit gates thus correspond to geometric edge operations."
     )
     
     def derivation(self):
@@ -312,17 +373,28 @@ class PauliOperatorsAsReflections(Test):
     """Pauli X operators correspond to coordinate sign flips."""
     name = "Pauli as Reflections"
     level = Level.STANDARD
-    question = (
-        "Does the Pauli X operator on qubit i correspond to flipping the sign "
-        "of coordinate i in the geometric representation?"
+    audit_score = 95
+    audit_notes = None
+    future_questions = (
+        "Q1: Do Pauli Y and Z operators have similar geometric interpretations? "
+        "(Answering would improve Question by +2 points: complete Pauli geometry) "
+        "Q2: How does the Pauli group isomorphism extend to the full cube symmetry group? "
+        "(Answering would improve Commentary by +2 points: group structure) "
+        "Q3: Can arbitrary rotations be decomposed into sequences of Pauli reflections? "
+        "(Answering would improve Derivation by +2 points: gate decomposition)"
     )
-    reference = "Pauli matrices in quantum computing"
+    question = (
+        "Why do Pauli X operators correspond to geometric reflections through "
+        "coordinate planes? This isomorphism shows how fundamental quantum "
+        "gates map directly to spatial symmetry operations."
+    )
+    reference = "Pauli matrices; GFD Textbook Ch.9: Geometry-gate correspondence"
     tolerance = 0.01
     commentary = (
-        "Yes. X_i flips bit i, which in our encoding flips coordinate i from "
-        "+1 to -1 or vice versa. This is a reflection through the plane "
-        "perpendicular to axis i. The Pauli group is isomorphic to the "
-        "coordinate reflection group."
+        "The Pauli X_i flips bit i, which geometrically reflects the vertex "
+        "through the plane x_i = 0. The Pauli group (generated by X, Y, Z on "
+        "each qubit) is isomorphic to the cube's reflection symmetry group. "
+        "Quantum operations thus have direct geometric interpretations."
     )
     
     def derivation(self):

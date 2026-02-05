@@ -91,6 +91,45 @@ body {
     background-color: var(--bg-sidebar);
 }
 
+.sidebar-bottom-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 36px;
+    padding: 0 16px;
+    border-top: 1px solid var(--border-color);
+    background-color: var(--bg-sidebar);
+    margin-top: auto;
+}
+
+.take-break-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.15s;
+}
+
+.take-break-link:hover {
+    color: var(--accent-green);
+}
+
+/* Bug Report Icon */
+.bug-report-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: opacity 0.15s;
+}
+
+.bug-report-link:hover {
+    opacity: 0.7;
+}
+
+.bug-icon {
+    font-size: 16px;
+}
+
 .sidebar-header {
     padding: 12px 16px;
     border-bottom: 1px solid var(--border-color);
@@ -122,6 +161,15 @@ body {
     font-size: 15px;
     font-weight: 600;
     color: var(--text-primary);
+}
+
+.model-name.gfm-stroke {
+    font-size: 24px;
+    font-weight: bold;
+    color: transparent;
+    -webkit-text-stroke: 1.5px #4488ff;
+    text-shadow: 0 0 10px rgba(68, 136, 255, 0.5);
+    letter-spacing: 2px;
 }
 
 .research-badge {

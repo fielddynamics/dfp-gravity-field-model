@@ -15,6 +15,7 @@ import math
 from typing import Dict, Optional
 
 from gravity_field_model.framework import *
+from gravity_field_model.common import K
 
 
 # =============================================================================
@@ -22,7 +23,6 @@ from gravity_field_model.framework import *
 # =============================================================================
 
 PI = math.pi
-K = 4  # Closure constant
 
 # BBP formula positions (mod 8)
 BBP_POSITIONS = [1, 4, 5, 6]
@@ -458,6 +458,16 @@ class BBPFiringOrder(Test):
             .add("Position 3 (POWER)", BBP_POSITIONS[2])
             .add("Position 4 (EXHAUST)", BBP_POSITIONS[3])
         )
+    
+    def observations(self):
+        return (
+            Observed()
+            .add("Firing order matches", 1)
+            .add("Position 1 (INTAKE)", 1)
+            .add("Position 2 (COMPRESS)", 4)
+            .add("Position 3 (POWER)", 5)
+            .add("Position 4 (EXHAUST)", 6)
+        )
 
 
 class BBPIntakeStroke(Test):
@@ -770,6 +780,13 @@ class BBPLargestAtBlocked(Test):
             Model()
             .add("Largest coefficient magnitude", largest_coeff)
             .add("Position of largest", position_of_largest)
+        )
+    
+    def observations(self):
+        return (
+            Observed()
+            .add("Largest coefficient magnitude", 4)
+            .add("Position of largest", 1)
         )
 
 

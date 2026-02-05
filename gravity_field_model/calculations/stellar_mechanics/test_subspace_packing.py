@@ -24,6 +24,14 @@ PATTERN OBSERVATIONS (not derivations):
 The k=4 comes from the simplex theorem. The OBSERVATION that stable nuclei
 like He-4 have A=4 is a COINCIDENCE or CORRELATION, not an explanation.
 Nuclear stability is explained by the shell model, not by k-alignment.
+
+TEST GROUP GOALS:
+This module explores nuclear stability patterns, distinguishing between physical
+explanations (shell model, Q-values) and numerical observations (k-multiples).
+Students learn to recognize pattern-matching vs causal derivation: the shell
+model explains stability, while k-alignment merely describes some patterns.
+
+Audience: Undergraduate nuclear physics students.
 """
 
 import math
@@ -73,9 +81,24 @@ class K4PackingGeometry(Test):
     HONESTY: This is a geometric definition, not a physics derivation.
     The simplex theorem says d+1 points minimally enclose d dimensions.
     """
+    audit_score = 79
+    audit_notes = None
+    future_questions = (
+        "Q1: Is the k=4 = He-4 correspondence physically meaningful or merely numerical "
+        "coincidence, and how could we distinguish between these possibilities? "
+        "(Answering would improve Question by +4 points: addresses core interpretive issue) "
+        "Q2: How does the shell model independently explain He-4 stability through "
+        "doubly-magic closure at Z=N=2? "
+        "(Answering would improve Derivation by +3 points: standard physics explanation) "
+        "Q3: What other physics theories have attempted to connect geometry with "
+        "nuclear structure? "
+        "(Answering would improve Commentary by +2 points: broader context)"
+    )
     name = "k=4 Simplex Theorem"
     question = (
-        "Does k=4 follow from the simplex theorem (d+1 for d=3)?"
+        "Why does geometry require exactly 4 points (tetrahedron) to minimally "
+        "enclose 3D space? Is this mathematical fact alone sufficient to explain "
+        "why He-4 (also 4 nucleons) is exceptionally stable?"
     )
     reference = "Geometry"
     tolerance = 0.01
@@ -132,10 +155,23 @@ class BindingEnergyCurve(Test):
 
     HONESTY: This is measured nuclear data. Standard physics.
     """
+    audit_score = 86
+    audit_notes = None
+    future_questions = (
+        "Q1: Why does the binding curve show saw-tooth fine structure superimposed on "
+        "the smooth SEMF trend? "
+        "(Answering would improve Commentary by +3 points: shell and pairing effects) "
+        "Q2: How does each term in the semi-empirical mass formula (volume, surface, "
+        "Coulomb, asymmetry, pairing) shape the curve? "
+        "(Answering would improve Derivation by +3 points: term-by-term understanding) "
+        "Q3: At what mass number does the Coulomb term begin to dominate over the volume term? "
+        "(Answering would improve Model Output by +2 points: quantitative crossover)"
+    )
     name = "Binding Energy Curve Shape"
     question = (
-        "Does the binding energy per nucleon increase from He-4 to Fe-56, "
-        "then decrease to U-238?"
+        "Why does the binding energy curve rise from light nuclei to iron, "
+        "then fall for heavy nuclei? What competition between attractive "
+        "strong force and repulsive Coulomb force shapes this curve?"
     )
     reference = "Nuclear Physics (AME2020)"
     tolerance = 0.05
@@ -202,9 +238,23 @@ class Be8Instability(Test):
     HONESTY: Be-8 instability is explained by the positive Q-value for
     alpha decay. Standard nuclear physics, not a GFD prediction.
     """
+    audit_score = 88
+    audit_notes = None
+    future_questions = (
+        "Q1: Why is BE/A misleading as a stability criterion, and what makes Q-value "
+        "the correct measure for decay energetics? "
+        "(Answering would improve Question by +3 points: corrects common misconception) "
+        "Q2: How does the Be-8 decay width (Gamma ~ 6 eV) relate to its femtosecond lifetime "
+        "through the uncertainty principle? "
+        "(Answering would improve Derivation by +3 points: quantum mechanics connection) "
+        "Q3: What other nuclei are 'unbound' like Be-8 and decay immediately after formation? "
+        "(Answering would improve Audience Accessibility by +2 points: broader examples)"
+    )
     name = "Be-8 Instability"
     question = (
-        "Why is Be-8 extremely unstable despite having BE/A = 7.06 MeV?"
+        "Why is beryllium-8 unstable in 8x10^-17 seconds despite having high "
+        "binding energy per nucleon? What does the positive Q-value for alpha "
+        "decay reveal about total vs per-nucleon binding?"
     )
     reference = "Nuclear Physics (Q-value)"
     tolerance = 0.20
@@ -268,9 +318,23 @@ class TripleAlphaPathway(Test):
     HONESTY: The energy release is measured. Hoyle resonance enables it.
     Standard nuclear astrophysics.
     """
+    audit_score = 85
+    audit_notes = None
+    future_questions = (
+        "Q1: How does the Hoyle state at 7.65 MeV in C-12 enable the triple-alpha process "
+        "that would otherwise be impossibly slow? "
+        "(Answering would improve Derivation by +4 points: resonance enhancement mechanism) "
+        "Q2: Why is the triple-alpha process considered evidence for fine-tuning or "
+        "anthropic selection in physics? "
+        "(Answering would improve Commentary by +3 points: deeper significance) "
+        "Q3: What experimental facilities have measured the Hoyle state properties most precisely? "
+        "(Answering would improve Observation Quality by +2 points: measurement provenance)"
+    )
     name = "Triple-Alpha Energy Release"
     question = (
-        "Does the triple-alpha process (3*He-4 -> C-12) release energy?"
+        "Why does combining three helium-4 nuclei into carbon-12 release "
+        "7.3 MeV of energy? What role does the Hoyle resonance play in making "
+        "this crucial step in stellar nucleosynthesis possible?"
     )
     reference = "Nuclear Astrophysics"
     tolerance = 0.10
@@ -332,9 +396,23 @@ class AlphaDecayEjection(Test):
     HONESTY: Alpha decay emits He-4 because it's doubly magic (very stable).
     The observation that A=4=k is noted, not explanatory.
     """
+    audit_score = 84
+    audit_notes = None
+    future_questions = (
+        "Q1: Why is alpha particle emission favored over proton, deuteron, or triton "
+        "emission in heavy nuclei? "
+        "(Answering would improve Question by +3 points: explains preformation) "
+        "Q2: How does the Geiger-Nuttall law connect alpha decay half-lives to alpha "
+        "particle energies? "
+        "(Answering would improve Derivation by +3 points: tunneling relationship) "
+        "Q3: What is alpha clustering, and how do physicists detect it in nuclear structure? "
+        "(Answering would improve Observation Quality by +2 points: experimental signatures)"
+    )
     name = "Alpha Decay Emits He-4"
     question = (
-        "Does alpha decay universally emit He-4 nuclei with ~4-6 MeV energy?"
+        "Why does alpha decay always emit helium-4 rather than other light "
+        "nuclei? What makes He-4 'doubly magic' and energetically favorable "
+        "as a decay product?"
     )
     reference = "Nuclear Physics (alpha decay)"
     tolerance = 0.10
@@ -392,9 +470,24 @@ class MagicNumbersComparison(Test):
     HONESTY: Magic numbers are explained by the nuclear shell model.
     The partial overlap with k-multiples is an observation, not an explanation.
     """
+    audit_score = 82
+    audit_notes = None
+    future_questions = (
+        "Q1: How does spin-orbit coupling in the nuclear shell model generate the "
+        "specific magic numbers 2, 8, 20, 28, 50, 82, 126? "
+        "(Answering would improve Derivation by +4 points: shell model mechanism) "
+        "Q2: Why are some magic numbers k-multiples (8, 20, 28) while others are not "
+        "(2, 50, 82, 126), and is this pattern meaningful? "
+        "(Answering would improve Commentary by +3 points: addresses pattern skeptically) "
+        "Q3: Are there superheavy magic numbers beyond 126, and what nuclear structure "
+        "calculations predict them? "
+        "(Answering would improve Audience Accessibility by +2 points: current research)"
+    )
     name = "Magic Numbers vs k-Multiples"
     question = (
-        "How do nuclear magic numbers compare to k-multiples?"
+        "Why do some magic numbers (8, 20, 28) happen to be k-multiples while "
+        "others (2, 50, 82, 126) are not? Does the shell model or k-geometry "
+        "provide the true explanation for nuclear stability?"
     )
     reference = "Nuclear Physics (shell model)"
     tolerance = 0.01
@@ -451,10 +544,23 @@ class NeutronProtonMassDifference(Test):
 
     HONESTY: ~1.3 MeV difference is measured. Standard physics.
     """
+    audit_score = 80
+    audit_notes = None
+    future_questions = (
+        "Q1: Why is the neutron heavier than the proton even though the d quark is heavier "
+        "than the u quark (neutron = udd, proton = uud)? "
+        "(Answering would improve Question by +4 points: QCD mass puzzle) "
+        "Q2: How does the neutron-proton mass difference enable beta decay and determine "
+        "which nuclei are stable? "
+        "(Answering would improve Commentary by +3 points: stability consequences) "
+        "Q3: What would happen to nuclear physics if the neutron were lighter than the proton? "
+        "(Answering would improve Audience Accessibility by +2 points: counterfactual insight)"
+    )
     name = "Neutron-Proton Mass Difference"
     question = (
-        "What is the neutron-proton mass difference, and is it small compared "
-        "to the nucleon mass?"
+        "Why is the neutron only 0.14% heavier than the proton, and why does "
+        "this tiny difference (1.3 MeV) determine whether free neutrons decay "
+        "and which nuclei are stable against beta decay?"
     )
     reference = "CODATA"
     tolerance = 0.15
@@ -506,9 +612,23 @@ class NuclearRadiusScale(Test):
 
     HONESTY: r_0 ~ 1.2 fm is measured. Standard nuclear physics.
     """
+    audit_score = 78
+    audit_notes = None
+    future_questions = (
+        "Q1: Why does the nuclear radius scale as A^(1/3), indicating constant nuclear "
+        "density regardless of nucleus size? "
+        "(Answering would improve Derivation by +3 points: explains incompressibility) "
+        "Q2: How do electron scattering experiments measure nuclear radii, and what does "
+        "the charge distribution look like? "
+        "(Answering would improve Observation Quality by +3 points: measurement technique) "
+        "Q3: How does the nuclear radius compare to the range of the strong force (~1 fm)? "
+        "(Answering would improve Commentary by +2 points: scale connection)"
+    )
     name = "Nuclear Radius Constant"
     question = (
-        "What is the nuclear radius constant r_0, and how does it compare to r_e?"
+        "Why does the nuclear radius follow R = r_0 * A^(1/3) with r_0 ~ 1.2 fm? "
+        "What does this cube-root scaling reveal about nuclear matter being "
+        "approximately incompressible?"
     )
     reference = "Nuclear Physics"
     tolerance = 0.30

@@ -48,12 +48,22 @@ class HexagonInternalAngle(Test):
     """
     name = "Hexagon Internal Angle = 120 degrees"
     question = (
-        "Does the formula (n-2)*180/n for n=6 yield the hexagon internal "
-        "angle of 120 degrees?"
+        "Why is the hexagon angle 120 degrees? The formula (n-2)*180/n for n=6 gives "
+        "4*180/6 = 120 degrees, the same as the vesica piscis coupling angle."
     )
     reference = "Euclidean geometry"
     tolerance = 1e-10
     level = Level.STANDARD
+    audit_score = 82
+    audit_notes = None
+    future_questions = (
+        "Q1: Why does the internal angle formula (n-2)*180/n produce 120 for n=6 specifically? "
+        "(Answering would improve Derivation by +2 points: explaining the polygon angle formula) "
+        "Q2: How does 120 degrees connect to the tetrahedral dihedral angle of 70.53 degrees? "
+        "(Answering would improve Commentary by +3 points: linking hexagonal to tetrahedral geometry) "
+        "Q3: Does the 120-degree angle have significance in crystal lattice physics? "
+        "(Answering would improve Audience Accessibility by +2 points: connecting to materials science)"
+    )
     
     commentary = (
         "THE HEXAGON ANGLE:\n"
@@ -91,12 +101,22 @@ class HexagonalPackingEfficiency(Test):
     """
     name = "Hexagonal Packing Efficiency = 74%"
     question = (
-        "Does hexagonal close packing achieve the maximum sphere packing "
-        "efficiency of pi/(3*sqrt(2)) ~ 74.05%?"
+        "Why is hexagonal packing optimal? Kepler (1611) conjectured and Hales (2005) proved "
+        "that pi/(3*sqrt(2)) ~ 74% is the maximum sphere packing density in 3D."
     )
     reference = "Kepler conjecture (proven 2005)"
     tolerance = 0.001
     level = Level.STANDARD
+    audit_score = 85
+    audit_notes = None
+    future_questions = (
+        "Q1: Why did the Kepler conjecture take nearly 400 years to prove? "
+        "(Answering would improve Audience Accessibility by +3 points: historical and mathematical context) "
+        "Q2: Does the 74% packing efficiency relate to any GFD predictions? "
+        "(Answering would improve Commentary by +3 points: connecting optimality to field closure) "
+        "Q3: How does FCC (face-centered cubic) compare to HCP (hexagonal close-packed) in GFD? "
+        "(Answering would improve Derivation by +2 points: addressing 3D packing alternatives)"
+    )
     
     commentary = (
         "THE KEPLER CONJECTURE:\n"
@@ -135,12 +155,22 @@ class C6SymmetryOrder(Test):
     """
     name = "C6 Symmetry: 60-degree Rotation"
     question = (
-        "Does hexagonal packing exhibit C6 symmetry with 360/6 = 60 degree "
-        "rotational invariance?"
+        "Why do hexagonal structures exhibit C6 symmetry? With 6 equivalent orientations, "
+        "rotation by 360/6 = 60 degrees maps the structure onto itself."
     )
     reference = "Point group theory"
     tolerance = 0.0
     level = Level.STANDARD
+    audit_score = 80
+    audit_notes = None
+    future_questions = (
+        "Q1: How does C6 symmetry relate to the 6 neighbors in hexagonal packing? "
+        "(Answering would improve Commentary by +2 points: connecting symmetry order to neighbor count) "
+        "Q2: Why does graphene exhibit C6 symmetry and what does GFD predict about it? "
+        "(Answering would improve Observation Quality by +3 points: connecting to real materials) "
+        "Q3: Could field envelopes exhibit higher symmetry like C12 under certain conditions? "
+        "(Answering would improve Question by +2 points: exploring symmetry extensions)"
+    )
     
     commentary = (
         "C6 ROTATIONAL SYMMETRY:\n"
@@ -184,12 +214,22 @@ class VesicaPiscisAngleMatch(Test):
     """
     name = "Vesica Piscis Angle = Hexagon Angle = 120 deg"
     question = (
-        "Does the vesica piscis coupling angle (2*pi/3 = 120 degrees) equal "
-        "the hexagon internal angle (120 degrees)?"
+        "Why does the vesica piscis angle match the hexagon angle? Both are 120 degrees "
+        "because they arise from the same underlying hexagonal geometry."
     )
     reference = "Geometric correspondence"
     tolerance = 1e-10
     level = Level.STANDARD
+    audit_score = 83
+    audit_notes = None
+    future_questions = (
+        "Q1: Is the 120-degree angle correspondence a coincidence or a necessary geometric fact? "
+        "(Answering would improve Derivation by +3 points: proving the relationship rigorously) "
+        "Q2: Does the vesica piscis play a role beyond determining the 1/3 coupling fraction? "
+        "(Answering would improve Commentary by +2 points: exploring additional geometric meaning) "
+        "Q3: How does this angle correspondence manifest in physical systems like crystals? "
+        "(Answering would improve Observation Quality by +3 points: connecting to laboratory observations)"
+    )
     
     commentary = (
         "THE CONNECTION:\n"

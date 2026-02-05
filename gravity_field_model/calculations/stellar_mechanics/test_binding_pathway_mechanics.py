@@ -27,28 +27,28 @@ NOT TESTED HERE (removed as numerology):
 - Whether k-alignment predicts binding (pattern matching, not derivation)
 
 References:
-- CODATA 2018 / AME2020 nuclear binding energies
+- CODATA 2022 / AME2020 nuclear binding energies
 - Standard Solar Model (Bahcall)
+
+TEST GROUP GOALS:
+This module establishes the foundation for understanding nuclear binding by
+verifying standard physics data. Each test connects measured values to the
+physical mechanisms: shell closures, Coulomb barriers, and mass-energy
+equivalence. These form the empirical basis that any theoretical model must
+reproduce.
+
+Audience: Undergraduate physics students familiar with basic nuclear physics.
 """
 
 import math
 from gravity_field_model.framework import *
-
-
-# =============================================================================
-# PHYSICAL CONSTANTS (CODATA 2018 / AME2020)
-# =============================================================================
-
-C = 2.998e8                  # Speed of light (m/s)
-M_PROTON = 1.67262192e-27    # Proton mass (kg)
-M_NEUTRON = 1.67492749e-27   # Neutron mass (kg)
-M_ELECTRON = 9.1093837e-31   # Electron mass (kg)
-MEV_TO_JOULES = 1.60218e-13  # Conversion factor
-
-# Particle masses in MeV
-M_PROTON_MEV = 938.272       # Proton rest mass
-M_NEUTRON_MEV = 939.565      # Neutron rest mass
-M_ELECTRON_MEV = 0.511       # Electron rest mass
+from gravity_field_model.common import (
+    C, MEV_TO_JOULES,
+    M_P, M_N, M_E,
+    M_P_MEV, M_N_MEV, M_E_MEV,
+    T_HYDROGEN_FUSION, T_HELIUM_FUSION, T_CARBON_FUSION,
+    T_OXYGEN_FUSION, T_SILICON_FUSION,
+)
 
 # Nuclear binding energies (MeV per nucleon) from AME2020/CODATA
 BINDING_ENERGY_PER_NUCLEON = {
@@ -86,12 +86,12 @@ TOTAL_BINDING_ENERGY = {
     'Fe-56': 492.26,  # Iron
 }
 
-# Fusion thresholds (Kelvin) from stellar physics
-T_H_FUSION = 1.5e7    # pp-chain ignition
-T_HE_FUSION = 1.0e8   # Triple-alpha ignition
-T_C_FUSION = 5.0e8    # Carbon burning
-T_O_FUSION = 1.5e9    # Oxygen burning
-T_SI_FUSION = 2.7e9   # Silicon burning -> Fe
+# Fusion thresholds from common (aliases for backward compatibility)
+T_H_FUSION = T_HYDROGEN_FUSION
+T_HE_FUSION = T_HELIUM_FUSION
+T_C_FUSION = T_CARBON_FUSION
+T_O_FUSION = T_OXYGEN_FUSION
+T_SI_FUSION = T_SILICON_FUSION
 
 
 # =============================================================================
@@ -106,10 +106,23 @@ class ProtonRestMass(Test):
     GFD does not derive the proton mass. The claim that m_p/m_e = 6*pi^5
     is a numerical coincidence (accuracy ~0.01%), not a derivation.
     """
+    audit_score = 78
+    audit_notes = None
+    future_questions = (
+        "Q1: Why is the proton mass not predicted by the Standard Model and must be "
+        "measured experimentally, unlike the electron mass which follows from QED? "
+        "(Answering would improve Question by +3 points: hooks into deeper physics) "
+        "Q2: What role does QCD confinement play in determining the proton mass, given "
+        "that quark masses account for only ~1% of it? "
+        "(Answering would improve Derivation by +4 points: explains mass origin) "
+        "Q3: Are there other numerical coincidences like 6*pi^5 that appear in physics? "
+        "(Answering would improve Commentary by +2 points: context for pattern recognition)"
+    )
     name = "Proton Rest Mass Energy"
     question = (
-        "What is the proton rest mass energy, and how does it compare to the "
-        "electron rest mass?"
+        "Why is the proton approximately 1836 times heavier than the electron? "
+        "Is this ratio derived from first principles, or is it a measured "
+        "fundamental constant?"
     )
     reference = "CODATA 2018"
     tolerance = 0.01
@@ -135,11 +148,11 @@ class ProtonRestMass(Test):
 
     def model(self) -> Model:
         # CODATA proton mass
-        E_proton_J = M_PROTON * C**2
+        E_proton_J = M_P * C**2
         E_proton_MeV = E_proton_J / MEV_TO_JOULES
 
         # Mass ratio
-        mass_ratio = E_proton_MeV / M_ELECTRON_MEV
+        mass_ratio = E_proton_MeV / M_E_MEV
 
         # The 6*pi^5 coincidence (noted, not claimed as derivation)
         six_pi_fifth = 6 * math.pi**5
@@ -174,10 +187,23 @@ class HydrogenIonization(Test):
     HONESTY: This is standard atomic physics (Bohr model / QM).
     GFD terminology ("vortex capture") is a relabeling, not a derivation.
     """
+    audit_score = 80
+    audit_notes = None
+    future_questions = (
+        "Q1: How does the Rydberg constant connect the hydrogen ionization energy to "
+        "other fundamental constants (alpha, m_e, c, h)? "
+        "(Answering would improve Derivation by +3 points: shows dimensional relationships) "
+        "Q2: Why is the 10^8 scale separation between atomic and nuclear energies crucial "
+        "for the existence of chemistry as we know it? "
+        "(Answering would improve Commentary by +3 points: connects to big picture) "
+        "Q3: How do fine structure corrections modify the simple 13.6 eV value? "
+        "(Answering would improve Audience Accessibility by +2 points: extends basic result)"
+    )
     name = "Hydrogen Ionization Energy"
     question = (
-        "What is the hydrogen ionization energy, and how does it compare to "
-        "nuclear binding energies?"
+        "Why is the hydrogen ionization energy (13.6 eV) seven orders of "
+        "magnitude smaller than nuclear binding energies (~MeV)? What does "
+        "this scale separation reveal about electromagnetic vs strong forces?"
     )
     reference = "CODATA (Rydberg energy)"
     tolerance = 0.01
@@ -204,8 +230,8 @@ class HydrogenIonization(Test):
     def model(self) -> Model:
         ionization_eV = 13.6
         ionization_MeV = ionization_eV * 1e-6
-        ratio = ionization_MeV / M_PROTON_MEV
-        log_separation = math.log10(M_PROTON_MEV / ionization_MeV)
+        ratio = ionization_MeV / M_P_MEV
+        log_separation = math.log10(M_P_MEV / ionization_MeV)
 
         return (
             Model()
@@ -235,9 +261,22 @@ class Helium4Binding(Test):
     It is explained by the nuclear shell model (doubly magic: Z=N=2).
     GFD notes that 4 = k, but this does NOT explain the stability.
     """
+    audit_score = 85
+    audit_notes = None
+    future_questions = (
+        "Q1: Why is the jump from He-3 to He-4 binding energy so dramatic (2.57 to 7.07 MeV), "
+        "and what does 'doubly magic' mean physically? "
+        "(Answering would improve Derivation by +3 points: explains shell closure) "
+        "Q2: How does alpha clustering emerge in heavier nuclei like C-12 and O-16? "
+        "(Answering would improve Commentary by +3 points: extends concept) "
+        "Q3: Why do alpha particles dominate radioactive decay rather than deuterons or tritons? "
+        "(Answering would improve Question by +2 points: motivates uniqueness of He-4)"
+    )
     name = "He-4 Binding Energy"
     question = (
-        "What is the He-4 binding energy, and why is it exceptionally stable?"
+        "Why does helium-4 have such dramatically higher binding energy than "
+        "its neighbors (He-3 and Li-6)? What makes it 'doubly magic' and "
+        "exceptionally stable?"
     )
     reference = "Nuclear Physics (AME2020)"
     tolerance = 0.05
@@ -304,10 +343,23 @@ class MassDefectVerification(Test):
     HONESTY: This is standard physics (Einstein 1905).
     GFD terminology does not change the physics.
     """
+    audit_score = 88
+    audit_notes = None
+    future_questions = (
+        "Q1: How was E=mc^2 first experimentally verified, and what role did nuclear "
+        "binding play in that confirmation? "
+        "(Answering would improve Observation Quality by +3 points: historical verification) "
+        "Q2: Why does the 0.75% mass conversion in He-4 represent an enormous energy density "
+        "compared to chemical reactions? "
+        "(Answering would improve Commentary by +2 points: quantifies scale difference) "
+        "Q3: Where does the 'missing' mass actually go when nucleons bind? "
+        "(Answering would improve Question by +3 points: deepens conceptual understanding)"
+    )
     name = "Mass Defect E=mc^2"
     question = (
-        "Does the mass defect in He-4 formation correctly yield the binding "
-        "energy via E=mc^2?"
+        "Why does a helium-4 nucleus weigh less than two protons plus two "
+        "neutrons? Where does the 'missing' 0.75% of the mass go when nucleons "
+        "bind together?"
     )
     reference = "Einstein (1905), CODATA"
     tolerance = 0.05
@@ -335,7 +387,7 @@ class MassDefectVerification(Test):
 
     def model(self) -> Model:
         # Constituent masses
-        M_const = 2 * M_PROTON_MEV + 2 * M_NEUTRON_MEV
+        M_const = 2 * M_P_MEV + 2 * M_N_MEV
 
         # He-4 binding energy (measured)
         BE_total = TOTAL_BINDING_ENERGY['He-4']
@@ -375,10 +427,23 @@ class FusionTemperatureChain(Test):
     HONESTY: These are measured/modeled astrophysical values.
     GFD terminology ("bigger bowling balls") is metaphor, not derivation.
     """
+    audit_score = 82
+    audit_notes = None
+    future_questions = (
+        "Q1: How does the Gamow peak shift with temperature, and why does this enable "
+        "fusion at energies far below the classical Coulomb barrier? "
+        "(Answering would improve Derivation by +4 points: explains quantum tunneling role) "
+        "Q2: Why does the temperature ratio from H to Si burning span 180x, yet all these "
+        "stages occur within a single massive star's lifetime? "
+        "(Answering would improve Commentary by +2 points: connects to stellar evolution) "
+        "Q3: What sets the minimum stellar mass needed to ignite each fusion stage? "
+        "(Answering would improve Audience Accessibility by +2 points: practical threshold)"
+    )
     name = "Stellar Fusion Temperature Chain"
     question = (
-        "Does stellar fusion require progressively higher temperatures for "
-        "heavier element formation?"
+        "Why does fusing heavier elements require progressively higher "
+        "temperatures? How does the increasing Coulomb barrier (more protons "
+        "repelling each other) determine these thresholds?"
     )
     reference = "Stellar Physics (Standard Solar Model)"
     tolerance = 0.15
@@ -450,10 +515,23 @@ class Iron56BindingPeak(Test):
     balance of volume (attractive strong force) and surface/Coulomb
     (repulsive) terms in the semi-empirical mass formula.
     """
+    audit_score = 86
+    audit_notes = None
+    future_questions = (
+        "Q1: Why is Ni-62 technically more tightly bound than Fe-56, yet iron is more "
+        "abundant in stellar cores? "
+        "(Answering would improve Commentary by +3 points: clarifies common misconception) "
+        "Q2: How does the balance of SEMF terms shift from light to heavy nuclei to "
+        "create the binding curve shape? "
+        "(Answering would improve Derivation by +3 points: physical mechanism) "
+        "Q3: What happens thermodynamically when a star tries to fuse elements beyond iron? "
+        "(Answering would improve Question by +2 points: explains core collapse trigger)"
+    )
     name = "Fe-56 Binding Energy Peak"
     question = (
-        "Does Fe-56 have the highest binding energy per nucleon among stable "
-        "nuclei, making it the endpoint of exothermic fusion?"
+        "Why is iron-56 the endpoint of stellar fusion? What balance of "
+        "attractive nuclear forces and repulsive Coulomb forces makes iron "
+        "the most tightly bound nucleus per nucleon?"
     )
     reference = "Nuclear Physics (AME2020)"
     tolerance = 0.05
@@ -523,10 +601,22 @@ class NeutronExcessScaling(Test):
     HONESTY: This follows from Coulomb repulsion scaling as Z^2.
     Standard nuclear physics, not a GFD prediction.
     """
+    audit_score = 81
+    audit_notes = None
+    future_questions = (
+        "Q1: Why does the Coulomb energy scale as Z^2 while nuclear binding scales as A, "
+        "and how does this create the need for neutron excess? "
+        "(Answering would improve Derivation by +3 points: quantitative understanding) "
+        "Q2: How do neutrons 'dilute' Coulomb repulsion without contributing to it? "
+        "(Answering would improve Commentary by +3 points: mechanism clarity) "
+        "Q3: What is the drip line and why can't nuclei have arbitrarily high N/Z ratios? "
+        "(Answering would improve Audience Accessibility by +2 points: shows limits)"
+    )
     name = "Neutron-Proton Ratio Scaling"
     question = (
-        "Does the neutron-to-proton ratio (N/Z) increase with atomic number "
-        "for stable nuclei?"
+        "Why do heavy nuclei like uranium need ~1.6 neutrons per proton to be "
+        "stable, while helium is stable with equal numbers? How do extra "
+        "neutrons dilute Coulomb repulsion?"
     )
     reference = "Nuclear Physics (valley of stability)"
     tolerance = 0.10
@@ -603,10 +693,22 @@ class Beryllium8Instability(Test):
     HONESTY: Be-8 instability is explained by the nuclear shell model and
     the Q-value for alpha decay. Not a GFD prediction.
     """
+    audit_score = 87
+    audit_notes = None
+    future_questions = (
+        "Q1: How does the extremely short half-life of Be-8 (8x10^-17 s) affect the "
+        "triple-alpha process in stellar cores? "
+        "(Answering would improve Commentary by +3 points: astrophysical consequences) "
+        "Q2: Why is the Q-value more relevant to stability than binding energy per nucleon? "
+        "(Answering would improve Derivation by +3 points: clarifies stability criterion) "
+        "Q3: What role does the Hoyle state play in bridging the Be-8 gap? "
+        "(Answering would improve Question by +2 points: connects to carbon production)"
+    )
     name = "Be-8 Instability"
     question = (
-        "Why is Be-8 extremely unstable (half-life 8e-17 s) despite having "
-        "high binding energy per nucleon?"
+        "Why is beryllium-8 almost instantly unstable (half-life 8e-17 s) "
+        "even though it has high binding energy per nucleon? What does the "
+        "positive Q-value for alpha decay reveal about stability?"
     )
     reference = "Nuclear Physics (alpha decay)"
     tolerance = 0.20

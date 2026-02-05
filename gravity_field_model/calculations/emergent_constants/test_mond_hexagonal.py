@@ -94,12 +94,22 @@ class HexagonalNeighborCount(Test):
     """
     name = "Hexagonal Packing: N = 6 Neighbors"
     question = (
-        "Does hexagonal close packing produce exactly 6 nearest neighbors, "
-        "the maximum for equal circles in 2D?"
+        "Why exactly 6 neighbors in hexagonal packing? The circumference at neighbor distance "
+        "is 2*pi*2R, each neighbor needs 2R arc, so max = 2*pi = 6.28, constrained to 6."
     )
     reference = "Hexagonal close packing geometry"
     tolerance = 0.0
     level = Level.STANDARD
+    audit_score = 90
+    audit_notes = None
+    future_questions = (
+        "Q1: Why does 2D hexagonal packing determine 3D gravitational physics? "
+        "(Answering would improve Question by +3 points: addressing the dimensional application) "
+        "Q2: Does the integer constraint from 2*pi = 6.28 have deeper significance? "
+        "(Answering would improve Commentary by +2 points: exploring the near-integer nature of 2*pi) "
+        "Q3: Are there alternative packing geometries that could yield different MOND functions? "
+        "(Answering would improve Derivation by +3 points: exploring uniqueness of hexagonal choice)"
+    )
     
     commentary = (
         "WHY EXACTLY 6?\n\n"
@@ -161,12 +171,22 @@ class VesicaPiscisCoupling(Test):
     """
     name = "Vesica Piscis Coupling: eta = 1/3"
     question = (
-        "Does the vesica piscis geometry produce a coupling fraction "
-        "eta = (2*pi/3)/(2*pi) = 1/3 for hexagonal overlap?"
+        "Why does each overlap contribute exactly 1/3? The vesica piscis at hexagonal distance "
+        "subtends 120 degrees (equilateral triangle), giving eta = (2*pi/3)/(2*pi) = 1/3."
     )
     reference = "Vesica piscis geometry"
     tolerance = 1e-10
     level = Level.CRITICAL
+    audit_score = 94
+    audit_notes = None
+    future_questions = (
+        "Q1: Why does the equilateral triangle geometry emerge at hexagonal packing distance? "
+        "(Answering would improve Derivation by +2 points: connecting packing to triangle property) "
+        "Q2: Does the vesica piscis shape have any significance beyond the 1/3 fraction? "
+        "(Answering would improve Commentary by +2 points: exploring the sacred geometry connection) "
+        "Q3: How does the 120-degree angle relate to the Merkaba's tetrahedral angles? "
+        "(Answering would improve Audience Accessibility by +3 points: unifying framework geometry)"
+    )
     
     commentary = (
         "THE VESICA PISCIS:\n\n"
@@ -237,12 +257,22 @@ class TilingContributionDerivation(Test):
     """
     name = "Tiling Contribution: C = 6 * (1/3) * (1/2) = 1"
     question = (
-        "Does C_tiling = N * eta * s = 6 * (1/3) * (1/2) = 1 exactly, "
-        "explaining the '1' in the MOND function?"
+        "Why is the MOND denominator exactly 1? The tiling contribution C = N * eta * s = "
+        "6 neighbors * (1/3 coupling) * (1/2 sharing) = 6/6 = 1 from pure geometry."
     )
     reference = "GFD Framework"
     tolerance = 1e-10
     level = Level.CRITICAL
+    audit_score = 96
+    audit_notes = None
+    future_questions = (
+        "Q1: Why does 6/6 = 1 produce the simplest possible MOND function form? "
+        "(Answering would improve Commentary by +2 points: exploring the elegance of the result) "
+        "Q2: Could measurement of MOND in galaxies distinguish C = 1.00 from C = 0.99? "
+        "(Answering would improve Observation Quality by +3 points: assessing observational precision) "
+        "Q3: Does the exact cancellation 6 * (1/3) * (1/2) = 1 hint at a deeper symmetry? "
+        "(Answering would improve Question by +2 points: probing for underlying structure)"
+    )
     
     commentary = (
         "THIS IS THE CENTRAL DERIVATION:\n\n"
@@ -310,12 +340,22 @@ class ConstitutiveLawDerived(Test):
     """
     name = "Constitutive Law mu(x) = x/(1+x) Derived"
     question = (
-        "Does the geometrically derived mu(x) = x/(x + C_tiling) with C=1 "
-        "exactly reproduce the MOND interpolating function mu(x) = x/(1+x)?"
+        "Why does mu(x) = x/(1+x) emerge from geometry? With C_tiling = 1 from hexagonal packing, "
+        "the constitutive law mu(x) = x/(x+C) becomes the exact MOND function."
     )
     reference = "Milgrom (1983)"
     tolerance = 1e-10
     level = Level.CRITICAL
+    audit_score = 95
+    audit_notes = None
+    future_questions = (
+        "Q1: Are there any x-values where geometric and standard MOND might diverge? "
+        "(Answering would improve Observation Quality by +3 points: testing for hidden differences) "
+        "Q2: How does this derived mu(x) compare to alternative MOND functions like mu = x/sqrt(1+x^2)? "
+        "(Answering would improve Audience Accessibility by +3 points: connecting to MOND literature) "
+        "Q3: Does the algebraic identity mu(x) = x/(x+1) have implications for field equations? "
+        "(Answering would improve Derivation by +2 points: exploring mathematical consequences)"
+    )
     
     commentary = (
         "VERIFICATION:\n"
@@ -384,12 +424,22 @@ class NewtonianLimitRecovery(Test):
     """
     name = "Newtonian Limit: mu -> 1 as x -> infinity"
     question = (
-        "Does mu(x) = x/(1+x) approach 1 as x -> infinity, "
-        "recovering Newtonian gravity in strong fields?"
+        "Why does Newtonian gravity emerge in strong fields? As x -> infinity, mu(x) = x/(1+x) "
+        "approaches 1, ensuring solar system physics remains unchanged."
     )
     reference = "MOND phenomenology"
     tolerance = 0.001
     level = Level.STANDARD
+    audit_score = 88
+    audit_notes = None
+    future_questions = (
+        "Q1: At what precision have solar system tests confirmed mu -> 1 behavior? "
+        "(Answering would improve Observation Quality by +3 points: quantifying empirical constraints) "
+        "Q2: Are there any solar system anomalies that might hint at MOND effects? "
+        "(Answering would improve Commentary by +2 points: addressing Pioneer anomaly discussion) "
+        "Q3: How does the x >> 1 limit connect to the external field effect in MOND? "
+        "(Answering would improve Audience Accessibility by +3 points: introducing advanced MOND concept)"
+    )
     
     commentary = (
         "NEWTONIAN RECOVERY:\n"
@@ -442,12 +492,22 @@ class DeepMONDLimit(Test):
     """
     name = "Deep MOND Limit: mu -> x as x -> 0"
     question = (
-        "Does mu(x) = x/(1+x) approach x as x -> 0, producing the "
-        "gravitational boost for flat rotation curves?"
+        "Why do galaxy rotation curves flatten? As x -> 0, mu(x) ~ x, giving gravity boost "
+        "1/sqrt(mu) ~ 1/sqrt(x), which produces v^4 = GMa_0 and flat rotation curves."
     )
     reference = "MOND phenomenology"
     tolerance = 0.01
     level = Level.STANDARD
+    audit_score = 89
+    audit_notes = None
+    future_questions = (
+        "Q1: How does the v^4 = GMa_0 relation emerge from mu ~ x in the deep MOND limit? "
+        "(Answering would improve Derivation by +3 points: completing the rotation curve derivation) "
+        "Q2: Which galaxies provide the cleanest tests of the deep MOND regime? "
+        "(Answering would improve Observation Quality by +3 points: connecting theory to data) "
+        "Q3: Does the gravity boost 1/sqrt(x) have a geometric interpretation in GFD? "
+        "(Answering would improve Commentary by +2 points: relating boost to field closure)"
+    )
     
     commentary = (
         "DEEP MOND REGIME:\n"
@@ -499,12 +559,22 @@ class TransitionPoint(Test):
     """
     name = "Transition Point: mu(1) = 0.5"
     question = (
-        "Does the transition occur at x = 1 where mu(1) = 0.5, "
-        "balancing Newtonian and MOND contributions equally?"
+        "Why does the MOND transition occur at x = 1? When a = a_0, mu(1) = 1/(1+1) = 0.5, "
+        "balancing field contribution equally with tiling contribution."
     )
     reference = "MOND phenomenology"
     tolerance = 1e-10
     level = Level.STANDARD
+    audit_score = 87
+    audit_notes = None
+    future_questions = (
+        "Q1: Why does mu(1) = 0.5 represent 'equal balance' between regimes? "
+        "(Answering would improve Commentary by +2 points: interpreting the midpoint physically) "
+        "Q2: How sharp is the transition around x = 1 compared to other MOND functions? "
+        "(Answering would improve Derivation by +2 points: analyzing transition width) "
+        "Q3: Can the x = 1 transition point be directly observed in any galaxy? "
+        "(Answering would improve Observation Quality by +3 points: identifying observational targets)"
+    )
     
     commentary = (
         "THE TRANSITION:\n"

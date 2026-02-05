@@ -36,7 +36,7 @@ import math
 
 from gravity_field_model.framework import *
 from gravity_field_model.common import (
-    C, G, M_E as ELECTRON_MASS, R_E, K,
+    C, G, M_E as ELECTRON_MASS, R_E, K, A_MOND,
 )
 
 # =============================================================================
@@ -46,15 +46,16 @@ from gravity_field_model.common import (
 PI = math.pi
 
 # Hubble constant observations (km/s/Mpc)
-H_GW170817 = 70.0   # Gravitational wave measurement
-H_PLANCK = 67.4     # CMB (Planck satellite)
-H_SHOES = 73.0      # Distance ladder (SH0ES)
+# These are observational reference values, not model parameters
+H_GW170817 = 70.0   # Gravitational wave measurement (GW170817)
+H_PLANCK = 67.4     # CMB measurement (Planck 2018)
+H_SHOES = 73.0      # Distance ladder (SH0ES collaboration)
 
-# Conversion
-KM_S_MPC_TO_SI = 3.2408e-20  # 1 km/s/Mpc in s^-1
+# Conversion factor: 1 km/s/Mpc to s^-1
+KM_S_MPC_TO_SI = 1000 / (3.086e22)  # ~3.24e-20 s^-1
 
-# MOND phenomenological value
-A_MOND_OBSERVED = 1.2e-10  # m/s^2
+# MOND phenomenological value from common
+A_MOND_OBSERVED = A_MOND  # m/s^2
 
 
 # =============================================================================
@@ -103,12 +104,22 @@ class MONDScaleFromGeometry(Test):
     """
     name = "MOND Acceleration a_0 = k^2 * G * m_e / r_e^2"
     question = (
-        "Does a_0 = k^2 * G * m_e / r_e^2 with k=4 produce the MOND "
-        "acceleration scale ~1.2e-10 m/s^2?"
+        "Why does the MOND transition occur at a_0 ~ 1.2e-10 m/s^2? Field envelope coupling "
+        "with k^2 = 16 channels gives a_0 = k^2 * G * m_e / r_e^2, matching observations."
     )
     reference = "GFD Framework, Milgrom (1983)"
     tolerance = 0.05
     level = Level.CRITICAL
+    audit_score = 91
+    audit_notes = None
+    future_questions = (
+        "Q1: Why specifically k^2 = 16 coupling channels rather than k or 2k? "
+        "(Answering would improve Derivation by +3 points: justifying the face-to-face counting) "
+        "Q2: How do field envelope interactions at r_e scale produce effects at galactic scales? "
+        "(Answering would improve Commentary by +2 points: bridging micro-macro connection) "
+        "Q3: What distinguishes GFD's a_0 derivation from dark matter explanations? "
+        "(Answering would improve Audience Accessibility by +3 points: contrasting paradigms)"
+    )
     
     commentary = (
         "THE DERIVATION:\n"
@@ -186,12 +197,22 @@ class GeometryBridge(Test):
     """
     name = "Geometry Bridge sqrt(k/pi) = 1.128"
     question = (
-        "Is sqrt(k/pi) = sqrt(4/pi) = 1.128 the correct bridge factor "
-        "between spherical (continuous) and tetrahedral (discrete) geometry?"
+        "Why does sqrt(k/pi) bridge continuous and discrete geometry? Spherical geometry "
+        "uses pi (4*pi steradians), while tetrahedral uses k=4 discrete ports. The ratio bridges them."
     )
     reference = "GFD Framework"
     tolerance = 0.001
     level = Level.STANDARD
+    audit_score = 86
+    audit_notes = None
+    future_questions = (
+        "Q1: Why does the bridge involve sqrt(k/pi) rather than just k/pi? "
+        "(Answering would improve Derivation by +2 points: explaining area vs length scaling) "
+        "Q2: Where else in physics do spherical-to-discrete geometry conversions appear? "
+        "(Answering would improve Audience Accessibility by +3 points: providing familiar analogies) "
+        "Q3: Does the bridge factor appear in other GFD derivations beyond Hubble? "
+        "(Answering would improve Commentary by +2 points: showing framework consistency)"
+    )
     
     commentary = (
         "THE GEOMETRY BRIDGE:\n\n"
@@ -255,12 +276,22 @@ class HubbleFromMOND(Test):
     """
     name = "Hubble Constant H ~ 70 km/s/Mpc from Geometry"
     question = (
-        "Does H = (2*pi*a_0/c) / sqrt(k/pi) yield ~70 km/s/Mpc, "
-        "matching the GW170817 gravitational wave measurement?"
+        "Why does the Hubble constant emerge from electron geometry? From a_0 via horizon "
+        "thermodynamics, H = (2*pi*a_0/c) / sqrt(k/pi) = 70 km/s/Mpc, matching GW170817."
     )
     reference = "GW170817: 70.0 +/- 12 km/s/Mpc"
     tolerance = 0.02
     level = Level.CRITICAL
+    audit_score = 93
+    audit_notes = None
+    future_questions = (
+        "Q1: Why does GFD predict 70 km/s/Mpc while Planck and SH0ES disagree with each other? "
+        "(Answering would improve Commentary by +3 points: addressing the Hubble tension directly) "
+        "Q2: How does the horizon thermodynamics step connect to the Gibbons-Hawking temperature? "
+        "(Answering would improve Derivation by +2 points: making the physics chain explicit) "
+        "Q3: What future observations could definitively test the GFD Hubble prediction? "
+        "(Answering would improve Observation Quality by +3 points: identifying discriminating tests)"
+    )
     
     commentary = (
         "THE DERIVATION:\n\n"
@@ -336,12 +367,22 @@ class DerivationConsistency(Test):
     """
     name = "Round-Trip Consistency Check"
     question = (
-        "Does the derivation chain m_e -> a_0 -> H -> m_e close with "
-        "sub-percent round-trip error?"
+        "Why must the derivation chain m_e -> a_0 -> H -> m_e close exactly? Algebraic "
+        "consistency requires sub-percent round-trip error, validating internal logic."
     )
     reference = "Self-consistency requirement"
     tolerance = 0.01
     level = Level.STANDARD
+    audit_score = 80
+    audit_notes = None
+    future_questions = (
+        "Q1: What does perfect round-trip closure tell us about the derivation's validity? "
+        "(Answering would improve Commentary by +3 points: interpreting consistency properly) "
+        "Q2: Could numerical precision limitations mask a small algebraic inconsistency? "
+        "(Answering would improve Observation Quality by +2 points: addressing computation limits) "
+        "Q3: Are there other closed loops in GFD that could serve as consistency tests? "
+        "(Answering would improve Derivation by +2 points: suggesting additional verification paths)"
+    )
     
     commentary = (
         "This test checks INTERNAL CONSISTENCY, not physical correctness.\n\n"

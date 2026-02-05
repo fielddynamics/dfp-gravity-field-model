@@ -356,7 +356,7 @@ function filterFiles(pattern) {
 function updateFileCount(count) {
     const countElement = document.getElementById('file-count');
     if (countElement) {
-        countElement.textContent = count > 0 ? `${count} files` : '';
+        countElement.textContent = count > 0 ? `${count} tests` : '';
     }
 }
 

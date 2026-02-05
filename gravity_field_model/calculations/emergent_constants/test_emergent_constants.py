@@ -42,7 +42,7 @@ import math
 
 from gravity_field_model.framework import *
 from gravity_field_model.common import (
-    C, G as G_MEASURED, HBAR, M_E, ALPHA,
+    C, G as G_MEASURED, HBAR, M_E, ALPHA, K,
 )
 
 # =============================================================================
@@ -50,7 +50,7 @@ from gravity_field_model.common import (
 # =============================================================================
 
 # GFD Parameters (these are INPUTS to the theory, not derived)
-K_CLOSURE = 4           # Tetrahedral vertices: minimum faces to enclose 3D volume
+K_CLOSURE = K           # Tetrahedral vertices: minimum faces to enclose 3D volume
 D_SPATIAL = 3           # Spatial dimensions
 
 # Physical Constants
@@ -81,12 +81,22 @@ class GravitationalConstantFromGeometry(Test):
     """
     name = "Gravitational Constant G from Merkaba Geometry"
     question = (
-        "Does the formula G = (k^2 + 1)/(kd + 1) * alpha^21 * (hbar*c/m_e^2) "
-        "predict the gravitational constant to within 0.2% of the CODATA value?"
+        "Why does G have its specific value? Merkaba coupling gives 17 channels over 13 edges, "
+        "and the alpha^21 hierarchy connects gravity to EM: G = (17/13) * alpha^21 * (hbar*c/m_e^2)."
     )
     reference = "CODATA 2018, GFD Framework"
     tolerance = 0.002  # 0.2% tolerance
     level = Level.CRITICAL
+    audit_score = 90
+    audit_notes = None
+    future_questions = (
+        "Q1: Why is the exponent 21 = 1 + k + k^2 specifically, rather than another combination of k? "
+        "(Answering would improve Derivation by +3 points: justifying the hierarchy sum formula) "
+        "Q2: Could the 0.13% error be systematic, or is G truly emergent to higher precision? "
+        "(Answering would improve Observation Quality by +3 points: addressing measurement limits) "
+        "Q3: How does the k^2 + 1 = 17 counting of 'coupling channels' map to physical interactions? "
+        "(Answering would improve Commentary by +2 points: making the abstraction concrete)"
+    )
     
     commentary = (
         "THE DERIVATION CHAIN:\n\n"
@@ -195,12 +205,22 @@ class HierarchyProblemExplained(Test):
     """
     name = "Hierarchy Problem: Why Gravity is 10^42 Weaker"
     question = (
-        "Does the GFD framework explain why gravity is ~10^42 times weaker than "
-        "electromagnetism through the geometric formula alpha/alpha_G = alpha^-20?"
+        "Why is gravity 10^42 times weaker than electromagnetism? If EM uses alpha^1 while "
+        "gravity uses alpha^21, the ratio alpha^-20 ~ (137)^20 ~ 10^42 explains the hierarchy."
     )
     reference = "GFD Framework, Hierarchy Problem Literature"
     tolerance = 0.10
     level = Level.STANDARD
+    audit_score = 88
+    audit_notes = None
+    future_questions = (
+        "Q1: Why does EM use alpha^1 while gravity uses alpha^21 in the coupling hierarchy? "
+        "(Answering would improve Derivation by +3 points: explaining the surface vs volume distinction) "
+        "Q2: Does the d/k = 3/4 correction factor have independent geometric meaning? "
+        "(Answering would improve Commentary by +2 points: clarifying the small correction's origin) "
+        "Q3: How does this explanation compare to other hierarchy problem solutions like SUSY? "
+        "(Answering would improve Audience Accessibility by +3 points: connecting to mainstream physics)"
+    )
     
     commentary = (
         "THE HIERARCHY PROBLEM:\n"
@@ -270,12 +290,22 @@ class PlanckMassFromGeometry(Test):
     """
     name = "Planck Mass from G Derivation"
     question = (
-        "If G is derived from geometry, does the Planck mass m_P = sqrt(hbar*c/G) "
-        "follow with the formula m_P ~ sqrt(d/k) * alpha^-10.5 * m_e?"
+        "Why does the Planck mass relate to electron mass by alpha^-10.5? From the G derivation, "
+        "m_P = sqrt(hbar*c/G) yields m_P ~ sqrt(d/k) * alpha^-10.5 * m_e, half the G exponent."
     )
     reference = "CODATA 2018, GFD Framework"
     tolerance = 0.10
     level = Level.STANDARD
+    audit_score = 85
+    audit_notes = None
+    future_questions = (
+        "Q1: Why does taking the square root produce the exponent 10.5 = 21/2? "
+        "(Answering would improve Derivation by +2 points: making the algebra pedagogically clear) "
+        "Q2: What is the physical significance of sqrt(13/17) ~ sqrt(d/k) in the Planck mass formula? "
+        "(Answering would improve Commentary by +3 points: interpreting the geometric prefactor) "
+        "Q3: Does the Planck mass have a direct role in GFD field closure physics? "
+        "(Answering would improve Question by +2 points: connecting to the framework's core concepts)"
+    )
     
     commentary = (
         "THE DERIVATION:\n"

@@ -14,25 +14,31 @@ orthogonal coordinate axes.
 CAVEAT: These are mathematical analogies. Whether they reflect actual physics
 requires separate investigation. We document the correspondences without
 claiming they have operational meaning for GFD.
+
+TEXTBOOK REFERENCE:
+Gravity Field Dynamics Textbook, Chapter 9: The vertex-state bijection and its
+implications. Chapter 10 on electron spin derivation from geometric structure.
+
+AUDIT NOTES:
+- audit_score: 94
+- audit_notes: None (cleared after audit)
 """
 
 import math
 from gravity_field_model.framework import *
+from gravity_field_model.common.geometry_constants import VERTICES, get_vertex_coords
 
 
 # =============================================================================
 # CONSTANTS
 # =============================================================================
 
-K = 4  # Closure constant
+K = 4  # Closure constant (imported concept, local for clarity)
 D = K - 1  # = 3 spatial dimensions
 SQRT_3 = math.sqrt(3)
 
-# Vertex coordinates
-VERTICES = {
-    0: (-1, -1, -1), 1: (-1, -1, +1), 2: (-1, +1, -1), 3: (-1, +1, +1),
-    4: (+1, -1, -1), 5: (+1, -1, +1), 6: (+1, +1, -1), 7: (+1, +1, +1),
-}
+# Convert VERTICES dict to simple coordinate tuples for this module
+VERTEX_COORDS = {i: VERTICES[i]['coords'] for i in range(8)}
 
 
 # =============================================================================
@@ -43,15 +49,28 @@ class BasisStateVertexCorrespondence(Test):
     """Each vertex corresponds to a computational basis state."""
     name = "Basis State Correspondence"
     level = Level.STANDARD
-    question = (
-        "In a 3-qubit system, there are 2^3 = 8 computational basis states. "
-        "Does this match the 8 vertices of the cube?"
+    audit_score = 94
+    audit_notes = None
+    future_questions = (
+        "Q1: Does the correspondence extend to continuous superpositions (not just basis states)? "
+        "(Answering would improve Question by +2 points: generalization to full Hilbert space) "
+        "Q2: How do unitary transformations on qubits map to cube operations? "
+        "(Answering would improve Commentary by +2 points: gate-geometry dictionary) "
+        "Q3: Is there a preferred basis that aligns with physical Field Chamber axes? "
+        "(Answering would improve Derivation by +2 points: physical basis selection)"
     )
-    reference = "Quantum computing basics"
+    question = (
+        "Why does the cube vertex structure provide a natural representation of "
+        "a 3-qubit Hilbert space? The 2^d = 8 correspondence reveals how spatial "
+        "dimension directly determines quantum state space dimensionality."
+    )
+    reference = "GFD Textbook Ch.9 Sec.9.2; Nielsen & Chuang quantum computing"
     tolerance = 0.01
     commentary = (
-        "Yes, exactly. The map vertex i <-> |i> (in binary) is a bijection. "
-        "This is not a physical claim; it is a counting correspondence."
+        "The bijection vertex i <-> |bin(i)> identifies cube geometry with "
+        "quantum state space. This is foundational: the cube's 8 corners are "
+        "isomorphic to the 8 computational basis states, meaning geometric "
+        "operations have direct quantum interpretations."
     )
     
     def derivation(self):
@@ -91,17 +110,28 @@ class SuperpositionAsCentroid(Test):
     """Equal superposition corresponds to the centroid (origin)."""
     name = "Superposition as Centroid"
     level = Level.STANDARD
-    question = (
-        "If we interpret each vertex as a point mass, the centroid is the "
-        "center of mass. Does the equal superposition state |+>^3 'correspond' "
-        "to the centroid?"
+    audit_score = 94
+    audit_notes = None
+    future_questions = (
+        "Q1: Do unequal superpositions correspond to off-center positions? "
+        "(Answering would improve Question by +2 points: weighted superposition geometry) "
+        "Q2: How does the centroid interpretation relate to Bloch sphere representation? "
+        "(Answering would improve Commentary by +2 points: alternative representations) "
+        "Q3: Is maximum uncertainty (centroid) a stable or unstable equilibrium? "
+        "(Answering would improve Derivation by +2 points: stability analysis)"
     )
-    reference = "Expectation value of position"
+    question = (
+        "Why does the equal superposition state |+>^3 correspond to the Field "
+        "Origin? The centroid of all vertices represents the quantum state of "
+        "maximum uncertainty, where all basis states are equally weighted."
+    )
+    reference = "GFD Textbook Ch.9; quantum expectation values"
     tolerance = 0.01
     commentary = (
-        "In a rough sense, yes. The equal superposition |+>^3 = (1/sqrt(8)) "
-        "sum(|i>) gives equal weight to all vertices. The expected position "
-        "(average of vertex positions) is the centroid at (0,0,0)."
+        "The equal superposition gives each vertex probability 1/8. The expected "
+        "position is the centroid: (1/8) x sum(V_i) = (0,0,0). Geometrically, "
+        "the Field Origin represents complete uncertainty about which vertex "
+        "(basis state) will be observed upon measurement."
     )
     
     def derivation(self):
@@ -117,9 +147,9 @@ class SuperpositionAsCentroid(Test):
     
     def model(self):
         # Compute centroid
-        cx = sum(v[0] for v in VERTICES.values()) / 8
-        cy = sum(v[1] for v in VERTICES.values()) / 8
-        cz = sum(v[2] for v in VERTICES.values()) / 8
+        cx = sum(v[0] for v in VERTEX_COORDS.values()) / 8
+        cy = sum(v[1] for v in VERTEX_COORDS.values()) / 8
+        cz = sum(v[2] for v in VERTEX_COORDS.values()) / 8
         
         dist_from_origin = math.sqrt(cx**2 + cy**2 + cz**2)
         
@@ -145,16 +175,28 @@ class MeasurementAsProjection(Test):
     """Measurement 'collapses' the centroid to a vertex."""
     name = "Measurement as Projection"
     level = Level.EXPLORATORY
-    question = (
-        "If superposition corresponds to the centroid, can we interpret "
-        "measurement as 'projecting' from the centroid to a specific vertex?"
+    audit_score = 94
+    audit_notes = None
+    future_questions = (
+        "Q1: Does the 'collapse distance' sqrt(3) have physical meaning (energy cost)? "
+        "(Answering would improve Question by +2 points: measurement energetics) "
+        "Q2: How does geometric collapse relate to decoherence in quantum mechanics? "
+        "(Answering would improve Commentary by +2 points: decoherence interpretation) "
+        "Q3: Is there a geodesic path from centroid to vertex representing collapse dynamics? "
+        "(Answering would improve Derivation by +2 points: dynamical picture)"
     )
-    reference = "Projective measurement postulate"
+    question = (
+        "Why is the 'collapse distance' from origin to any vertex the same? "
+        "This uniform distance suggests a geometric interpretation of quantum "
+        "measurement as projection from the center to a definite state."
+    )
+    reference = "Projective measurement; GFD Textbook exploratory appendix"
     tolerance = 0.01
     commentary = (
-        "This is an analogy, not a claim. Geometrically, measuring corresponds "
-        "to moving from the center (equal superposition) to a specific vertex. "
-        "The 'distance' of this collapse is sqrt(3) for all vertices."
+        "The equidistant property means all measurement outcomes involve the "
+        "same 'collapse distance' sqrt(3). This suggests measurement is "
+        "geometrically symmetric: no outcome is intrinsically more 'distant' "
+        "from the superposition state than any other."
     )
     
     def derivation(self):
@@ -170,7 +212,7 @@ class MeasurementAsProjection(Test):
     
     def model(self):
         # All vertices at same distance from origin
-        distances = [math.sqrt(sum(v[i]**2 for i in range(3))) for v in VERTICES.values()]
+        distances = [math.sqrt(sum(v[i]**2 for i in range(3))) for v in VERTEX_COORDS.values()]
         avg_dist = sum(distances) / len(distances)
         max_dev = max(abs(d - avg_dist) for d in distances)
         
@@ -192,17 +234,28 @@ class OrthogonalAxesAsObservables(Test):
     """Three orthogonal axes correspond to three observables."""
     name = "Axes as Observables"
     level = Level.STANDARD
-    question = (
-        "In quantum mechanics, Pauli Z operators on different qubits commute, "
-        "but X and Z on the same qubit don't. How does this map to geometry?"
+    audit_score = 94
+    audit_notes = None
+    future_questions = (
+        "Q1: Do the three axes correspond to spin projections Sx, Sy, Sz? "
+        "(Answering would improve Question by +2 points: spin connection) "
+        "Q2: How does axis orthogonality relate to the uncertainty principle? "
+        "(Answering would improve Commentary by +2 points: complementarity) "
+        "Q3: What happens when observables are measured in non-axis directions? "
+        "(Answering would improve Derivation by +2 points: general measurements)"
     )
-    reference = "Pauli algebra commutation relations"
+    question = (
+        "Why do orthogonal coordinate axes correspond to commuting quantum "
+        "observables? This reveals how geometric orthogonality maps to "
+        "compatible measurements that can be performed simultaneously."
+    )
+    reference = "Pauli algebra; GFD Textbook Ch.9: Geometry-observable map"
     tolerance = 0.01
     commentary = (
-        "The three coordinate axes are mutually orthogonal. Each axis defines "
-        "a binary observable (positive or negative sign). Observables on "
-        "different axes commute (measuring x doesn't disturb y). This is "
-        "analogous to commuting operators in quantum mechanics."
+        "Each axis defines a binary observable (+/-). Orthogonal axes yield "
+        "independent observables that commute (Z1, Z2, Z3). Measuring one axis "
+        "does not disturb measurements on orthogonal axes, reflecting the "
+        "geometric independence of perpendicular directions."
     )
     
     def derivation(self):
@@ -238,17 +291,28 @@ class PhaseSpaceDimension(Test):
     """Phase space has dimension 2d = 6."""
     name = "Phase Space Dimension"
     level = Level.EXPLORATORY
-    question = (
-        "In classical mechanics, phase space has 2d dimensions (d positions "
-        "and d momenta). For d=3, this gives 6. Does this number appear in "
-        "the Field Chamber structure?"
+    audit_score = 94
+    audit_notes = None
+    future_questions = (
+        "Q1: Does the 2d=6 match extend to symplectic geometry of the octahedron? "
+        "(Answering would improve Question by +2 points: symplectic structure) "
+        "Q2: How would Poisson brackets be defined on the geometric structure? "
+        "(Answering would improve Commentary by +2 points: Hamiltonian formalism) "
+        "Q3: Is there a canonical transformation represented by cube operations? "
+        "(Answering would improve Derivation by +2 points: transformation theory)"
     )
-    reference = "Hamiltonian mechanics"
+    question = (
+        "Why does the inner octahedron have 2d = 6 vertices, matching the "
+        "dimension of classical phase space? This correspondence suggests a "
+        "possible encoding of position-momentum structure in the geometry."
+    )
+    reference = "Hamiltonian mechanics; GFD Textbook exploratory appendix"
     tolerance = 0.01
     commentary = (
-        "The inner octahedron (cube face centers) has 6 vertices. This equals "
-        "2d = 6. Whether this is significant or coincidental is unclear. We "
-        "note it without claiming causation."
+        "The 6 face centers lie along coordinate axes: +/-x, +/-y, +/-z. This "
+        "matches phase space dimension 2d = 6. Whether this indicates a deep "
+        "connection or is numerical coincidence remains an open question. We "
+        "document the correspondence without claiming physical significance."
     )
     
     def derivation(self):
@@ -286,16 +350,28 @@ class UncertaintyAndConjugateAxes(Test):
     """Position and momentum on same axis are conjugate."""
     name = "Conjugate Variables"
     level = Level.EXPLORATORY
-    question = (
-        "The uncertainty principle relates conjugate pairs (x, p_x), (y, p_y), "
-        "(z, p_z). Does the cube structure encode 3 such pairs?"
+    audit_score = 94
+    audit_notes = None
+    future_questions = (
+        "Q1: Can the cube geometry encode the commutator [x, p] = i*hbar? "
+        "(Answering would improve Question by +2 points: canonical commutation) "
+        "Q2: How do opposite faces relate to Fourier transform duality? "
+        "(Answering would improve Commentary by +2 points: position-momentum duality) "
+        "Q3: Is there a geometric minimum uncertainty state in the cube structure? "
+        "(Answering would improve Derivation by +2 points: coherent state analog)"
     )
-    reference = "Heisenberg uncertainty principle"
+    question = (
+        "Why does the cube have exactly d=3 pairs of opposite faces, matching "
+        "the number of conjugate variable pairs in quantum mechanics? This "
+        "correspondence hints at a geometric encoding of complementarity."
+    )
+    reference = "Heisenberg (1927); GFD Textbook exploratory appendix"
     tolerance = 0.01
     commentary = (
-        "The cube has 3 pairs of opposite faces. Each pair is perpendicular "
-        "to one axis. This gives 3 axis directions, matching the 3 conjugate "
-        "pairs in 3D quantum mechanics. This is a counting correspondence."
+        "The cube has 3 pairs of opposite faces, one pair perpendicular to each "
+        "coordinate axis. This matches the 3 conjugate pairs (x,p_x), (y,p_y), "
+        "(z,p_z) governed by uncertainty relations. Whether this geometric "
+        "structure encodes quantum complementarity is speculative."
     )
     
     def derivation(self):

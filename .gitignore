@@ -48,3 +48,6 @@ htmlcov/
 
 # Documentation (large generated files)
 docs/
+
+# Markdown files (working documents)
+*.md

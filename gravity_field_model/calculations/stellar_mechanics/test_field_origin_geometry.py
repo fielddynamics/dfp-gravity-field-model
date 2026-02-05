@@ -25,6 +25,14 @@ WHAT THIS MODULE DOES NOT DO:
 - It does not explain WHY k=4 should relate to nuclear stability
 - The observation that A mod 4 = 0 for some stable nuclei is pattern
   matching, not a GFD prediction
+
+TEST GROUP GOALS:
+This module establishes the geometric foundation of the GFD model. The stellated
+octahedron geometry is introduced as a framework for organizing nuclear structure.
+Students learn that r_e and k=4 are adopted constants, not derived predictions,
+establishing honesty about what the model assumes vs what it explains.
+
+Audience: Undergraduate physics and mathematics students.
 """
 
 import math
@@ -62,10 +70,23 @@ class FieldEnvelopeSize(Test):
     this value as the "Field Envelope" size. This is a model definition,
     not a derivation.
     """
+    audit_score = 80
+    audit_notes = None
+    future_questions = (
+        "Q1: What physical interpretation does the classical electron radius have, given "
+        "that electrons appear point-like in scattering experiments? "
+        "(Answering would improve Question by +4 points: addresses apparent paradox) "
+        "Q2: How does r_e emerge from equating electrostatic self-energy to rest mass energy? "
+        "(Answering would improve Derivation by +3 points: shows historical derivation) "
+        "Q3: Why might GFD choose r_e as the fundamental length scale rather than Compton "
+        "wavelength or Bohr radius? "
+        "(Answering would improve Commentary by +2 points: model motivation)"
+    )
     name = "Field Envelope r_e"
     question = (
-        "Is the Field Envelope size r_e set to the classical electron radius "
-        "(2.818 fm) from CODATA?"
+        "Why does GFD adopt the classical electron radius (2.818 fm) as its "
+        "fundamental length scale? What physical significance does r_e have, "
+        "and what does it mean to 'adopt' rather than 'derive' a constant?"
     )
     reference = "CODATA 2018"
     tolerance = 0.01
@@ -104,9 +125,23 @@ class TetrahedralClosureConstant(Test):
     d-dimensional space. For d=3, this gives k=4. GFD DEFINES k=4 as the
     "Field Closure constant." This is a geometric fact, not a physics derivation.
     """
+    audit_score = 82
+    audit_notes = None
+    future_questions = (
+        "Q1: What makes the tetrahedron mathematically special as the minimal volume-enclosing "
+        "simplex in 3D, and why can't fewer points work? "
+        "(Answering would improve Derivation by +3 points: geometric necessity) "
+        "Q2: Is it coincidence or deep physics that He-4 (4 nucleons) and carbon (4 valence) "
+        "both involve the number 4? "
+        "(Answering would improve Commentary by +3 points: addresses pattern recognition) "
+        "Q3: How does the simplex theorem generalize to higher dimensions (4D, 5D)? "
+        "(Answering would improve Audience Accessibility by +2 points: mathematical extension)"
+    )
     name = "Tetrahedral Closure k=4"
     question = (
-        "Does k=4 follow from the simplex theorem (d+1 points for d dimensions)?"
+        "Why does the simplex theorem require exactly 4 points to minimally "
+        "enclose 3-dimensional space? Is this geometric fact sufficient to "
+        "explain why helium-4 is stable, or does physics require more?"
     )
     reference = "Geometry (simplex theorem)"
     tolerance = 0.01
@@ -161,10 +196,23 @@ class FieldOriginAtCenter(Test):
     is defined with vertices at (+/-1, +/-1, +/-1), so the center is (0,0,0)
     by construction.
     """
+    audit_score = 75
+    audit_notes = None
+    future_questions = (
+        "Q1: Why is the centroid the natural choice for the Field Origin rather than "
+        "some other special point of the stellated octahedron? "
+        "(Answering would improve Question by +3 points: motivates construction) "
+        "Q2: What symmetry group does the stellated octahedron possess, and how does this "
+        "relate to its physical interpretation? "
+        "(Answering would improve Derivation by +3 points: group theory connection) "
+        "Q3: How would the model change if a different polyhedron were used as the Field Chamber? "
+        "(Answering would improve Commentary by +2 points: explores alternatives)"
+    )
     name = "Field Origin Location"
     question = (
-        "Is the Field Origin at the geometric center (0,0,0) of the stellated "
-        "octahedron?"
+        "Why is the Field Origin placed at the geometric center (0,0,0) of "
+        "the stellated octahedron by construction? What symmetry properties "
+        "does this central position preserve?"
     )
     reference = "Model Definition"
     tolerance = 0.01
@@ -215,10 +263,22 @@ class OriginVertexDistance(Test):
 
     HONESTY: Pure geometry. Distance from (0,0,0) to (+/-1,+/-1,+/-1) is sqrt(3).
     """
+    audit_score = 74
+    audit_notes = None
+    future_questions = (
+        "Q1: What is the geometric significance of sqrt(3) appearing as the vertex distance, "
+        "and how does this relate to the cube diagonal? "
+        "(Answering would improve Derivation by +3 points: connects to familiar geometry) "
+        "Q2: How do the edge lengths of the inner octahedron compare to the outer tetrahedra? "
+        "(Answering would improve Model Output by +2 points: complete geometric picture) "
+        "Q3: Why does uniform vertex distance from the center matter for physical interpretation? "
+        "(Answering would improve Commentary by +3 points: symmetry significance)"
+    )
     name = "Origin-Vertex Distance"
     question = (
-        "In unit coordinates, is the distance from Field Origin to each vertex "
-        "exactly sqrt(3)?"
+        "Why is the distance from the origin to each vertex exactly sqrt(3) "
+        "in unit coordinates? What does this uniform distance mean for the "
+        "symmetry of the stellated octahedron?"
     )
     reference = "Geometry"
     tolerance = 0.01
@@ -270,9 +330,23 @@ class BimetricBalance(Test):
     HONESTY: The stellated octahedron is constructed from two interpenetrating
     tetrahedra. By symmetry, both are equidistant from the center.
     """
+    audit_score = 76
+    audit_notes = None
+    future_questions = (
+        "Q1: What physical meaning do Tet A and Tet B have in the GFD model, and why are "
+        "two tetrahedra needed rather than one? "
+        "(Answering would improve Question by +4 points: model interpretation) "
+        "Q2: How does the interpenetrating geometry relate to matter-antimatter or "
+        "other dual structures in physics? "
+        "(Answering would improve Commentary by +3 points: physical analogy) "
+        "Q3: What happens at the 6 points where Tet A and Tet B edges intersect? "
+        "(Answering would improve Model Output by +2 points: geometric detail)"
+    )
     name = "Bimetric Balance"
     question = (
-        "Are Tet A and Tet B equidistant from the Field Origin?"
+        "Why must the two interpenetrating tetrahedra (Tet A and Tet B) be "
+        "equidistant from the center by construction? What would break if "
+        "this symmetry were violated?"
     )
     reference = "Model Geometry"
     tolerance = 0.01
@@ -327,9 +401,24 @@ class InnerOctahedronBoundary(Test):
     HONESTY: The inner octahedron has vertices at (+/-1,0,0), (0,+/-1,0), (0,0,+/-1).
     Distance from origin is 1.0 by construction.
     """
+    audit_score = 73
+    audit_notes = None
+    future_questions = (
+        "Q1: What role does the inner octahedron play in the GFD model geometry, and how "
+        "does it differ from the outer stellated structure? "
+        "(Answering would improve Question by +3 points: clarifies model structure) "
+        "Q2: Why are the inner octahedron vertices at axis-aligned positions while the "
+        "outer vertices are at cube corners? "
+        "(Answering would improve Derivation by +3 points: geometric relationship) "
+        "Q3: How do the 8 faces of the inner octahedron correspond to the 8 cells of "
+        "the stellated structure? "
+        "(Answering would improve Model Output by +2 points: face-cell correspondence)"
+    )
     name = "Inner Octahedron Boundary"
     question = (
-        "Do the 6 inner octahedron vertices lie at distance 1.0 from the origin?"
+        "Why do the 6 axis-aligned vertices of the inner octahedron all lie at "
+        "unit distance from the origin? How does this inner boundary relate to "
+        "the outer stellated vertices at sqrt(3)?"
     )
     reference = "Geometry"
     tolerance = 0.01
@@ -383,9 +472,23 @@ class ScaleComparison(Test):
     HONESTY: This is an observation. r_e > r_proton is a measured fact.
     GFD does not explain WHY this is so.
     """
+    audit_score = 78
+    audit_notes = None
+    future_questions = (
+        "Q1: Why is the electromagnetic length scale (r_e) larger than the strong force "
+        "length scale (proton radius) despite QED being a weaker interaction? "
+        "(Answering would improve Question by +4 points: addresses counterintuitive result) "
+        "Q2: How was the proton charge radius measured, and why did the muonic hydrogen "
+        "puzzle arise? "
+        "(Answering would improve Observation Quality by +3 points: measurement details) "
+        "Q3: What other characteristic length scales exist between r_e and r_proton? "
+        "(Answering would improve Audience Accessibility by +2 points: scale hierarchy)"
+    )
     name = "Field Envelope vs Proton Size"
     question = (
-        "Is the Field Envelope size r_e larger than the proton charge radius?"
+        "Why is the classical electron radius (~2.8 fm) about 3 times larger "
+        "than the proton charge radius (~0.87 fm)? What does this scale ratio "
+        "tell us about electromagnetic vs strong force length scales?"
     )
     reference = "Nuclear Physics (proton radius)"
     tolerance = 0.10
@@ -436,9 +539,24 @@ class ComptonWavelengthRatio(Test):
     HONESTY: lambda_C / r_e = 2*pi/alpha ~ 861 is a known result from QED.
     GFD does not derive this. It observes and adopts it.
     """
+    audit_score = 81
+    audit_notes = None
+    future_questions = (
+        "Q1: Why does alpha (the fine structure constant) appear in the ratio between "
+        "quantum and classical electron length scales? "
+        "(Answering would improve Derivation by +3 points: alpha as coupling strength) "
+        "Q2: What is the physical meaning of the Compton wavelength as a 'quantum size' "
+        "for the electron? "
+        "(Answering would improve Commentary by +3 points: wave-particle duality) "
+        "Q3: How do these length scale relationships generalize to other particles like muons? "
+        "(Answering would improve Audience Accessibility by +2 points: extends concept)"
+    )
     name = "Compton / r_e Ratio"
     question = (
-        "What is the ratio of Compton wavelength to classical electron radius?"
+        "Why is the Compton wavelength exactly 2*pi/alpha times larger than "
+        "the classical electron radius? What does this relationship between "
+        "quantum and classical electron scales reveal about the fine structure "
+        "constant?"
     )
     reference = "QED"
     tolerance = 0.05

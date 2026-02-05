@@ -26,6 +26,14 @@ is DEFINED as the "field closure frequency" in GFD. However:
 
 GFD terminology (Field Closure, bowling ball, squish ball) provides metaphors
 for standard physics but does not derive new results.
+
+TEST GROUP GOALS:
+This module connects nuclear binding energies to observable stellar properties:
+luminosity, mass loss, and thermal radiation. Students learn to trace the energy
+pathway from nuclear reactions (MeV scale) to macroscopic stellar output (watts),
+understanding E=mc^2 as the bridge between mass defect and radiated power.
+
+Audience: Undergraduate astrophysics and nuclear physics students.
 """
 
 import math
@@ -140,9 +148,22 @@ class BindingEnergyRelease(Test):
 
     HONESTY: 26.7 MeV is measured. E=mc^2 explains it. Standard physics.
     """
+    audit_score = 84
+    audit_notes = None
+    future_questions = (
+        "Q1: How is the 26.7 MeV distributed among photons, positrons, and neutrinos, "
+        "and why do neutrinos carry away energy undetectably? "
+        "(Answering would improve Commentary by +3 points: energy partitioning) "
+        "Q2: Why does the pp-chain require multiple steps rather than direct 4p -> He-4? "
+        "(Answering would improve Derivation by +3 points: reaction pathway necessity) "
+        "Q3: How does the energy release per reaction compare to chemical combustion? "
+        "(Answering would improve Audience Accessibility by +2 points: familiar comparison)"
+    )
     name = "pp-Chain Energy Release"
     question = (
-        "Does pp-chain fusion release 26.7 MeV when 4 protons fuse to He-4?"
+        "Why does the pp-chain release exactly 26.7 MeV when four protons fuse "
+        "to helium-4? How does the mass defect (0.7% of constituent mass) "
+        "account for this energy via E=mc^2?"
     )
     reference = "Nuclear Physics (pp chain)"
     tolerance = 0.10
@@ -196,9 +217,22 @@ class MassDefectCalculation(Test):
 
     HONESTY: Einstein 1905. Standard physics. GFD does not improve on this.
     """
+    audit_score = 86
+    audit_notes = None
+    future_questions = (
+        "Q1: How did Cockcroft and Walton first verify E=mc^2 experimentally in 1932? "
+        "(Answering would improve Observation Quality by +3 points: historical verification) "
+        "Q2: Why do neutrino losses cause a slight discrepancy between calculated and "
+        "calorimetric energy release? "
+        "(Answering would improve Commentary by +3 points: explains ~6% difference) "
+        "Q3: How does the mass defect for fission compare to fusion? "
+        "(Answering would improve Audience Accessibility by +2 points: broader context)"
+    )
     name = "Mass Defect E=mc^2"
     question = (
-        "Does the mass defect in pp-chain fusion satisfy E=mc^2?"
+        "Why does Einstein's E=mc^2 precisely connect the mass lost during "
+        "fusion to the energy released? What does this century-old equation "
+        "reveal about the fundamental equivalence of mass and energy?"
     )
     reference = "Einstein (1905)"
     tolerance = 0.10
@@ -253,9 +287,23 @@ class SolarFieldBindingRate(Test):
     HONESTY: This divides solar luminosity by energy per reaction.
     Standard astrophysics calculation.
     """
+    audit_score = 82
+    audit_notes = None
+    future_questions = (
+        "Q1: Why is 10^38 reactions per second an almost incomprehensibly large number, "
+        "yet the Sun appears steady over human timescales? "
+        "(Answering would improve Commentary by +3 points: scale perspective) "
+        "Q2: How is the fusion rate distributed spatially within the solar core? "
+        "(Answering would improve Model Output by +3 points: spatial profile) "
+        "Q3: What fraction of the Sun's hydrogen will be consumed over its main sequence "
+        "lifetime, and why only the core participates? "
+        "(Answering would improve Audience Accessibility by +2 points: stellar lifespan)"
+    )
     name = "Solar Fusion Rate"
     question = (
-        "How many pp-chain fusion reactions occur per second in the Sun?"
+        "Why must the Sun perform ~10^38 fusion reactions per second to "
+        "maintain its luminosity? How does dividing total power by energy "
+        "per reaction reveal the enormous scale of stellar nucleosynthesis?"
     )
     reference = "Solar Physics"
     tolerance = 0.15
@@ -304,9 +352,23 @@ class StellarWindMassLoss(Test):
 
     HONESTY: dm/dt = L/c^2. Standard physics from E=mc^2.
     """
+    audit_score = 85
+    audit_notes = None
+    future_questions = (
+        "Q1: How does the radiation mass loss (4.26 billion kg/s) compare to the solar "
+        "wind mass loss, and which dominates? "
+        "(Answering would improve Commentary by +3 points: complete mass budget) "
+        "Q2: Over the Sun's 10 billion year lifetime, what fraction of its mass will be "
+        "converted to radiation? "
+        "(Answering would improve Model Output by +3 points: lifetime integral) "
+        "Q3: How does mass loss affect the orbits of planets over astronomical timescales? "
+        "(Answering would improve Audience Accessibility by +2 points: observable consequence)"
+    )
     name = "Solar Mass Loss Rate"
     question = (
-        "Is the Sun's mass loss rate consistent with L = dm/dt x c^2?"
+        "Why does the Sun lose 4.26 billion kg of mass every second, yet will "
+        "shine for billions of years? How does L = dm/dt x c^2 connect the "
+        "tiny mass fraction converted to the enormous energy released?"
     )
     reference = "E=mc^2 (Einstein)"
     tolerance = 0.10
@@ -355,9 +417,23 @@ class ThermalPowerScale(Test):
 
     HONESTY: Standard thermodynamics. L = 4*pi*R^2*sigma*T^4.
     """
+    audit_score = 83
+    audit_notes = None
+    future_questions = (
+        "Q1: Why does luminosity scale as T^4 rather than linearly with temperature, "
+        "and what physical insight does this reveal about blackbody radiation? "
+        "(Answering would improve Derivation by +3 points: Planck distribution connection) "
+        "Q2: How well does the Sun approximate an ideal blackbody, and where does it deviate? "
+        "(Answering would improve Observation Quality by +3 points: spectral deviations) "
+        "Q3: How can astronomers use this law to determine stellar radii from luminosity "
+        "and temperature? "
+        "(Answering would improve Audience Accessibility by +2 points: practical application)"
+    )
     name = "Stefan-Boltzmann Verification"
     question = (
-        "Does the Stefan-Boltzmann law reproduce solar luminosity?"
+        "Why does the Stefan-Boltzmann law (L = 4*pi*R^2*sigma*T^4) accurately "
+        "predict solar luminosity from surface temperature and radius alone? "
+        "What does this reveal about stars as blackbody radiators?"
     )
     reference = "Thermodynamics"
     tolerance = 0.10
@@ -408,9 +484,24 @@ class BindingEnergyPeak(Test):
 
     HONESTY: This is measured nuclear data. Standard physics.
     """
+    audit_score = 87
+    audit_notes = None
+    future_questions = (
+        "Q1: What subtle difference exists between binding energy per nucleon (Fe-56 peak) "
+        "and total binding energy per atom (Ni-62 peak)? "
+        "(Answering would improve Commentary by +3 points: precise distinction) "
+        "Q2: How does the shell model explain fine structure in the binding curve "
+        "beyond the smooth SEMF prediction? "
+        "(Answering would improve Derivation by +3 points: shell effects) "
+        "Q3: Why is iron so abundant in the universe compared to elements just below or "
+        "above it on the periodic table? "
+        "(Answering would improve Audience Accessibility by +2 points: cosmic abundance)"
+    )
     name = "Fe-56 Binding Energy Peak"
     question = (
-        "Does Fe-56 have the maximum binding energy per nucleon (~8.79 MeV)?"
+        "Why is iron-56 the most tightly bound nucleus per nucleon at 8.79 MeV? "
+        "What balance of attractive strong force and repulsive Coulomb force "
+        "creates this energy maximum that determines stellar evolution endpoints?"
     )
     reference = "Nuclear Physics (AME2020)"
     tolerance = 0.05
@@ -471,9 +562,23 @@ class SupernovaEnergyRelease(Test):
 
     HONESTY: ~10^46 J is observed. Standard astrophysics.
     """
+    audit_score = 81
+    audit_notes = None
+    future_questions = (
+        "Q1: Why do neutrinos carry 99% of supernova energy while optical light is only 1%? "
+        "(Answering would improve Commentary by +3 points: energy channel partitioning) "
+        "Q2: What gravitational potential energy release powers the neutrino burst during "
+        "core collapse? "
+        "(Answering would improve Derivation by +3 points: energy source) "
+        "Q3: How does a supernova briefly outshine its entire host galaxy despite being "
+        "a single star? "
+        "(Answering would improve Audience Accessibility by +2 points: dramatic comparison)"
+    )
     name = "Supernova Energy Scale"
     question = (
-        "Is the typical supernova energy release ~10^46 J?"
+        "Why do supernovae release ~10^46 Joules, equivalent to 12% of the "
+        "core's rest mass energy? What gravitational and nuclear processes "
+        "combine to power these brief cosmic explosions that outshine galaxies?"
     )
     reference = "Astrophysics"
     tolerance = 0.30
@@ -523,9 +628,23 @@ class NeutrinoEmission(Test):
 
     HONESTY: ~2 neutrinos per pp-chain. Standard physics.
     """
+    audit_score = 80
+    audit_notes = None
+    future_questions = (
+        "Q1: Why did early solar neutrino experiments detect only 1/3 of the predicted "
+        "flux, and how was this 'solar neutrino problem' resolved? "
+        "(Answering would improve Commentary by +4 points: historical puzzle and solution) "
+        "Q2: How do neutrino detectors like Super-Kamiokande and SNO work to detect these "
+        "ghostly particles? "
+        "(Answering would improve Observation Quality by +3 points: detection methods) "
+        "Q3: What is the neutrino flux at Earth, and how many pass through your body each second? "
+        "(Answering would improve Audience Accessibility by +2 points: visceral scale)"
+    )
     name = "Solar Neutrino Rate"
     question = (
-        "How many neutrinos does the Sun emit per second?"
+        "Why does the Sun emit ~2x10^38 neutrinos per second, and why do "
+        "these ghostly particles carry away energy without interacting? "
+        "What does neutrino detection tell us about fusion in the solar core?"
     )
     reference = "Solar Neutrino Physics"
     tolerance = 0.20
