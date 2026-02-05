@@ -936,8 +936,16 @@ function parseNewFrameworkTests(lines) {
                 level: testHeaderMatch[2],
                 question: '',
                 status: null,
-                subsections: []
+                subsections: [],
+                className: null
             };
+            continue;
+        }
+
+        // Check for class name (for CLI runner)
+        const classMatch = trimmed.match(/^\[class:\s*(\w+)\]$/);
+        if (classMatch && currentTest) {
+            currentTest.className = classMatch[1];
             continue;
         }
 
@@ -1048,14 +1056,22 @@ function parseNewFrameworkTests(lines) {
 function renderFrameworkTest(test) {
     const levelClass = test.level ? test.level.toLowerCase() : 'standard';
     const statusClass = test.status === 'pass' ? 'passed' : test.status === 'fail' ? 'failed' : '';
+    const testId = 'test-' + Math.random().toString(36).substr(2, 9);
+    // Encode test data as base64 to avoid HTML attribute escaping issues
+    const testDataB64 = btoa(unescape(encodeURIComponent(JSON.stringify(test))));
 
     let html = `
-        <div class="framework-test ${statusClass}">
+        <div class="framework-test ${statusClass}" id="${testId}" data-test-b64="${testDataB64}">
             <div class="test-header">
                 <h3 class="test-name">${escapeHtml(test.name)}</h3>
-                <div class="test-badges">
-                    ${test.level ? `<span class="level-badge ${levelClass}">${escapeHtml(test.level)}</span>` : ''}
-                    ${test.status ? `<span class="status-badge ${statusClass}">${test.status.toUpperCase()}</span>` : ''}
+                <div class="test-actions">
+                    <button class="copy-test-btn" onclick="copyTestToClipboard('${testId}')" title="Copy test results to clipboard">
+                        <span class="copy-icon">&#128203;</span>
+                    </button>
+                    <div class="test-badges">
+                        ${test.level ? `<span class="level-badge ${levelClass}">${escapeHtml(test.level)}</span>` : ''}
+                        ${test.status ? `<span class="status-badge ${statusClass}">${test.status.toUpperCase()}</span>` : ''}
+                    </div>
                 </div>
             </div>
     `;
@@ -1533,4 +1549,84 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+/**
+ * Copy test results to clipboard in a formatted text format
+ */
+function copyTestToClipboard(testId) {
+    const testElement = document.getElementById(testId);
+    if (!testElement) return;
+
+    const testDataB64 = testElement.getAttribute('data-test-b64');
+    if (!testDataB64) return;
+
+    // Decode from base64
+    const test = JSON.parse(decodeURIComponent(escape(atob(testDataB64))));
+    const formattedText = formatTestForClipboard(test);
+
+    navigator.clipboard.writeText(formattedText).then(() => {
+        // Show brief feedback
+        const btn = testElement.querySelector('.copy-test-btn');
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = '<span class="copy-icon">&#10003;</span>';
+        btn.classList.add('copied');
+        setTimeout(() => {
+            btn.innerHTML = originalHtml;
+            btn.classList.remove('copied');
+        }, 1500);
+    }).catch(err => {
+        console.error('Failed to copy:', err);
+    });
+}
+
+/**
+ * Format test data as readable text for clipboard
+ */
+function formatTestForClipboard(test) {
+    let lines = [];
+
+    // Header
+    lines.push(test.name.toUpperCase());
+    if (test.level) lines.push(test.level.toUpperCase());
+    if (test.status) lines.push(test.status.toUpperCase());
+    lines.push('');
+
+    // Question
+    if (test.question) {
+        lines.push(test.question);
+        lines.push('');
+    }
+
+    // Subsections
+    for (const subsection of test.subsections) {
+        const name = subsection.name.replace(/\s*\(.*\)$/, '');
+        const sourceMatch = subsection.name.match(/\(([^)]+)\)$/);
+        const source = sourceMatch ? ` (${sourceMatch[1]})` : '';
+
+        lines.push(name + source);
+
+        if (subsection.type === 'table') {
+            // Include table as-is
+            lines.push(subsection.content.join('\n'));
+        } else {
+            // Include text content with indentation
+            const contentLines = subsection.content.split('\n');
+            for (const line of contentLines) {
+                if (line.trim()) {
+                    lines.push('  ' + line.trim());
+                }
+            }
+        }
+        lines.push('');
+    }
+
+    // Add CLI command if class name is available
+    if (test.className) {
+        lines.push('---');
+        lines.push('# To run this specific test:');
+        lines.push(`python -m gfd_model_v2.run_test ${test.className}`);
+    }
+
+    return lines.join('\n');
 }

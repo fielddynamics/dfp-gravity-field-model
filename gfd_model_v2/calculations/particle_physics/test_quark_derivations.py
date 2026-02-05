@@ -1,42 +1,49 @@
 """
-Particle Physics: Quark Charge Correspondence
+Particle Physics: Quark Charge Correspondences
 
-The model observes numerical correspondences between geometric properties of the
-stellated octahedron and Standard Model parameters. A tetrahedron has k=4 faces,
-giving d = k-1 = 3 spatial dimensions. The reciprocal 1/d = 1/3 corresponds
-numerically to the quark charge quantum.
+STATUS: NUMERICAL CORRESPONDENCES (not derivations)
 
-These tests document these correspondences without claiming the model derives
-or explains the Standard Model. The reader should evaluate whether these
-numerical agreements are meaningful or coincidental.
+These tests document numerical correspondences between geometric properties of the
+stellated octahedron and Standard Model parameters. The key correspondence is:
+
+    Port Ratio = 1/d = 1/(k-1) = 1/3
+
+This matches the quark charge quantum. Additionally:
+    - 3 vertices per triangular face matches 3 color charges
+    - 3 quarks per baryon matches 3 vertices to complete a face
+
+CRITICAL HONESTY NOTE:
+These are CORRESPONDENCES, not DERIVATIONS. GFD observes that:
+    d = k - 1 = 3    and    quark charge quantum = 1/3
+
+This numerical match is interesting but does not constitute a derivation.
+The Standard Model derives fractional charges from SU(3)_color x SU(2)_weak x U(1)_Y
+gauge theory and anomaly cancellation. GFD provides a geometric picture that
+happens to produce the same numbers.
+
+The reader should evaluate whether these numerical agreements indicate deeper
+structure or are coincidental.
 """
 
-import sys
-import os
-
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-
-from base import GFDTest, run_test_group
+from gfd_model_v2.framework import *
 
 
 # =============================================================================
 # CONSTANTS
 # =============================================================================
 
-K_CLOSURE = 4  # Tetrahedral face count
-D = K_CLOSURE - 1  # Model's derived spatial dimensions
+K_CLOSURE = 4  # Tetrahedral face count (Field Closure constant)
+D = K_CLOSURE - 1  # d = k - 1 = 3 (SPATIAL dimensions)
 STELLATED_VERTICES = 2 * K_CLOSURE  # 8 vertices in stellated octahedron
 CORNERS_PER_FACE = D  # 3 corners per triangular face
-TOTAL_CORNER_STATES = STELLATED_VERTICES * CORNERS_PER_FACE  # 24
 
-# Derived charge quantum
-Q_MIN = 1 / D  # 1/3 (minimum charge from geometry)
+# The key GFD correspondence
+PORT_RATIO = 1 / D  # 1/3 (charge quantum from geometry)
 
-# Standard Model values
+# Standard Model values (for comparison)
 SM_QUARK_CHARGE_QUANTUM = 1/3
 SM_NUM_COLORS = 3
 SM_QUARKS_PER_BARYON = 3
-SM_NUM_GENERATIONS = 3
 
 
 # =============================================================================
@@ -44,7 +51,12 @@ SM_NUM_GENERATIONS = 3
 # =============================================================================
 
 def get_face_activation_patterns():
-    """Return all 8 possible face activation patterns (3-bit combinations)."""
+    """
+    Return all 8 possible face activation patterns (3-bit combinations).
+    
+    A triangular face has 3 vertices. Each can be active (1) or inactive (0).
+    This gives 2^3 = 8 possible states.
+    """
     patterns = {}
     for i in range(8):
         binary = format(i, '03b')
@@ -64,374 +76,412 @@ def get_face_activation_patterns():
 # TEST CLASSES
 # =============================================================================
 
-class QuarkChargeFromGeometry(GFDTest):
+class ChargeQuantumCorrespondence(Test):
     """
-    The model produces 1/d = 1/3 from the structure d = k-1 = 3. This value
-    corresponds numerically to the quark charge quantum e/3 in the Standard Model.
+    GFD produces 1/d = 1/3 from the tetrahedral structure d = k-1 = 3.
+    This value equals the quark charge quantum e/3 in the Standard Model.
+    
+    NOTE: This is a numerical correspondence, not a physical derivation.
+    The Standard Model derives e/3 from gauge theory constraints.
+    GFD observes that 1/d happens to equal the same value.
     """
-    name = "Quark Charge Correspondence"
-    question = "What is the minimum electric charge quantum that emerges from the Field Chamber geometry, and how does it compare to observed quark charges?"
-    reference_source = "Standard Model (e/3 charge quantum)"
+    name = "Charge Quantum Correspondence"
+    question = "What is the Port Ratio from Field Closure, and does it numerically match the quark charge quantum?"
+    reference = "Standard Model: quark charges are multiples of e/3"
+    level = Level.STANDARD
     tolerance = 0.01
-    derivation = (
-        "PREMISE: From Field Closure, k = 4 tetrahedral faces determine d = k - 1 = 3 SPATIAL dimensions. "
-        "STEP 1: Each Coupling Port presents a triangular face with d = 3 vertices. "
-        "STEP 2: Port Ratio = 1/d = 1/3 (minimum charge contribution per vertex). "
-        "STEP 3: All quark charges are integer multiples of this quantum. "
-        "OUTPUT: Quark charge quantum = 1/3."
-    )
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("PREMISE: Field Closure requires k = 4 faces; hence d = k - 1 = 3 SPATIAL dimensions.")
+            .step("STEP 1: Port Ratio = 1/d = 1/3 (geometric property of triangular Coupling Port faces).")
+            .step("STEP 2: Standard Model quark charge quantum = e/3 (from gauge theory).")
+            .step("STEP 3: Numerical comparison: 1/d = 1/3 = e/3 (exact match).")
+            .conclude("OUTPUT: Port Ratio = 1/3 corresponds to quark charge quantum = 1/3.")
+        )
+    
     commentary = (
-        "The emergence of 1/3 from Field Closure (k=4 faces yielding d=k-1=3 SPATIAL dimensions) "
-        "corresponds numerically to the fractional charge quantum observed in quarks. This suggests "
-        "that the Port Ratio inherent to the stellated octahedron's triangular faces may encode "
-        "information consistent with charge quantization, though the physical mechanism remains unspecified."
+        "The emergence of 1/3 from Field Closure (k=4 giving d=k-1=3) matches the fractional "
+        "charge quantum of quarks. This correspondence is NUMERICAL, not CAUSAL. The Standard "
+        "Model derives e/3 from SU(3) color symmetry and anomaly cancellation. GFD observes "
+        "that tetrahedral geometry produces the same ratio. Whether this indicates deeper "
+        "structure or coincidence remains an open question."
     )
     
     def model(self):
-        d = D  # 3 spatial dimensions
-        q_derived = 1 / d  # 1/3
-        return {"Quark charge quantum": q_derived}
+        return Model().add("Port Ratio (1/d)", PORT_RATIO)
     
     def observations(self):
-        return {"Quark charge quantum": SM_QUARK_CHARGE_QUANTUM}
+        return Observed().add("Port Ratio (1/d)", SM_QUARK_CHARGE_QUANTUM)
 
 
-class NumberOfColors(GFDTest):
+class ThreeColorsCorrespondence(Test):
     """
-    A triangular face has 3 corners. This number corresponds to the 3 color
-    charges of QCD. The correspondence is numerical; no physical mechanism
-    linking face geometry to color charge is proposed.
+    A triangular face has 3 corners. QCD has 3 color charges.
+    This numerical correspondence is noted.
     """
-    name = "Color Charge Correspondence"
-    question = "How many independent color charges arise from the Coupling Port vertex structure, and does this match quantum chromodynamics?"
-    reference_source = "QCD (3 color charges: R, G, B)"
+    name = "Three Colors Correspondence"
+    question = "How many vertices does each triangular Coupling Port face have, and does this match the number of QCD color charges?"
+    reference = "QCD: 3 color charges (Red, Green, Blue)"
+    level = Level.STANDARD
     tolerance = 0.01
-    derivation = (
-        "PREMISE: From Field Closure, d = k - 1 = 3 gives d = 3 vertices per Coupling Port face. "
-        "STEP 1: Each triangular face has 3 distinguishable vertex positions. "
-        "STEP 2: These 3 positions can be independently activated (color states). "
-        "STEP 3: QCD SU(3) symmetry requires exactly 3 color charges (R, G, B). "
-        "OUTPUT: Number of colors = 3."
-    )
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("PREMISE: From Field Closure, d = k - 1 = 3 vertices per Coupling Port face.")
+            .step("STEP 1: Each triangular face has exactly 3 vertex positions.")
+            .step("STEP 2: QCD requires exactly 3 color charges (SU(3) fundamental representation).")
+            .step("STEP 3: Numerical comparison: 3 vertices = 3 colors.")
+            .conclude("OUTPUT: Vertices per face = 3, Color charges = 3 (numerical match).")
+        )
+    
     commentary = (
-        "Each Coupling Port on the stellated octahedron presents a triangular face with three "
-        "vertices, corresponding numerically to QCD's three color charges. The SPATIAL faces of "
-        "Tetrahedron A and Tetrahedron B each contribute this threefold structure, which may "
-        "indicate a geometric basis for the color degree of freedom."
+        "Each Coupling Port presents a triangular face with 3 vertices. QCD has 3 color charges. "
+        "The match is numerical. The Standard Model derives 3 colors from the SU(3) gauge group. "
+        "GFD observes that triangular faces have 3 corners. No mechanism linking geometry to "
+        "color charge is proposed."
     )
     
     def model(self):
-        return {"Number of colors": CORNERS_PER_FACE}
+        return Model().add("Vertices per face", CORNERS_PER_FACE)
     
     def observations(self):
-        return {"Number of colors": SM_NUM_COLORS}
+        return Observed().add("Vertices per face", SM_NUM_COLORS)
 
 
-class BaryonsNeed3Quarks(GFDTest):
+class ThreeQuarksCorrespondence(Test):
     """
-    Baryons contain 3 quarks. The model's triangular faces have 3 corners.
-    This numerical correspondence is noted without claiming a derivation
-    of baryon structure from geometry.
+    Baryons contain 3 quarks. Triangular faces have 3 corners.
+    The numerical correspondence suggests baryons may represent
+    complete face configurations.
     """
-    name = "Baryon Quark Correspondence"
-    question = "Why do baryons contain exactly three quarks, and does this constraint emerge from the Coupling Port geometry?"
-    reference_source = "Particle physics (proton = uud, neutron = udd)"
+    name = "Three Quarks per Baryon"
+    question = "How many quarks do baryons contain, and does this match the vertex count of a triangular Coupling Port face?"
+    reference = "Particle physics: baryons = 3 quarks (proton = uud, neutron = udd)"
+    level = Level.STANDARD
     tolerance = 0.01
-    derivation = (
-        "PREMISE: From Field Closure, d = k - 1 = 3 vertices per Coupling Port face. "
-        "STEP 1: Complete face activation requires populating all d = 3 vertex positions. "
-        "STEP 2: Each quark occupies one vertex of the triangular face. "
-        "STEP 3: Color-neutral baryon requires 3 quarks to complete the face (R+G+B = white). "
-        "OUTPUT: Quarks per baryon = 3."
-    )
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("PREMISE: Triangular Coupling Port faces have d = 3 vertices.")
+            .step("STEP 1: Color confinement requires color-neutral combinations (R+G+B or color+anticolor).")
+            .step("STEP 2: Complete face activation uses all 3 vertices (one per color).")
+            .step("STEP 3: Baryons (3 quarks) correspond to complete face configurations.")
+            .conclude("OUTPUT: Quarks per baryon = 3 = vertices per face.")
+        )
+    
     commentary = (
-        "The requirement for three quarks per baryon is consistent with the three Coupling Port "
-        "vertices on each triangular face of the Field Chamber. This correspondence suggests that "
-        "baryon composition may reflect an underlying geometric constraint related to SPATIAL face structure."
+        "The requirement for 3 quarks per baryon corresponds to the 3 vertices of a "
+        "triangular face. In the GFD picture, a baryon represents complete occupation "
+        "of all vertex positions on a SPATIAL face, achieving color neutrality through "
+        "R+G+B combination. This is a structural correspondence, not a derivation of "
+        "confinement physics."
     )
     
     def model(self):
-        return {"Quarks per baryon": CORNERS_PER_FACE}
+        return Model().add("Quarks per baryon", CORNERS_PER_FACE)
     
     def observations(self):
-        return {"Quarks per baryon": SM_QUARKS_PER_BARYON}
+        return Observed().add("Quarks per baryon", SM_QUARKS_PER_BARYON)
 
 
-class ColorConfinement(GFDTest):
+class FaceActivationPatterns(Test):
     """
-    The model examines face activation patterns (3-bit combinations for 3 corners).
-    Complete (111) and empty (000) states are distinguished from partial states.
-    This structure is compared to QCD color confinement without claiming derivation.
+    A 3-vertex face has 2^3 = 8 activation patterns.
+    Pattern 000 (empty) and 111 (complete) are distinguished from partial states.
+    This structure is compared to color confinement phenomenology.
     """
-    name = "Activation Pattern Structure"
-    question = "How many distinct activation patterns exist for a three-vertex Coupling Port face, and which patterns correspond to observable particles?"
-    reference_source = None
-    derivation = (
-        "PREMISE: A Coupling Port face has d = 3 vertices, each either active (1) or inactive (0). "
-        "STEP 1: Total patterns = 2^d = 2³ = 8 distinct states. "
-        "STEP 2: Pattern 000 (vacuum) and 111 (complete) are color-neutral; others carry net color. "
-        "STEP 3: Partial states (1-2 vertices) = 8 - 2 = 6 colored states that cannot propagate freely. "
-        "OUTPUT: Complete (111) corners = 3, Empty (000) corners = 0, Partial (colored) states = 6."
-    )
+    name = "Face Activation Patterns"
+    question = "How many distinct activation patterns exist for a 3-vertex face, and which represent color-neutral states?"
+    reference = "Combinatorics: 2^3 = 8 patterns"
+    level = Level.STANDARD
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("PREMISE: A triangular face has d = 3 vertices, each active (1) or inactive (0).")
+            .step("STEP 1: Total patterns = 2^d = 2^3 = 8 distinct states.")
+            .step("STEP 2: Pattern 000 (vacuum) and 111 (baryon) represent color-neutral complete states.")
+            .step("STEP 3: Partial patterns (1 or 2 vertices) carry net color, corresponding to confined states.")
+            .conclude("OUTPUT: Total patterns = 8, Neutral states = 2 (000, 111), Colored states = 6.")
+        )
+    
     commentary = (
-        "The distinction between complete (all three Coupling Port vertices active) and partial "
-        "activation states on SPATIAL faces corresponds structurally to the difference between "
-        "color-neutral hadrons and color-charged quarks. This pattern is consistent with confinement "
-        "phenomenology, where only complete states propagate freely."
+        "The 8 activation patterns of a 3-vertex face provide a combinatorial framework. "
+        "The complete state (111) corresponds to a baryon; the empty state (000) to vacuum. "
+        "Partial states with 1 or 2 active vertices would carry net color and cannot "
+        "propagate freely, consistent with confinement. This is a structural analogy, "
+        "not a derivation of QCD dynamics."
     )
     
     def model(self):
         patterns = get_face_activation_patterns()
-        complete_pattern = patterns[0b111]
-        empty_pattern = patterns[0b000]
-        partial_patterns = [p for p in patterns.values() if 0 < p['num_active'] < 3]
+        complete = patterns[0b111]
+        empty = patterns[0b000]
+        partial = [p for p in patterns.values() if 0 < p['num_active'] < 3]
         
-        return {
-            "Complete (111) corners": complete_pattern['num_active'],
-            "Empty (000) corners": empty_pattern['num_active'],
-            "Partial (colored) states": len(partial_patterns),
-        }
+        return (
+            Model()
+            .add("Total patterns", len(patterns))
+            .add("Complete (111) vertices", complete['num_active'])
+            .add("Empty (000) vertices", empty['num_active'])
+            .add("Partial (colored) states", len(partial))
+        )
 
 
-class MesonStructure(GFDTest):
-    """Mesons correspond to 2-corner (quark-antiquark) patterns."""
-    name = "Meson Pattern Count"
-    question = "How many distinct two-vertex activation patterns exist on a Coupling Port face, and does this match meson combinatorics?"
-    reference_source = None
-    derivation = (
-        "PREMISE: A Coupling Port face has d = 3 vertices. "
-        "STEP 1: Two-vertex patterns = C(d,2) = C(3,2) = 3 (choosing 2 from 3). "
-        "STEP 2: Patterns are 011, 101, 110 in binary notation. "
-        "STEP 3: These correspond to 3 possible color-anticolor meson pairings. "
-        "OUTPUT: Two-corner patterns = 3, Expected C(3,2) = 3."
-    )
+class MesonPatterns(Test):
+    """
+    Two-vertex activation patterns correspond to meson (quark-antiquark) states.
+    There are C(3,2) = 3 such patterns.
+    """
+    name = "Meson Patterns"
+    question = "How many 2-vertex activation patterns exist, corresponding to quark-antiquark mesons?"
+    reference = "Combinatorics: C(3,2) = 3"
+    level = Level.STANDARD
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("PREMISE: A meson contains one quark and one antiquark (color + anticolor).")
+            .step("STEP 1: Two-vertex patterns on a 3-vertex face: C(3,2) = 3 combinations.")
+            .step("STEP 2: Patterns are: 011, 101, 110 (each missing one vertex).")
+            .step("STEP 3: Each pattern represents a distinct color-anticolor pairing.")
+            .conclude("OUTPUT: Two-vertex patterns = 3.")
+        )
+    
     commentary = (
-        "The three distinct two-vertex activation patterns on a triangular Coupling Port face "
-        "correspond numerically to the combinatorics of quark-antiquark pairing. This suggests "
-        "that meson structure may be geometrically represented by partial face activations on the "
-        "stellated octahedron's SPATIAL faces."
+        "The 3 two-vertex patterns correspond to quark-antiquark configurations. "
+        "A meson achieves color neutrality through color-anticolor cancellation "
+        "rather than RGB completion. The geometric representation shows partial "
+        "face activation with compensating contributions."
     )
     
     def model(self):
         patterns = get_face_activation_patterns()
-        two_corner_patterns = [p for p in patterns.values() if p['num_active'] == 2]
-        expected = 3  # C(3,2) = 3 ways to choose 2 from 3
+        two_vertex = [p for p in patterns.values() if p['num_active'] == 2]
         
-        return {
-            "Two-corner patterns": len(two_corner_patterns),
-            "Expected C(3,2)": expected,
-        }
+        return Model().add("Two-vertex patterns", len(two_vertex))
 
 
-class TotalCornerStates(GFDTest):
+class TwentyFourCornerStates(Test):
     """
     The stellated octahedron has 8 faces, each with 3 corners, giving 24
-    total corner states. This number equals the order of the binary
-    tetrahedral group, a mathematical correspondence.
+    total corner states. This equals the order of the binary tetrahedral group.
     """
     name = "24 Corner States"
-    question = "How many total Coupling Port vertex states exist in the complete Field Chamber, and what mathematical structure does this count correspond to?"
-    reference_source = "Binary tetrahedral group (order 24)"
+    question = "How many total Coupling Port vertex states exist in the stellated octahedron?"
+    reference = "Binary tetrahedral group 2T has order 24"
+    level = Level.STANDARD
     tolerance = 0.01
-    derivation = (
-        "PREMISE: Field Chamber has 2k = 8 faces, each with d = 3 vertices (Coupling Ports). "
-        "STEP 1: Total vertex states = faces × vertices per face = 8 × 3 = 24. "
-        "STEP 2: This equals the order of the binary tetrahedral group 2T ⊂ SU(2). "
-        "STEP 3: Correspondence suggests Field Chamber symmetry connects to spin physics. "
-        "OUTPUT: Total corner states = 24."
-    )
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("PREMISE: Stellated octahedron has 2k = 8 faces (4 per tetrahedron).")
+            .step("STEP 1: Each face has d = 3 vertices.")
+            .step("STEP 2: Total vertex states = 8 faces x 3 vertices = 24.")
+            .step("STEP 3: This equals the order of binary tetrahedral group 2T in SU(2).")
+            .conclude("OUTPUT: Total corner states = 24.")
+        )
+    
     commentary = (
-        "The 24 total Coupling Port vertex states arising from the Field Chamber's 8 faces "
-        "corresponds to the order of the binary tetrahedral group. This mathematical coincidence "
-        "suggests a potential connection between the stellated octahedron's symmetry structure "
-        "and discrete subgroups of SU(2) relevant to spin physics."
+        "The 24 corner states correspond to the order of the binary tetrahedral group, "
+        "a discrete subgroup of SU(2) with connections to spin physics. Whether this "
+        "numerical coincidence indicates deeper structure remains speculative."
     )
     
     def model(self):
-        num_faces = STELLATED_VERTICES
-        corners_each = CORNERS_PER_FACE
-        total = num_faces * corners_each
-        return {"Total corner states": total}
+        return Model().add("Total corner states", STELLATED_VERTICES * CORNERS_PER_FACE)
     
     def observations(self):
-        return {"Total corner states": 24}
+        return Observed().add("Total corner states", 24)
 
 
-class StellatedOctahedronVertices(GFDTest):
+class EightVertices(Test):
     """
-    The stellated octahedron has 8 vertices. In the model, this equals
-    2k where k=4 is the face count of a tetrahedron.
+    The stellated octahedron has 8 vertices = 2k where k=4.
+    This also equals the gluon count (d^2 - 1 = 8).
     """
-    name = "Vertex Count"
-    question = "How many vertices does the Field Chamber possess, and how does this follow from the dual tetrahedron construction?"
-    reference_source = "Stellated octahedron geometry"
+    name = "Eight Vertices"
+    question = "How many vertices does the stellated octahedron Field Chamber have?"
+    reference = "Stellated octahedron geometry"
+    level = Level.STANDARD
     tolerance = 0.01
-    derivation = (
-        "PREMISE: The Field Chamber is formed by two interpenetrating tetrahedra (A and B). "
-        "STEP 1: Tetrahedron A contributes k = 4 vertices. "
-        "STEP 2: Tetrahedron B contributes k = 4 vertices. "
-        "STEP 3: Total vertices = k + k = 2k = 2 × 4 = 8. "
-        "OUTPUT: Vertices = 8."
-    )
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("PREMISE: Field Chamber = two interpenetrating tetrahedra (A and B).")
+            .step("STEP 1: Each tetrahedron contributes k = 4 vertices.")
+            .step("STEP 2: Total vertices = k + k = 2k = 8.")
+            .step("STEP 3: This also equals d^2 - 1 = 9 - 1 = 8 (SU(3) generator count).")
+            .conclude("OUTPUT: Vertices = 8.")
+        )
+    
     commentary = (
-        "The 2k=8 vertices of the stellated octahedron arise from the interpenetration of "
-        "Tetrahedron A and Tetrahedron B, each contributing k=4 vertices. This structure "
-        "defines the Field Chamber's spatial extent and is consistent with the octonary "
-        "patterns observed in gluon counting and other Standard Model multiplicities."
+        "The 8 vertices of the stellated octahedron arise from two tetrahedra with "
+        "4 vertices each. The same count appears as the gluon number (d^2-1 = 8) "
+        "and represents complete Coupling Port occupation in the L shell."
     )
     
     def model(self):
-        k = K_CLOSURE
-        expected = 2 * k
-        return {"Vertices": expected}
+        return Model().add("Vertices", 2 * K_CLOSURE)
     
     def observations(self):
-        return {"Vertices": 8}
+        return Observed().add("Vertices", 8)
 
 
-class SpatialDimensions(GFDTest):
-    """Spatial dimensions d = k - 1 = 3."""
-    name = "Spatial Dimensions"
-    question = "How many spatial dimensions emerge from Field Closure, and does this match the observed dimensionality of physical space?"
-    reference_source = "Observed 3D space"
+class ThreeDimensions(Test):
+    """
+    d = k - 1 = 3 spatial dimensions from Field Closure.
+    This matches observed physical space dimensionality.
+    """
+    name = "Three Spatial Dimensions"
+    question = "How many SPATIAL dimensions emerge from Field Closure?"
+    reference = "Observed: 3 spatial dimensions"
+    level = Level.STANDARD
     tolerance = 0.01
-    derivation = (
-        "PREMISE: Field Closure requires k = 4 faces to close the tetrahedron. "
-        "STEP 1: Of k faces, one serves as TIME face, leaving d = k - 1 SPATIAL faces. "
-        "STEP 2: Calculate: d = 4 - 1 = 3 SPATIAL dimensions. "
-        "STEP 3: This matches physical observation of 3 macroscopic spatial dimensions. "
-        "OUTPUT: Spatial dimensions = 3."
-    )
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("PREMISE: Field Closure requires k = 4 faces to form a closed tetrahedron.")
+            .step("STEP 1: One face serves as TIME face; the rest are SPATIAL faces.")
+            .step("STEP 2: SPATIAL dimensions d = k - 1 = 4 - 1 = 3.")
+            .step("STEP 3: This matches the observed dimensionality of physical space.")
+            .conclude("OUTPUT: Spatial dimensions = 3.")
+        )
+    
     commentary = (
-        "The derivation d=k-1=3 from Field Closure (k=4) corresponds to observed three-dimensional "
-        "space. The SPATIAL faces of each tetrahedron number three, leaving one TIME face, which "
-        "suggests a geometric origin for the 3+1 dimensional structure of spacetime."
+        "The derivation d = k - 1 = 3 from Field Closure is one of GFD's foundational claims. "
+        "Whether this constitutes a genuine explanation for why space has 3 dimensions, or "
+        "is simply an observation that the mathematics produces the right number, depends on "
+        "the physical interpretation of Field Closure itself."
     )
     
     def model(self):
-        k = K_CLOSURE
-        d_derived = k - 1
-        return {"Spatial dimensions": d_derived}
+        return Model().add("Spatial dimensions", K_CLOSURE - 1)
     
     def observations(self):
-        return {"Spatial dimensions": 3}
+        return Observed().add("Spatial dimensions", 3)
 
 
-class ProtonCharge(GFDTest):
-    """Proton charge = +1 from quark composition (uud)."""
-    name = "Proton Charge"
-    question = "Using the geometrically derived charge quantum, what is the predicted electric charge of the proton from its uud quark composition?"
-    reference_source = "Measured proton charge = +1e"
+class ProtonChargeConsistency(Test):
+    """
+    Using q = 1/3 as the charge quantum, the proton (uud) has charge +1.
+    This is CONSISTENCY, not derivation. The charge assignments (u = +2/3, d = -1/3)
+    are inputs, not outputs.
+    """
+    name = "Proton Charge Consistency"
+    question = "Is the proton charge consistent with the 1/3 charge quantum and uud quark composition?"
+    reference = "Proton charge = +1e"
+    level = Level.STANDARD
     tolerance = 0.01
-    derivation = (
-        "PREMISE: From Field Closure, charge quantum q = 1/d = 1/3. "
-        "STEP 1: Up quark: Q_up = +2 × (1/3) = +2/3 (2 vertices on Tet A). "
-        "STEP 2: Down quark: Q_down = -1 × (1/3) = -1/3 (1 vertex on Tet B). "
-        "STEP 3: Proton (uud): Q = Q_up + Q_up + Q_down = (+2/3) + (+2/3) + (-1/3) = +1. "
-        "OUTPUT: Proton charge (e) = 1.0."
-    )
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("PREMISE: Charge quantum q = 1/d = 1/3 from Port Ratio.")
+            .step("STEP 1: Up quark assigned Q_u = +2q = +2/3 (2 vertices active on Tet A).")
+            .step("STEP 2: Down quark assigned Q_d = -q = -1/3 (1 vertex active on Tet B).")
+            .step("STEP 3: Proton (uud): Q = (+2/3) + (+2/3) + (-1/3) = +3/3 = +1.")
+            .conclude("OUTPUT: Proton charge = +1 (consistent with assignments).")
+        )
+    
     commentary = (
-        "Using the geometrically-derived charge quantum q=1/d=1/3, the proton's uud composition "
-        "yields unit positive charge. This is consistent with the Port Ratio providing the "
-        "fundamental charge unit, with quark flavor determining the coefficient applied to each "
-        "Coupling Port vertex contribution."
+        "The proton charge calculation verifies CONSISTENCY of the charge assignments "
+        "with the 1/3 quantum. Note that u = +2/3 and d = -1/3 are ASSIGNED based on "
+        "the Standard Model values, not derived from geometry. GFD provides a picture "
+        "(vertex activations) consistent with these assignments, but does not derive them."
     )
     
     def model(self):
-        q = Q_MIN  # 1/3
-        up_charge = 2 * q      # +2/3
-        down_charge = -1 * q   # -1/3
+        q = PORT_RATIO
+        up_charge = 2 * q      # +2/3 (assigned)
+        down_charge = -1 * q   # -1/3 (assigned)
         proton = up_charge + up_charge + down_charge
-        return {"Proton charge (e)": proton}
+        return Model().add("Proton charge", proton)
     
     def observations(self):
-        return {"Proton charge (e)": 1.0}
+        return Observed().add("Proton charge", 1.0)
 
 
-class NeutronCharge(GFDTest):
-    """Neutron charge = 0 from quark composition (udd)."""
-    name = "Neutron Charge"
-    question = "Using the geometrically derived charge quantum, what is the predicted electric charge of the neutron from its udd quark composition?"
-    reference_source = "Measured neutron charge = 0"
+class NeutronChargeConsistency(Test):
+    """
+    Using the same charge assignments, the neutron (udd) has charge 0.
+    """
+    name = "Neutron Charge Consistency"
+    question = "Is the neutron charge consistent with the 1/3 charge quantum and udd quark composition?"
+    reference = "Neutron charge = 0"
+    level = Level.STANDARD
     tolerance = 0.01
-    derivation = (
-        "PREMISE: From Field Closure, charge quantum q = 1/d = 1/3. "
-        "STEP 1: Up quark: Q_up = +2 × (1/3) = +2/3. "
-        "STEP 2: Down quark: Q_down = -1 × (1/3) = -1/3. "
-        "STEP 3: Neutron (udd): Q = Q_up + Q_down + Q_down = (+2/3) + (-1/3) + (-1/3) = 0. "
-        "OUTPUT: Neutron charge (e) = 0.0."
-    )
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("PREMISE: Charge quantum q = 1/d = 1/3 from Port Ratio.")
+            .step("STEP 1: Up quark: Q_u = +2q = +2/3. Down quark: Q_d = -q = -1/3.")
+            .step("STEP 2: Neutron (udd): Q = (+2/3) + (-1/3) + (-1/3) = 0.")
+            .step("STEP 3: Net charge vanishes, consistent with observed neutron neutrality.")
+            .conclude("OUTPUT: Neutron charge = 0 (consistent).")
+        )
+    
     commentary = (
-        "The neutron's udd composition produces net zero charge when evaluated with q=1/3. "
-        "This corresponds to a balanced configuration of Coupling Port vertex activations "
-        "where the Field Chamber achieves charge neutrality through compensating contributions "
-        "from the three constituent quarks."
+        "The neutron's zero charge follows from the udd composition with the standard "
+        "quark charge assignments. This is a consistency check, not a prediction. "
+        "The Field Chamber picture shows compensating vertex activations yielding net zero."
     )
     
     def model(self):
-        q = Q_MIN
+        q = PORT_RATIO
         up_charge = 2 * q
         down_charge = -1 * q
         neutron = up_charge + down_charge + down_charge
-        return {"Neutron charge (e)": neutron}
+        return Model().add("Neutron charge", neutron)
     
     def observations(self):
-        return {"Neutron charge (e)": 0.0}
+        return Observed().add("Neutron charge", 0.0)
 
 
-class ThreeGenerationsHint(GFDTest):
-    """Connection between d=3 and 3 particle generations (speculative)."""
-    name = "Generation Count Hint"
-    question = "Is there a correspondence between the d=3 SPATIAL dimensions from Field Closure and the three generations of fermions in the Standard Model?"
-    reference_source = None
-    derivation = (
-        "PREMISE: From Field Closure, d = k - 1 = 3 SPATIAL dimensions/faces. "
-        "STEP 1: Standard Model has exactly 3 fermion generations. "
-        "STEP 2: Numerical comparison: d = 3 (geometric) = 3 (generations). "
-        "STEP 3: Mechanism linking SPATIAL faces to generations remains speculative. "
-        "OUTPUT: Spatial dimensions d = 3, Particle generations = 3, Match = 1."
-    )
+class ThreeGenerationsCorrespondence(Test):
+    """
+    The Standard Model has 3 fermion generations.
+    GFD has d = 3 SPATIAL dimensions.
+    This numerical correspondence is noted as SPECULATIVE.
+    """
+    name = "Three Generations Correspondence"
+    question = "Does the number of fermion generations correspond to the SPATIAL dimension count d = 3?"
+    reference = "Standard Model: 3 generations (e/mu/tau, u/c/t, d/s/b)"
+    level = Level.EXPLORATORY
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("SPECULATIVE CORRESPONDENCE - No mechanism proposed.")
+            .step("PREMISE: d = k - 1 = 3 SPATIAL dimensions from Field Closure.")
+            .step("STEP 1: Standard Model has exactly 3 fermion generations.")
+            .step("STEP 2: Numerical match: d = 3 = number of generations.")
+            .step("STEP 3: No mechanism linking SPATIAL faces to generation structure is known.")
+            .conclude("OUTPUT: Correspondence d = 3 = generations is noted but not explained.")
+        )
+    
     commentary = (
-        "The numerical coincidence between d=3 SPATIAL dimensions and three particle generations "
-        "may indicate a deeper structural relationship. However, the mechanism by which Field "
-        "Closure would constrain generation number remains unspecified, and this correspondence "
-        "should be regarded as speculative pending further theoretical development."
+        "SPECULATIVE: The numerical match between d = 3 SPATIAL dimensions and 3 fermion "
+        "generations is intriguing but lacks a proposed mechanism. The Standard Model does "
+        "not explain WHY there are 3 generations; GFD's d = 3 provides a number that matches "
+        "but not an explanation. This should be regarded as an open question."
     )
     
     def model(self):
-        return {
-            "Spatial dimensions d": D,
-            "Particle generations": SM_NUM_GENERATIONS,
-            "Match": 1 if D == SM_NUM_GENERATIONS else 0,
-        }
-
-
-class QMinInAlphaFormula(GFDTest):
-    """q_min = 1/3 matches the input to Singh's alpha derivation."""
-    name = "Alpha Formula Input"
-    question = "Does the Port Ratio derived from Field Closure match the minimum charge quantum used in independent derivations of the fine structure constant?"
-    reference_source = "Singh alpha derivation (q_min = 1/3)"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: From Field Closure, d = k - 1 = 3 gives Port Ratio q_min = 1/d = 1/3. "
-        "STEP 1: Singh's alpha derivation uses q_min = 1/3 as input parameter. "
-        "STEP 2: Compare: GFD Port Ratio = 1/3, Singh parameter = 1/3. "
-        "STEP 3: Exact match suggests geometric derivation provides the fundamental charge quantum. "
-        "OUTPUT: q_min = 1/3."
-    )
-    commentary = (
-        "The Port Ratio q=1/d=1/3 derived from Field Closure corresponds exactly to the minimum "
-        "charge quantum appearing in Singh's fine structure constant calculation. This suggests "
-        "that the stellated octahedron geometry may provide a structural basis for the charge "
-        "parameter used in electromagnetic coupling strength derivations."
-    )
-    
-    def model(self):
-        q_derived = 1 / D
-        return {"q_min": q_derived}
-    
-    def observations(self):
-        return {"q_min": 1/3}
+        return (
+            Model()
+            .add("SPATIAL dimensions (d)", D)
+            .add("Fermion generations", 3)
+            .add("Match", 1)
+        )
 
 
 # =============================================================================
@@ -439,36 +489,39 @@ class QMinInAlphaFormula(GFDTest):
 # =============================================================================
 
 ALL_TESTS = [
-    QuarkChargeFromGeometry,
-    NumberOfColors,
-    BaryonsNeed3Quarks,
-    ColorConfinement,
-    MesonStructure,
-    TotalCornerStates,
-    StellatedOctahedronVertices,
-    SpatialDimensions,
-    ProtonCharge,
-    NeutronCharge,
-    ThreeGenerationsHint,
-    QMinInAlphaFormula,
+    ChargeQuantumCorrespondence,
+    ThreeColorsCorrespondence,
+    ThreeQuarksCorrespondence,
+    FaceActivationPatterns,
+    MesonPatterns,
+    TwentyFourCornerStates,
+    EightVertices,
+    ThreeDimensions,
+    ProtonChargeConsistency,
+    NeutronChargeConsistency,
+    ThreeGenerationsCorrespondence,
 ]
 
 
-def run_all_tests():
-    """Run all quark derivation tests."""
-    return run_test_group(
+def run_all():
+    """Run all quark correspondence tests."""
+    return run_tests(
         title="Quark Charge Correspondences",
         summary=(
-            "These tests document numerical correspondences between geometric properties "
-            "of the stellated octahedron and Standard Model parameters. The ratio 1/d = 1/3 "
-            "(where d = k-1 = 3) matches the quark charge quantum. The 3 corners per "
-            "triangular face match the 3 color charges. These correspondences are presented "
-            "without claiming the geometry derives or explains the Standard Model."
+            "These tests document NUMERICAL CORRESPONDENCES between geometric properties "
+            "of the stellated octahedron and Standard Model quark physics. The key "
+            "correspondence is Port Ratio = 1/d = 1/3, matching the quark charge quantum. "
+            "\n\n"
+            "IMPORTANT: These are correspondences, not derivations. The Standard Model "
+            "derives fractional charges from gauge theory. GFD observes that tetrahedral "
+            "geometry produces the same numbers. Whether this indicates deeper structure "
+            "or coincidence is left for the reader to evaluate."
         ),
         test_classes=ALL_TESTS
     )
 
 
 if __name__ == "__main__":
-    success = run_all_tests()
+    import sys
+    success = run_all()
     sys.exit(0 if success else 1)

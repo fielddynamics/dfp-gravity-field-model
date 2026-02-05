@@ -1,470 +1,421 @@
 """
-Electron Shell Structure: 2, 8, 18, 32 from Lattice Geometry
+Electron Shell Structure: A Geometric Interpretation
 
-These tests examine electron shell capacities (2, 8, 18, 32) using the GFD
-lattice geometry framework. The model produces values consistent with the
-established 2n^2 formula, with n^2 orbital cells multiplied by 2 spin states.
+STATUS: ALTERNATIVE FRAMING (not derivation)
+
+These tests examine electron shell capacities (2, 8, 18, 32) through the lens
+of GFD geometry. The capacities follow the well-established 2n^2 formula from
+quantum mechanics.
+
+CRITICAL HONESTY NOTE:
+
+The shell capacities 2, 8, 18, 32 are DERIVED in standard quantum mechanics from:
+    1. Schrodinger equation solution for hydrogen-like atoms
+    2. Angular momentum quantization giving (2l+1) m_l states per subshell
+    3. Spin-1/2 doubling from Dirac equation
+
+GFD does NOT derive these capacities. Instead, GFD observes that:
+    - k = 4 (Field Closure constant)
+    - The capacities can be written as: k/2, 2k, 2*9, 2k^2
+    - This provides a geometric PICTURE but not a DERIVATION
+
+The question is whether this geometric reframing is:
+    (a) A genuine insight into underlying structure, or
+    (b) Retrofitting k=4 to match known values
+
+This file documents the correspondences honestly without claiming derivation.
 """
 
-import sys
-import os
-
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-
-from base import GFDTest, run_test_group
+from gfd_model_v2.framework import *
 
 
 # =============================================================================
 # CONSTANTS
 # =============================================================================
 
-K = 4  # Closure constant
-D = K - 1  # 3 spatial dimensions
+K = 4  # Field Closure constant
+D = K - 1  # d = 3 SPATIAL dimensions
+TIME_FACES = 2  # One per tetrahedron
 
-# Shell capacities
-SHELL_CAPACITIES = [2, 8, 18, 32]  # K, L, M, N shells
+# Shell capacities from quantum mechanics
+SHELL_CAPACITIES = {
+    1: 2,   # K shell: 2 = 2(1)^2
+    2: 8,   # L shell: 8 = 2(2)^2
+    3: 18,  # M shell: 18 = 2(3)^2
+    4: 32,  # N shell: 32 = 2(4)^2
+}
 
 # Noble gas electron counts
 NOBLE_GASES = {
-    'He': 2, 'Ne': 10, 'Ar': 18, 'Kr': 36, 'Xe': 54, 'Rn': 86,
+    'He': 2,
+    'Ne': 10,
+    'Ar': 18,
+    'Kr': 36,
+    'Xe': 54,
+    'Rn': 86,
 }
-
-# Subshell capacities
-SUBSHELL_CAPACITIES = {'s': 2, 'p': 6, 'd': 10, 'f': 14}
-L_VALUES = {'s': 0, 'p': 1, 'd': 2, 'f': 3}
 
 
 # =============================================================================
 # HELPER FUNCTIONS
 # =============================================================================
 
-def shell_capacity(n):
-    """Return capacity of shell n using 2n^2 formula."""
+def shell_capacity_qm(n):
+    """
+    Standard quantum mechanics formula: C(n) = 2n^2
+    
+    Derivation (QM):
+        - n^2 spatial states from angular momentum: sum of (2l+1) for l=0 to n-1
+        - Factor of 2 from spin-1/2 (two m_s values per spatial state)
+    """
     return 2 * n * n
 
+
 def shell_capacity_gfd(n):
-    """Calculate shell capacity from GFD framework: n^2 orbital cells x 2 spin states."""
+    """
+    GFD geometric interpretation: C(n) = n^2 orbital cells x 2 spin states
+    
+    NOTE: This produces the SAME result as 2n^2 but factored differently.
+    This is not a derivation; it's a re-expression.
+    """
     orbital_cells = n * n
-    spin_states = 2  # From dual Field Chamber (stellated octahedron) structure
-    return orbital_cells * spin_states
-
-def subshell_capacity(l):
-    """Return capacity of subshell with angular momentum l: 2(2l + 1)."""
-    return 2 * (2 * l + 1)
+    spin_factor = TIME_FACES  # 2, from dual tetrahedra
+    return orbital_cells * spin_factor
 
 
 # =============================================================================
-# TEST CLASSES
+# TESTS: SHELL CAPACITIES
 # =============================================================================
 
-class ShellFormula2nSquared(GFDTest):
-    """Shell capacities follow 2n^2 formula."""
-    name = "Shell Capacity Formula"
-    question = "What electron capacities do atomic shells exhibit, and does the standard 2n^2 formula correctly predict these values?"
-    reference_source = "Atomic physics (established)"
+class ShellCapacitiesQM(Test):
+    """
+    BASELINE: Standard quantum mechanics gives shell capacities 2, 8, 18, 32
+    via the 2n^2 formula.
+    
+    This is well-established physics, not GFD content. It provides the
+    reference values that GFD attempts to reframe geometrically.
+    """
+    name = "Shell Capacities (QM Baseline)"
+    question = "What are the electron shell capacities from the standard 2n^2 formula?"
+    reference = "Quantum mechanics: C(n) = 2n^2"
+    level = Level.STANDARD
     tolerance = 0.01
-    derivation = (
-        "PREMISE: Shell capacity follows C(n) = 2n² where n is the principal quantum number. "
-        "STEP 1: For n=1 (K shell): C = 2 × 1² = 2. "
-        "STEP 2: For n=2 (L shell): C = 2 × 2² = 8. "
-        "STEP 3: For n=3 (M shell): C = 2 × 3² = 18. For n=4 (N shell): C = 2 × 4² = 32. "
-        "OUTPUT: K shell = 2, L shell = 8, M shell = 18, N shell = 32."
-    )
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("STANDARD QUANTUM MECHANICS (not GFD derivation).")
+            .step("PREMISE: Schrodinger equation yields n^2 spatial orbitals per shell.")
+            .step("STEP 1: For shell n: Sum of (2l+1) for l = 0 to n-1 = n^2 spatial states.")
+            .step("STEP 2: Spin-1/2 gives 2 spin states per spatial state.")
+            .step("STEP 3: Total capacity: C(n) = 2n^2 = 2, 8, 18, 32 for n = 1, 2, 3, 4.")
+            .conclude("OUTPUT: K=2, L=8, M=18, N=32 (from QM, not GFD).")
+        )
+    
     commentary = (
-        "The 2n² shell capacity formula is a well-established result of quantum mechanics. "
-        "This test serves as a baseline verification that the model's geometric interpretation "
-        "produces values consistent with atomic spectroscopy, without claiming to replace the "
-        "standard quantum mechanical derivation."
+        "The 2n^2 shell capacity formula is a result of standard quantum mechanics. "
+        "It comes from solving the Schrodinger equation for the hydrogen atom and "
+        "applying Pauli exclusion. GFD does not derive this formula; it provides "
+        "an alternative geometric picture that happens to match."
     )
     
     def model(self):
-        computed = [shell_capacity(n) for n in [1, 2, 3, 4]]
-        return {
-            "K shell (n=1)": computed[0],
-            "L shell (n=2)": computed[1],
-            "M shell (n=3)": computed[2],
-            "N shell (n=4)": computed[3],
-        }
+        return (
+            Model()
+            .add("K shell (n=1)", shell_capacity_qm(1))
+            .add("L shell (n=2)", shell_capacity_qm(2))
+            .add("M shell (n=3)", shell_capacity_qm(3))
+            .add("N shell (n=4)", shell_capacity_qm(4))
+        )
     
     def observations(self):
-        return {
-            "K shell (n=1)": 2,
-            "L shell (n=2)": 8,
-            "M shell (n=3)": 18,
-            "N shell (n=4)": 32,
-        }
+        return (
+            Observed()
+            .add("K shell (n=1)", 2)
+            .add("L shell (n=2)", 8)
+            .add("M shell (n=3)", 18)
+            .add("N shell (n=4)", 32)
+        )
 
 
-class GFDShellFormula(GFDTest):
-    """GFD calculation produces values consistent with standard 2n^2 formula."""
-    name = "GFD Shell Calculation"
-    question = "How does the GFD framework decompose shell capacity into orbital and spin components, and does this match the standard formula?"
-    reference_source = "2n^2 formula"
+class GFDShellReframing(Test):
+    """
+    GFD reframes 2n^2 as (n^2 orbital cells) x (2 spin states).
+    
+    The factor of 2 is associated with TIME faces.
+    The n^2 factor is associated with orbital geometry.
+    
+    This produces identical results to 2n^2 because it IS 2n^2,
+    just factored differently. It is not a derivation.
+    """
+    name = "GFD Shell Reframing"
+    question = "Does the GFD geometric reframing produce the same shell capacities as 2n^2?"
+    reference = "GFD: C(n) = n^2 x TIME_faces"
+    level = Level.STANDARD
     tolerance = 0.01
-    derivation = (
-        "PREMISE: Shell capacity factors as C(n) = (orbital cells) × (spin states) in GFD. "
-        "STEP 1: Orbital cells per shell = n² (spatial configurations). "
-        "STEP 2: Spin states = 2 (from dual Field Chamber TIME faces: Tet A and Tet B). "
-        "STEP 3: Therefore C(n) = n² × 2 = 2n². "
-        "OUTPUT: K shell = 2, L shell = 8, M shell = 18, N shell = 32."
-    )
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("ALTERNATIVE FACTORIZATION (not derivation).")
+            .step("PREMISE: GFD refactors 2n^2 as: (orbital cells) x (spin factor).")
+            .step("STEP 1: Orbital cells = n^2 (spatial configurations).")
+            .step("STEP 2: Spin factor = TIME_faces = 2 (dual tetrahedra).")
+            .step("STEP 3: C(n) = n^2 x 2 = 2n^2 (same formula, different interpretation).")
+            .conclude("OUTPUT: GFD produces 2, 8, 18, 32 (matches QM because it IS 2n^2).")
+        )
+    
     commentary = (
-        "The factorization into n² orbital cells multiplied by 2 spin states corresponds to the "
-        "dual-tetrahedron structure of the Field Chamber. The spin factor of 2 arises from the "
-        "two TIME faces (one per tetrahedron), suggesting that electron spin may be geometrically "
-        "represented by which tetrahedron within the stellated octahedron is activated."
+        "GFD associates the spin factor of 2 with the dual tetrahedra (one TIME face "
+        "per tetrahedron). This is a geometric interpretation of spin doubling, not "
+        "a derivation. The n^2 factor for orbital cells lacks a clear geometric "
+        "origin in GFD. This reframing matches QM because it is algebraically identical."
     )
     
     def model(self):
-        gfd_values = [shell_capacity_gfd(n) for n in [1, 2, 3, 4]]
-        return {
-            "K shell capacity": gfd_values[0],
-            "L shell capacity": gfd_values[1],
-            "M shell capacity": gfd_values[2],
-            "N shell capacity": gfd_values[3],
-        }
+        return (
+            Model()
+            .add("K shell (GFD)", shell_capacity_gfd(1))
+            .add("L shell (GFD)", shell_capacity_gfd(2))
+            .add("M shell (GFD)", shell_capacity_gfd(3))
+            .add("N shell (GFD)", shell_capacity_gfd(4))
+        )
     
     def observations(self):
-        standard = [shell_capacity(n) for n in [1, 2, 3, 4]]
-        return {
-            "K shell capacity": standard[0],
-            "L shell capacity": standard[1],
-            "M shell capacity": standard[2],
-            "N shell capacity": standard[3],
-        }
+        return (
+            Observed()
+            .add("K shell (GFD)", shell_capacity_qm(1))
+            .add("L shell (GFD)", shell_capacity_qm(2))
+            .add("M shell (GFD)", shell_capacity_qm(3))
+            .add("N shell (GFD)", shell_capacity_qm(4))
+        )
 
 
-class FirstShellIsKOver2(GFDTest):
-    """First shell capacity = k/2 = 2."""
-    name = "K Shell = k/2"
-    question = "Does the K shell (n=1) capacity correspond to the number of TIME faces in the Field Chamber, and what is the geometric interpretation?"
-    reference_source = "K shell capacity = 2"
+class SpinFactorFromTimeFaces(Test):
+    """
+    The factor of 2 in shell capacities comes from electron spin.
+    GFD interprets this as the 2 TIME faces of the stellated octahedron.
+    
+    This is the same correspondence documented in other particle physics tests.
+    """
+    name = "Spin Factor = TIME Faces"
+    question = "Does the spin degeneracy factor of 2 correspond to the TIME face count?"
+    reference = "Spin-1/2 gives 2 spin states"
+    level = Level.STANDARD
     tolerance = 0.01
-    derivation = (
-        "PREMISE: From Field Closure, k = 4 tetrahedral faces and 2 TIME faces total. "
-        "STEP 1: K shell capacity = 2n² = 2 × 1² = 2. "
-        "STEP 2: In terms of k: K shell = k/2 = 4/2 = 2 = TIME face count. "
-        "STEP 3: Innermost shell represents one electron per TIME face (spin-up/spin-down). "
-        "OUTPUT: K shell (k/2) = 2."
-    )
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("CORRESPONDENCE (documented elsewhere).")
+            .step("PREMISE: Electrons have spin-1/2, giving 2s+1 = 2 spin states.")
+            .step("STEP 1: Field Chamber has 2 TIME faces (one per tetrahedron).")
+            .step("STEP 2: GFD correspondence: spin states = TIME faces = 2.")
+            .step("STEP 3: Each orbital can hold 2 electrons (one per TIME face).")
+            .conclude("OUTPUT: Spin factor = 2 = TIME faces (correspondence).")
+        )
+    
     commentary = (
-        "The K shell capacity of 2 corresponds to k/2 where k=4 is the Field Closure constant. "
-        "This suggests that the innermost shell represents the minimal occupation state of the "
-        "Field Chamber, with one electron per TIME face of Tetrahedron A and Tetrahedron B."
+        "The factor of 2 in 2n^2 arises from spin degeneracy in standard physics. "
+        "GFD interprets this as reflecting the two TIME faces of the stellated "
+        "octahedron. This is a consistent interpretation across GFD's particle "
+        "physics framework."
     )
     
     def model(self):
-        return {"K shell (k/2)": K // 2}
+        return (
+            Model()
+            .add("TIME faces", TIME_FACES)
+            .add("Spin states (2s+1)", 2)
+            .add("Electrons per orbital", 2)
+        )
     
     def observations(self):
-        return {"K shell (k/2)": 2}
+        return (
+            Observed()
+            .add("TIME faces", 2)
+            .add("Spin states (2s+1)", 2)
+            .add("Electrons per orbital", 2)
+        )
 
 
-class SecondShellIs2k(GFDTest):
-    """Second shell capacity = 2k = 8 (stellated octahedron vertices)."""
-    name = "L Shell = 2k"
-    question = "Does the L shell (n=2) capacity correspond to the total vertex count of the stellated octahedron Field Chamber?"
-    reference_source = "L shell capacity = 8"
+class PauliExclusionInterpretation(Test):
+    """
+    Pauli exclusion limits each orbital to 2 electrons.
+    GFD interprets this as: 1 electron per tetrahedron x 2 tetrahedra = 2.
+    
+    This is a geometric PICTURE, not a derivation of Pauli exclusion.
+    """
+    name = "Pauli Exclusion Interpretation"
+    question = "Can Pauli exclusion be pictured as one electron per tetrahedron?"
+    reference = "Pauli exclusion: max 2 electrons per orbital"
+    level = Level.STANDARD
     tolerance = 0.01
-    derivation = (
-        "PREMISE: From Field Closure, k = 4 gives 2k = 8 vertices in the stellated octahedron. "
-        "STEP 1: L shell capacity = 2n² = 2 × 2² = 8. "
-        "STEP 2: In terms of k: L shell = 2k = 2 × 4 = 8 = vertex count. "
-        "STEP 3: Second shell represents complete occupation of all Field Chamber vertices. "
-        "OUTPUT: L shell (2k) = 8."
-    )
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("GEOMETRIC INTERPRETATION (not derivation of Pauli).")
+            .step("PREMISE: Pauli exclusion: no two identical fermions in same quantum state.")
+            .step("STEP 1: Each orbital defines a spatial state.")
+            .step("STEP 2: GFD: one electron on Tet A TIME face, one on Tet B TIME face.")
+            .step("STEP 3: Maximum 2 electrons per orbital (different TIME faces).")
+            .conclude("OUTPUT: Pauli limit = 2 = tetrahedra count (geometric picture).")
+        )
+    
     commentary = (
-        "The L shell capacity of 8 equals 2k, the total vertex count of the stellated octahedron. "
-        "This correspondence suggests that the second shell may represent full occupation of the "
-        "Field Chamber's vertex positions, with Tetrahedron A and Tetrahedron B each contributing "
-        "k=4 vertices to the available electron states."
+        "Pauli exclusion is derived in QM from the antisymmetry requirement for "
+        "fermion wavefunctions. GFD provides a geometric PICTURE: each tetrahedron "
+        "can host one electron in a given orbital, so the dual structure limits "
+        "occupancy to 2. This does not derive Pauli exclusion from geometry."
     )
     
     def model(self):
-        return {"L shell (2k)": 2 * K}
+        return (
+            Model()
+            .add("Tetrahedra", 2)
+            .add("Electrons per tetrahedron per orbital", 1)
+            .add("Max electrons per orbital", 2)
+        )
     
     def observations(self):
-        return {"L shell (2k)": 8}
+        return (
+            Observed()
+            .add("Tetrahedra", 2)
+            .add("Electrons per tetrahedron per orbital", 1)
+            .add("Max electrons per orbital", 2)
+        )
 
 
-class FourthShellIs2kSquared(GFDTest):
-    """Fourth shell capacity = 2k^2 = 32."""
-    name = "N Shell = 2k^2"
-    question = "Does the N shell (n=4) capacity follow from a hierarchical nesting of Field Chambers, and what geometric pattern does this suggest?"
-    reference_source = "N shell capacity = 32"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: From Field Closure, k = 4 and n = k for the fourth shell. "
-        "STEP 1: N shell capacity = 2n² = 2 × 4² = 32. "
-        "STEP 2: In terms of k: N shell = 2k² = 2 × 16 = 32 (k complete L-shell units). "
-        "STEP 3: Pattern suggests hierarchical Field Chamber nesting: k × (2k) = 4 × 8 = 32. "
-        "OUTPUT: N shell (2k²) = 32."
-    )
+# =============================================================================
+# TESTS: NUMERICAL OBSERVATIONS (honesty about retrofitting)
+# =============================================================================
+
+class KShellNumerology(Test):
+    """
+    K shell capacity = 2 = k/2 where k=4.
+    
+    HONESTY: This is retrofitting k=4 to match the known value 2.
+    There is no derivation; 2 = k/2 is observed, not predicted.
+    """
+    name = "K Shell = k/2 (Observation)"
+    question = "Can the K shell capacity be written as k/2?"
+    reference = "K shell = 2, k = 4"
+    level = Level.EXPLORATORY
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("NUMERICAL OBSERVATION (not derivation).")
+            .step("PREMISE: K shell capacity = 2 (from QM). k = 4 (Field Closure).")
+            .step("STEP 1: Observe that 2 = k/2 = 4/2.")
+            .step("STEP 2: k/2 = TIME face count = spin states (consistent).")
+            .step("STEP 3: This is an observation, not a prediction or derivation.")
+            .conclude("OUTPUT: K shell = 2 = k/2 (observed correspondence).")
+        )
+    
     commentary = (
-        "The N shell capacity of 32 = 2k² may correspond to k complete Field Chamber configurations, "
-        "each with capacity 2k. This suggests a hierarchical nesting structure where higher shells "
-        "represent increasingly complex arrangements of the stellated octahedron geometry centered "
-        "at the Field Origin."
+        "The K shell capacity of 2 equals k/2 where k=4. This is noted as a "
+        "correspondence: the first shell capacity equals half the Field Closure "
+        "constant, which also equals the TIME face count. Whether this is "
+        "meaningful or coincidental is left as an open question."
     )
     
     def model(self):
-        return {"N shell (2k^2)": 2 * K * K}
+        return Model().add("K shell", K // 2)
     
     def observations(self):
-        return {"N shell (2k^2)": 32}
+        return Observed().add("K shell", 2)
 
 
-class SubshellFormula(GFDTest):
-    """Subshell capacities follow 2(2l+1) formula."""
-    name = "Subshell Capacities"
-    question = "What is the capacity of each subshell type (s, p, d, f), and how does the formula 2(2l+1) determine these values?"
-    reference_source = "Atomic physics (established)"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: Subshell capacity is C(l) = 2(2l + 1) where l is angular momentum quantum number. "
-        "STEP 1: For l=0 (s): C = 2(2×0 + 1) = 2. For l=1 (p): C = 2(2×1 + 1) = 6. "
-        "STEP 2: For l=2 (d): C = 2(2×2 + 1) = 10. For l=3 (f): C = 2(2×3 + 1) = 14. "
-        "STEP 3: Factor of 2 arises from spin degeneracy (2 TIME faces in Field Chamber). "
-        "OUTPUT: s subshell = 2, p subshell = 6, d subshell = 10, f subshell = 14."
-    )
+class LShellNumerology(Test):
+    """
+    L shell capacity = 8 = 2k where k=4.
+    
+    This also equals the stellated octahedron vertex count.
+    """
+    name = "L Shell = 2k (Observation)"
+    question = "Can the L shell capacity be written as 2k?"
+    reference = "L shell = 8, 2k = 8"
+    level = Level.EXPLORATORY
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("NUMERICAL OBSERVATION (not derivation).")
+            .step("PREMISE: L shell capacity = 8 (from QM). k = 4 (Field Closure).")
+            .step("STEP 1: Observe that 8 = 2k = 2 x 4.")
+            .step("STEP 2: 2k = stellated octahedron vertex count (consistent).")
+            .step("STEP 3: This is an observation, not a prediction or derivation.")
+            .conclude("OUTPUT: L shell = 8 = 2k = vertices (observed correspondence).")
+        )
+    
     commentary = (
-        "The subshell capacity formula 2(2l+1) reflects magnetic quantum number degeneracy "
-        "multiplied by spin. The geometric interpretation of angular momentum quantum number l "
-        "within the Field Chamber framework remains an open question, though the factor of 2 "
-        "is consistent with the dual-tetrahedron TIME face structure."
+        "The L shell capacity of 8 equals 2k, the stellated octahedron vertex count. "
+        "This suggests a correspondence between second-shell electrons and Field "
+        "Chamber vertices. The interpretation is that completing the L shell fills "
+        "all geometric vertex positions."
     )
     
     def model(self):
-        return {
-            "s subshell (l=0)": subshell_capacity(0),
-            "p subshell (l=1)": subshell_capacity(1),
-            "d subshell (l=2)": subshell_capacity(2),
-            "f subshell (l=3)": subshell_capacity(3),
-        }
+        return Model().add("L shell", 2 * K)
     
     def observations(self):
-        return {
-            "s subshell (l=0)": 2,
-            "p subshell (l=1)": 6,
-            "d subshell (l=2)": 10,
-            "f subshell (l=3)": 14,
-        }
+        return Observed().add("L shell", 8)
 
 
-class SubshellSumEqualsShell(GFDTest):
-    """Subshells sum to shell capacity for all shells."""
-    name = "Subshell Sum"
-    question = "Do the subshell capacities within each principal shell sum to the correct total shell capacity of 2n^2?"
-    reference_source = "Shell structure (established)"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: For shell n, subshells have l = 0, 1, ..., n-1, each contributing 2(2l+1). "
-        "STEP 1: Sum = Σ[l=0 to n-1] 2(2l+1) = 2 × n² (algebraic identity). "
-        "STEP 2: Verify: n=1 gives 2; n=2 gives 2+6=8; n=3 gives 2+6+10=18; n=4 gives 2+6+10+14=32. "
-        "STEP 3: Each sum equals 2n², confirming subshell sum = shell capacity. "
-        "OUTPUT: Shell n=1 sum = 2, n=2 sum = 8, n=3 sum = 18, n=4 sum = 32."
-    )
-    commentary = (
-        "The mathematical identity Σ(2l+1) = n² for l=0 to n-1 underlies the subshell summation. "
-        "This algebraic constraint is consistent with the Field Chamber's combinatorial structure, "
-        "suggesting that subshell decomposition may reflect distinguishable Coupling Port "
-        "configurations within each shell's geometric arrangement."
-    )
+class NobleGasSequencePattern(Test):
+    """
+    Noble gas differences: 8, 8, 18, 18, 32.
     
-    def model(self):
-        sums = {}
-        for n in [1, 2, 3, 4]:
-            total = sum(subshell_capacity(l) for l in range(n))
-            sums[f"Shell n={n} sum"] = total
-        return sums
-    
-    def observations(self):
-        return {
-            "Shell n=1 sum": shell_capacity(1),
-            "Shell n=2 sum": shell_capacity(2),
-            "Shell n=3 sum": shell_capacity(3),
-            "Shell n=4 sum": shell_capacity(4),
-        }
-
-
-class NobleGasHelium(GFDTest):
-    """Helium: 2 electrons = filled K shell = k/2."""
-    name = "Helium Configuration"
-    question = "Why is helium chemically inert with exactly 2 electrons, and how does this relate to the Field Chamber TIME face count?"
-    reference_source = "He atomic number = 2"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: K shell = k/2 = 2 corresponds to TIME face count in Field Chamber. "
-        "STEP 1: Helium fills K shell completely with Z = 2 electrons. "
-        "STEP 2: The 2 electrons occupy 2 TIME faces (one per tetrahedron). "
-        "STEP 3: Complete TIME face occupation produces closed noble gas configuration. "
-        "OUTPUT: Helium electrons = 2."
-    )
-    commentary = (
-        "Helium's closed-shell stability at 2 electrons corresponds to k/2, representing "
-        "complete occupation of the TIME face states in the Field Chamber. This minimal "
-        "noble gas configuration may indicate that chemical inertness arises when both "
-        "Tetrahedron A and Tetrahedron B contribute one electron each."
-    )
-    
-    def model(self):
-        return {"Helium electrons": shell_capacity(1)}
-    
-    def observations(self):
-        return {"Helium electrons": NOBLE_GASES['He']}
-
-
-class NobleGasNeon(GFDTest):
-    """Neon: 10 electrons = K + L = 2 + 8 = k/2 + 2k."""
-    name = "Neon Configuration"
-    question = "How many electrons fill the K and L shells completely, and does this match neon's atomic number?"
-    reference_source = "Ne atomic number = 10"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: Neon fills K and L shells, corresponding to (k/2) + (2k) = 5k/2 electrons. "
-        "STEP 1: K shell = k/2 = 2 (TIME faces). L shell = 2k = 8 (vertices). "
-        "STEP 2: Total = K + L = 2 + 8 = 10 = 5k/2 where k = 4. "
-        "STEP 3: Complete occupation of TIME faces plus all stellated octahedron vertices. "
-        "OUTPUT: Neon electrons (K+L) = 10."
-    )
-    commentary = (
-        "Neon's stability at 10 electrons corresponds to k/2 + 2k = 5k/2, representing "
-        "complete occupation of both TIME face states and all stellated octahedron vertices. "
-        "This suggests that the first major noble gas closure involves saturating the "
-        "Field Chamber's fundamental geometric positions."
-    )
-    
-    def model(self):
-        k_shell = shell_capacity(1)
-        l_shell = shell_capacity(2)
-        return {"Neon electrons (K+L)": k_shell + l_shell}
-    
-    def observations(self):
-        return {"Neon electrons (K+L)": NOBLE_GASES['Ne']}
-
-
-class NobleGasArgon(GFDTest):
-    """Argon: 18 electrons = 2 x 9 (completion position)."""
-    name = "Argon Configuration"
-    question = "What is the electron configuration of argon, and how does the count 18 factor into geometric components?"
-    reference_source = "Ar atomic number = 18"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: Argon fills K, L, 3s, and 3p, totaling 2 × d² electrons where d = 3. "
-        "STEP 1: K=2 + L=8 + 3s=2 + 3p=6 = 18. "
-        "STEP 2: Factor as 18 = 2 × 9 = 2 × d² where d² = 3² = 9. "
-        "STEP 3: Represents spin-doubled (2) times d-squared (9) configurations. "
-        "OUTPUT: Argon electrons (2×9) = 18."
-    )
-    commentary = (
-        "Argon's electron count of 18 = 2×9 corresponds to a paired completion structure. "
-        "The factor of 9 may relate to the 3×3 SPATIAL face interactions possible between "
-        "Tetrahedron A and Tetrahedron B, though the precise geometric interpretation of "
-        "this intermediate closure requires further investigation."
-    )
-    
-    def model(self):
-        return {"Argon electrons (2x9)": 2 * 9}
-    
-    def observations(self):
-        return {"Argon electrons (2x9)": NOBLE_GASES['Ar']}
-
-
-class NobleGasPattern(GFDTest):
-    """Noble gas differences: 8, 8, 18, 18, 32."""
+    The pattern shows each capacity appearing twice (Aufbau filling order).
+    This is standard chemistry, not GFD content.
+    """
     name = "Noble Gas Differences"
-    question = "What pattern do the electron count differences between successive noble gases follow, and what determines this sequence?"
-    reference_source = "Periodic table noble gas sequence"
+    question = "What pattern do noble gas electron count differences follow?"
+    reference = "Periodic table: He=2, Ne=10, Ar=18, Kr=36, Xe=54, Rn=86"
+    level = Level.STANDARD
     tolerance = 0.01
-    derivation = (
-        "PREMISE: Noble gas sequence reflects shell capacities appearing twice (Aufbau filling). "
-        "STEP 1: Differences: He→Ne = 8, Ne→Ar = 8, Ar→Kr = 18, Kr→Xe = 18, Xe→Rn = 32. "
-        "STEP 2: In GFD: 8 = 2k (vertices), 18 = 2d² (SPATIAL), 32 = 2k² (closure squared). "
-        "STEP 3: Pattern 8, 8, 18, 18, 32 shows each capacity twice due to orbital filling order. "
-        "OUTPUT: Diff He-Ne = 8, Diff Ne-Ar = 8, Diff Ar-Kr = 18, Diff Kr-Xe = 18, Diff Xe-Rn = 32."
-    )
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("STANDARD CHEMISTRY (Aufbau principle).")
+            .step("PREMISE: Noble gases occur at filled-shell electron configurations.")
+            .step("STEP 1: He(2), Ne(10), Ar(18), Kr(36), Xe(54), Rn(86).")
+            .step("STEP 2: Differences: 8, 8, 18, 18, 32 (each capacity appears twice).")
+            .step("STEP 3: Pattern from orbital filling order (s, p, d, f subshells).")
+            .conclude("OUTPUT: Differences 8, 8, 18, 18, 32 (from Aufbau, not GFD).")
+        )
+    
     commentary = (
-        "The doubling pattern in noble gas differences (8, 8, then 18, 18, then 32) reflects "
-        "successive shell capacities appearing twice due to the Aufbau principle's orbital "
-        "filling order. This pattern is consistent with Field Chamber geometry where each "
-        "capacity corresponds to distinct stellated octahedron occupation modes."
+        "The noble gas sequence reflects orbital filling order (Aufbau principle). "
+        "Each shell capacity appears twice because of how s, p, d, f subshells fill "
+        "across periods. This is standard chemistry. GFD can note that 8 = 2k, but "
+        "the doubling pattern comes from Aufbau, not geometry."
     )
     
     def model(self):
         nobles = [NOBLE_GASES[g] for g in ['He', 'Ne', 'Ar', 'Kr', 'Xe', 'Rn']]
         diffs = [nobles[i+1] - nobles[i] for i in range(len(nobles)-1)]
-        return {
-            "Diff He-Ne": diffs[0],
-            "Diff Ne-Ar": diffs[1],
-            "Diff Ar-Kr": diffs[2],
-            "Diff Kr-Xe": diffs[3],
-            "Diff Xe-Rn": diffs[4],
-        }
+        return (
+            Model()
+            .add("Diff He->Ne", diffs[0])
+            .add("Diff Ne->Ar", diffs[1])
+            .add("Diff Ar->Kr", diffs[2])
+            .add("Diff Kr->Xe", diffs[3])
+            .add("Diff Xe->Rn", diffs[4])
+        )
     
     def observations(self):
-        return {
-            "Diff He-Ne": 8,
-            "Diff Ne-Ar": 8,
-            "Diff Ar-Kr": 18,
-            "Diff Kr-Xe": 18,
-            "Diff Xe-Rn": 32,
-        }
-
-
-class SpinFromDualFieldChamber(GFDTest):
-    """Spin-1/2 (2 states) correspondence with dual Field Chamber TIME faces."""
-    name = "Spin Multiplicity"
-    question = "How many distinct spin states does a spin-1/2 particle have, and does this match the TIME face count in the Field Chamber?"
-    reference_source = "Spin-1/2 gives 2 states"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: The Field Chamber has 2 TIME faces (one per tetrahedron). "
-        "STEP 1: Spin-1/2 particle has 2s + 1 = 2(1/2) + 1 = 2 spin states. "
-        "STEP 2: Field Chamber TIME faces: Tet A has 1, Tet B has 1, total = 2. "
-        "STEP 3: Correspondence: spin states = 2 = TIME faces. "
-        "OUTPUT: Spin states (TIME faces) = 2."
-    )
-    commentary = (
-        "The two spin states of fermions correspond to the two TIME faces in the stellated "
-        "octahedron, one from each interpenetrating tetrahedron. This suggests that spin-up "
-        "and spin-down may be geometrically distinguished by activation of the TIME face on "
-        "Tetrahedron A versus Tetrahedron B respectively."
-    )
-    
-    def model(self):
-        time_faces = 2  # One per tetrahedron
-        return {"Spin states (TIME faces)": time_faces}
-    
-    def observations(self):
-        return {"Spin states (TIME faces)": 2}
-
-
-class PauliExclusionAsGeometry(GFDTest):
-    """Pauli exclusion: 2 electrons per orbital corresponds to 2 tetrahedra."""
-    name = "Pauli Exclusion Geometry"
-    question = "Why does the Pauli exclusion principle limit orbital occupancy to 2 electrons, and how does this relate to the dual tetrahedron structure?"
-    reference_source = "Pauli exclusion principle"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: The Field Chamber has 2 tetrahedra: Tetrahedron A and Tetrahedron B. "
-        "STEP 1: Pauli exclusion: no two identical fermions can occupy the same quantum state. "
-        "STEP 2: Each orbital accepts one electron per tetrahedron: 1 + 1 = 2 maximum. "
-        "STEP 3: Geometric constraint (2 tetrahedra) matches quantum limit (2 per orbital). "
-        "OUTPUT: Electrons per orbital = 2."
-    )
-    commentary = (
-        "The Pauli exclusion principle's limit of two electrons per orbital corresponds to "
-        "the Field Chamber's dual-tetrahedron structure. Each orbital position within the "
-        "stellated octahedron can accommodate one electron from Tetrahedron A and one from "
-        "Tetrahedron B, suggesting a geometric basis for fermionic exclusion."
-    )
-    
-    def model(self):
-        tetrahedra_per_field_chamber = 2
-        return {"Electrons per orbital": tetrahedra_per_field_chamber}
-    
-    def observations(self):
-        return {"Electrons per orbital": 2}
+        return (
+            Observed()
+            .add("Diff He->Ne", 8)
+            .add("Diff Ne->Ar", 8)
+            .add("Diff Ar->Kr", 18)
+            .add("Diff Kr->Xe", 18)
+            .add("Diff Xe->Rn", 32)
+        )
 
 
 # =============================================================================
@@ -472,36 +423,42 @@ class PauliExclusionAsGeometry(GFDTest):
 # =============================================================================
 
 ALL_TESTS = [
-    ShellFormula2nSquared,
-    GFDShellFormula,
-    FirstShellIsKOver2,
-    SecondShellIs2k,
-    FourthShellIs2kSquared,
-    SubshellFormula,
-    SubshellSumEqualsShell,
-    NobleGasHelium,
-    NobleGasNeon,
-    NobleGasArgon,
-    NobleGasPattern,
-    SpinFromDualFieldChamber,
-    PauliExclusionAsGeometry,
+    # Baseline and reframing
+    ShellCapacitiesQM,
+    GFDShellReframing,
+    
+    # Spin interpretation
+    SpinFactorFromTimeFaces,
+    PauliExclusionInterpretation,
+    
+    # Numerical observations
+    KShellNumerology,
+    LShellNumerology,
+    NobleGasSequencePattern,
 ]
 
 
-def run_all_tests():
+def run_all():
     """Run all shell structure tests."""
-    return run_test_group(
-        title="Electron Shell Structure from Lattice Geometry",
+    return run_tests(
+        title="Electron Shell Structure: A Geometric Interpretation",
         summary=(
-            "These tests examine electron shell capacities (2, 8, 18, 32) using the "
-            "GFD lattice geometry framework. The model produces values consistent with "
-            "the 2n^2 formula through n^2 orbital cells times 2 spin states (corresponding "
-            "to the dual-tetrad stellated octahedron structure)."
+            "These tests examine electron shell capacities through GFD geometry.\n\n"
+            "IMPORTANT: Shell capacities (2, 8, 18, 32) are DERIVED by quantum mechanics "
+            "from the Schrodinger equation and Pauli exclusion. GFD does NOT derive these "
+            "values; it provides an alternative GEOMETRIC PICTURE that produces the same "
+            "numbers.\n\n"
+            "The spin factor of 2 is associated with TIME faces (one per tetrahedron). "
+            "The n^2 orbital factor lacks clear geometric origin in GFD.\n\n"
+            "Numerical observations (k/2=2, 2k=8) are noted as correspondences, not "
+            "predictions. The reader should evaluate whether this geometric reframing "
+            "provides insight or merely retrofits k=4 to known values."
         ),
         test_classes=ALL_TESTS
     )
 
 
 if __name__ == "__main__":
-    success = run_all_tests()
+    import sys
+    success = run_all()
     sys.exit(0 if success else 1)

@@ -1,475 +1,463 @@
 """
-Cross-Checks: Inter-Module Consistency Validation
+Cross-Checks: Structural Validations for the Stellated Octahedron Geometry
 
-This module verifies consistency across different calculation domains in the
-GFD validation suite. Tests confirm that k=4, fundamental constants, and
-geometric relationships maintain agreement between modules.
+This module verifies that the GFD model's geometric definitions are internally
+consistent and have the mathematical properties claimed by the model.
+
+WHAT IS A GENUINE CROSS-CHECK?
+A real cross-check compares predictions or properties derived from DIFFERENT
+starting points that should agree. It's NOT comparing a value to itself.
+
+For example:
+- GENUINE: The model claims TET_A and TET_B partition the 8 vertices.
+  We verify this by checking BOTH that they don't overlap AND that they
+  cover all vertices. Two independent checks that together prove partition.
+  
+- NOT GENUINE: Defining VERTICES = 2*K at the top of a file, then "checking"
+  that VERTICES == 2*K. That's just A = A.
+
+WHAT THIS MODULE VALIDATES:
+1. Partition Property: TET_A and TET_B truly partition the 8 vertices
+2. Parity Correspondence: Binary parity determines tetrahedron membership
+3. Complementary Structure: Inversion pairs cross between tetrahedra
+4. Topological Consistency: The tetrahedron satisfies Euler's formula
+5. Algebraic Structure: Arithmetic inversion equals bitwise XOR
+
+These are structural validations of the model's definitions, not cross-checks
+of independent physical derivations. We are honest about what each test does.
 """
 
 import sys
-import os
 import math
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
-
-from gfd_model_v2.base import GFDTest, run_test_group
+from gfd_model_v2.framework import *
 from gfd_model_v2.common import (
     K, C, HBAR as H_BAR, ALPHA, R_E, LAMBDA_COMPTON as LAMBDA_C, M_E,
     TET_A, TET_B,
 )
 
-# Topology counts
-VERTICES = 2 * K   # 8
-FACES = 2 * K       # 8
-EDGES = 3 * K       # 12
+
+# =============================================================================
+# PARTITION VALIDATIONS
+# =============================================================================
+# The GFD model claims the stellated octahedron consists of two interlocking
+# tetrahedra (TET_A and TET_B) that PARTITION the 8 vertices. A partition means:
+#   1. No overlap (disjoint sets)
+#   2. Complete coverage (union = all vertices)
+# These two tests together verify the partition claim.
+# =============================================================================
+
+class TetrahedraPartitionDisjoint(Test):
+    """
+    WHAT WE'RE CHECKING:
+    The model defines TET_A = {1, 2, 4, 7} and TET_B = {0, 3, 5, 6}.
+    For these to be a valid partition, they must not share any vertices.
+    
+    WHY THIS MATTERS:
+    If TET_A and TET_B overlapped, a vertex could belong to both tetrahedra,
+    breaking the dual chamber structure that the Field Closure model relies on.
+    This test confirms the sets are truly disjoint.
+    """
+    name = "Tetrahedra Partition: Disjoint"
+    question = (
+        "Are the vertex sets TET_A and TET_B mathematically disjoint? "
+        "This is half of proving they partition the stellated octahedron vertices."
+    )
+    reference = "Set theory: disjoint sets have empty intersection"
+    tolerance = 0.01
+    level = Level.STANDARD
+    commentary = (
+        "The GFD model requires TET_A and TET_B to be distinct, non-overlapping "
+        "vertex sets. This test verifies the model's definitions satisfy that requirement. "
+        "We compute the actual set intersection rather than assuming it's empty."
+    )
+    
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("CLAIM: TET_A and TET_B partition the 8 stellated octahedron vertices.")
+            .step("TEST 1 OF 2: Check that they are disjoint (no shared vertices).")
+            .step("TET_A = {1, 2, 4, 7} as defined in the model.")
+            .step("TET_B = {0, 3, 5, 6} as defined in the model.")
+            .step("Compute intersection: TET_A & TET_B.")
+            .step("If intersection is empty, the sets are disjoint.")
+            .conclude("Overlap count = |TET_A & TET_B| should be 0.")
+        )
+    
+    def model(self) -> Model:
+        # Actually compute the intersection, don't assume
+        intersection = TET_A & TET_B
+        overlap_count = len(intersection)
+        return Model().add("Overlap count", overlap_count)
+    
+    def observations(self) -> Observed:
+        return Observed().add("Overlap count", 0)
+
+
+class TetrahedraPartitionExhaustive(Test):
+    """
+    WHAT WE'RE CHECKING:
+    The second half of the partition property: TET_A union TET_B must equal
+    the complete vertex set {0, 1, 2, 3, 4, 5, 6, 7}.
+    
+    WHY THIS MATTERS:
+    If the union were missing vertices, those vertices would belong to neither
+    tetrahedron, leaving "orphan" Coupling Ports outside the Field Chamber structure.
+    """
+    name = "Tetrahedra Partition: Exhaustive"
+    question = (
+        "Does TET_A union TET_B equal the complete vertex set {0..7}? "
+        "This is the second half of proving they partition the vertices."
+    )
+    reference = "Set theory: exhaustive partition covers all elements"
+    tolerance = 0.01
+    level = Level.STANDARD
+    commentary = (
+        "Combined with the disjoint test, this confirms TET_A and TET_B form a "
+        "proper partition of the 8 vertices. Together they cover everything exactly once."
+    )
+    
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("CLAIM: TET_A and TET_B partition the 8 stellated octahedron vertices.")
+            .step("TEST 2 OF 2: Check that their union covers all 8 vertices.")
+            .step("TET_A = {1, 2, 4, 7}.")
+            .step("TET_B = {0, 3, 5, 6}.")
+            .step("Expected complete set = {0, 1, 2, 3, 4, 5, 6, 7}.")
+            .step("Compute: TET_A | TET_B and compare to expected.")
+            .conclude("Union size = 8 and covers_all = 1 if union equals {0..7}.")
+        )
+    
+    def model(self) -> Model:
+        union = TET_A | TET_B
+        expected = set(range(8))
+        covers_all = 1 if union == expected else 0
+        return (
+            Model()
+            .add("Union size", len(union))
+            .add("Covers all vertices", covers_all)
+        )
+    
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("Union size", 8)
+            .add("Covers all vertices", 1)
+        )
 
 
 # =============================================================================
-# TEST CLASSES
+# PARITY CORRESPONDENCE
+# =============================================================================
+# The model claims tetrahedron membership is determined by binary parity:
+# - TET_A contains vertices with odd parity (popcount is 1 or 3)
+# - TET_B contains vertices with even parity (popcount is 0 or 2)
+# This is a structural claim we can verify.
 # =============================================================================
 
-class KConsistency(GFDTest):
-    """k=4 is consistent across all modules."""
-    name = "k Consistency"
+class ParityDeterminesTetrahedron(Test):
+    """
+    WHAT WE'RE CHECKING:
+    The model claims binary parity determines which tetrahedron a vertex belongs to.
+    We verify this by computing parity independently and checking membership.
+    
+    WHY THIS MATTERS:
+    This correspondence isn't just a coincidence in the definitions. It connects
+    the abstract algebraic structure (parity) to the geometric structure (tetrahedra).
+    If this broke, the parity arguments used elsewhere in the model would be invalid.
+    """
+    name = "Parity Determines Tetrahedron"
     question = (
-        "Is the Field Closure constant k=4 used consistently across all validation modules "
-        "(particle physics, coupling dynamics, and symmetry operations), ensuring the model "
-        "maintains a single coherent value for this fundamental parameter?"
+        "Is tetrahedron membership perfectly determined by binary parity? "
+        "TET_A should contain all odd-parity vertices, TET_B all even-parity."
     )
-    reference_source = "Topology constant"
+    reference = "Binary parity: popcount(v) mod 2"
     tolerance = 0.01
-    derivation = (
-        "PREMISE: The Field Closure constant k=4 should appear consistently across all validation modules. "
-        "STEP 1: In topology module: k=4 is the number of faces on a tetrahedron. "
-        "STEP 2: In coupling module: each tetrahedron has k=4 vertices. "
-        "STEP 3: In symmetry module: 4 faces per tetrahedron (1 TIME + 3 SPATIAL). "
-        "STEP 4: Compare all values: 4 = 4 = 4. "
-        "OUTPUT: k (topology) = 4, Faces per tet = 4, Vertices per tet = 4."
-    )
+    level = Level.STANDARD
     commentary = (
-        "The consistent appearance of k=4 across different calculation modules suggests "
-        "this value may represent a fundamental structural parameter of the Field Chamber. "
-        "This internal consistency is necessary for the model to maintain coherent predictions "
-        "across its various domains."
+        "We independently compute each vertex's parity from its binary representation, "
+        "then check it matches the tetrahedron membership defined in the model. "
+        "This is a genuine verification, not a tautology."
     )
     
-    def model(self):
-        return {
-            "k (topology)": K,
-            "Faces per tet": K,
-            "Vertices per tet": K,
-        }
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("CLAIM: Binary parity determines tetrahedron membership.")
+            .step("Odd parity means popcount(v) mod 2 = 1 (vertices 1, 2, 4, 7).")
+            .step("Even parity means popcount(v) mod 2 = 0 (vertices 0, 3, 5, 6).")
+            .step("TEST: For each v in TET_A, verify popcount(v) mod 2 = 1.")
+            .step("TEST: For each v in TET_B, verify popcount(v) mod 2 = 0.")
+            .step("TET_A: 1=001 (pop=1), 2=010 (pop=1), 4=100 (pop=1), 7=111 (pop=3). All odd.")
+            .step("TET_B: 0=000 (pop=0), 3=011 (pop=2), 5=101 (pop=2), 6=110 (pop=2). All even.")
+            .conclude("TET_A odd count = 4, TET_B even count = 4.")
+        )
     
-    def observations(self):
-        return {
-            "k (topology)": 4,
-            "Faces per tet": 4,
-            "Vertices per tet": 4,
-        }
+    def model(self) -> Model:
+        # Independently compute parity and check against membership
+        tet_a_odd = sum(1 for v in TET_A if bin(v).count('1') % 2 == 1)
+        tet_b_even = sum(1 for v in TET_B if bin(v).count('1') % 2 == 0)
+        return (
+            Model()
+            .add("TET_A vertices with odd parity", tet_a_odd)
+            .add("TET_B vertices with even parity", tet_b_even)
+        )
+    
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("TET_A vertices with odd parity", 4)
+            .add("TET_B vertices with even parity", 4)
+        )
 
 
-class VertexCountConsistency(GFDTest):
-    """8 vertices = 2k is consistent."""
-    name = "Vertex Count Consistency"
+# =============================================================================
+# COMPLEMENTARY PAIR STRUCTURE
+# =============================================================================
+# The model identifies 4 "complementary pairs" where each vertex pairs with
+# its bitwise complement (v XOR 7). The claim is that these pairs ALWAYS
+# cross between tetrahedra: one member in TET_A, one in TET_B.
+# =============================================================================
+
+class ComplementaryPairsCrossTetrahedra(Test):
+    """
+    WHAT WE'RE CHECKING:
+    For each complementary pair (v, 7-v), does one vertex belong to TET_A
+    and the other to TET_B? The model claims all 4 pairs cross tetrahedra.
+    
+    WHY THIS MATTERS:
+    The complementary pair structure is central to Field Closure dynamics.
+    If any pair were contained within a single tetrahedron, it would break
+    the inter-tetrahedra coupling that the model claims drives field dynamics.
+    
+    NOTE: This follows mathematically from the parity correspondence (since
+    v and 7-v always have opposite parities), but we test it explicitly to
+    validate the geometric claim about the stellated octahedron structure.
+    """
+    name = "Complementary Pairs Cross Tetrahedra"
     question = (
-        "Is the total vertex count of 8 = 2k consistent across all module representations, "
-        "confirming that Tet_A and Tet_B together account for all Coupling Ports in the "
-        "stellated octahedron?"
+        "Do all 4 complementary pairs (v, 7-v) cross between TET_A and TET_B? "
+        "This ensures systematic coupling between the dual Field Chamber components."
     )
-    reference_source = "Dual Field Chamber geometry"
+    reference = "Inversion symmetry through the Field Origin"
     tolerance = 0.01
-    derivation = (
-        "PREMISE: The stellated octahedron comprises two interlocking tetrahedra with 2k total vertices. "
-        "STEP 1: From topology: total vertices = 8. "
-        "STEP 2: From k constant: 2k = 2×4 = 8. "
-        "STEP 3: From set definitions: |Tet_A| + |Tet_B| = 4 + 4 = 8. "
-        "STEP 4: Compare all representations: 8 = 8 = 8. "
-        "OUTPUT: Total vertices = 8, 2k = 8, Tet_A + Tet_B = 8."
-    )
+    level = Level.STANDARD
     commentary = (
-        "The relationship 2k=8 vertices corresponds to the dual structure of the Field Chamber, "
-        "with each tetrahedron contributing k=4 vertices. This consistent vertex count across "
-        "representations suggests the stellated octahedron geometry is internally coherent."
+        "We check each of the 4 pairs: (0,7), (1,6), (2,5), (3,4). For each pair, "
+        "we verify one vertex is in TET_A and the other in TET_B. This is a consequence "
+        "of the parity structure, but worth verifying explicitly as a structural property."
     )
     
-    def model(self):
-        return {
-            "Total vertices": VERTICES,
-            "2k": 2 * K,
-            "Tet_A + Tet_B": len(TET_A) + len(TET_B),
-        }
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("CLAIM: All 4 complementary pairs cross between tetrahedra.")
+            .step("Pairs: (0,7), (1,6), (2,5), (3,4) where each sums to 7.")
+            .step("Check (0,7): 0 in TET_B, 7 in TET_A. CROSSES.")
+            .step("Check (1,6): 1 in TET_A, 6 in TET_B. CROSSES.")
+            .step("Check (2,5): 2 in TET_A, 5 in TET_B. CROSSES.")
+            .step("Check (3,4): 3 in TET_B, 4 in TET_A. CROSSES.")
+            .conclude("Cross-tetrahedra pairs = 4 (all pairs cross).")
+        )
     
-    def observations(self):
-        return {
-            "Total vertices": 8,
-            "2k": 8,
-            "Tet_A + Tet_B": 8,
-        }
-
-
-class TetrahedraDisjoint(GFDTest):
-    """Tet_A and Tet_B are disjoint sets."""
-    name = "Tetrahedra Disjoint"
-    question = (
-        "Are the vertex sets Tet_A and Tet_B mathematically disjoint (zero intersection), "
-        "confirming they partition the stellated octahedron vertices into non-overlapping "
-        "complementary sub-structures?"
-    )
-    reference_source = "Set theory"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: Tet_A and Tet_B partition the stellated octahedron vertices by parity. "
-        "STEP 1: Tet_A = {1, 2, 4, 7} (odd parity vertices). "
-        "STEP 2: Tet_B = {0, 3, 5, 6} (even parity vertices). "
-        "STEP 3: Compute intersection: Tet_A ∩ Tet_B = { }. "
-        "STEP 4: Count overlap: |Tet_A ∩ Tet_B| = 0. "
-        "OUTPUT: Overlap count = 0."
-    )
-    commentary = (
-        "The disjoint nature of Tetrahedron A and Tetrahedron B vertex sets is consistent with "
-        "interpreting them as complementary sub-structures within the Field Chamber. This separation "
-        "may indicate distinct functional domains within the stellated octahedron topology."
-    )
-    
-    def model(self):
-        overlap = len(TET_A & TET_B)
-        return {"Overlap count": overlap}
-    
-    def observations(self):
-        return {"Overlap count": 0}
-
-
-class TetrahedraExhaustive(GFDTest):
-    """Tet_A union Tet_B = all 8 vertices."""
-    name = "Tetrahedra Exhaustive"
-    question = (
-        "Does the union of Tet_A and Tet_B cover all 8 vertices of the stellated octahedron, "
-        "confirming they form a complete partition with no vertices left unassigned?"
-    )
-    reference_source = "Set theory"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: Tet_A and Tet_B should together cover all 2k=8 vertices of the stellated octahedron. "
-        "STEP 1: Tet_A = {1, 2, 4, 7}; Tet_B = {0, 3, 5, 6}. "
-        "STEP 2: Compute union: Tet_A ∪ Tet_B = {0, 1, 2, 3, 4, 5, 6, 7}. "
-        "STEP 3: Full vertex set: {0, 1, 2, 3, 4, 5, 6, 7}. "
-        "STEP 4: Check equality: Tet_A ∪ Tet_B = {0..7} and |union| = 8. "
-        "OUTPUT: Union size = 8, Covers all = 1."
-    )
-    commentary = (
-        "The exhaustive coverage of all vertices by Tetrahedra A and B together suggests a complete "
-        "partition of the Field Chamber structure. This correspondence supports the model's treatment "
-        "of the two tetrahedra as a non-overlapping, exhaustive decomposition of the stellated octahedron."
-    )
-    
-    def model(self):
-        union = len(TET_A | TET_B)
-        full_set = TET_A | TET_B == set(range(8))
-        return {
-            "Union size": union,
-            "Covers all": 1 if full_set else 0,
-        }
-    
-    def observations(self):
-        return {
-            "Union size": 8,
-            "Covers all": 1,
-        }
-
-
-class EulerFormulaTetrahedron(GFDTest):
-    """V - E + F = 2 for each tetrahedron."""
-    name = "Euler Formula (Tet)"
-    question = (
-        "Does each tetrahedron in the Field Chamber satisfy Euler's polyhedron formula "
-        "V - E + F = 2, confirming it is a valid closed 2-manifold in three dimensions?"
-    )
-    reference_source = "Euler's polyhedron formula"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: Euler's formula V - E + F = 2 must hold for any valid closed polyhedron. "
-        "STEP 1: A tetrahedron has: V = k = 4 vertices. "
-        "STEP 2: A tetrahedron has: E = 6 edges (each pair of vertices connected). "
-        "STEP 3: A tetrahedron has: F = k = 4 faces. "
-        "STEP 4: Calculate: V - E + F = 4 - 6 + 4 = 2. "
-        "OUTPUT: V - E + F = 2."
-    )
-    commentary = (
-        "Adherence to Euler's polyhedron formula confirms each tetrahedron within the Field Chamber "
-        "is a valid closed 2-manifold. This consistency with established topological constraints is "
-        "a necessary condition for the geometric coherence of Tetrahedron A and Tetrahedron B."
-    )
-    
-    def model(self):
-        V = 4
-        E = 6
-        F = 4
-        euler = V - E + F
-        return {"V - E + F": euler}
-    
-    def observations(self):
-        return {"V - E + F": 2}
-
-
-class SpeedOfLightConsistency(GFDTest):
-    """c = lambda_C * f_Compton is consistent."""
-    name = "c Consistency"
-    question = (
-        "Is the speed of light c self-consistently recovered from the product of the "
-        "Compton wavelength λ_C and Compton frequency f_C, confirming the fundamental "
-        "wave relation c = λf holds in the GFD parameter set?"
-    )
-    reference_source = "Speed of light"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: The speed of light must satisfy c = λ × f for any wave relation. "
-        "STEP 1: Compton wavelength: λ_C = 2.426×10⁻¹² m. "
-        "STEP 2: Compton frequency: f_C = c/λ_C = 2.998×10⁸ / 2.426×10⁻¹² = 1.236×10²⁰ Hz. "
-        "STEP 3: Verify: λ_C × f_C = 2.426×10⁻¹² × 1.236×10²⁰ = 2.998×10⁸ m/s. "
-        "OUTPUT: c (input) = 2.998×10⁸ m/s, c (from lambda_C * f) = 2.998×10⁸ m/s."
-    )
-    commentary = (
-        "This self-consistency check confirms that the speed of light remains algebraically coherent "
-        "when decomposed into Compton wavelength and frequency components. Maintaining this identity "
-        "is essential for any model incorporating relativistic mechanics and Field Closure dynamics."
-    )
-    
-    def model(self):
-        f_compton = C / LAMBDA_C
-        c_check = LAMBDA_C * f_compton
-        return {
-            "c (input)": C,
-            "c (from lambda_C * f)": c_check,
-        }
-    
-    def observations(self):
-        return {
-            "c (input)": C,
-            "c (from lambda_C * f)": C,
-        }
-
-
-class AlphaRelation(GFDTest):
-    """alpha = r_e / lambda_C_bar approximately."""
-    name = "Alpha Relation"
-    question = (
-        "Is the fine structure constant α approximately equal to the ratio of the classical "
-        "electron radius r_e to the reduced Compton wavelength λ̄_C = λ_C/(2π), confirming "
-        "consistency with quantum electrodynamics?"
-    )
-    reference_source = "Fine structure constant"
-    tolerance = 0.05
-    derivation = (
-        "PREMISE: The fine structure constant α should equal r_e/λ̄_C per QED. "
-        "STEP 1: Fine structure constant: α = 1/137.036 ≈ 7.297×10⁻³. "
-        "STEP 2: Classical electron radius: r_e = 2.818×10⁻¹⁵ m. "
-        "STEP 3: Compton wavelength: λ_C = 2.426×10⁻¹² m. "
-        "STEP 4: Reduced Compton wavelength: λ̄_C = λ_C/(2π) = 3.862×10⁻¹³ m. "
-        "STEP 5: Compute ratio: r_e/λ̄_C = 2.818×10⁻¹⁵ / 3.862×10⁻¹³ = 7.297×10⁻³. "
-        "OUTPUT: alpha (exact) = 7.297×10⁻³, r_e / lambda_C_bar = 7.297×10⁻³."
-    )
-    commentary = (
-        "The approximate correspondence between the fine structure constant and the ratio of classical "
-        "electron radius to reduced Compton wavelength is a known relationship from quantum electrodynamics. "
-        "This cross-check confirms the model's constants remain consistent with established physics, "
-        "which is necessary for meaningful Port Ratio calculations."
-    )
-    
-    def model(self):
-        lambda_c_bar = LAMBDA_C / (2 * math.pi)
-        ratio = R_E / lambda_c_bar
-        return {
-            "alpha (exact)": ALPHA,
-            "r_e / lambda_C_bar": ratio,
-        }
-    
-    def observations(self):
-        return {
-            "alpha (exact)": ALPHA,
-            "r_e / lambda_C_bar": ALPHA,
-        }
-
-
-class ComplementaryPairsConsistency(GFDTest):
-    """4 complementary pairs cross tetrahedra everywhere."""
-    name = "Complementary Pairs"
-    question = (
-        "Do all k=4 complementary pairs (formed by inversion through the Field Origin) "
-        "cross the boundary between Tetrahedron A and Tetrahedron B, ensuring systematic "
-        "coupling between the dual Field Chamber components?"
-    )
-    reference_source = "Inversion symmetry"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: Complementary pairs (V, 7-V) should cross between Tet_A and Tet_B under inversion. "
-        "STEP 1: The k=4 pairs are: (0,7), (1,6), (2,5), (3,4). "
-        "STEP 2: Check each: 0∈B, 7∈A (cross); 1∈A, 6∈B (cross); 2∈A, 5∈B (cross); 3∈B, 4∈A (cross). "
-        "STEP 3: Count cross-tetrahedra pairs: 4 out of 4. "
-        "OUTPUT: Cross-tetrahedra pairs = 4."
-    )
-    commentary = (
-        "The observation that all four complementary vertex pairs span both tetrahedra suggests a "
-        "systematic relationship between Field Chamber geometry and inversion symmetry. This cross-tetrahedra "
-        "pairing may correspond to the structure of Coupling Ports connecting Tetrahedron A and Tetrahedron B."
-    )
-    
-    def model(self):
+    def model(self) -> Model:
         pairs = [(0, 7), (1, 6), (2, 5), (3, 4)]
         cross_count = 0
         for v1, v2 in pairs:
-            t1 = 'A' if v1 in TET_A else 'B'
-            t2 = 'A' if v2 in TET_A else 'B'
-            if t1 != t2:
+            in_different_tetrahedra = (v1 in TET_A) != (v2 in TET_A)
+            if in_different_tetrahedra:
                 cross_count += 1
-        return {"Cross-tetrahedra pairs": cross_count}
+        return Model().add("Pairs that cross tetrahedra", cross_count)
     
-    def observations(self):
-        return {"Cross-tetrahedra pairs": 4}
+    def observations(self) -> Observed:
+        return Observed().add("Pairs that cross tetrahedra", 4)
 
 
-class ParityConsistency(GFDTest):
-    """Tet_A = odd parity, Tet_B = even parity."""
-    name = "Parity Consistency"
+# =============================================================================
+# TOPOLOGICAL CONSISTENCY
+# =============================================================================
+# Euler's formula V - E + F = 2 must hold for any valid closed polyhedron.
+# The GFD model claims a tetrahedron has k=4 vertices and k=4 faces.
+# We verify this is topologically consistent.
+# =============================================================================
+
+class TetrahedronTopologyValid(Test):
+    """
+    WHAT WE'RE CHECKING:
+    A tetrahedron has V=4 vertices, E=6 edges, F=4 faces.
+    Euler's polyhedron formula requires V - E + F = 2 for any closed surface.
+    
+    WHY THIS MATTERS:
+    This is NOT a GFD cross-check. It's a sanity check that the basic geometry
+    the model uses (tetrahedra with 4 vertices and 4 faces) is topologically valid.
+    If this failed, the tetrahedron wouldn't be a legitimate 3D polyhedron.
+    
+    HONESTY NOTE:
+    The edge count E=6 comes from geometry (4 vertices, each pair connected = C(4,2) = 6).
+    This test verifies topological consistency of the tetrahedron parameters.
+    """
+    name = "Tetrahedron Topology Valid"
     question = (
-        "Is tetrahedron membership perfectly determined by binary parity—Tet_A containing "
-        "all odd-parity vertices (odd number of 1-bits) and Tet_B containing all even-parity "
-        "vertices?"
+        "Does the tetrahedron (V=4, E=6, F=4) satisfy Euler's formula V - E + F = 2? "
+        "This confirms it is a valid closed polyhedron."
     )
-    reference_source = "Binary parity"
+    reference = "Euler's polyhedron formula (Euler, 1758)"
     tolerance = 0.01
-    derivation = (
-        "PREMISE: Binary parity (popcount mod 2) should determine tetrahedron membership. "
-        "STEP 1: Tet_A = {1, 2, 4, 7}. Check parities: 1=001→1 (odd), 2=010→1 (odd), 4=100→1 (odd), 7=111→3 (odd). "
-        "STEP 2: Tet_B = {0, 3, 5, 6}. Check parities: 0=000→0 (even), 3=011→2 (even), 5=101→2 (even), 6=110→2 (even). "
-        "STEP 3: Count: Tet_A has 4/4 odd; Tet_B has 4/4 even. "
-        "OUTPUT: Tet_A odd count = 4, Tet_B even count = 4."
-    )
+    level = Level.STANDARD
     commentary = (
-        "The correspondence between binary parity and tetrahedron membership suggests an underlying "
-        "mathematical structure relating combinatorial properties to Field Chamber geometry. This consistency "
-        "supports the model's vertex labeling scheme as reflecting intrinsic topological distinctions."
+        "Euler's formula is a fundamental topological constraint for closed polyhedra. "
+        "A tetrahedron with 4 vertices has C(4,2)=6 edges (each pair of vertices connected) "
+        "and 4 triangular faces. We verify: 4 - 6 + 4 = 2."
     )
     
-    def model(self):
-        tet_a_odd = sum(1 for v in TET_A if bin(v).count('1') % 2 == 1)
-        tet_b_even = sum(1 for v in TET_B if bin(v).count('1') % 2 == 0)
-        return {
-            "Tet_A odd count": tet_a_odd,
-            "Tet_B even count": tet_b_even,
-        }
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("Euler's formula: V - E + F = 2 for any closed convex polyhedron.")
+            .step("Tetrahedron vertices: V = k = 4.")
+            .step("Tetrahedron edges: E = C(4,2) = 4*3/2 = 6 (each pair of vertices connected).")
+            .step("Tetrahedron faces: F = k = 4 (each face is a triangle).")
+            .step("Calculate: V - E + F = 4 - 6 + 4 = 2.")
+            .step("This matches Euler's requirement.")
+            .conclude("Euler characteristic = 2.")
+        )
     
-    def observations(self):
-        return {
-            "Tet_A odd count": 4,
-            "Tet_B even count": 4,
-        }
+    def model(self) -> Model:
+        V = K  # 4 vertices (from GFD model)
+        E = V * (V - 1) // 2  # 6 edges (derived from combinatorics)
+        F = K  # 4 faces (from GFD model)
+        euler = V - E + F
+        return Model().add("V - E + F", euler)
+    
+    def observations(self) -> Observed:
+        return Observed().add("V - E + F", 2)
 
 
-class FaceCountConsistency(GFDTest):
-    """8 faces = 2k across the dual Field Chamber."""
-    name = "Face Count"
+# =============================================================================
+# ALGEBRAIC STRUCTURE
+# =============================================================================
+# The model uses both arithmetic inversion (7-v) and bitwise XOR (v ^ 7).
+# For 3-bit numbers (0-7), these are equivalent. We verify this.
+# =============================================================================
+
+class InversionEqualsXOR(Test):
+    """
+    WHAT WE'RE CHECKING:
+    For all vertices v in {0..7}, is (7 - v) equal to (v XOR 7)?
+    
+    WHY THIS MATTERS:
+    The model uses both notations interchangeably. If they weren't equivalent,
+    different parts of the model would compute different "complements."
+    
+    MATHEMATICAL NOTE:
+    This equivalence holds for 3-bit numbers because 7 = 111 in binary,
+    and XOR with 111 flips all bits, which for 3-bit unsigned integers
+    equals subtraction from 7. This is NOT a general property of arithmetic.
+    """
+    name = "Inversion Equals XOR"
     question = (
-        "Does the combined dual Field Chamber have 2k=8 faces total, with each tetrahedron "
-        "contributing k=4 faces (1 TIME + 3 SPATIAL per tetrahedron)?"
+        "Is arithmetic inversion (7-v) equivalent to bitwise XOR (v^7) "
+        "for all 8 vertices? This validates the algebraic structure."
     )
-    reference_source = "Dual Field Chamber geometry"
+    reference = "Binary arithmetic for 3-bit integers"
     tolerance = 0.01
-    derivation = (
-        "PREMISE: The dual Field Chamber should have 2k faces from two tetrahedra. "
-        "STEP 1: Each tetrahedron has k=4 triangular faces (1 TIME + 3 SPATIAL). "
-        "STEP 2: Tet_A: 4 faces; Tet_B: 4 faces. "
-        "STEP 3: Total faces: 4 + 4 = 8. "
-        "STEP 4: Verify: 2k = 2×4 = 8. "
-        "OUTPUT: Total faces = 8, 2k = 8."
-    )
+    level = Level.STANDARD
     commentary = (
-        "The relationship 2k=8 faces corresponds to the dual tetrahedra each contributing k=4 faces "
-        "to the Field Chamber. This is consistent with identifying 2 TIME faces (1 per tetrahedron) and "
-        "6 SPATIAL faces (3 per tetrahedron) within the stellated octahedron structure, partitioned "
-        "across Tetrahedron A and Tetrahedron B."
+        "For 3-bit unsigned integers, XOR with 7 (111 binary) flips all bits. "
+        "Flipping all bits of v gives the ones-complement, which for 3-bit numbers "
+        "equals 7 - v. This equivalence is specific to 3-bit numbers."
     )
     
-    def model(self):
-        return {
-            "Total faces": FACES,
-            "2k": 2 * K,
-        }
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("CLAIM: For v in {0..7}, (7 - v) = (v XOR 7).")
+            .step("v=0: 7-0=7, 0 XOR 7 = 000 XOR 111 = 111 = 7. MATCH.")
+            .step("v=1: 7-1=6, 1 XOR 7 = 001 XOR 111 = 110 = 6. MATCH.")
+            .step("v=2: 7-2=5, 2 XOR 7 = 010 XOR 111 = 101 = 5. MATCH.")
+            .step("v=3: 7-3=4, 3 XOR 7 = 011 XOR 111 = 100 = 4. MATCH.")
+            .step("v=4: 7-4=3, 4 XOR 7 = 100 XOR 111 = 011 = 3. MATCH.")
+            .step("v=5: 7-5=2, 5 XOR 7 = 101 XOR 111 = 010 = 2. MATCH.")
+            .step("v=6: 7-6=1, 6 XOR 7 = 110 XOR 111 = 001 = 1. MATCH.")
+            .step("v=7: 7-7=0, 7 XOR 7 = 111 XOR 111 = 000 = 0. MATCH.")
+            .conclude("Vertices where (7-v) = (v XOR 7): 8 out of 8.")
+        )
     
-    def observations(self):
-        return {
-            "Total faces": 8,
-            "2k": 8,
-        }
-
-
-class EdgeCountConsistency(GFDTest):
-    """12 edges = 3k for the stellated octahedron."""
-    name = "Edge Count"
-    question = (
-        "Does the stellated octahedron have 3k=12 edges, representing the connectivity "
-        "pathways between Coupling Ports in the Field Chamber structure?"
-    )
-    reference_source = "Stellated octahedron geometry"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: The stellated octahedron edges should satisfy E = 3k. "
-        "STEP 1: Each tetrahedron has 6 edges (connecting all pairs of 4 vertices). "
-        "STEP 2: Total edges in the cube containing the stellated octahedron: 12. "
-        "STEP 3: These 12 edges connect the 8 vertices (Coupling Ports). "
-        "STEP 4: Verify: 3k = 3×4 = 12. "
-        "OUTPUT: Total edges = 12, 3k = 12."
-    )
-    commentary = (
-        "The 3k=12 edge relationship for the stellated octahedron is consistent with the standard "
-        "geometric properties of this form. These edges may correspond to the connectivity pathways "
-        "between Coupling Ports, with each vertex serving as a potential Port location within the Field Chamber."
-    )
-    
-    def model(self):
-        return {
-            "Total edges": EDGES,
-            "3k": 3 * K,
-        }
-    
-    def observations(self):
-        return {
-            "Total edges": 12,
-            "3k": 12,
-        }
-
-
-class InversionXORConsistency(GFDTest):
-    """Inversion = XOR with 7 (111 binary)."""
-    name = "Inversion = XOR"
-    question = (
-        "Is the arithmetic inversion operation (7-V) equivalent to the bitwise XOR operation "
-        "(V ⊕ 7) for all 8 vertices, confirming the algebraic structure of the vertex labeling?"
-    )
-    reference_source = "Binary arithmetic"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: Arithmetic inversion (7-V) should equal bitwise XOR (V⊕7) for all vertices. "
-        "STEP 1: Arithmetic inversion: inv(V) = 7 - V. "
-        "STEP 2: Bitwise XOR: V ⊕ 7 = V ⊕ 111₂ (flips all 3 bits). "
-        "STEP 3: Check equivalence for each vertex: "
-        "V=0: 7-0=7, 0⊕7=7; V=1: 7-1=6, 1⊕7=6; V=2: 7-2=5, 2⊕7=5; V=3: 7-3=4, 3⊕7=4; "
-        "V=4: 7-4=3, 4⊕7=3; V=5: 7-5=2, 5⊕7=2; V=6: 7-6=1, 6⊕7=1; V=7: 7-7=0, 7⊕7=0. "
-        "STEP 4: Count matches: 8/8 vertices satisfy (7-V) = (V⊕7). "
-        "OUTPUT: XOR equivalence count = 8."
-    )
-    commentary = (
-        "The equivalence between arithmetic inversion (7-v) and bitwise XOR confirms a mathematical "
-        "property of the vertex labeling within the Field Chamber. This self-consistency suggests the "
-        "binary representation has algebraic structure that may relate to Field Closure operations "
-        "centered on the Field Origin."
-    )
-    
-    def model(self):
+    def model(self) -> Model:
         match_count = sum(1 for v in range(8) if (7 - v) == (v ^ 7))
-        return {"XOR equivalence count": match_count}
+        return Model().add("Vertices with matching inversion methods", match_count)
     
-    def observations(self):
-        return {"XOR equivalence count": 8}
+    def observations(self) -> Observed:
+        return Observed().add("Vertices with matching inversion methods", 8)
+
+
+# =============================================================================
+# PHYSICS CONSTANTS SANITY CHECK
+# =============================================================================
+# This is NOT a GFD cross-check. It verifies that the physical constants
+# used in the model are consistent with known QED relationships.
+# =============================================================================
+
+class AlphaFromLengthScales(Test):
+    """
+    WHAT WE'RE CHECKING:
+    The fine structure constant alpha approximately equals r_e / lambda_bar_C,
+    where r_e is the classical electron radius and lambda_bar_C is the reduced
+    Compton wavelength. This is a known QED relationship.
+    
+    WHY THIS MATTERS:
+    The GFD model uses alpha, r_e, and lambda_C as parameters. If these
+    constants weren't mutually consistent (per QED), the model's calculations
+    involving these quantities would be internally inconsistent.
+    
+    HONESTY NOTE:
+    This is a sanity check on the physical constants, not a GFD derivation.
+    The model imports these values from CODATA; we verify they satisfy
+    the QED relationship alpha = r_e / lambda_bar_C.
+    """
+    name = "Alpha from Length Scales (QED Consistency)"
+    question = (
+        "Is alpha approximately equal to r_e / lambda_bar_C as required by QED? "
+        "This is a sanity check on the physical constants, not a GFD derivation."
+    )
+    reference = "Quantum Electrodynamics"
+    tolerance = 0.01
+    level = Level.STANDARD
+    commentary = (
+        "The fine structure constant relates the classical electron radius to the "
+        "reduced Compton wavelength: alpha = r_e / lambda_bar_C. We verify the CODATA "
+        "constants used in the model satisfy this relationship within 1%."
+    )
+    
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("QED RELATION: alpha = r_e / lambda_bar_C.")
+            .step("alpha = 1/137.036 = 7.297e-3 (fine structure constant).")
+            .step("r_e = 2.818e-15 m (classical electron radius).")
+            .step("lambda_C = 2.426e-12 m (Compton wavelength).")
+            .step("lambda_bar_C = lambda_C / (2*pi) = 3.862e-13 m (reduced).")
+            .step("Compute: r_e / lambda_bar_C = 2.818e-15 / 3.862e-13 = 7.297e-3.")
+            .step("Compare to alpha: 7.297e-3 vs 7.297e-3. MATCH.")
+            .conclude("alpha from CODATA vs alpha from r_e/lambda_bar_C.")
+        )
+    
+    def model(self) -> Model:
+        lambda_bar = LAMBDA_C / (2 * math.pi)
+        alpha_from_lengths = R_E / lambda_bar
+        return (
+            Model()
+            .add("alpha (CODATA)", ALPHA)
+            .add("r_e / lambda_bar_C", alpha_from_lengths)
+        )
+    
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("alpha (CODATA)", ALPHA)
+            .add("r_e / lambda_bar_C", ALPHA)  # Should match if constants are consistent
+        )
 
 
 # =============================================================================
@@ -477,35 +465,36 @@ class InversionXORConsistency(GFDTest):
 # =============================================================================
 
 ALL_TESTS = [
-    KConsistency,
-    VertexCountConsistency,
-    TetrahedraDisjoint,
-    TetrahedraExhaustive,
-    EulerFormulaTetrahedron,
-    SpeedOfLightConsistency,
-    AlphaRelation,
-    ComplementaryPairsConsistency,
-    ParityConsistency,
-    FaceCountConsistency,
-    EdgeCountConsistency,
-    InversionXORConsistency,
+    # Partition property (two tests that together prove the claim)
+    TetrahedraPartitionDisjoint,
+    TetrahedraPartitionExhaustive,
+    # Structural correspondences
+    ParityDeterminesTetrahedron,
+    ComplementaryPairsCrossTetrahedra,
+    # Topological and algebraic consistency
+    TetrahedronTopologyValid,
+    InversionEqualsXOR,
+    # Physics sanity check (not a GFD derivation)
+    AlphaFromLengthScales,
 ]
 
 
-def run_all_tests():
+def run_all() -> bool:
     """Run all cross-check tests."""
-    return run_test_group(
-        title="Cross-Module Consistency Checks",
+    return run_tests(
+        title="Structural Validations and Consistency Checks",
         summary=(
-            "These tests verify that fundamental constants (k=4, vertices=8, "
-            "faces=8, edges=12) and relationships (complementary pairs, parity, "
-            "inversion) maintain consistency across calculation modules. "
-            "Cross-checks ensure coherent assumptions throughout the validation suite."
+            "These tests verify the GFD model's geometric definitions are internally "
+            "consistent. We validate the partition property (TET_A and TET_B truly "
+            "partition the 8 vertices), the parity correspondence, complementary pair "
+            "structure, and topological validity. We also include a QED sanity check "
+            "on physical constants. These are structural validations, not cross-checks "
+            "of independent physical derivations."
         ),
         test_classes=ALL_TESTS
     )
 
 
 if __name__ == "__main__":
-    success = run_all_tests()
+    success = run_all()
     sys.exit(0 if success else 1)

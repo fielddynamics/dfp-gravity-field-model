@@ -1,442 +1,299 @@
 """
-Quantum Tunneling: Barrier Penetration Through Field Closure
+Quantum Tunneling: GFD Interpretation (Speculative)
+====================================================
 
-These tests examine quantum tunneling using the GFD framework. The model
-calculations are compared against established WKB approximation results and
-experimental data from STM, alpha decay, and Josephson junction measurements.
+HONEST ASSESSMENT:
+------------------
+GFD does NOT derive quantum tunneling from first principles.
+
+Quantum tunneling is well understood through standard quantum mechanics:
+the WKB approximation, Gamow theory, and related formalisms provide
+complete, experimentally verified descriptions.
+
+These tests explore whether GFD concepts (Field Closure, k=4, stellated
+octahedron geometry) might offer an alternative INTERPRETATION of tunneling.
+This is SPECULATIVE: no derivation shows that Field Closure produces the
+WKB exponential. The commentary below suggests possible connections, but
+these remain unproven hypotheses, not derived predictions.
+
+WHAT WE ACTUALLY DO HERE:
+-------------------------
+1. REFERENCE tests: Verify standard QM formulas work (sanity checks)
+2. EXPLORATORY tests: Propose speculative GFD interpretations
+
+Feynman's test: "Does GFD make a prediction about tunneling that differs
+from standard QM and can be tested?" Currently: NO.
+
+Until GFD can derive T = exp(-2*kappa*L) from Field Closure dynamics,
+these remain interpretive suggestions, not scientific predictions.
 """
 
 import sys
-import os
 import math
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
-
-from gfd_model_v2.base import GFDTest, run_test_group
+from gfd_model_v2.framework import *
 from gfd_model_v2.common import (
-    C, HBAR as H_BAR, H as H_PLANCK, E_CHARGE, M_E, M_P, R_E,
+    C, HBAR as H_BAR, E_CHARGE, M_E, M_P, R_E,
     EV, MEV_TO_JOULES,
 )
 
 # Derived constants
 CLOSURE_FREQUENCY = C / R_E
-EV_TO_JOULES = EV  # alias for backward compat
+EV_TO_JOULES = EV
 
 
 # =============================================================================
-# TEST CLASSES
+# REFERENCE TESTS: Standard QM (for framework validation)
 # =============================================================================
 
-class TunnelingFormula(GFDTest):
-    """Tunneling probability T ~ exp(-2*kappa*L)."""
-    name = "Basic Tunneling Formula"
+class WKBFormulaReference(Test):
+    """
+    Standard WKB tunneling formula.
+
+    This is NOT a GFD test. It verifies the framework can compute
+    standard quantum mechanics correctly.
+    """
+    name = "WKB Formula (Reference)"
+    level = Level.STANDARD
     question = (
-        "Does the WKB approximation for quantum tunneling, T ≈ exp(-2κL), yield valid "
-        "transmission probabilities, and how does the decay constant κ depend on the "
-        "energy deficit (V - E)?"
+        "Does the standard WKB approximation T = exp(-2*kappa*L) produce "
+        "valid tunneling probabilities for a rectangular barrier?"
     )
-    reference_source = "WKB approximation (established)"
+    reference = "WKB approximation (standard QM)"
     tolerance = 0.10
-    derivation = (
-        "PREMISE: The WKB tunneling probability T ≈ exp(-2κL) applies for rectangular barriers. "
-        "STEP 1: The decay constant is κ = √[2m(V-E)]/ℏ where V is barrier height, E is particle energy. "
-        "STEP 2: For V = 1.0 eV, E = 0.5 eV, m = m_e = 9.109×10⁻³¹ kg: "
-        "κ = √[2 × 9.109×10⁻³¹ × 0.5 × 1.602×10⁻¹⁹] / 1.055×10⁻³⁴ = 3.62×10⁹ m⁻¹. "
-        "STEP 3: For barrier width L = 1 nm: T = exp(-2 × 3.62×10⁹ × 10⁻⁹) = exp(-7.24). "
-        "STEP 4: T ≈ 7.2×10⁻⁴ (valid probability in range [0,1]). "
-        "OUTPUT: Decay constant (1/m) = 3.62×10⁹, Tunneling probability ≈ 7.2×10⁻⁴."
-    )
     commentary = (
-        "The exponential decay of probability amplitude with barrier width is consistent with "
-        "a Field Closure mechanism operating across the barrier region. Within the DFP framework, "
-        "each Field Closure cycle may correspond to a discrete sampling of the classically forbidden "
-        "region, with cumulative attenuation producing the characteristic WKB exponential."
+        "REFERENCE TEST: This computes standard quantum mechanics. "
+        "GFD does not derive this formula. The WKB approximation follows from "
+        "solving the Schrodinger equation in the classically forbidden region. "
+        "We include this test to verify our framework computes known physics correctly."
     )
-    
+
+    def derivation(self):
+        return (
+            Derivation()
+            .step("Standard QM: In classically forbidden region, wavefunction decays as psi ~ exp(-kappa*x)")
+            .step("Decay constant: kappa = sqrt[2m(V-E)] / hbar")
+            .step("Transmission probability: T = exp(-2*kappa*L) for rectangular barrier")
+            .equation("kappa = sqrt[2 * 9.109e-31 * 0.5 * 1.602e-19] / 1.055e-34 = 3.62e9 m^-1")
+            .step("For L = 1 nm: T = exp(-7.24) = 7.2e-4")
+            .conclude("This is standard QM, not a GFD derivation")
+        )
+
     def model(self):
         V = 1.0 * EV_TO_JOULES
         E = 0.5 * EV_TO_JOULES
         L = 1e-9
         kappa = math.sqrt(2 * M_E * (V - E)) / H_BAR
         T = math.exp(-2 * kappa * L)
-        return {
-            "Decay constant (1/m)": kappa,
-            "Tunneling probability": T,
-        }
-    
+        return (
+            Model()
+            .add("Decay constant (1/m)", kappa)
+            .add("Tunneling probability", T)
+        )
+
     def observations(self):
+        # Self-consistent: model matches standard QM
         V = 1.0 * EV_TO_JOULES
         E = 0.5 * EV_TO_JOULES
         L = 1e-9
         kappa = math.sqrt(2 * M_E * (V - E)) / H_BAR
         T = math.exp(-2 * kappa * L)
-        return {
-            "Decay constant (1/m)": kappa,
-            "Tunneling probability": T,
-        }
+        return (
+            Observed()
+            .add("Decay constant (1/m)", kappa)
+            .add("Tunneling probability", T)
+        )
 
 
-class ExponentialWidthDependence(GFDTest):
-    """Tunneling probability exponentially decreases with width."""
-    name = "Exponential Width Dependence"
+class STMSensitivityReference(Test):
+    """
+    STM distance sensitivity.
+
+    Standard physics: the exponential dependence on gap distance.
+    """
+    name = "STM Sensitivity (Reference)"
+    level = Level.STANDARD
     question = (
-        "Does the WKB tunneling probability scale exponentially with barrier width such that "
-        "doubling the width squares the probability, confirming multiplicative attenuation "
-        "through successive Field Closure cycles?"
+        "Does WKB theory correctly predict the ~10x current change per "
+        "Angstrom observed in scanning tunneling microscopy?"
     )
-    reference_source = "WKB theory"
-    tolerance = 0.10
-    derivation = (
-        "PREMISE: The WKB formula T(L) = exp(-2κL) should exhibit exponential scaling with width. "
-        "STEP 1: For width L: T(L) = exp(-2κL). "
-        "STEP 2: For width 2L: T(2L) = exp(-2κ·2L) = exp(-4κL). "
-        "STEP 3: Relationship: T(2L) = exp(-4κL) = [exp(-2κL)]² = T(L)². "
-        "STEP 4: Test ratio: T(2L)/T(L)² = exp(-4κL)/exp(-4κL) = 1. "
-        "OUTPUT: T(2L)/T(L)^2 = 1."
-    )
-    commentary = (
-        "The exponential scaling with barrier width suggests that barrier penetration involves "
-        "multiplicative probability accumulation. This is consistent with a Field Closure model "
-        "where each additional segment of barrier introduces an independent attenuation factor, "
-        "corresponding to passage through additional stellated octahedron configurations."
-    )
-    
-    def model(self):
-        V = 1.0 * EV_TO_JOULES
-        E = 0.5 * EV_TO_JOULES
-        kappa = math.sqrt(2 * M_E * (V - E)) / H_BAR
-        
-        L1 = 1e-9
-        L2 = 2e-9
-        T1 = math.exp(-2 * kappa * L1)
-        T2 = math.exp(-2 * kappa * L2)
-        ratio = T2 / (T1**2)  # Should be ~1 if T2 ~ T1^2
-        
-        return {"T(2L)/T(L)^2": ratio}
-    
-    def observations(self):
-        return {"T(2L)/T(L)^2": 1.0}  # Perfect exponential would give 1
-
-
-class STMSensitivity(GFDTest):
-    """STM shows ~10x current change per Angstrom."""
-    name = "STM Distance Sensitivity"
-    question = (
-        "In scanning tunneling microscopy, does the tunneling current exhibit approximately "
-        "10-fold sensitivity per Angstrom of tip-sample separation change, and what decay "
-        "constant produces this extreme distance dependence?"
-    )
-    reference_source = "STM physics (Nobel 1986)"
+    reference = "STM physics (Nobel 1986)"
     tolerance = 0.20
-    derivation = (
-        "PREMISE: STM current I ∝ exp(-2κd) should show ~10× sensitivity per Angstrom. "
-        "STEP 1: Typical work function φ ≈ 4.5 eV for metals. "
-        "STEP 2: Calculate κ: κ = √(2m_e·φ)/ℏ = √(2 × 9.109×10⁻³¹ × 4.5 × 1.602×10⁻¹⁹)/1.055×10⁻³⁴. "
-        "STEP 3: κ ≈ 1.09×10¹⁰ m⁻¹. "
-        "STEP 4: Current ratio for Δd = 1 Å = 10⁻¹⁰ m: I₁/I₂ = exp(2κΔd) = exp(2 × 1.09×10¹⁰ × 10⁻¹⁰). "
-        "STEP 5: I₁/I₂ = exp(2.18) ≈ 8.8. "
-        "OUTPUT: Current ratio per Angstrom ≈ 8.8 (approximately 10)."
-    )
     commentary = (
-        "The extreme sensitivity of STM tunneling current to tip-sample separation corresponds "
-        "to rapid changes in the effective number of Field Closure cycles spanning the gap. "
-        "The characteristic decay length may relate to the coupling efficiency at Coupling Ports "
-        "when the Field Chamber geometry is perturbed by the probe field."
+        "REFERENCE TEST: STM sensitivity is well explained by standard "
+        "WKB theory with typical metal work functions. This test validates "
+        "the framework against known experimental results. "
+        "GFD does not provide an alternative calculation."
     )
-    
+
+    def derivation(self):
+        return (
+            Derivation()
+            .step("Standard physics: I ~ exp(-2*kappa*d) where kappa = sqrt(2*m*phi)/hbar")
+            .step("Metal work function phi ~ 4.5 eV gives kappa ~ 1.09e10 m^-1")
+            .step("Current ratio for 1 Angstrom change: exp(2 * 1.09e10 * 1e-10) = 8.8")
+            .conclude("Standard QM predicts ~10x/Angstrom, matching STM observations")
+        )
+
     def model(self):
         work_function = 4.5 * EV_TO_JOULES
         kappa = math.sqrt(2 * M_E * work_function) / H_BAR
-        
         d1 = 1.0e-9
-        d2 = 1.1e-9  # 1 Angstrom more
+        d2 = 1.1e-9
         T1 = math.exp(-2 * kappa * d1)
         T2 = math.exp(-2 * kappa * d2)
         ratio = T1 / T2
-        
-        return {"Current ratio per Angstrom": ratio}
-    
+        return Model().add("Current ratio per Angstrom", ratio)
+
     def observations(self):
-        # Typical is ~10x per Angstrom
-        return {"Current ratio per Angstrom": 10.0}
+        return Observed().add("Current ratio per Angstrom", 10.0)
 
 
-class EnergyDependence(GFDTest):
-    """Tunneling probability increases as E approaches V."""
-    name = "Energy Dependence"
+# =============================================================================
+# EXPLORATORY: Speculative GFD Interpretations
+# =============================================================================
+
+class FieldClosureInterpretation(Test):
+    """
+    SPECULATIVE: Can Field Closure provide an interpretation of tunneling?
+
+    This is NOT a derivation. It asks whether the numbers are suggestive.
+    """
+    name = "Field Closure Interpretation (Speculative)"
+    level = Level.EXPLORATORY
     question = (
-        "Does the tunneling probability increase monotonically as the particle energy E "
-        "approaches the barrier height V, reflecting the decreasing decay constant κ as the "
-        "energy deficit (V-E) diminishes?"
+        "SPECULATIVE: If each Field Closure cycle provides an independent "
+        "attenuation factor, does the number of cycles during barrier "
+        "traversal suggest a mechanism for exponential decay?"
     )
-    reference_source = "Quantum mechanics (established)"
-    tolerance = 0.10
-    derivation = (
-        "PREMISE: The decay constant κ = √[2m(V-E)]/ℏ should decrease as E approaches V. "
-        "STEP 1: As E → V, the deficit (V-E) → 0, so κ → 0 and T increases. "
-        "STEP 2: Test case 1: V = 1.0 eV, E = 0.1 eV → (V-E) = 0.9 eV → large κ → small T. "
-        "STEP 3: Test case 2: V = 1.0 eV, E = 0.9 eV → (V-E) = 0.1 eV → small κ → large T. "
-        "STEP 4: Compare: T(E=0.9) >> T(E=0.1), confirming T increases as E → V. "
-        "OUTPUT: Increases = 1 (true)."
-    )
+    reference = None
     commentary = (
-        "As incident energy approaches the barrier height, the decay constant kappa diminishes, "
-        "corresponding to reduced attenuation per Field Closure cycle. This suggests that the "
-        "probability amplitude at each Coupling Port depends on the energy deficit relative to "
-        "the potential, consistent with classical-quantum transition behavior at barrier edges."
+        "EXPLORATORY SPECULATION: This test does NOT derive tunneling. "
+        "It merely calculates how many Field Closure cycles occur during "
+        "a tunneling interaction and asks whether this is suggestive. "
+        "The critical missing piece: we need to show WHY Field Closure "
+        "produces exponential attenuation with exactly kappa = sqrt(2m(V-E))/hbar. "
+        "Without that derivation, this remains numerology, not physics."
     )
-    
-    def model(self):
-        V = 1.0 * EV_TO_JOULES
-        L = 1e-9
-        
-        E1 = 0.1 * EV_TO_JOULES
-        E2 = 0.9 * EV_TO_JOULES
-        
-        kappa1 = math.sqrt(2 * M_E * (V - E1)) / H_BAR
-        kappa2 = math.sqrt(2 * M_E * (V - E2)) / H_BAR
-        
-        T1 = math.exp(-2 * kappa1 * L)
-        T2 = math.exp(-2 * kappa2 * L)
-        
-        return {"Increases": 1 if T2 > T1 else 0}
-    
-    def observations(self):
-        return {"Increases": 1}
 
+    def derivation(self):
+        return (
+            Derivation()
+            .step("SPECULATION: Assume Field Closure frequency f_c = c/r_e ~ 10^23 Hz")
+            .step("Characteristic barrier traversal velocity: v ~ sqrt(2E/m)")
+            .step("For E = 0.5 eV, m = m_e: v ~ 4.2e5 m/s")
+            .step("Time to cross 1 nm barrier: t ~ 2.4e-15 s")
+            .step("Number of closure cycles: N ~ t * f_c ~ 2.4e8")
+            .step("MISSING: Why does each cycle contribute exactly exp(-2*kappa*dx)?")
+            .conclude("Numbers exist but derivation is missing")
+        )
 
-class MassDependence(GFDTest):
-    """Heavier particles tunnel less efficiently."""
-    name = "Mass Dependence"
-    question = (
-        "Do heavier particles exhibit lower tunneling probabilities than lighter particles "
-        "through the same barrier, and how does the mass dependence κ ∝ √m affect the "
-        "relative transmission of electrons versus protons?"
-    )
-    reference_source = "Quantum mechanics (established)"
-    tolerance = 0.10
-    derivation = (
-        "PREMISE: The decay constant κ = √[2m(V-E)]/ℏ is proportional to √m. "
-        "STEP 1: Heavier particles have larger κ, hence stronger exponential suppression. "
-        "STEP 2: Mass ratio: m_p/m_e = 1.673×10⁻²⁷/9.109×10⁻³¹ ≈ 1836. "
-        "STEP 3: Decay constant ratio: κ_p/κ_e = √(m_p/m_e) = √1836 ≈ 43. "
-        "STEP 4: Tunneling ratio: T_e/T_p = exp(2(κ_p - κ_e)L) >> 1 for typical L. "
-        "OUTPUT: Electron > Proton = 1 (true)."
-    )
-    commentary = (
-        "The mass dependence of tunneling probability is consistent with the Field Closure "
-        "timescale relative to particle transit time through the barrier. Heavier particles "
-        "traverse more slowly, potentially experiencing more Field Closure cycles and thus "
-        "greater cumulative attenuation of probability amplitude."
-    )
-    
     def model(self):
-        V = 1.0 * EV_TO_JOULES
         E = 0.5 * EV_TO_JOULES
         L = 1e-9
-        
-        kappa_e = math.sqrt(2 * M_E * (V - E)) / H_BAR
-        kappa_p = math.sqrt(2 * M_P * (V - E)) / H_BAR
-        
-        T_electron = math.exp(-2 * kappa_e * L)
-        T_proton = math.exp(-2 * kappa_p * L)
-        
-        return {"Electron > Proton": 1 if T_electron > T_proton else 0}
-    
-    def observations(self):
-        return {"Electron > Proton": 1}
-
-
-class AlphaDecayBarrier(GFDTest):
-    """Alpha decay barrier exceeds alpha particle energy."""
-    name = "Alpha Decay Barrier"
-    question = (
-        "In alpha decay, does the Coulomb barrier at the nuclear surface substantially exceed "
-        "the alpha particle's kinetic energy, requiring quantum tunneling to escape, as "
-        "described by Gamow's theory?"
-    )
-    reference_source = "Gamow theory (1928)"
-    tolerance = 0.20
-    derivation = (
-        "PREMISE: In alpha decay, the Coulomb barrier should exceed the alpha particle energy. "
-        "STEP 1: Consider U-238 → Th-234 + α decay (Z_daughter = 90). "
-        "STEP 2: Nuclear radius: r_nuclear ≈ 1.2 × A^(1/3) fm ≈ 7.4 fm for A ≈ 234. "
-        "STEP 3: Coulomb barrier at r_nuclear: V = k_e × (2e)(Z_d × e)/r "
-        "= 8.99×10⁹ × 2 × 90 × (1.602×10⁻¹⁹)² / 7.4×10⁻¹⁵ J. "
-        "STEP 4: V ≈ 35 MeV (barrier height at nuclear surface). "
-        "STEP 5: Observed α energy: E_α ≈ 4.2 MeV. Since V >> E_α, tunneling is required. "
-        "OUTPUT: Tunneling required = 1 (true)."
-    )
-    commentary = (
-        "Alpha decay provides a natural test case for barrier penetration where the classical "
-        "Coulomb barrier substantially exceeds the alpha particle energy. The Gamow factor may "
-        "correspond to cumulative Field Closure attenuation through the barrier region, with the "
-        "nuclear surface defining a boundary condition at the Field Origin of the daughter nucleus."
-    )
-    
-    def model(self):
-        Z_daughter = 90  # Thorium
-        r_nuclear = 7.4e-15
-        k_coulomb = 8.99e9
-        
-        V_barrier = 2 * Z_daughter * E_CHARGE**2 * k_coulomb / r_nuclear
-        V_barrier_MeV = V_barrier / MEV_TO_JOULES
-        E_alpha_MeV = 4.2
-        
-        return {"Tunneling required": 1 if V_barrier_MeV > E_alpha_MeV else 0}
-    
-    def observations(self):
-        return {"Tunneling required": 1}
-
-
-class GravityFieldsAcrossBarrier(GFDTest):
-    """Even thin barriers contain many gravity fields."""
-    name = "Gravity Fields Across Barrier"
-    question = (
-        "How many gravity fields (of size r_e, the classical electron radius) span a typical "
-        "nanometer-scale tunneling barrier, and does this large count support treating "
-        "tunneling as traversal through many discrete Field Closure elements?"
-    )
-    reference_source = None
-    derivation = (
-        "PREMISE: Gravity field size is r_e = 2.818×10⁻¹⁵ m (classical electron radius). "
-        "STEP 1: Consider a typical tunneling barrier: L = 1 nm = 10⁻⁹ m. "
-        "STEP 2: Number of gravity fields: N = L/r_e = 10⁻⁹ / 2.818×10⁻¹⁵. "
-        "STEP 3: N ≈ 3.55×10⁵ gravity fields across a 1 nm barrier. "
-        "STEP 4: Even for a very thin barrier (0.1 nm), N ≈ 35,500 gravity fields. "
-        "OUTPUT: Gravity fields in 1 nm ≈ 3.55×10⁵."
-    )
-    commentary = (
-        "EXPLORATORY - requires further derivation. The large number of gravity fields spanning even "
-        "thin barriers suggests that tunneling is not a single-step process but involves traversal of "
-        "many discrete field elements. This is consistent with the WKB approximation treating the "
-        "barrier as a continuous medium, while the underlying Field Chamber structure provides the "
-        "discrete substrate."
-    )
-    
-    def model(self):
-        L = 1e-9  # 1 nm
-        gravity_fields = L / R_E
-        return {"Gravity fields in 1 nm": gravity_fields}
-
-
-class ClosureCyclesPerInteraction(GFDTest):
-    """Many closure cycles during tunneling interaction."""
-    name = "Closure Cycles"
-    question = (
-        "How many Field Closure cycles occur during a typical tunneling interaction time, "
-        "and does this large count support the statistical emergence of tunneling probability "
-        "from many discrete closure events?"
-    )
-    reference_source = None
-    derivation = (
-        "PREMISE: Many Field Closure cycles should occur during a tunneling interaction. "
-        "STEP 1: Estimate characteristic velocity in barrier: v_char = √(2E/m) for E = 0.5 eV. "
-        "STEP 2: v_char = √(2 × 0.5 × 1.602×10⁻¹⁹ / 9.109×10⁻³¹) ≈ 4.2×10⁵ m/s. "
-        "STEP 3: Interaction time for L = 1 nm: t = L/v_char = 10⁻⁹ / 4.2×10⁵ ≈ 2.4×10⁻¹⁵ s. "
-        "STEP 4: Field Closure frequency: f_closure ≈ 10²³ Hz. "
-        "STEP 5: Closure cycles during interaction: N = t × f_closure = 2.4×10⁻¹⁵ × 10²³ ≈ 2.4×10⁸. "
-        "OUTPUT: Interaction time (s) ≈ 2.4×10⁻¹⁵, Closure cycles ≈ 2.4×10⁸."
-    )
-    commentary = (
-        "EXPLORATORY - requires further derivation. The large number of Field Closure cycles occurring "
-        "during barrier traversal may indicate that tunneling probability emerges from statistical "
-        "accumulation across many closure events. Each cycle potentially represents an opportunity for "
-        "the stellated octahedron configuration to permit or attenuate probability amplitude transfer "
-        "through Coupling Ports."
-    )
-    
-    def model(self):
-        V = 1.0 * EV_TO_JOULES
-        E = 0.5 * EV_TO_JOULES
-        L = 1e-9
-        
         v_char = math.sqrt(2 * E / M_E)
         t_interaction = L / v_char
-        cycles = t_interaction * CLOSURE_FREQUENCY
-        
-        return {
-            "Interaction time (s)": t_interaction,
-            "Closure cycles": cycles,
-        }
+        closure_cycles = t_interaction * CLOSURE_FREQUENCY
+        return (
+            Model()
+            .add("Barrier traversal time (s)", t_interaction)
+            .add("Closure cycles during traversal", closure_cycles)
+        )
 
-
-class ResonantTunneling(GFDTest):
-    """Resonant tunneling shows frequency matching effects."""
-    name = "Resonant Tunneling"
-    question = (
-        "In resonant tunneling through double barriers, can transmission approach unity "
-        "(T → 1) despite substantial individual barrier attenuation, and what role does "
-        "frequency matching play in this constructive interference phenomenon?"
-    )
-    reference_source = "Resonant tunneling diodes"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: Double barrier structures can exhibit resonant tunneling at specific energies. "
-        "STEP 1: At resonance, the particle de Broglie wavelength fits an integer number of "
-        "half-wavelengths in the well between barriers. "
-        "STEP 2: Constructive interference allows T → 1 even when each barrier has T_single << 1. "
-        "STEP 3: The resonance condition: 2L_well = nλ/2 where n is an integer. "
-        "STEP 4: Resonant tunneling diodes exploit this for negative differential resistance. "
-        "OUTPUT: Resonance enables high T = 1, Frequency matching key = 1."
-    )
-    commentary = (
-        "Resonant tunneling, where transmission approaches unity despite substantial individual "
-        "barrier attenuation, suggests constructive interference of probability amplitudes. This "
-        "may correspond to frequency matching between incident particle de Broglie frequency and "
-        "the natural Field Closure frequency, enabling coherent amplitude transfer across barriers."
-    )
-    
-    def model(self):
-        # At resonance, T can approach 1 even with T_single << 1
-        return {
-            "Resonance enables high T": 1,
-            "Frequency matching key": 1,
-        }
-    
     def observations(self):
-        return {
-            "Resonance enables high T": 1,
-            "Frequency matching key": 1,
-        }
+        # No observations: this is exploratory
+        return None
 
 
-class JosephsonTunneling(GFDTest):
-    """Josephson tunneling: Cooper pairs tunnel coherently."""
-    name = "Josephson Tunneling"
+class GeometricScaleComparison(Test):
+    """
+    SPECULATIVE: How do GFD length scales compare to tunneling barriers?
+
+    This calculates ratios. It does NOT derive anything.
+    """
+    name = "Geometric Scale Comparison (Speculative)"
+    level = Level.EXPLORATORY
     question = (
-        "Does the Josephson effect demonstrate that Cooper pairs can tunnel coherently "
-        "through an insulating barrier, and does the AC Josephson relation f = 2eV/h "
-        "indicate direct coupling between voltage and Field Closure phase evolution?"
+        "SPECULATIVE: How many classical electron radii (r_e) fit in a "
+        "typical tunneling barrier? Is this number physically meaningful?"
     )
-    reference_source = "Josephson (Nobel 1973)"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: The Josephson effect involves Cooper pairs (2e charge) tunneling coherently. "
-        "STEP 1: DC Josephson effect: supercurrent flows with zero voltage drop. "
-        "STEP 2: AC Josephson effect: applying voltage V produces oscillating current at frequency f. "
-        "STEP 3: The AC Josephson relation: f = 2eV/h (exactly, used as a voltage standard). "
-        "STEP 4: The 2e factor corresponds to the paired electron transfer. "
-        "OUTPUT: Coherent pair tunneling = 1, AC frequency f = 2eV/h = 1."
-    )
+    reference = None
     commentary = (
-        "The Josephson effect demonstrates macroscopic quantum coherence through Cooper pair "
-        "tunneling, suggesting that Field Closure permits correlated two-particle transfer. "
-        "The AC Josephson frequency relation f = 2eV/h may indicate direct coupling between "
-        "applied voltage and the phase evolution at Coupling Ports spanning the junction."
+        "EXPLORATORY: This calculates L/r_e ~ 3.5e5 for a 1 nm barrier. "
+        "The number is large, but what does it mean? GFD would need to "
+        "show that tunneling involves traversal of discrete r_e units "
+        "with specific attenuation per unit. Currently this is just a ratio, "
+        "not a physical prediction."
     )
-    
+
+    def derivation(self):
+        return (
+            Derivation()
+            .step("GFD proposes r_e = 2.818e-15 m as a fundamental length scale")
+            .step("Typical tunneling barrier: L ~ 1 nm = 1e-9 m")
+            .step("Ratio: L / r_e = 1e-9 / 2.818e-15 = 3.55e5")
+            .step("Question: Does this ratio appear in any GFD formula?")
+            .conclude("Ratio calculated, physical meaning unknown")
+        )
+
     def model(self):
-        return {
-            "Coherent pair tunneling": 1,
-            "AC frequency f = 2eV/h": 1,
-        }
-    
+        L = 1e-9
+        ratio = L / R_E
+        return Model().add("Barrier width / r_e", ratio)
+
     def observations(self):
-        return {
-            "Coherent pair tunneling": 1,
-            "AC frequency f = 2eV/h": 1,
-        }
+        return None
+
+
+class DiscreteVsContinuousQuestion(Test):
+    """
+    THE KEY QUESTION: Can GFD make a testable prediction?
+
+    This articulates what would be needed for GFD to contribute to tunneling physics.
+    """
+    name = "The Missing Derivation (Critical Question)"
+    level = Level.EXPLORATORY
+    question = (
+        "What would GFD need to derive to make a genuine contribution "
+        "to tunneling physics? What testable prediction could distinguish "
+        "GFD from standard QM?"
+    )
+    reference = None
+    commentary = (
+        "THE HONEST QUESTION: Standard QM predicts T = exp(-2*kappa*L). "
+        "For GFD to contribute, it must either: "
+        "(1) Derive this formula from Field Closure dynamics, or "
+        "(2) Predict a correction term that differs from standard QM. "
+        "Option 1 would be elegant but adds nothing testable. "
+        "Option 2 would be scientifically valuable. "
+        "Currently GFD offers neither: it provides interpretive language "
+        "(Field Closure cycles, Coupling Ports) without derivation. "
+        "This test passes trivially because it makes no prediction."
+    )
+
+    def derivation(self):
+        return (
+            Derivation()
+            .step("Standard QM: T = exp(-2*kappa*L) with kappa = sqrt(2m(V-E))/hbar")
+            .step("GFD claim: Tunneling involves Field Closure cycles through barrier")
+            .step("MISSING DERIVATION: Show that discrete Field Closure produces T = exp(-2*kappa*L)")
+            .step("ALTERNATIVE: Predict a GFD correction to tunneling that can be tested")
+            .step("Until one of these exists, GFD makes no tunneling prediction")
+            .conclude("Status: Interpretation without derivation")
+        )
+
+    def model(self):
+        # This test articulates what's missing
+        # It "passes" because it makes no quantitative claim
+        return (
+            Model()
+            .add("Derivation exists", 0)  # Honest: no derivation
+            .add("Testable prediction exists", 0)  # Honest: no prediction
+        )
+
+    def observations(self):
+        # No observations to compare: this is a meta-question
+        return None
 
 
 # =============================================================================
@@ -444,33 +301,33 @@ class JosephsonTunneling(GFDTest):
 # =============================================================================
 
 ALL_TESTS = [
-    TunnelingFormula,
-    ExponentialWidthDependence,
-    STMSensitivity,
-    EnergyDependence,
-    MassDependence,
-    AlphaDecayBarrier,
-    GravityFieldsAcrossBarrier,
-    ClosureCyclesPerInteraction,
-    ResonantTunneling,
-    JosephsonTunneling,
+    # Reference tests: standard QM (framework validation)
+    WKBFormulaReference,
+    STMSensitivityReference,
+    # Exploratory: speculative GFD interpretations
+    FieldClosureInterpretation,
+    GeometricScaleComparison,
+    DiscreteVsContinuousQuestion,
 ]
 
 
-def run_all_tests():
+def run_all():
     """Run all quantum tunneling tests."""
-    return run_test_group(
-        title="Quantum Tunneling Examination",
+    return run_tests(
+        title="Quantum Tunneling: Honest Assessment",
         summary=(
-            "These tests examine established tunneling physics (WKB formula, "
-            "exponential width dependence, STM sensitivity) within the GFD framework. "
-            "Model calculations are compared against experimental results from "
-            "STM measurements, alpha decay, and Josephson junction experiments."
+            "IMPORTANT: GFD does NOT derive quantum tunneling. "
+            "The tests below include: (1) Reference tests verifying "
+            "standard QM formulas work, and (2) Exploratory tests "
+            "articulating speculative GFD interpretations. "
+            "Until GFD can derive T = exp(-2*kappa*L) from Field Closure "
+            "dynamics or predict a testable deviation from standard QM, "
+            "these remain interpretations, not scientific predictions."
         ),
         test_classes=ALL_TESTS
     )
 
 
 if __name__ == "__main__":
-    success = run_all_tests()
+    success = run_all()
     sys.exit(0 if success else 1)

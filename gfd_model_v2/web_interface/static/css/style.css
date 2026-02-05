@@ -109,17 +109,22 @@ body {
     padding: 8px 0;
 }
 
-.model-icon {
-    width: 24px;
-    height: 24px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 6px;
-}
-
 .model-name {
     font-size: 15px;
     font-weight: 600;
     color: var(--text-primary);
+}
+
+.research-badge {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--accent-green);
+    background: rgba(78, 201, 176, 0.15);
+    border: 1px solid var(--accent-green);
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .dropdown-arrow {
@@ -992,9 +997,45 @@ body {
     color: var(--text-primary);
 }
 
+.framework-test .test-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
 .framework-test .test-badges {
     display: flex;
     gap: 8px;
+}
+
+.copy-test-btn {
+    background: none;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-size: 14px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.copy-test-btn:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+    border-color: var(--accent-green);
+}
+
+.copy-test-btn.copied {
+    background: rgba(78, 201, 176, 0.15);
+    color: var(--accent-green);
+    border-color: var(--accent-green);
+}
+
+.copy-test-btn .copy-icon {
+    font-size: 12px;
 }
 
 /* Level Badges */

@@ -1,1 +1,2 @@
-# Stellar Mechanics tests - Gravity tile dynamics in stellar environments
+# Stellar Mechanics test module
+# Migrated from archived/stellar_mechanics to v2 framework

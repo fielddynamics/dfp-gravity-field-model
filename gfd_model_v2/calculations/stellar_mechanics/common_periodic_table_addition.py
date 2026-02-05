@@ -49,6 +49,7 @@ ELEMENTS_118 = [
     ("Cu", "Copper",       29,  63,  128, 1),
     ("Zn", "Zinc",         30,  64,  134, 2),
     ("Ga", "Gallium",      31,  69,  135, 3),
+    ("Ga", "Gallium",      31,  69,  135, 3),
     ("Ge", "Germanium",    32,  74,  122, 4),
     ("As", "Arsenic",      33,  75,  119, 5),
     ("Se", "Selenium",     34,  80,  120, 6),

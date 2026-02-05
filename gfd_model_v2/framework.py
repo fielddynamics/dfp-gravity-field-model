@@ -440,6 +440,7 @@ class TestResult:
     tables: List[Dict] = field(default_factory=list)
     metric_tolerances: Dict[str, float] = field(default_factory=dict)
     level: Level = Level.STANDARD
+    class_name: Optional[str] = None  # The Python class name for CLI runner
     
     # Computed fields
     passed: bool = field(init=False)
@@ -559,6 +560,7 @@ class Test(ABC):
             tables=tables,
             metric_tolerances=metric_tols,
             level=self.level,
+            class_name=self.__class__.__name__,
         )
 
 
@@ -735,6 +737,9 @@ class Renderer:
         title = f"  {result.name.upper()}  {badge}"
         print(title)
         print(_c(_Colors.DIM, "  " + "-" * 60))
+        # Print class name for CLI runner reference
+        if result.class_name:
+            print(_c(_Colors.DIM, f"  [class: {result.class_name}]"))
         print()
         
         print(f"  {result.question}")

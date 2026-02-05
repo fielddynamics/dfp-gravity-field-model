@@ -1,286 +1,278 @@
 """
-Reference Systems: Binary Classification Validation
+Binary Vertex Encoding: Coordinate Structure of the Dual Field Chamber
 
 This module validates the mathematical properties of the binary vertex encoding
-used in the dual Field Chamber. Tests verify complementary pair relationships,
-parity classification, and the isomorphism between vertex indices and 3-bit
-binary representations.
+in the dual Field Chamber. The key insight is simple: a cube has 8 vertices,
+and 8 = 2^3, so we can label each vertex with a 3-bit binary number.
+
+THE PHYSICAL CLAIM:
+The two tetrahedra (A and B) that form the stellated octahedron are distinguished
+by the parity of their vertex labels. Tet A contains vertices with an odd number
+of 1-bits, Tet B contains vertices with an even number of 1-bits. This is not
+mystical, it is just how the geometry works.
+
+WHY THIS MATTERS:
+This binary structure connects the Field Chamber geometry to information theory.
+Each vertex can be thought of as a state in a 3-bit register, and the two
+tetrahedra correspond to the two parity classes. This is the same structure
+used in error-correcting codes.
 """
 
-import sys
-import os
-
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-
-from base import GFDTest, run_test_group
+from gfd_model_v2.framework import *
 
 
 # =============================================================================
 # CONSTANTS
 # =============================================================================
 
-TET_A = {1, 2, 4, 7}  # Odd parity vertices
-TET_B = {0, 3, 5, 6}  # Even parity vertices
+# The two tetrahedra are distinguished by bit-count parity
+TET_A = {1, 2, 4, 7}  # Odd parity: 001, 010, 100, 111
+TET_B = {0, 3, 5, 6}  # Even parity: 000, 011, 101, 110
 
+# Complementary pairs are connected by body diagonals of the cube
 COMPLEMENTARY_PAIRS = [(0, 7), (1, 6), (2, 5), (3, 4)]
-
-# Binary vertex encodings (3-bit representation)
-BINARY_VERTICES = {
-    0: {'binary': '000'},
-    1: {'binary': '001'},
-    2: {'binary': '010'},
-    3: {'binary': '011'},
-    4: {'binary': '100'},
-    5: {'binary': '101'},
-    6: {'binary': '110'},
-    7: {'binary': '111'},
-}
-
-
-# =============================================================================
-# HELPER FUNCTIONS
-# =============================================================================
-
-def get_tetrahedron(v):
-    return 'A' if v in TET_A else 'B'
-
-def get_parity(v):
-    return bin(v).count('1') % 2
 
 
 # =============================================================================
 # TEST CLASSES
 # =============================================================================
 
-class EightBinaryVertices(GFDTest):
-    """8 binary encodings correspond to 8 vertices."""
+class BinaryVertexCount(Test):
+    """8 vertices = 2^3 binary encodings."""
     name = "Binary Vertex Count"
+    level = Level.STANDARD
     question = (
-        "Does the number of unique d-bit binary encodings (where d=k-1=3) equal the number of "
-        "Coupling Port vertices (2k=8) in the dual Field Chamber?"
+        "The cube has 8 vertices, and 8 = 2^3. Does each vertex correspond "
+        "to a unique 3-bit binary number from 000 to 111?"
     )
-    reference_source = "Binary counting (2^3 = 8)"
+    reference = "Basic combinatorics: 2^d states in d dimensions"
     tolerance = 0.01
-    derivation = (
-        "PREMISE: The Field Chamber exists in d=k-1=3 spatial dimensions, with 2k=8 vertices. "
-        "STEP 1: A d-bit binary number can encode 2^d distinct values. "
-        "STEP 2: With d=3 bits: 2^3 = 8 unique encodings (000 through 111). "
-        "STEP 3: The dual Field Chamber has 2k = 2×4 = 8 vertices. "
-        "OUTPUT: Binary vertex count = 8."
-    )
     commentary = (
-        "The correspondence between 8 vertices and 3-bit binary encodings reflects the 2^3 structure of the Field "
-        "Chamber coordinate system. This isomorphism suggests that the Coupling Port positions may be naturally "
-        "represented in a binary framework."
+        "This is straightforward counting. A cube vertex can be at +1 or -1 "
+        "along each of 3 axes, giving 2 x 2 x 2 = 8 possibilities. We encode "
+        "+1 as bit 1, and -1 as bit 0."
     )
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("A cube exists in d=3 dimensions.")
+            .step("Each coordinate can be +1 or -1 (2 choices per axis).")
+            .step("Total vertices = 2^d = 2^3 = 8.")
+            .step("These map to binary codes 000, 001, 010, ..., 111.")
+            .conclude("Binary vertex count = 8.")
+        )
     
     def model(self):
-        return {"Binary vertex count": len(BINARY_VERTICES)}
+        d = 3
+        vertex_count = 2 ** d
+        return Model().add("Binary vertex count", vertex_count)
     
     def observations(self):
-        return {"Binary vertex count": 8}
+        return Observed().add("Binary vertex count", 8)
 
 
-class BinaryEncodingIsomorphism(GFDTest):
-    """Vertex binary encoding covers all 3-bit values."""
-    name = "Binary Isomorphism"
-    question = (
-        "Is the mapping from vertex indices {0,1,2,3,4,5,6,7} to d=3-bit binary codes {000,...,111} "
-        "a complete isomorphism with no gaps or duplicates?"
-    )
-    reference_source = "Binary representation theorem"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: Each vertex index i ∈ {0,1,...,7} is assigned a binary code. "
-        "STEP 1: The standard encoding assigns vertex i the binary representation of i itself. "
-        "STEP 2: Enumerate: 0→000, 1→001, 2→010, 3→011, 4→100, 5→101, 6→110, 7→111. "
-        "STEP 3: This covers all 2^d = 8 possible d-bit codes exactly once. "
-        "OUTPUT: Binary sets match = 1."
-    )
-    commentary = (
-        "The complete coverage of 3-bit values (000-111) establishes a bijection between binary coordinates and "
-        "vertex positions. This correspondence is consistent with treating each spatial axis as a binary degree "
-        "of freedom."
-    )
-    
-    def model(self):
-        vertex_binaries = {t['binary'] for t in BINARY_VERTICES.values()}
-        expected_binaries = {format(v, '03b') for v in range(8)}
-        match = vertex_binaries == expected_binaries
-        return {"Binary sets match": 1 if match else 0}
-    
-    def observations(self):
-        return {"Binary sets match": 1}
-
-
-class ComplementaryPairsCorrespond(GFDTest):
-    """Complementary pairs follow XOR with 7 pattern."""
-    name = "Complementary Pairs"
-    question = (
-        "Do the k=4 complementary vertex pairs in the Field Chamber correspond to the binary complement "
-        "operation (XOR with 2^d - 1 = 7), which geometrically represents body diagonals of the containing cube?"
-    )
-    reference_source = "Binary complement structure"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: Two vertices are complementary if they lie on opposite corners of the cube (body diagonal). "
-        "STEP 1: The binary complement of code B is NOT(B) = (2^d - 1) XOR B = 7 XOR B. "
-        "STEP 2: Compute pairs: 0 XOR 7 = 7, 1 XOR 7 = 6, 2 XOR 7 = 5, 3 XOR 7 = 4. "
-        "STEP 3: This yields pairs: (0,7), (1,6), (2,5), (3,4). "
-        "STEP 4: Total pairs = 8/2 = k = 4, each connecting antipodal vertices. "
-        "OUTPUT: Pairs match = 1."
-    )
-    commentary = (
-        "The XOR-with-7 pattern for complementary pairs corresponds to the body diagonals of the containing cube. "
-        "This relationship suggests that complementary vertices occupy positions of maximum spatial separation "
-        "within the Field Chamber."
-    )
-    
-    def model(self):
-        # Complementary pairs have all bits inverted (XOR 7)
-        computed_pairs = [(i, 7-i) for i in range(4)]
-        our_pairs = set(tuple(sorted(p)) for p in COMPLEMENTARY_PAIRS)
-        computed_set = set(tuple(sorted(p)) for p in computed_pairs)
-        match = our_pairs == computed_set
-        return {"Pairs match": 1 if match else 0}
-    
-    def observations(self):
-        return {"Pairs match": 1}
-
-
-class ParityClassificationMatch(GFDTest):
-    """Bit-count parity matches tetrahedron assignment."""
+class ParityDeterminesTetrahedron(Test):
+    """Bit-count parity determines tetrahedron membership."""
     name = "Parity Classification"
+    level = Level.STANDARD
     question = (
-        "For all 2k=8 vertices, does the bit-count parity (number of 1s mod 2) of each binary code "
-        "correctly determine assignment to Tetrahedron A (odd parity) or Tetrahedron B (even parity)?"
+        "Does the parity of the bit count (number of 1s mod 2) correctly "
+        "classify vertices into Tetrahedron A (odd) and Tetrahedron B (even)?"
     )
-    reference_source = "Parity classification"
+    reference = "Parity check codes in information theory"
     tolerance = 0.01
-    derivation = (
-        "PREMISE: Tetrahedron A = {vertices with odd number of 1-bits}; Tetrahedron B = {even number}. "
-        "STEP 1: Count 1-bits for each vertex: 0(0), 1(1), 2(1), 3(2), 4(1), 5(2), 6(2), 7(3). "
-        "STEP 2: Odd parity vertices: {1, 2, 4, 7} → Tetrahedron A. "
-        "STEP 3: Even parity vertices: {0, 3, 5, 6} → Tetrahedron B. "
-        "STEP 4: Each tetrahedron has exactly k=4 vertices. "
-        "OUTPUT: Parity matches = 8."
-    )
     commentary = (
-        "The alignment between bit-count parity and tetrahedron assignment is consistent with the geometric "
-        "definition of Tetrahedron A and Tetrahedron B. This correspondence may indicate that the binary "
-        "coordinate system naturally encodes the dual structure."
+        "This is the key structural result. The two tetrahedra that interlock "
+        "to form the stellated octahedron are exactly the two parity classes "
+        "of the 3-bit binary encoding. No coincidence: alternate vertices of "
+        "a cube always form a tetrahedron."
     )
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("Count 1-bits for each vertex index:")
+            .step("  0 (000): 0 ones -> even -> Tet B")
+            .step("  1 (001): 1 one  -> odd  -> Tet A")
+            .step("  2 (010): 1 one  -> odd  -> Tet A")
+            .step("  3 (011): 2 ones -> even -> Tet B")
+            .step("  4 (100): 1 one  -> odd  -> Tet A")
+            .step("  5 (101): 2 ones -> even -> Tet B")
+            .step("  6 (110): 2 ones -> even -> Tet B")
+            .step("  7 (111): 3 ones -> odd  -> Tet A")
+            .conclude("Parity matches = 8 (all vertices correctly classified).")
+        )
     
     def model(self):
         matches = 0
         for v in range(8):
-            our_parity = 1 if get_tetrahedron(v) == 'A' else 0
-            bit_count = BINARY_VERTICES[v]['binary'].count('1')
-            binary_parity = bit_count % 2
-            if our_parity == binary_parity:
+            bit_parity = bin(v).count('1') % 2  # 1 = odd, 0 = even
+            expected_tet_a = (bit_parity == 1)
+            actual_tet_a = (v in TET_A)
+            if expected_tet_a == actual_tet_a:
                 matches += 1
-        return {"Parity matches": matches}
+        return Model().add("Parity matches", matches)
     
     def observations(self):
-        return {"Parity matches": 8}
+        return Observed().add("Parity matches", 8)
 
 
-class ApexCorrespondence(GFDTest):
-    """Pure forms (000, 111) correspond to apex vertices."""
-    name = "Apex Correspondence"
+class ComplementaryPairsXOR(Test):
+    """Complementary vertices differ by XOR with 7 (all bits flipped)."""
+    name = "Complementary Pairs XOR"
+    level = Level.STANDARD
     question = (
-        "Do the binary extrema—vertex 0 (code 000) and vertex 7 (code 111)—belong to opposite tetrahedra, "
-        "confirming that the 'pure states' of the binary encoding are assigned to complementary structures?"
+        "The 4 body diagonals of the cube connect complementary vertices. "
+        "Are these pairs exactly the vertices related by v XOR 7 (bit complement)?"
     )
-    reference_source = "Binary extrema"
+    reference = "Cube body diagonals pass through center"
     tolerance = 0.01
-    derivation = (
-        "PREMISE: Vertex 0 has code 000 (all zeros); Vertex 7 has code 111 (all ones). "
-        "STEP 1: Bit-count of 000 is 0 (even parity) → Vertex 0 ∈ Tetrahedron B. "
-        "STEP 2: Bit-count of 111 is 3 (odd parity) → Vertex 7 ∈ Tetrahedron A. "
-        "STEP 3: These vertices are complementary: 0 XOR 7 = 7 (full complement). "
-        "STEP 4: They occupy opposite corners of the cube (body diagonal). "
-        "OUTPUT: All apex correspondences correct = 1."
-    )
     commentary = (
-        "The correspondence of vertices 0 (000) and 7 (111) to opposite tetrahedra reflects their positions as "
-        "binary extrema. These vertices correspond to the pure-state endpoints of the 3-bit coordinate space."
+        "The XOR operation with 7 (binary 111) flips all bits. Geometrically, "
+        "this maps each vertex to the opposite corner of the cube. These "
+        "antipodal pairs form the body diagonals, and each pair contains "
+        "one vertex from Tet A and one from Tet B."
     )
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("Compute v XOR 7 for v = 0, 1, 2, 3:")
+            .step("  0 XOR 7 = 7  -> pair (0, 7)")
+            .step("  1 XOR 7 = 6  -> pair (1, 6)")
+            .step("  2 XOR 7 = 5  -> pair (2, 5)")
+            .step("  3 XOR 7 = 4  -> pair (3, 4)")
+            .step("These are exactly the 4 body diagonals of the cube.")
+            .conclude("All 4 complementary pairs follow XOR pattern.")
+        )
     
     def model(self):
-        v0_is_000 = BINARY_VERTICES[0]['binary'] == '000'
-        v7_is_111 = BINARY_VERTICES[7]['binary'] == '111'
-        v0_is_tet_b = 0 in TET_B
-        v7_is_tet_a = 7 in TET_A
-        all_correct = v0_is_000 and v7_is_111 and v0_is_tet_b and v7_is_tet_a
-        return {"All apex correspondences correct": 1 if all_correct else 0}
+        computed_pairs = [(i, i ^ 7) for i in range(4)]
+        our_pairs = set(tuple(sorted(p)) for p in COMPLEMENTARY_PAIRS)
+        computed_set = set(tuple(sorted(p)) for p in computed_pairs)
+        match = (our_pairs == computed_set)
+        return Model().add("Pairs match XOR pattern", 1 if match else 0)
     
     def observations(self):
-        return {"All apex correspondences correct": 1}
+        return Observed().add("Pairs match XOR pattern", 1)
 
 
-class ComplementaryPairXOR(GFDTest):
-    """The (3,4) pair demonstrates XOR complement relationship."""
-    name = "(3,4) Pair XOR"
-    question = (
-        "Does the complementary pair (3, 4) satisfy the defining XOR relationship: 3 XOR 4 = 2^d - 1 = 7, "
-        "confirming that their binary codes are bitwise complements?"
-    )
-    reference_source = "Binary arithmetic"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: Two vertices form a complementary pair if their XOR equals 2^d - 1 = 7. "
-        "STEP 1: Vertex 3 has binary code 011; Vertex 4 has binary code 100. "
-        "STEP 2: Compute XOR bit-by-bit: 0⊕1=1, 1⊕0=1, 1⊕0=1 → result = 111 = 7. "
-        "STEP 3: Verify: 3 + 4 = 7 (sum equals 2^d - 1, confirming complementarity). "
-        "OUTPUT: 3 XOR 4 = 7."
-    )
-    commentary = (
-        "The (3, 4) pair XOR yielding 7 demonstrates the full complement relationship between binary codes 011 "
-        "and 100. This arithmetic property is consistent with the spatial opposition of these vertices across "
-        "the Field Origin."
-    )
-    
-    def model(self):
-        xor_result = 3 ^ 4
-        return {"3 XOR 4": xor_result}
-    
-    def observations(self):
-        return {"3 XOR 4": 7}
-
-
-class AllPairsCrossTetrahedra(GFDTest):
-    """All complementary pairs cross tetrahedra boundaries."""
+class ComplementaryPairsCrossTetrahedra(Test):
+    """Each complementary pair has one vertex in Tet A, one in Tet B."""
     name = "Cross-Tetrahedra Pairs"
+    level = Level.STANDARD
     question = (
-        "For each of the k=4 complementary vertex pairs, does one member belong to Tetrahedron A and "
-        "the other to Tetrahedron B, confirming that body diagonals always connect the dual structures?"
+        "Since XOR with 7 flips all bits, it changes the parity. Does this "
+        "mean every complementary pair connects Tet A to Tet B?"
     )
-    reference_source = "Dual Field Chamber geometry"
+    reference = "Parity flip under bit complement"
     tolerance = 0.01
-    derivation = (
-        "PREMISE: Complementary pairs are: (0,7), (1,6), (2,5), (3,4). "
-        "STEP 1: The XOR operation flips all bits, which changes the parity of the bit-count. "
-        "STEP 2: If vertex v has even parity, then v XOR 7 has odd parity (and vice versa). "
-        "STEP 3: Therefore, complementary vertices always have opposite parities. "
-        "STEP 4: Since parity determines tetrahedron membership, each pair spans both tetrahedra. "
-        "OUTPUT: Pairs crossing tetrahedra = 4."
-    )
     commentary = (
-        "The universal crossing of complementary pairs between Tetrahedron A and Tetrahedron B reflects the "
-        "interlocking nature of the dual structure. This property is consistent with the definition of "
-        "complementary vertices as occupying opposite tetrahedra."
+        "Flipping all 3 bits changes the bit count by +/- 3, 1, or some odd "
+        "number. Since 3 is odd, the parity always flips. Therefore, if v is "
+        "in Tet A (odd parity), then v XOR 7 is in Tet B (even parity)."
     )
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("XOR with 7 flips all bits.")
+            .step("If v has k ones, then v XOR 7 has (3-k) ones.")
+            .step("k and (3-k) have opposite parity (one odd, one even).")
+            .step("Therefore complementary vertices are in opposite tetrahedra.")
+            .conclude("Pairs crossing tetrahedra = 4 (all of them).")
+        )
     
     def model(self):
         cross_count = 0
         for v1, v2 in COMPLEMENTARY_PAIRS:
-            if get_tetrahedron(v1) != get_tetrahedron(v2):
+            tet_v1 = 'A' if v1 in TET_A else 'B'
+            tet_v2 = 'A' if v2 in TET_A else 'B'
+            if tet_v1 != tet_v2:
                 cross_count += 1
-        return {"Pairs crossing tetrahedra": cross_count}
+        return Model().add("Pairs crossing tetrahedra", cross_count)
     
     def observations(self):
-        return {"Pairs crossing tetrahedra": 4}
+        return Observed().add("Pairs crossing tetrahedra", 4)
+
+
+class FourVerticesPerTetrahedron(Test):
+    """Each tetrahedron has exactly k=4 vertices."""
+    name = "Tetrahedron Vertex Count"
+    level = Level.STANDARD
+    question = (
+        "A regular tetrahedron has 4 vertices. Do both Tet A and Tet B "
+        "have exactly 4 vertices each?"
+    )
+    reference = "Tetrahedron definition"
+    tolerance = 0.01
+    commentary = (
+        "The 8 cube vertices split evenly into two tetrahedra of 4 vertices "
+        "each. This is because exactly half of all 3-bit numbers have odd "
+        "parity (four: 001, 010, 100, 111) and half have even parity."
+    )
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("Tet A = {1, 2, 4, 7} = vertices with odd bit parity.")
+            .step("Tet B = {0, 3, 5, 6} = vertices with even bit parity.")
+            .step("|Tet A| = 4, |Tet B| = 4.")
+            .step("Total: 4 + 4 = 8 = all cube vertices.")
+            .conclude("Tet A count = 4; Tet B count = 4.")
+        )
+    
+    def model(self):
+        return (
+            Model()
+            .add("Tet A count", len(TET_A))
+            .add("Tet B count", len(TET_B))
+        )
+    
+    def observations(self):
+        return (
+            Observed()
+            .add("Tet A count", 4)
+            .add("Tet B count", 4)
+        )
+
+
+class BinaryExtremaAreAntipodal(Test):
+    """Vertices 0 (000) and 7 (111) are antipodal and in opposite tetrahedra."""
+    name = "Binary Extrema"
+    level = Level.STANDARD
+    question = (
+        "The binary extrema 000 (all -1 coordinates) and 111 (all +1 coordinates) "
+        "form an antipodal pair. Are they in opposite tetrahedra?"
+    )
+    reference = "Cube geometry"
+    tolerance = 0.01
+    commentary = (
+        "Vertex 0 has 0 ones (even parity) so is in Tet B. Vertex 7 has 3 ones "
+        "(odd parity) so is in Tet A. These pure states occupy opposite corners "
+        "of the cube and belong to opposite tetrahedra."
+    )
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("Vertex 0 = binary 000, coordinates (-1, -1, -1).")
+            .step("Vertex 7 = binary 111, coordinates (+1, +1, +1).")
+            .step("0 has 0 ones (even) -> Tet B.")
+            .step("7 has 3 ones (odd) -> Tet A.")
+            .step("They form complementary pair (0, 7) across the body diagonal.")
+            .conclude("Extrema in opposite tetrahedra = 1 (true).")
+        )
+    
+    def model(self):
+        v0_in_tet_b = 0 in TET_B
+        v7_in_tet_a = 7 in TET_A
+        opposite = v0_in_tet_b and v7_in_tet_a
+        return Model().add("Extrema in opposite tetrahedra", 1 if opposite else 0)
+    
+    def observations(self):
+        return Observed().add("Extrema in opposite tetrahedra", 1)
 
 
 # =============================================================================
@@ -288,30 +280,31 @@ class AllPairsCrossTetrahedra(GFDTest):
 # =============================================================================
 
 ALL_TESTS = [
-    EightBinaryVertices,
-    BinaryEncodingIsomorphism,
-    ComplementaryPairsCorrespond,
-    ParityClassificationMatch,
-    ApexCorrespondence,
-    ComplementaryPairXOR,
-    AllPairsCrossTetrahedra,
+    BinaryVertexCount,
+    ParityDeterminesTetrahedron,
+    ComplementaryPairsXOR,
+    ComplementaryPairsCrossTetrahedra,
+    FourVerticesPerTetrahedron,
+    BinaryExtremaAreAntipodal,
 ]
 
 
-def run_all_tests():
-    """Run all binary classification tests."""
-    return run_test_group(
-        title="Binary Classification Validation",
+def run_all():
+    """Run all binary vertex encoding tests."""
+    return run_tests(
+        title="Binary Vertex Encoding: Coordinate Structure",
         summary=(
-            "These tests validate the mathematical properties of the binary vertex "
-            "encoding in the dual Field Chamber. The 3-bit binary representation "
-            "produces consistent complementary pairs, parity classification, and "
-            "tetrahedra assignment."
+            "These tests validate the binary encoding of cube vertices. The 8 "
+            "vertices map to 3-bit codes 000 through 111. The two tetrahedra "
+            "are exactly the two parity classes: Tet A has odd parity vertices, "
+            "Tet B has even parity. Complementary pairs (body diagonals) are "
+            "related by XOR with 7 and always cross between tetrahedra."
         ),
         test_classes=ALL_TESTS
     )
 
 
 if __name__ == "__main__":
-    success = run_all_tests()
+    import sys
+    success = run_all()
     sys.exit(0 if success else 1)

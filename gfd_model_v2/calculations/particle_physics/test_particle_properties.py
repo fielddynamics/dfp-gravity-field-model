@@ -1,845 +1,456 @@
 """
-Particle Physics: Fundamental Particle Properties
+Particle Physics: Geometric Correspondences
 
-These tests examine correspondences between the stellated octahedron geometry
-and fundamental particle properties from the Standard Model. The model's
-geometric parameters (k=4, d=3, 8 vertices, 8 faces) produce values that
-correspond numerically to established particle physics measurements.
+STATUS: NUMERICAL CORRESPONDENCES (not derivations)
 
-These correspondences are documented without claiming the geometry derives
-or explains the Standard Model. The reader should evaluate whether these
-numerical agreements indicate deeper structure or are coincidental.
+These tests document numerical correspondences between the stellated octahedron
+geometry and particle physics multiplicities. The geometric counts:
+
+    k = 4 (tetrahedral faces)
+    d = k - 1 = 3 (SPATIAL dimensions)
+    2k = 8 (vertices)
+    2 x TIME faces = 2 (spin states)
+    12 edges
+
+are compared to Standard Model particle counts.
+
+WHAT THESE TESTS DO AND DO NOT SHOW:
+
+DO SHOW:
+    - Geometric counts that happen to match particle physics numbers
+    - Structural features (dual tetrahedra) consistent with matter/antimatter
+
+DO NOT SHOW:
+    - Derivations of Standard Model physics from geometry
+    - Predictions that differ from the Standard Model
+    - Physical mechanisms linking geometry to particles
+
+REMOVED FROM PREVIOUS VERSION (numerology without derivation):
+    - 6*pi^5 for proton-electron ratio (no derivation)
+    - Binary decomposition of 137 (no physical meaning)
+    - 3/13 for weak mixing angle (numerical coincidence)
+    - pi/2 for Higgs/W ratio (numerical coincidence)
+    - 50-50 dark matter split (contradicts observation)
+    - Muon-electron ratio formulas (26% error)
 """
 
-import sys
-import os
 import math
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
+from gfd_model_v2.framework import *
+from gfd_model_v2.common import K_CLOSURE, ALPHA, ALPHA_INVERSE
 
-from gfd_model_v2.base import GFDTest, run_test_group
-from gfd_model_v2.common import (
-    K_CLOSURE, C, HBAR, ALPHA, ALPHA_INVERSE,
-)
 
-# Geometric counts from Field Chamber
-D = K_CLOSURE - 1                # Spatial dimensions (3)
+# =============================================================================
+# GEOMETRIC CONSTANTS
+# =============================================================================
+
+D = K_CLOSURE - 1                # d = 3 SPATIAL dimensions
 VERTICES = 2 * K_CLOSURE         # 8 vertices in stellated octahedron
 FACES = 2 * K_CLOSURE            # 8 faces (4 per tetrahedron)
 TIME_FACES = 2                   # One per tetrahedron
 SPATIAL_FACES = 6                # Three per tetrahedron
 EDGES = 12                       # Stellated octahedron edge count
 
-# Particle masses (MeV/c^2)
-M_ELECTRON = 0.511               # Electron mass
-M_MUON = 105.658                 # Muon mass
-M_TAU = 1776.86                  # Tau mass
-M_PROTON = 938.272               # Proton mass
-M_NEUTRON = 939.565              # Neutron mass
-M_PION_CHARGED = 139.570         # Charged pion mass
-M_PION_NEUTRAL = 134.977         # Neutral pion mass
-M_W = 80379                      # W boson mass
-M_Z = 91188                      # Z boson mass
-M_HIGGS = 125250                 # Higgs boson mass
+# Port Ratio
+PORT_RATIO = 1 / D               # 1/3 charge quantum
 
-# Coupling constants
-ALPHA_S = 0.118                  # Strong coupling at Z mass
-SIN2_THETA_W = 0.23122           # Weak mixing angle
-
-# Magnetic moments (in units of Bohr magneton for electron)
-G_ELECTRON = 2.00231930436256    # Electron g-factor
-G_MUON = 2.0023318418            # Muon g-factor
+# Particle masses for reference
+M_ELECTRON = 0.511               # MeV/c^2
 
 
 # =============================================================================
-# TEST CLASSES
+# TESTS: VERTEX AND FACE CORRESPONDENCES
 # =============================================================================
 
-class GluonCount(GFDTest):
+class GluonVertexCorrespondence(Test):
     """
-    QCD has 8 gluons (SU(3) generators: 3^2 - 1 = 8). The stellated octahedron
-    has 8 vertices (2k = 8). This numerical correspondence is noted.
+    QCD has 8 gluons (SU(3) generators: 3^2 - 1 = 8).
+    The stellated octahedron has 8 vertices (2k = 8).
+    
+    Both formulas use d = 3:
+        - Gluons: d^2 - 1 = 8
+        - Vertices: 2k = 2(d+1) = 8
+    
+    This is a numerical correspondence, not a derivation.
     """
-    name = "Gluon Count Correspondence"
-    question = "How many gluons exist in quantum chromodynamics, and does this match the vertex count of the stellated octahedron Field Chamber?"
-    reference_source = "QCD (8 gluons from SU(3))"
+    name = "Gluon Count = Vertex Count"
+    question = "Do the stellated octahedron vertices correspond numerically to the QCD gluon count?"
+    reference = "QCD: 8 gluons from SU(3)"
+    level = Level.STANDARD
     tolerance = 0.01
-    derivation = (
-        "PREMISE: From Field Closure, d = k - 1 = 3 and the Field Chamber has 2k = 8 vertices. "
-        "STEP 1: SU(3) generators count: d² - 1 = 3² - 1 = 9 - 1 = 8 gluons. "
-        "STEP 2: Field Chamber vertex count: 2k = 2 × 4 = 8 vertices. "
-        "STEP 3: Compare: both formulas yield 8, establishing gluon-vertex correspondence. "
-        "OUTPUT: SU(3) generators (d²-1) = 8, Field Chamber vertices (2k) = 8."
-    )
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("PREMISE: From Field Closure, d = k - 1 = 3; vertices = 2k = 8.")
+            .step("STEP 1: SU(3) gluon count: d^2 - 1 = 3^2 - 1 = 8.")
+            .step("STEP 2: Field Chamber vertex count: 2k = 2 x 4 = 8.")
+            .step("STEP 3: Both equal 8. Correspondence is numerical; no mechanism proposed.")
+            .conclude("OUTPUT: Gluons = 8, Vertices = 8 (numerical match).")
+        )
+    
     commentary = (
-        "The 8 gluons of QCD correspond numerically to the 2k=8 vertices of the stellated "
-        "octahedron. Both arise from similar algebraic structures: SU(3) has 3^2-1=8 generators, "
-        "while the Field Chamber has 2k=8 vertex positions. This correspondence may "
-        "indicate a connection between color charge and spatial position in the geometry."
+        "The 8 gluons of QCD and 8 vertices of the stellated octahedron both arise from "
+        "d = 3: gluons from SU(3) structure (d^2-1), vertices from 2k = 2(d+1). "
+        "Whether this indicates a connection between color charge and vertex position "
+        "or is coincidental remains an open question."
     )
     
     def model(self):
-        gluon_formula = D * D - 1  # SU(3): 3^2 - 1 = 8
-        vertex_count = 2 * K_CLOSURE
-        return {
-            "SU(3) generators (d^2-1)": gluon_formula,
-            "Field Chamber vertices (2k)": vertex_count,
-        }
+        gluon_formula = D * D - 1  # 8
+        vertex_count = 2 * K_CLOSURE  # 8
+        return (
+            Model()
+            .add("SU(3) gluon count", gluon_formula)
+            .add("Stellated octahedron vertices", vertex_count)
+        )
     
     def observations(self):
-        return {
-            "SU(3) generators (d^2-1)": 8,
-            "Field Chamber vertices (2k)": 8,
-        }
+        return (
+            Observed()
+            .add("SU(3) gluon count", 8)
+            .add("Stellated octahedron vertices", 8)
+        )
 
 
-class WZMassRatio(GFDTest):
+class GaugeBosonEdgeCorrespondence(Test):
     """
-    The W/Z mass ratio is related to the weak mixing angle.
-    M_W/M_Z = cos(theta_W) ~ 0.88.
-    """
-    name = "W/Z Mass Ratio"
-    question = "What is the mass ratio between W and Z bosons, and how does this relate to the weak mixing angle in electroweak theory?"
-    reference_source = "Electroweak theory (M_W/M_Z = cos theta_W)"
-    tolerance = 0.02
-    derivation = (
-        "PREMISE: Electroweak theory predicts M_W / M_Z = cos(theta_W). "
-        "STEP 1: Calculate mass ratio from measured masses: M_W / M_Z. "
-        "STEP 2: Calculate cos(theta_W) from sin²(theta_W): cos(theta_W) = sqrt(1 - sin²). "
-        "STEP 3: Compare ratio to cos(theta_W) to verify electroweak prediction. "
-        "OUTPUT: M_W/M_Z ratio = 0.8815, cos(theta_W) = 0.8768."
-    )
-    commentary = (
-        "The W/Z mass ratio of approximately 0.88 reflects electroweak symmetry breaking. "
-        "In the Field Chamber framework, this ratio may correspond to the projection of "
-        "SPATIAL face interactions onto the TIME face axis, though the precise geometric "
-        "interpretation of weak boson masses requires further development."
-    )
+    The Standard Model has 12 gauge bosons: 8 gluons + W+ + W- + Z + photon.
+    The stellated octahedron has 12 edges.
     
-    def model(self):
-        ratio = M_W / M_Z
-        cos_theta = math.sqrt(1 - SIN2_THETA_W)
-        return {
-            "M_W/M_Z ratio": ratio,
-            "cos(theta_W)": cos_theta,
-        }
-    
-    def observations(self):
-        return {
-            "M_W/M_Z ratio": 0.8815,
-            "cos(theta_W)": 0.8768,
-        }
-
-
-class ElectronCharge(GFDTest):
+    This is a numerical correspondence, not a derivation.
     """
-    The electron has charge -1, corresponding to complete SPATIAL face activation
-    (3 corners x 1/3 charge quantum = 1 unit charge).
-    """
-    name = "Electron Unit Charge"
-    question = "How does the electron's unit charge arise from Coupling Port vertex activation, and why is it exactly -1?"
-    reference_source = "Electron charge = -1e"
+    name = "12 Gauge Bosons = 12 Edges"
+    question = "Do the stellated octahedron edges correspond numerically to the Standard Model gauge boson count?"
+    reference = "Standard Model: 8 gluons + 3 weak bosons + 1 photon = 12"
+    level = Level.STANDARD
     tolerance = 0.01
-    derivation = (
-        "PREMISE: From Field Closure, d = k - 1 = 3 vertices per Coupling Port face. "
-        "STEP 1: Charge quantum per vertex = 1/d = 1/3. "
-        "STEP 2: Complete face activation = d vertices × (1/d) charge each = 3 × (1/3) = 1. "
-        "STEP 3: Electron on Tetrahedron B gives negative sign: total charge = -1. "
-        "OUTPUT: Corners per face = 3, Charge per corner = 0.333, Total charge = 1.0."
-    )
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("PREMISE: Stellated octahedron has 12 edges connecting its 8 vertices.")
+            .step("STEP 1: Gluons = d^2 - 1 = 8 (SU(3) generators).")
+            .step("STEP 2: Weak bosons = 3 (W+, W-, Z) + photon = 1. Total = 8 + 3 + 1 = 12.")
+            .step("STEP 3: Field Chamber edges = 12. Numerical correspondence noted.")
+            .conclude("OUTPUT: Gauge bosons = 12, Edges = 12 (numerical match).")
+        )
+    
     commentary = (
-        "The electron's unit charge corresponds to complete activation of all three Coupling "
-        "Port vertices on a SPATIAL face, each contributing q=1/d=1/3 to the total. This "
-        "suggests that leptons, unlike quarks, represent fully activated face configurations "
-        "in the stellated octahedron geometry."
-    )
-    
-    def model(self):
-        corners = D  # 3 corners per face
-        charge_quantum = 1 / D  # 1/3
-        total_charge = corners * charge_quantum
-        return {
-            "Corners per face": corners,
-            "Charge per corner": charge_quantum,
-            "Total charge": total_charge,
-        }
-    
-    def observations(self):
-        return {
-            "Corners per face": 3,
-            "Charge per corner": 0.333,
-            "Total charge": 1.0,
-        }
-
-
-class MuonElectronRatio(GFDTest):
-    """
-    The muon-electron mass ratio is approximately 207. This is close to
-    certain geometric expressions involving alpha and k.
-    """
-    name = "Muon-Electron Mass Ratio"
-    question = "What is the mass ratio between the muon and electron, and can geometric factors approximate this value?"
-    reference_source = "m_mu/m_e = 206.768"
-    tolerance = 0.05
-    derivation = (
-        "PREMISE: Lepton mass ratios may involve geometric and electromagnetic factors. "
-        "STEP 1: Calculate measured ratio: m_mu / m_e from particle masses. "
-        "STEP 2: Geometric estimate: d × π² × (1/α)^(1/3) where d = 3. "
-        "STEP 3: Compare: geometric estimate differs by ~26%, indicating additional physics. "
-        "OUTPUT: m_mu/m_e measured = 206.768, Geometric estimate = 152.4."
-    )
-    commentary = (
-        "The muon-electron mass ratio of approximately 207 is close to 3*pi^2*(1/alpha)^(1/3), "
-        "though not exact. The factor of 3 suggests SPATIAL face involvement, while the pi^2 "
-        "term may relate to Field Closure cycles. The discrepancy indicates additional physics "
-        "beyond simple geometric counting."
-    )
-    
-    def model(self):
-        ratio = M_MUON / M_ELECTRON
-        # Geometric estimate: involves alpha and dimensions
-        geometric_est = D * math.pi**2 * (ALPHA_INVERSE)**(1/3)
-        return {
-            "m_mu/m_e measured": ratio,
-            "Geometric estimate": geometric_est,
-        }
-    
-    def observations(self):
-        return {
-            "m_mu/m_e measured": 206.768,
-            "Geometric estimate": 152.4,  # Approximate, not exact match
-        }
-
-
-class FineStructureFromGeometry(GFDTest):
-    """
-    The fine structure constant alpha ~ 1/137 may relate to Field Chamber cycles.
-    137 = 128 + 8 + 1 = 2^7 + 2^3 + 2^0, involving powers of 2.
-    """
-    name = "Fine Structure Constant"
-    question = "Can the inverse fine structure constant 1/alpha be approximated by binary decomposition related to Field Chamber geometry?"
-    reference_source = "1/alpha = 137.036"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: The fine structure constant may encode Field Chamber geometry in binary form. "
-        "STEP 1: Binary decomposition of 137: 137 = 2⁷ + 2³ + 2⁰ = 128 + 8 + 1. "
-        "STEP 2: Identify GFD components: 2³ = 8 = 2k (vertices), 2⁷ = 16 × 8 (cycles). "
-        "STEP 3: Compare: 137 vs 137.036, difference only 0.026%. "
-        "OUTPUT: 1/alpha measured = 137.036, Binary approximation = 137."
-    )
-    commentary = (
-        "The value 137 decomposes as 128+8+1 = 2^7+2^3+2^0, involving the seventh, third, and "
-        "zeroth powers of 2. The factor 2^3=8 corresponds to Field Chamber vertices, while "
-        "2^7=128 may represent 16 complete orbits (16x8=128). This binary decomposition "
-        "suggests information-theoretic structure in electromagnetic coupling."
-    )
-    
-    def model(self):
-        alpha_inv = 1 / ALPHA
-        binary_approx = 2**7 + 2**3 + 2**0  # 128 + 8 + 1 = 137
-        return {
-            "1/alpha measured": alpha_inv,
-            "Binary approximation": binary_approx,
-        }
-    
-    def observations(self):
-        return {
-            "1/alpha measured": 137.036,
-            "Binary approximation": 137,
-        }
-
-
-class WeakMixingAngle(GFDTest):
-    """
-    The weak mixing angle sin^2(theta_W) ~ 0.231. This is close to 3/13.
-    """
-    name = "Weak Mixing Angle"
-    question = "Can the weak mixing angle sin^2(theta_W) be expressed as a ratio of Field Closure parameters?"
-    reference_source = "sin^2(theta_W) = 0.23122"
-    tolerance = 0.02
-    derivation = (
-        "PREMISE: From Field Closure, d = k - 1 = 3 and k = 4. "
-        "STEP 1: Construct geometric ratio: d / (d² + k) = 3 / (9 + 4) = 3/13. "
-        "STEP 2: Calculate: 3/13 = 0.2308. "
-        "STEP 3: Compare to measured sin²(theta_W): difference = 0.2%. "
-        "OUTPUT: sin²(theta_W) measured = 0.23122, d/(d²+k) = 3/13 = 0.2308."
-    )
-    commentary = (
-        "The weak mixing angle sin^2(theta_W) ~ 0.231 is numerically close to 3/13 and "
-        "also to d/(d^2+k) = 3/13. The appearance of d=3 SPATIAL dimensions and the "
-        "combination d^2+k=13 suggests this fundamental electroweak parameter may encode "
-        "information about Field Chamber geometry."
-    )
-    
-    def model(self):
-        geometric_ratio = D / (D**2 + K_CLOSURE)  # 3/13
-        return {
-            "sin^2(theta_W) measured": SIN2_THETA_W,
-            "d/(d^2+k) = 3/13": geometric_ratio,
-        }
-    
-    def observations(self):
-        return {
-            "sin^2(theta_W) measured": 0.23122,
-            "d/(d^2+k) = 3/13": 0.2308,
-        }
-
-
-class MatterAntimatterSymmetry(GFDTest):
-    """
-    The dual tetrahedra (A and B) provide natural matter-antimatter conjugation.
-    Each particle state in Tet A has a conjugate in Tet B.
-    """
-    name = "Matter-Antimatter Duality"
-    question = "Does the dual tetrahedron structure of the Field Chamber provide a natural geometric basis for particle-antiparticle conjugation?"
-    reference_source = "CPT theorem (particle-antiparticle symmetry)"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: The Field Chamber consists of Tetrahedron A and Tetrahedron B interpenetrating. "
-        "STEP 1: Tetrahedron A has k = 4 vertices (labeled 0-3). "
-        "STEP 2: Tetrahedron B has k = 4 vertices (labeled 4-7), each complementing Tet A vertices. "
-        "STEP 3: Vertex pairs sum to 7: (0,7), (1,6), (2,5), (3,4) → k = 4 conjugate pairs. "
-        "OUTPUT: Tet A vertices = 4, Tet B vertices = 4, Complementary pairs = 4."
-    )
-    commentary = (
-        "The stellated octahedron's dual structure, with Tetrahedron A and Tetrahedron B "
-        "interpenetrating, provides a natural geometric basis for particle-antiparticle "
-        "conjugation. Each vertex in Tet A has a complementary vertex in Tet B (sum to 7), "
-        "consistent with CPT symmetry requirements."
-    )
-    
-    def model(self):
-        tet_a_vertices = K_CLOSURE  # 4 vertices
-        tet_b_vertices = K_CLOSURE  # 4 vertices
-        complementary_pairs = K_CLOSURE  # 4 pairs
-        return {
-            "Tet A vertices": tet_a_vertices,
-            "Tet B vertices": tet_b_vertices,
-            "Complementary pairs": complementary_pairs,
-        }
-    
-    def observations(self):
-        return {
-            "Tet A vertices": 4,
-            "Tet B vertices": 4,
-            "Complementary pairs": 4,
-        }
-
-
-class PhotonMassless(GFDTest):
-    """
-    The photon is massless. In the geometric framework, this may correspond
-    to pure Field Chamber oscillation without net vertex activation.
-    """
-    name = "Photon Masslessness"
-    question = "Why is the photon massless, and how might balanced Tetrahedron A and B oscillations produce zero rest mass?"
-    reference_source = "Photon mass = 0"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: In the Field Chamber model, mass arises from net vertex activation imbalance. "
-        "STEP 1: Photon has balanced activations: Tet A = 1, Tet B = 1 (normalized). "
-        "STEP 2: Net activation = Tet_A - Tet_B = 1 - 1 = 0. "
-        "STEP 3: Zero net activation corresponds to zero rest mass. "
-        "OUTPUT: Tet A activation = 1, Tet B activation = 1, Net activation (mass) = 0."
-    )
-    commentary = (
-        "The photon's zero mass may correspond to perfectly balanced oscillations between "
-        "Tetrahedron A and Tetrahedron B, with no net vertex activation. This suggests that "
-        "electromagnetic radiation represents Field Chamber dynamics without rest mass "
-        "accumulation at the Field Origin."
-    )
-    
-    def model(self):
-        tet_a_activation = 1  # Normalized
-        tet_b_activation = 1  # Normalized  
-        net_activation = tet_a_activation - tet_b_activation
-        return {
-            "Tet A activation": tet_a_activation,
-            "Tet B activation": tet_b_activation,
-            "Net activation (mass)": net_activation,
-        }
-    
-    def observations(self):
-        return {
-            "Tet A activation": 1,
-            "Tet B activation": 1,
-            "Net activation (mass)": 0,
-        }
-
-
-class GravitonSpin(GFDTest):
-    """
-    The hypothetical graviton has spin-2. This may correspond to
-    two complete tetrahedra contributing (2 x spin-1/2 per TIME face).
-    """
-    name = "Graviton Spin Prediction"
-    question = "What spin value is predicted for the graviton, and how does this relate to the dual TIME face structure of the Field Chamber?"
-    reference_source = "Theoretical graviton spin = 2"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: The Field Chamber has 2 TIME faces, one per tetrahedron. "
-        "STEP 1: Each TIME face can carry spin-1 character. "
-        "STEP 2: Coherent activation of both TIME faces: spin = 2 × 1 = 2. "
-        "STEP 3: Graviton spin-2 matches dual TIME face coherence requirement. "
-        "OUTPUT: TIME faces = 2, Contribution per face = 1, Predicted graviton spin = 2."
-    )
-    commentary = (
-        "The predicted graviton spin of 2 corresponds to both TIME faces of the stellated "
-        "octahedron contributing coherently. If electron spin-1/2 arises from one TIME face "
-        "configuration, graviton spin-2 may arise from complete dual-tetrahedron activation "
-        "(2 tetrahedra x 2 spin states / 2 = 2)."
-    )
-    
-    def model(self):
-        time_faces = TIME_FACES  # 2
-        spin_per_face = 1  # Each TIME face carries spin-1 character
-        graviton_spin = time_faces * spin_per_face
-        return {
-            "TIME faces": time_faces,
-            "Contribution per face": spin_per_face,
-            "Predicted graviton spin": graviton_spin,
-        }
-    
-    def observations(self):
-        return {
-            "TIME faces": 2,
-            "Contribution per face": 1,
-            "Predicted graviton spin": 2,
-        }
-
-
-class StrongCouplingScale(GFDTest):
-    """
-    The strong coupling alpha_s ~ 0.118 at the Z mass scale.
-    This is approximately 1/8.5 ~ 1/(2k+0.5).
-    """
-    name = "Strong Coupling Correspondence"
-    question = "Can the strong coupling constant alpha_s be approximated by a ratio involving the Field Chamber vertex count?"
-    reference_source = "alpha_s(M_Z) = 0.118"
-    tolerance = 0.10
-    derivation = (
-        "NUMERICAL CORRESPONDENCE - NOT DERIVED. "
-        "PREMISE: This is an empirical observation, not a geometric derivation. "
-        "STEP 1: Empirical formula: 1/(2k + 0.5) = 1/(8 + 0.5) = 1/8.5 = 0.1176. "
-        "STEP 2: Compare to measured alpha_s at M_Z scale. "
-        "STEP 3: Difference < 0.5%, a numerical correspondence only. "
-        "OUTPUT: alpha_s measured = 0.118, 1/(2k+0.5) = 0.1176."
-    )
-    commentary = (
-        "NUMERICAL CORRESPONDENCE - The 0.5 adjustment is empirical. "
-        "The strong coupling alpha_s ~ 0.118 ~ 1/8.5 is numerically close to 1/(2k+0.5) where k=4. "
-        "However, the +0.5 adjustment has no known geometric origin and is purely empirical. "
-        "This correspondence is documented without claiming derivation from Field Chamber geometry. "
-        "The running of alpha_s with energy scale is governed by QCD, not geometric considerations."
-    )
-    
-    def model(self):
-        geometric_est = 1 / (2 * K_CLOSURE + 0.5)  # 1/8.5
-        return {
-            "alpha_s measured": ALPHA_S,
-            "1/(2k+0.5)": geometric_est,
-        }
-    
-    def observations(self):
-        return {
-            "alpha_s measured": 0.118,
-            "1/(2k+0.5)": 0.1176,
-        }
-
-
-class LeptonUniversality(GFDTest):
-    """
-    Lepton universality: e, mu, tau have identical gauge couplings.
-    All three generations access the same SPATIAL face structure.
-    """
-    name = "Lepton Universality"
-    question = "Why do electron, muon, and tau have identical gauge couplings despite different masses, and how does SPATIAL face structure explain this?"
-    reference_source = "Lepton universality (verified to <1%)"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: From Field Closure, d = k - 1 = 3 SPATIAL faces per tetrahedron. "
-        "STEP 1: There are d = 3 lepton generations: electron, muon, tau. "
-        "STEP 2: Each generation accesses one SPATIAL face: faces/generation = 3/3 = 1. "
-        "STEP 3: Equivalent SPATIAL face access implies identical gauge couplings. "
-        "OUTPUT: SPATIAL faces per tetrahedron = 3, Lepton generations = 3, Faces per generation = 1."
-    )
-    commentary = (
-        "Lepton universality, the equality of gauge couplings for e, mu, tau, corresponds "
-        "to all three generations accessing the same SPATIAL face structure of the Field "
-        "Chamber. The d=3 SPATIAL faces provide identical interaction vertices regardless "
-        "of which generation occupies them, explaining coupling equality."
-    )
-    
-    def model(self):
-        spatial_faces_per_tet = D  # 3 SPATIAL faces
-        generations = D  # 3 lepton generations
-        faces_per_generation = spatial_faces_per_tet / generations
-        return {
-            "SPATIAL faces per tetrahedron": spatial_faces_per_tet,
-            "Lepton generations": generations,
-            "Faces available per generation": faces_per_generation,
-        }
-    
-    def observations(self):
-        return {
-            "SPATIAL faces per tetrahedron": 3,
-            "Lepton generations": 3,
-            "Faces available per generation": 1,
-        }
-
-
-class PionMass(GFDTest):
-    """
-    The pion mass (~140 MeV) is the lightest meson.
-    m_pi/m_e ~ 273 ~ 2/alpha = 2 x 137.
-    """
-    name = "Pion Mass Correspondence"
-    question = "What is the ratio of pion mass to electron mass, and does this correspond to twice the inverse fine structure constant?"
-    reference_source = "m_pi/m_e ~ 273"
-    tolerance = 0.05
-    derivation = (
-        "PREMISE: The pion spans both tetrahedra as a quark-antiquark pair. "
-        "STEP 1: Calculate measured ratio: m_pi / m_e from particle masses. "
-        "STEP 2: Geometric prediction: 2/α = 2 × 137.036 = 274.07 (factor 2 for dual structure). "
-        "STEP 3: Compare: measured 273.1 vs predicted 274.07, difference = 0.35%. "
-        "OUTPUT: m_pi/m_e measured = 273.1, 2/alpha = 274.07."
-    )
-    commentary = (
-        "The pion-electron mass ratio of approximately 273 is close to 2/alpha ~ 274. "
-        "The factor of 2 may correspond to the dual tetrahedron structure, suggesting "
-        "that the pion as the lightest meson represents a minimal quark-antiquark "
-        "configuration spanning both Tetrahedron A and Tetrahedron B."
-    )
-    
-    def model(self):
-        ratio_measured = M_PION_CHARGED / M_ELECTRON
-        geometric_est = 2 * ALPHA_INVERSE
-        return {
-            "m_pi/m_e measured": ratio_measured,
-            "2/alpha": geometric_est,
-        }
-    
-    def observations(self):
-        return {
-            "m_pi/m_e measured": 273.1,
-            "2/alpha": 274.07,
-        }
-
-
-class ProtonElectronRatio(GFDTest):
-    """
-    The proton-electron mass ratio is approximately 1836.
-    This is close to 6*pi^5 ~ 1836.
-    """
-    name = "Proton-Electron Mass Ratio"
-    question = "What is the proton-electron mass ratio, and can it be expressed using SPATIAL face count and powers of pi?"
-    reference_source = "m_p/m_e = 1836.15"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: SPATIAL faces = 6 (3 per tetrahedron × 2 tetrahedra) from Field Chamber. "
-        "STEP 1: Calculate measured ratio: m_p / m_e from particle masses. "
-        "STEP 2: Geometric formula: 6 × π⁵ = 6 × 306.02 = 1836.12. "
-        "STEP 3: Compare: measured 1836.15 vs formula 1836.12, difference = 0.002%. "
-        "OUTPUT: m_p/m_e measured = 1836.15, 6×π⁵ = 1836.12."
-    )
-    commentary = (
-        "The proton-electron mass ratio of 1836 is remarkably close to 6*pi^5 ~ 1836.1. "
-        "The factor of 6 corresponds to the SPATIAL faces of the stellated octahedron, "
-        "while pi^5 may represent five complete Field Closure cycles. This suggests the "
-        "proton's mass encodes geometric and transcendental structure."
-    )
-    
-    def model(self):
-        ratio_measured = M_PROTON / M_ELECTRON
-        geometric_est = SPATIAL_FACES * math.pi**5  # 6*pi^5
-        return {
-            "m_p/m_e measured": ratio_measured,
-            "6*pi^5": geometric_est,
-        }
-    
-    def observations(self):
-        return {
-            "m_p/m_e measured": 1836.15,
-            "6*pi^5": 1836.12,
-        }
-
-
-class NeutronProtonDiff(GFDTest):
-    """
-    The neutron-proton mass difference is ~1.29 MeV, about 2.5 m_e.
-    This small difference reflects quark mass differences.
-    """
-    name = "Neutron-Proton Mass Difference"
-    question = "What is the mass difference between neutron and proton, and how does this compare to the electron mass?"
-    reference_source = "m_n - m_p = 1.293 MeV"
-    tolerance = 0.05
-    derivation = (
-        "PREMISE: Neutron-proton mass difference reflects quark mass difference (m_d > m_u). "
-        "STEP 1: Calculate mass difference: delta_m = m_n - m_p. "
-        "STEP 2: Express in electron mass units: delta_m / m_e. "
-        "STEP 3: Result ~2.5 m_e allows beta decay but permits bound neutrons in nuclei. "
-        "OUTPUT: m_n - m_p = 1.293 MeV, Ratio to m_e = 2.53."
-    )
-    commentary = (
-        "The neutron-proton mass difference of 1.29 MeV ~ 2.5 m_e reflects the down-up "
-        "quark mass difference within the Field Chamber framework. This small value "
-        "ensures neutron instability while allowing bound neutrons in nuclei, a balance "
-        "critical for element formation."
-    )
-    
-    def model(self):
-        diff = M_NEUTRON - M_PROTON
-        ratio_to_electron = diff / M_ELECTRON
-        return {
-            "m_n - m_p (MeV)": diff,
-            "Ratio to m_e": ratio_to_electron,
-        }
-    
-    def observations(self):
-        return {
-            "m_n - m_p (MeV)": 1.293,
-            "Ratio to m_e": 2.53,
-        }
-
-
-class ElectronGFactor(GFDTest):
-    """
-    The electron g-factor g_e ~ 2.002319 deviates from 2 by alpha/2pi + O(alpha^2).
-    This anomalous magnetic moment reflects QED corrections.
-    """
-    name = "Electron g-Factor"
-    question = "How does the electron's g-factor deviate from the Dirac value of 2, and does the leading correction follow from alpha/2pi?"
-    reference_source = "g_e = 2.00231930436256"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: The Dirac equation predicts g = 2; deviations arise from QED corrections. "
-        "STEP 1: Anomalous moment: (g - 2)/2 = (g_e - 2)/2 from measured g_e. "
-        "STEP 2: QED leading-order: α/(2π) = (1/137.036)/(2×π) = 0.001161409. "
-        "STEP 3: Compare measured to QED prediction for validation. "
-        "OUTPUT: (g-2)/2 measured = 0.001159652, alpha/2pi = 0.001161409."
-    )
-    commentary = (
-        "The electron's anomalous magnetic moment (g-2)/2 ~ alpha/2pi reflects QED radiative "
-        "corrections. In the Field Chamber framework, this corresponds to the probability "
-        "of virtual photon emission during a Field Closure cycle, with alpha representing the "
-        "electromagnetic coupling at each Coupling Port vertex."
-    )
-    
-    def model(self):
-        g_minus_2_over_2 = (G_ELECTRON - 2) / 2
-        alpha_over_2pi = ALPHA / (2 * math.pi)
-        return {
-            "(g-2)/2 measured": g_minus_2_over_2,
-            "alpha/2pi": alpha_over_2pi,
-        }
-    
-    def observations(self):
-        return {
-            "(g-2)/2 measured": 0.001159652,
-            "alpha/2pi": 0.001161409,
-        }
-
-
-class MuonGMinus2(GFDTest):
-    """
-    The muon g-2 anomaly shows a small discrepancy between theory and experiment.
-    This may indicate physics beyond the Standard Model.
-    """
-    name = "Muon g-2 Status"
-    question = "How does the muon's anomalous magnetic moment compare to the electron's, and what does the ratio reveal?"
-    reference_source = "Muon g-2 experiment (Fermilab)"
-    tolerance = 0.10
-    derivation = (
-        "PREMISE: Muon g-2 anomaly may reveal physics beyond QED due to larger mass sensitivity. "
-        "STEP 1: Calculate muon anomaly: (g_mu - 2)/2 from measured g_mu. "
-        "STEP 2: Calculate electron anomaly: (g_e - 2)/2 from measured g_e. "
-        "STEP 3: Compare ratio: muon/electron anomaly to assess mass-dependent contributions. "
-        "OUTPUT: Muon (g-2)/2 = 0.00116592, Electron (g-2)/2 = 0.00115965, Ratio = 1.0054."
-    )
-    commentary = (
-        "The persistent muon g-2 anomaly, showing approximately 2.5 sigma tension between "
-        "Standard Model prediction and measurement, may indicate additional contributions "
-        "from Field Chamber dynamics not captured in current calculations. The heavier "
-        "muon's larger Compton wavelength samples different Field Closure scales than the electron."
-    )
-    
-    def model(self):
-        muon_g_minus_2 = (G_MUON - 2) / 2
-        electron_g_minus_2 = (G_ELECTRON - 2) / 2
-        ratio = muon_g_minus_2 / electron_g_minus_2
-        return {
-            "Muon (g-2)/2": muon_g_minus_2,
-            "Electron (g-2)/2": electron_g_minus_2,
-            "Ratio": ratio,
-        }
-    
-    def observations(self):
-        return {
-            "Muon (g-2)/2": 0.00116592,
-            "Electron (g-2)/2": 0.00115965,
-            "Ratio": 1.0054,
-        }
-
-
-class GenerationMassHierarchy(GFDTest):
-    """
-    The three lepton generations show large mass hierarchy:
-    m_tau/m_mu ~ 17, m_mu/m_e ~ 207.
-    """
-    name = "Generation Mass Hierarchy"
-    question = "What are the mass ratios between successive lepton generations, and what pattern do they exhibit?"
-    reference_source = "Lepton masses (PDG)"
-    tolerance = 0.05
-    derivation = (
-        "PREMISE: Each lepton generation may represent a Field Closure nesting level. "
-        "STEP 1: Calculate first ratio: m_mu / m_e from measured masses. "
-        "STEP 2: Calculate second ratio: m_tau / m_mu from measured masses. "
-        "STEP 3: Total ratio m_tau / m_e spans the full hierarchy. "
-        "OUTPUT: m_mu/m_e = 206.768, m_tau/m_mu = 16.817, m_tau/m_e = 3477.2."
-    )
-    commentary = (
-        "The lepton mass hierarchy shows ratios of approximately 207 and 17 between "
-        "successive generations. These values may relate to successive Field Closure "
-        "nesting levels, with each generation representing a more compact configuration "
-        "within the stellated octahedron geometry."
-    )
-    
-    def model(self):
-        ratio_mu_e = M_MUON / M_ELECTRON
-        ratio_tau_mu = M_TAU / M_MUON
-        ratio_tau_e = M_TAU / M_ELECTRON
-        return {
-            "m_mu/m_e": ratio_mu_e,
-            "m_tau/m_mu": ratio_tau_mu,
-            "m_tau/m_e": ratio_tau_e,
-        }
-    
-    def observations(self):
-        return {
-            "m_mu/m_e": 206.768,
-            "m_tau/m_mu": 16.817,
-            "m_tau/m_e": 3477.2,
-        }
-
-
-class HiggsMassScale(GFDTest):
-    """
-    The Higgs mass (~125 GeV) sets the electroweak symmetry breaking scale.
-    m_H/m_W ~ 1.56 ~ pi/2.
-    """
-    name = "Higgs Mass Scale"
-    question = "What is the ratio of Higgs boson mass to W boson mass, and does this correspond to pi/2?"
-    reference_source = "m_H = 125.25 GeV"
-    tolerance = 0.05
-    derivation = (
-        "PREMISE: The Higgs mass scale may relate to half a Field Closure cycle (π/2). "
-        "STEP 1: Calculate mass ratio: m_H / m_W from measured masses. "
-        "STEP 2: Compare to geometric value: π/2 = 1.571. "
-        "STEP 3: Difference: (1.571 - 1.558) / 1.571 = 0.83%, close agreement. "
-        "OUTPUT: m_H/m_W = 1.558, pi/2 = 1.571."
-    )
-    commentary = (
-        "The Higgs-to-W mass ratio of approximately 1.56 is close to pi/2 ~ 1.57. "
-        "This suggests the electroweak symmetry breaking scale may be related to "
-        "half a Field Closure cycle, with the Higgs field representing the transition "
-        "between symmetric and broken phases of the Field Chamber configuration."
-    )
-    
-    def model(self):
-        ratio = M_HIGGS / M_W
-        pi_over_2 = math.pi / 2
-        return {
-            "m_H/m_W": ratio,
-            "pi/2": pi_over_2,
-        }
-    
-    def observations(self):
-        return {
-            "m_H/m_W": 1.558,
-            "pi/2": 1.571,
-        }
-
-
-class TwelveEdges(GFDTest):
-    """
-    The stellated octahedron has 12 edges. This equals the number of
-    gauge bosons in the Standard Model (8 gluons + W+ + W- + Z + gamma = 12).
-    """
-    name = "Twelve Edges / Twelve Bosons"
-    question = "How many edges does the stellated octahedron have, and does this match the total count of Standard Model gauge bosons?"
-    reference_source = "Standard Model gauge bosons"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: The stellated octahedron Field Chamber has 12 edges connecting 8 vertices. "
-        "STEP 1: Gluons = d² - 1 = 3² - 1 = 8 (SU(3) generators). "
-        "STEP 2: Weak bosons = d = 3 (W+, W-, Z), Photon = 1. "
-        "STEP 3: Total gauge bosons = 8 + 3 + 1 = 12 = Field Chamber edges. "
-        "OUTPUT: Field Chamber edges = 12, Gauge bosons = 12."
-    )
-    commentary = (
-        "The stellated octahedron's 12 edges correspond numerically to the 12 gauge bosons "
-        "of the Standard Model (8 gluons + W+ + W- + Z + gamma). This suggests that force "
-        "carrier particles may be geometrically associated with edge connections between "
-        "Coupling Port vertices in the Field Chamber structure."
+        "The 12 edges of the stellated octahedron match the 12 gauge bosons of the "
+        "Standard Model. Force carriers might geometrically correspond to edge connections "
+        "between vertices. This is speculative; no physical mechanism is proposed."
     )
     
     def model(self):
         gluons = D * D - 1  # 8
-        weak_bosons = D  # W+, W-, Z
-        photon = 1
-        total_bosons = gluons + weak_bosons + photon
-        return {
-            "Field Chamber edges": EDGES,
-            "Gauge bosons": total_bosons,
-        }
+        weak_plus_photon = 4  # W+, W-, Z, gamma
+        total_bosons = gluons + weak_plus_photon
+        return (
+            Model()
+            .add("Field Chamber edges", EDGES)
+            .add("Gauge bosons", total_bosons)
+        )
     
     def observations(self):
-        return {
-            "Field Chamber edges": 12,
-            "Gauge bosons": 12,
-        }
+        return (
+            Observed()
+            .add("Field Chamber edges", 12)
+            .add("Gauge bosons", 12)
+        )
 
 
-class DarkMatterHint(GFDTest):
+class ElectronChargeFromPortRatio(Test):
     """
-    The visible matter (baryonic) is only ~5% of the universe.
-    The dual tetrahedron has equal visible (Tet A) and hidden (Tet B) sectors.
+    The electron charge is exactly 1 in natural units.
+    In GFD, this corresponds to complete activation of a triangular face:
+        3 vertices x (1/3 charge per vertex) = 1
+    
+    This is CONSISTENCY with the Port Ratio, not a derivation.
     """
-    name = "Dark Sector Correspondence"
-    question = "Does the dual tetrahedron structure suggest a natural partition between visible and hidden matter sectors?"
-    reference_source = "Cosmological observations (Planck)"
-    tolerance = 0.20
-    derivation = (
-        "PREMISE: The Field Chamber has Tetrahedron A and Tetrahedron B in equal proportion. "
-        "STEP 1: Visible fraction = Tet_A / (Tet_A + Tet_B) = 0.5 (geometric symmetry). "
-        "STEP 2: Hidden fraction = Tet_B / (Tet_A + Tet_B) = 0.5 (geometric symmetry). "
-        "STEP 3: Hidden/visible ratio = 0.5 / 0.5 = 1.0 (equal sectors geometrically). "
-        "OUTPUT: Visible (Tet A) fraction = 0.5, Hidden (Tet B) fraction = 0.5, Hidden/Visible ratio = 1.0."
-    )
+    name = "Electron Charge = Complete Face"
+    question = "Is the unit electron charge consistent with complete triangular face activation?"
+    reference = "Electron charge = -1e (magnitude 1)"
+    level = Level.STANDARD
+    tolerance = 0.01
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("PREMISE: Port Ratio = 1/d = 1/3 (charge quantum per vertex).")
+            .step("STEP 1: Triangular Coupling Port face has d = 3 vertices.")
+            .step("STEP 2: Complete activation: 3 vertices x (1/3) = 1.")
+            .step("STEP 3: Electron charge magnitude = 1, consistent with complete face.")
+            .conclude("OUTPUT: Vertices = 3, Charge/vertex = 1/3, Total = 1.")
+        )
+    
     commentary = (
-        "The stellated octahedron's dual structure, with Tetrahedron A and Tetrahedron B "
-        "contributing equally, suggests a natural 50-50 split between visible and hidden "
-        "sectors. While observed dark-to-baryonic ratios are approximately 5:1, the "
-        "geometric framework provides a structural basis for hidden sector physics."
+        "The electron's unit charge is consistent with activating all 3 vertices of a "
+        "triangular Coupling Port face, each contributing q = 1/3. This suggests "
+        "leptons represent complete face configurations while quarks represent partial. "
+        "The sign (negative for electron) corresponds to Tetrahedron B association."
     )
     
     def model(self):
-        tet_a_fraction = 0.5  # Visible sector
-        tet_b_fraction = 0.5  # Hidden sector
-        ratio_hidden_to_visible = tet_b_fraction / tet_a_fraction
-        return {
-            "Visible (Tet A) fraction": tet_a_fraction,
-            "Hidden (Tet B) fraction": tet_b_fraction,
-            "Hidden/Visible ratio": ratio_hidden_to_visible,
-        }
+        corners = D  # 3
+        charge_per_corner = PORT_RATIO  # 1/3
+        total_charge = corners * charge_per_corner
+        return (
+            Model()
+            .add("Vertices per face", corners)
+            .add("Charge per vertex", charge_per_corner)
+            .add("Total charge", total_charge)
+        )
     
     def observations(self):
-        # Cosmological: ~5% baryonic, ~27% dark matter
-        return {
-            "Visible (Tet A) fraction": 0.5,
-            "Hidden (Tet B) fraction": 0.5,
-            "Hidden/Visible ratio": 1.0,
-        }
+        return (
+            Observed()
+            .add("Vertices per face", 3)
+            .add("Charge per vertex", 0.333)
+            .add("Total charge", 1.0)
+        )
+
+
+# =============================================================================
+# TESTS: DUAL TETRAHEDRA STRUCTURE
+# =============================================================================
+
+class MatterAntimatterDuality(Test):
+    """
+    The stellated octahedron consists of two interpenetrating tetrahedra.
+    This dual structure provides a natural geometric basis for 
+    particle-antiparticle pairing.
+    
+    This is a STRUCTURAL correspondence, not a derivation of CPT.
+    """
+    name = "Dual Tetrahedra = Matter/Antimatter"
+    question = "Does the dual tetrahedron structure provide a geometric basis for particle-antiparticle symmetry?"
+    reference = "CPT theorem requires particle-antiparticle pairs"
+    level = Level.STANDARD
+    tolerance = 0.01
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("PREMISE: Field Chamber = Tetrahedron A + Tetrahedron B, interpenetrating.")
+            .step("STEP 1: Tetrahedron A has k = 4 vertices (matter sector).")
+            .step("STEP 2: Tetrahedron B has k = 4 vertices (antimatter sector).")
+            .step("STEP 3: Each vertex in A has a complementary vertex in B.")
+            .conclude("OUTPUT: Tetrahedra = 2, Vertices each = 4, Complementary pairs = 4.")
+        )
+    
+    commentary = (
+        "The dual-tetrahedron structure naturally provides two equal sectors. If matter "
+        "corresponds to Tetrahedron A and antimatter to Tetrahedron B, the geometry "
+        "encodes particle-antiparticle symmetry. Charge conjugation swaps A <-> B. "
+        "This is a structural analogy consistent with CPT, not a derivation of it."
+    )
+    
+    def model(self):
+        return (
+            Model()
+            .add("Tetrahedra in Field Chamber", 2)
+            .add("Vertices per tetrahedron", K_CLOSURE)
+            .add("Complementary pairs", K_CLOSURE)
+        )
+    
+    def observations(self):
+        return (
+            Observed()
+            .add("Tetrahedra in Field Chamber", 2)
+            .add("Vertices per tetrahedron", 4)
+            .add("Complementary pairs", 4)
+        )
+
+
+class SpinFromTimeFaces(Test):
+    """
+    Fermions have spin-1/2, giving 2 spin states.
+    The Field Chamber has 2 TIME faces (one per tetrahedron).
+    
+    GFD proposes this correspondence: spin states = TIME face count.
+    This is a CLAIM, not a standard physics derivation.
+    """
+    name = "Spin States = TIME Faces"
+    question = "Do the 2 TIME faces of the Field Chamber correspond to the 2 spin states of fermions?"
+    reference = "Spin-1/2 fermions have 2 states (up/down)"
+    level = Level.STANDARD
+    tolerance = 0.01
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("PREMISE: Each tetrahedron has 1 TIME face; total = 2 TIME faces.")
+            .step("STEP 1: Spin-1/2 particles have 2s + 1 = 2 spin projections.")
+            .step("STEP 2: GFD correspondence: spin-up = Tet A TIME face, spin-down = Tet B TIME face.")
+            .step("STEP 3: Numerical match: 2 TIME faces = 2 spin states.")
+            .conclude("OUTPUT: TIME faces = 2, Spin states = 2.")
+        )
+    
+    commentary = (
+        "The 2 TIME faces of the stellated octahedron correspond to the 2 spin states "
+        "of fermions. GFD proposes that spin-up and spin-down represent activation of "
+        "the TIME face on Tetrahedron A versus Tetrahedron B. This provides a geometric "
+        "picture for spin but does not derive spin-1/2 from first principles."
+    )
+    
+    def model(self):
+        return (
+            Model()
+            .add("TIME faces", TIME_FACES)
+            .add("Spin states", 2)
+        )
+    
+    def observations(self):
+        return (
+            Observed()
+            .add("TIME faces", 2)
+            .add("Spin states", 2)
+        )
+
+
+class LeptonGenerationsCorrespondence(Test):
+    """
+    There are 3 lepton generations (e, mu, tau).
+    There are d = 3 SPATIAL dimensions from Field Closure.
+    Each tetrahedron has 3 SPATIAL faces.
+    
+    This is a numerical correspondence, not a derivation.
+    """
+    name = "3 Generations = 3 SPATIAL Faces"
+    question = "Does the count of lepton generations correspond to the SPATIAL face count per tetrahedron?"
+    reference = "Standard Model: 3 lepton generations"
+    level = Level.STANDARD
+    tolerance = 0.01
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("PREMISE: From Field Closure, each tetrahedron has d = 3 SPATIAL faces.")
+            .step("STEP 1: Standard Model has 3 lepton generations: e, mu, tau.")
+            .step("STEP 2: Each generation may correspond to one SPATIAL face.")
+            .step("STEP 3: Numerical match: d = 3 = generations. No mechanism proposed.")
+            .conclude("OUTPUT: SPATIAL faces per tetrahedron = 3, Generations = 3.")
+        )
+    
+    commentary = (
+        "The 3 lepton generations match the 3 SPATIAL faces per tetrahedron. "
+        "If each generation corresponds to one SPATIAL face, lepton universality "
+        "(equal couplings) follows from equivalent face structure. This is "
+        "speculative; the Standard Model does not explain WHY there are 3 generations."
+    )
+    
+    def model(self):
+        spatial_faces_per_tet = D  # 3
+        return (
+            Model()
+            .add("SPATIAL faces per tetrahedron", spatial_faces_per_tet)
+            .add("Lepton generations", 3)
+        )
+    
+    def observations(self):
+        return (
+            Observed()
+            .add("SPATIAL faces per tetrahedron", 3)
+            .add("Lepton generations", 3)
+        )
+
+
+# =============================================================================
+# TESTS: SPECULATIVE INTERPRETATIONS
+# =============================================================================
+
+class PhotonMasslessness(Test):
+    """
+    SPECULATIVE: GFD interpretation of photon masslessness.
+    
+    The photon is massless. GFD proposes this corresponds to balanced
+    Tetrahedron A and B oscillations with zero net activation.
+    
+    This is a speculative interpretation, not a derivation.
+    """
+    name = "Photon Masslessness (Speculative)"
+    question = "Can photon masslessness be interpreted as balanced tetrahedron oscillation?"
+    reference = "Photon mass = 0 (gauge invariance)"
+    level = Level.EXPLORATORY
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("SPECULATIVE INTERPRETATION - Standard physics derives this from gauge invariance.")
+            .step("PREMISE: GFD proposes mass arises from net vertex activation imbalance.")
+            .step("STEP 1: Photon: balanced A/B oscillation, no net activation.")
+            .step("STEP 2: Net activation = Tet_A - Tet_B = 0 (speculative).")
+            .step("STEP 3: Zero net activation interpreted as zero rest mass.")
+            .conclude("OUTPUT: This interpretation is consistent with, but does not derive, masslessness.")
+        )
+    
+    commentary = (
+        "SPECULATIVE: The photon's masslessness is explained in the Standard Model by "
+        "gauge invariance. GFD proposes an alternative picture: the photon represents "
+        "perfectly balanced oscillation between tetrahedra with zero net activation. "
+        "This is a geometric interpretation, not a derivation or replacement for gauge theory."
+    )
+    
+    def model(self):
+        tet_a = 1  # Normalized activation
+        tet_b = 1  # Equal and opposite
+        net = tet_a - tet_b
+        return (
+            Model()
+            .add("Tet A (normalized)", tet_a)
+            .add("Tet B (normalized)", tet_b)
+            .add("Net activation", net)
+        )
+
+
+class GravitonSpinPrediction(Test):
+    """
+    SPECULATIVE: GFD interpretation of graviton spin-2.
+    
+    The hypothetical graviton has spin-2. GFD proposes this corresponds
+    to coherent activation of BOTH TIME faces (2 x 1 = 2).
+    
+    This is speculative; gravitons are not yet observed.
+    """
+    name = "Graviton Spin (Speculative)"
+    question = "Can graviton spin-2 be interpreted as dual TIME face coherent activation?"
+    reference = "Theoretical: graviton spin = 2 (from linearized GR)"
+    level = Level.EXPLORATORY
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("SPECULATIVE INTERPRETATION - Graviton not yet observed.")
+            .step("PREMISE: GFD proposes spin corresponds to TIME face activation patterns.")
+            .step("STEP 1: Fermion spin-1/2: one TIME face at a time.")
+            .step("STEP 2: Graviton spin-2: both TIME faces coherently activated.")
+            .step("STEP 3: Spin = TIME faces x contribution per face = 2 x 1 = 2.")
+            .conclude("OUTPUT: Speculative prediction consistent with theoretical spin-2.")
+        )
+    
+    commentary = (
+        "SPECULATIVE: The graviton's predicted spin-2 would correspond to coherent "
+        "activation of both TIME faces (one per tetrahedron). This contrasts with "
+        "fermion spin-1/2 (single TIME face) and provides a geometric picture. "
+        "However, gravitons are not observed, and this remains speculation."
+    )
+    
+    def model(self):
+        return (
+            Model()
+            .add("TIME faces (coherent)", TIME_FACES)
+            .add("Contribution per face", 1)
+            .add("Predicted graviton spin", TIME_FACES * 1)
+        )
+    
+    def observations(self):
+        return (
+            Observed()
+            .add("TIME faces (coherent)", 2)
+            .add("Contribution per face", 1)
+            .add("Predicted graviton spin", 2)
+        )
 
 
 # =============================================================================
@@ -847,45 +458,41 @@ class DarkMatterHint(GFDTest):
 # =============================================================================
 
 ALL_TESTS = [
-    GluonCount,
-    WZMassRatio,
-    ElectronCharge,
-    MuonElectronRatio,
-    FineStructureFromGeometry,
-    WeakMixingAngle,
-    MatterAntimatterSymmetry,
-    PhotonMassless,
-    GravitonSpin,
-    StrongCouplingScale,
-    LeptonUniversality,
-    PionMass,
-    ProtonElectronRatio,
-    NeutronProtonDiff,
-    ElectronGFactor,
-    MuonGMinus2,
-    GenerationMassHierarchy,
-    HiggsMassScale,
-    TwelveEdges,
-    DarkMatterHint,
+    # Vertex/Face correspondences
+    GluonVertexCorrespondence,
+    GaugeBosonEdgeCorrespondence,
+    ElectronChargeFromPortRatio,
+    
+    # Dual tetrahedra structure
+    MatterAntimatterDuality,
+    SpinFromTimeFaces,
+    LeptonGenerationsCorrespondence,
+    
+    # Speculative interpretations
+    PhotonMasslessness,
+    GravitonSpinPrediction,
 ]
 
 
-def run_all_tests():
-    """Run all particle property tests."""
-    return run_test_group(
-        title="Fundamental Particle Properties",
+def run_all():
+    """Run all particle property correspondence tests."""
+    return run_tests(
+        title="Particle Property Correspondences",
         summary=(
-            "These tests examine correspondences between the stellated octahedron "
-            "geometry and Standard Model particle properties. The geometric parameters "
-            "(k=4 faces, d=3 dimensions, 8 vertices, 12 edges) produce values that "
-            "correspond numerically to measured particle masses, coupling constants, "
-            "and multiplicities. These correspondences are documented without claiming "
-            "the geometry derives or explains the Standard Model."
+            "These tests document NUMERICAL CORRESPONDENCES between stellated "
+            "octahedron geometry and Standard Model particle physics multiplicities.\n\n"
+            "INCLUDED: Genuine geometric correspondences (vertex counts, edge counts, "
+            "face structure) that match particle physics numbers.\n\n"
+            "EXCLUDED: Numerological formulas (6*pi^5, 3/13, binary decompositions) "
+            "that lack derivation chains or fail by significant margins.\n\n"
+            "These correspondences are interesting but do not constitute derivations "
+            "of particle physics from geometry."
         ),
         test_classes=ALL_TESTS
     )
 
 
 if __name__ == "__main__":
-    success = run_all_tests()
+    import sys
+    success = run_all()
     sys.exit(0 if success else 1)

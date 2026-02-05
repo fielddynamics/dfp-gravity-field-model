@@ -182,17 +182,17 @@ def create_app():
             env['NO_COLOR'] = '1'
             env['TERM'] = 'dumb'
             
-            # Add the project root to PYTHONPATH so imports like 'gfd_model_v2.framework' work
-            gfd_model_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-            project_pythonpath = os.path.dirname(gfd_model_root)  # Parent of gfd_model_v2
-            existing_pythonpath = env.get('PYTHONPATH', '')
-            env['PYTHONPATH'] = project_pythonpath + (os.pathsep + existing_pythonpath if existing_pythonpath else '')
+            # Run with explicit sys.path insertion using runpy for proper module execution
+            # Use forward slashes which work on Windows and avoid escaping issues
+            safe_project_root = project_root.replace('\\', '/')
+            safe_full_path = full_path.replace('\\', '/')
+            wrapper_code = f'import sys; sys.path.insert(0, "{safe_project_root}"); import runpy; runpy.run_path("{safe_full_path}", run_name="__main__")'
             
             result = subprocess.run(
-                [sys.executable, full_path],
+                [sys.executable, '-c', wrapper_code],
                 capture_output=True,
                 text=True,
-                cwd=project_pythonpath,  # Run from project root
+                cwd=project_root,
                 timeout=120,
                 env=env
             )
@@ -306,4 +306,9 @@ def run_server(port=5000, open_browser=True):
 
 
 if __name__ == '__main__':
-    run_server()
+    import argparse
+    parser = argparse.ArgumentParser(description='GFD Model Web Interface')
+    parser.add_argument('--port', type=int, default=5000, help='Port to run the server on')
+    parser.add_argument('--no-browser', action='store_true', help='Do not open browser automatically')
+    args = parser.parse_args()
+    run_server(port=args.port, open_browser=not args.no_browser)

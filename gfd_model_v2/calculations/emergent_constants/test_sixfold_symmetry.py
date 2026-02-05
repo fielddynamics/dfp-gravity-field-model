@@ -1,469 +1,266 @@
 """
-Sixfold Symmetry Observations
-=============================
+Hexagonal Geometry Facts
+========================
 
-This module examines the prevalence of six-fold symmetry in natural systems.
-Hexagonal packing (6 neighbors) corresponds to the densest 2D sphere packing,
-and this geometry appears in numerous physical systems:
+This module documents geometric facts about hexagonal packing that
+underpin the MOND constitutive law derivation.
 
-- Saturn's polar hexagon
-- Snowflakes and ice crystals
-- Benzene rings
-- Honeycomb cells
-- Graphene lattice
-- Benard convection cells
+WHAT THIS MODULE CONTAINS:
+Basic geometric facts about hexagonal packing. These are not "emergent
+constants" but rather the geometric foundations used in deriving them.
 
-The tests document correspondences between hexagonal geometry and observations.
+WHAT WAS REMOVED:
+- Catalogs of sixfold symmetry in nature (snowflakes, benzene, etc.)
+- Saturn's hexagon discussion (interesting but not relevant to derivations)
+- Speculative predictions about gravitational lensing
+- Anything that observes symmetry but doesn't derive a constant
+
+WHY THESE FACTS MATTER:
+The MOND constitutive law C_tiling = 6 * (1/3) * (1/2) = 1 relies on:
+- N = 6 neighbors in hexagonal packing
+- 120-degree internal angle (vesica piscis)
+- Optimal packing efficiency
+
+These geometric facts are verified here for completeness.
 """
 
 import sys
-import os
 import math
-from typing import Dict, Optional
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
-
-from gfd_model_v2.base import GFDTest, run_test_group
+from gfd_model_v2.framework import *
 
 # =============================================================================
 # CONSTANTS
 # =============================================================================
 
 PI = math.pi
-N_NEIGHBORS = 6  # Hexagonal packing
-
-# Saturn's hexagon parameters
-SATURN_HEXAGON_LATITUDE = 77  # degrees north
-SATURN_HEXAGON_RADIUS_KM = 14500
-
-# Known 6-fold symmetric structures
-SIXFOLD_STRUCTURES = [
-    "Saturn's north polar hexagon",
-    "Snowflakes (ice crystals)",
-    "Benzene ring",
-    "Honeycomb",
-    "Graphene",
-    "Basalt columns",
-    "Benard cells",
-    "EZ water",
-    "Quartz crystal",
-]
-
-
-def hexagonal_angle():
-    """Internal angle of a regular hexagon = 120 degrees."""
-    n = 6
-    return (n - 2) * 180 / n
-
-
-def vesica_piscis_angle():
-    """Coupling angle in vesica piscis = 120 degrees."""
-    return 2 * PI / 3 * (180 / PI)
-
-
-def hexagonal_packing_efficiency():
-    """HCP packing fraction = pi/(3*sqrt(2)) = 0.7405."""
-    return PI / (3 * math.sqrt(2))
 
 
 # =============================================================================
 # TESTS
 # =============================================================================
 
-class HexagonInternalAngle(GFDTest):
+class HexagonInternalAngle(Test):
     """
-    A regular hexagon has internal angle of 120 degrees.
-    This matches the vesica piscis coupling angle.
+    The internal angle of a regular hexagon is 120 degrees.
+    
+    This matches the vesica piscis coupling angle used in the MOND derivation.
     """
-    name = "Hexagon Internal Angle"
-    question = "Does the formula (n-2)×180°/n for n=6 yield the hexagon internal angle of exactly 120 degrees?"
-    reference_source = "Geometry (n-2)*180/n for n=6"
+    name = "Hexagon Internal Angle = 120 degrees"
+    question = (
+        "Does the formula (n-2)*180/n for n=6 yield the hexagon internal "
+        "angle of 120 degrees?"
+    )
+    reference = "Euclidean geometry"
     tolerance = 1e-10
-    derivation = (
-        "PREMISE: Regular polygon internal angle = (n-2)×180°/n. "
-        "STEP 1: For hexagon, n = 6. "
-        "STEP 2: Internal angle = (6-2)×180°/6 = 4×180°/6 = 720°/6. "
-        "STEP 3: Internal angle = 120°. "
-        "OUTPUT: Internal angle = 120 degrees."
-    )
-    commentary = None  # Basic geometric fact
+    level = Level.STANDARD
     
-    def model(self) -> Dict[str, float]:
-        return {"Internal angle (degrees)": hexagonal_angle()}
-    
-    def observations(self) -> Dict[str, float]:
-        return {"Internal angle (degrees)": 120}
-
-
-class VesicaMatchesHexagon(GFDTest):
-    """
-    Vesica piscis coupling angle = hexagon internal angle = 120 degrees.
-    Both arise from the same hexagonal packing geometry.
-    """
-    name = "Vesica = Hexagon Angle"
-    question = "Does the vesica piscis coupling angle (2π/3 = 120°) equal the hexagon internal angle (120°)?"
-    reference_source = "Geometric correspondence"
-    tolerance = 1e-10
-    derivation = (
-        "PREMISE: Both angles should emerge from hexagonal packing geometry. "
-        "STEP 1: Hexagon internal angle = 120° (derived above). "
-        "STEP 2: Vesica piscis angle = 2π/3 radians = 2×180°/3 = 120°. "
-        "STEP 3: Compare: 120° = 120°. "
-        "OUTPUT: Hexagon angle = 120, vesica angle = 120."
-    )
     commentary = (
-        "The 120-degree angle appears in both hexagon geometry and vesica piscis "
-        "overlap. This correspondence connects optimal 2D packing to the coupling "
-        "fraction used in the MOND derivation."
+        "THE HEXAGON ANGLE:\n"
+        "Regular polygon internal angle = (n-2)*180/n degrees.\n"
+        "For hexagon (n=6): (6-2)*180/6 = 4*180/6 = 720/6 = 120 degrees.\n\n"
+        "This is the same 120 degrees that appears in the vesica piscis\n"
+        "coupling angle (2*pi/3 radians), connecting hexagonal packing\n"
+        "geometry to the MOND derivation."
     )
     
-    def model(self) -> Dict[str, float]:
-        return {
-            "Hexagon angle": hexagonal_angle(),
-            "Vesica angle": vesica_piscis_angle(),
-        }
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("HEXAGON INTERNAL ANGLE:")
+            .step("For regular n-gon: angle = (n-2)*180/n degrees.")
+            .step("For hexagon, n = 6.")
+            .step("Angle = (6-2)*180/6 = 4*180/6 = 720/6 = 120 degrees.")
+            .conclude("Hexagon internal angle = 120 degrees.")
+        )
     
-    def observations(self) -> Dict[str, float]:
-        return {
-            "Hexagon angle": 120,
-            "Vesica angle": 120,
-        }
+    def model(self) -> Model:
+        n = 6
+        angle = (n - 2) * 180 / n
+        return Model().add("Internal angle (degrees)", angle)
+    
+    def observations(self) -> Observed:
+        return Observed().add("Internal angle (degrees)", 120)
 
 
-class SixNeighborsPacking(GFDTest):
+class HexagonalPackingEfficiency(Test):
     """
-    Hexagonal packing gives exactly 6 nearest neighbors.
-    This is the fundamental source of 6-fold symmetry.
+    Hexagonal close packing achieves the maximum density: pi/(3*sqrt(2)) ~ 74%.
+    
+    This was proven by Hales (2005), confirming the Kepler conjecture.
     """
-    name = "Six Neighbors in Hexagonal Packing"
-    question = "Does hexagonal close packing produce exactly N=6 nearest neighbors as the geometric source of sixfold symmetry?"
-    reference_source = "Hexagonal close packing"
-    tolerance = 0.0
-    derivation = (
-        "PREMISE: In 2D optimal packing, equal circles have maximum contact neighbors. "
-        "STEP 1: Arrange equal-radius circles with centers on a triangular lattice. "
-        "STEP 2: Each circle can touch at most 6 neighbors (360°/60° per neighbor). "
-        "STEP 3: This creates hexagonal arrangement with N = 6. "
-        "OUTPUT: Nearest neighbors = 6."
+    name = "Hexagonal Packing Efficiency = 74%"
+    question = (
+        "Does hexagonal close packing achieve the maximum sphere packing "
+        "efficiency of pi/(3*sqrt(2)) ~ 74.05%?"
     )
+    reference = "Kepler conjecture (proven 2005)"
+    tolerance = 0.001
+    level = Level.STANDARD
+    
     commentary = (
-        "Hexagonal close packing producing exactly 6 neighbors is a fundamental "
-        "geometric constraint. This count enters directly into the MOND derivation "
-        "and appears throughout natural systems."
+        "THE KEPLER CONJECTURE:\n"
+        "No arrangement of equal spheres can exceed the density of\n"
+        "hexagonal close packing (or its stacking variant FCC).\n\n"
+        "Packing fraction = pi/(3*sqrt(2)) = 0.7405 = 74.05%.\n\n"
+        "This was proven by Thomas Hales in 2005 using computer-assisted\n"
+        "verification. It explains why hexagonal symmetry is optimal\n"
+        "and appears throughout nature."
     )
     
-    def model(self) -> Dict[str, float]:
-        return {"Nearest neighbors": N_NEIGHBORS}
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("HEXAGONAL PACKING EFFICIENCY:")
+            .step("Kepler (1611): proposed this is the densest packing.")
+            .step("Hales (2005): proved it using computer verification.")
+            .step("Packing fraction = pi/(3*sqrt(2)).")
+            .step("Calculate: pi/(3*1.414) = 3.1416/4.243 = 0.7405.")
+            .conclude("Maximum packing efficiency = 74.05%.")
+        )
     
-    def observations(self) -> Dict[str, float]:
-        return {"Nearest neighbors": 6}
+    def model(self) -> Model:
+        efficiency = PI / (3 * math.sqrt(2))
+        return Model().add("Packing efficiency", round(efficiency, 4))
+    
+    def observations(self) -> Observed:
+        return Observed().add("Packing efficiency", 0.7405)
 
 
-class C6RotationalSymmetry(GFDTest):
+class C6SymmetryOrder(Test):
     """
-    Hexagonal structures have C6 rotational symmetry:
-    rotation by 60 degrees maps the structure onto itself.
+    Hexagonal structures have C6 rotational symmetry.
+    
+    Rotation by 360/6 = 60 degrees maps the structure onto itself.
     """
-    name = "C6 Rotational Symmetry"
-    question = "Does hexagonal structure exhibit C6 point group symmetry with 360°/6 = 60° rotational invariance?"
-    reference_source = "Point group C6"
+    name = "C6 Symmetry: 60-degree Rotation"
+    question = (
+        "Does hexagonal packing exhibit C6 symmetry with 360/6 = 60 degree "
+        "rotational invariance?"
+    )
+    reference = "Point group theory"
     tolerance = 0.0
-    derivation = (
-        "PREMISE: C6 symmetry means invariance under 6-fold rotation. "
-        "STEP 1: Symmetry order = 6 (number of equivalent orientations). "
-        "STEP 2: Rotation angle for self-mapping = 360°/6 = 60°. "
-        "STEP 3: Rotating hexagon by 60° maps vertices to vertices exactly. "
-        "OUTPUT: Symmetry order = 6, rotation angle = 60."
-    )
-    commentary = None  # Standard crystallographic symmetry
+    level = Level.STANDARD
     
-    def model(self) -> Dict[str, float]:
+    commentary = (
+        "C6 ROTATIONAL SYMMETRY:\n"
+        "A hexagonal structure looks the same after rotation by 60 degrees.\n"
+        "It has 6 equivalent orientations (symmetry order = 6).\n\n"
+        "This is why hexagonal structures have 6-fold patterns:\n"
+        "snowflakes, honeycomb, graphene all exhibit C6 symmetry."
+    )
+    
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("C6 SYMMETRY:")
+            .step("Symmetry order = 6.")
+            .step("Rotation angle for self-mapping = 360/6 = 60 degrees.")
+            .conclude("C6 symmetry has 60-degree rotational invariance.")
+        )
+    
+    def model(self) -> Model:
         symmetry_order = 6
         rotation_angle = 360 / symmetry_order
-        return {
-            "Symmetry order": symmetry_order,
-            "Rotation angle": rotation_angle,
-        }
+        return (
+            Model()
+            .add("Symmetry order", symmetry_order)
+            .add("Rotation angle (deg)", rotation_angle)
+        )
     
-    def observations(self) -> Dict[str, float]:
-        return {
-            "Symmetry order": 6,
-            "Rotation angle": 60,
-        }
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("Symmetry order", 6)
+            .add("Rotation angle (deg)", 60)
+        )
 
 
-class OptimalPackingIsHexagonal(GFDTest):
+class VesicaPiscisAngleMatch(Test):
     """
-    Hexagonal close packing is the densest sphere packing at ~74%.
-    This was proven (Kepler conjecture) in 2005.
+    The vesica piscis angle (2*pi/3 = 120 degrees) equals the hexagon internal angle.
+    
+    This is not coincidence. Both arise from the same hexagonal geometry.
     """
-    name = "Optimal Packing is Hexagonal"
-    question = "Does hexagonal close packing achieve the maximum sphere packing density of π/(3√2) ≈ 74.05%, as proven by Kepler conjecture?"
-    reference_source = "Kepler conjecture (proven 2005)"
-    tolerance = 0.001
-    derivation = (
-        "PREMISE: The Kepler conjecture states no packing exceeds HCP density. "
-        "STEP 1: HCP packing fraction = π / (3√2). "
-        "STEP 2: Calculate: π/(3×1.414) = 3.1416/4.243 ≈ 0.7405. "
-        "STEP 3: As percentage: 74.05%. "
-        "STEP 4: Proven by Hales (2005) using computer-assisted proof. "
-        "OUTPUT: Packing efficiency = 0.7405."
+    name = "Vesica Piscis Angle = Hexagon Angle = 120 deg"
+    question = (
+        "Does the vesica piscis coupling angle (2*pi/3 = 120 degrees) equal "
+        "the hexagon internal angle (120 degrees)?"
     )
+    reference = "Geometric correspondence"
+    tolerance = 1e-10
+    level = Level.STANDARD
+    
     commentary = (
-        "Hexagonal close packing achieving maximum density (74.05%) represents an "
-        "optimal configuration. This efficiency may explain why hexagonal symmetry "
-        "appears so frequently in natural systems."
+        "THE CONNECTION:\n"
+        "When circles are packed hexagonally, their overlaps (vesica piscis)\n"
+        "subtend 120 degrees. This is the same as the hexagon internal angle.\n\n"
+        "This is not coincidence. The vesica piscis angle and the hexagon\n"
+        "angle both arise from the same underlying hexagonal geometry.\n"
+        "Both are used in the MOND constitutive law derivation."
     )
     
-    def model(self) -> Dict[str, float]:
-        efficiency = hexagonal_packing_efficiency()
-        return {"Packing efficiency": efficiency}
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("ANGLE CORRESPONDENCE:")
+            .step("Hexagon internal angle: (6-2)*180/6 = 120 degrees.")
+            .step("Vesica piscis angle: 2*pi/3 radians = 2*180/3 = 120 degrees.")
+            .step("Both = 120 degrees.")
+            .conclude("The angles are identical, both from hexagonal geometry.")
+        )
     
-    def observations(self) -> Dict[str, float]:
-        return {"Packing efficiency": 0.7405}
-
-
-class SaturnHexagonExists(GFDTest):
-    """
-    Saturn's north polar hexagon is a real, confirmed phenomenon.
-    First observed by Voyager (1981), confirmed by Cassini.
-    """
-    name = "Saturn Hexagon Exists"
-    question = "Is Saturn's north polar hexagon a confirmed planetary-scale phenomenon exhibiting 6-fold symmetry?"
-    reference_source = "Voyager/Cassini observations"
-    derivation = (
-        "PREMISE: Satellite missions have observed Saturn's north pole in detail. "
-        "STEP 1: First observed by Voyager missions in 1981. "
-        "STEP 2: Confirmed and studied extensively by Cassini mission (2004-2017). "
-        "STEP 3: Hexagon has diameter ~29,000 km centered at ~77°N latitude. "
-        "STEP 4: Structure has persisted for decades, confirming stability. "
-        "OUTPUT: Hexagon diameter = 29000 km, confirmed = 1."
-    )
-    commentary = (
-        "Saturn's north polar hexagon is a confirmed atmospheric phenomenon "
-        "exhibiting 6-fold symmetry at planetary scales. The mechanism "
-        "producing this structure remains an area of active research."
-    )
+    def model(self) -> Model:
+        hexagon_angle = (6 - 2) * 180 / 6
+        vesica_angle = 2 * PI / 3 * (180 / PI)
+        difference = abs(hexagon_angle - vesica_angle)
+        
+        return (
+            Model()
+            .add("Hexagon angle (deg)", hexagon_angle)
+            .add("Vesica angle (deg)", round(vesica_angle, 4))
+            .add("Difference", difference)
+        )
     
-    def model(self) -> Dict[str, float]:
-        diameter_km = 2 * SATURN_HEXAGON_RADIUS_KM
-        return {
-            "Hexagon diameter (km)": diameter_km,
-            "Latitude (degrees N)": SATURN_HEXAGON_LATITUDE,
-            "Confirmed": 1,
-        }
-
-
-class SaturnHexagonIsSixSided(GFDTest):
-    """
-    Saturn's hexagon has exactly 6 sides, matching hexagonal packing.
-    Not 5, not 7, but exactly 6.
-    """
-    name = "Saturn Hexagon Has 6 Sides"
-    question = "Does Saturn's polar vortex have exactly 6 sides (not 5 or 7), matching the hexagonal packing neighbor count?"
-    reference_source = "Saturn observation"
-    tolerance = 0.0
-    derivation = (
-        "PREMISE: The structure should match hexagonal packing if geometrically fundamental. "
-        "STEP 1: Count sides of Saturn's polar structure from imagery: exactly 6. "
-        "STEP 2: Compare to hexagonal packing neighbor count: N = 6. "
-        "STEP 3: The match is exact (not pentagon with 5, not heptagon with 7). "
-        "OUTPUT: Saturn hexagon sides = 6, hexagonal packing neighbors = 6."
-    )
-    commentary = None  # Observational fact
-    
-    def model(self) -> Dict[str, float]:
-        return {
-            "Saturn hexagon sides": 6,
-            "Hexagonal packing neighbors": N_NEIGHBORS,
-        }
-    
-    def observations(self) -> Dict[str, float]:
-        return {
-            "Saturn hexagon sides": 6,
-            "Hexagonal packing neighbors": 6,
-        }
-
-
-class SnowflakeSixfold(GFDTest):
-    """
-    Snowflakes have 6-fold symmetry due to hexagonal ice lattice.
-    The H-O-H bond angle favors hexagonal packing.
-    """
-    name = "Snowflake Sixfold Symmetry"
-    question = "Do snowflakes exhibit 6-fold symmetry arising from the hexagonal ice crystal lattice structure?"
-    reference_source = "Ice crystal structure"
-    tolerance = 0.0
-    derivation = (
-        "PREMISE: Crystal symmetry constrains macroscopic growth patterns. "
-        "STEP 1: Water ice (Ih) forms hexagonal crystal lattice. "
-        "STEP 2: H₂O bond angle (~104.5°) favors hexagonal hydrogen bonding. "
-        "STEP 3: Crystal growth occurs along six equivalent directions. "
-        "STEP 4: Resulting snowflakes display 6-fold rotational symmetry. "
-        "OUTPUT: Snowflake symmetry order = 6."
-    )
-    commentary = (
-        "Snowflake 6-fold symmetry emerges from the hexagonal ice lattice structure. "
-        "The water molecule bond angle promotes hexagonal packing, demonstrating "
-        "how molecular geometry constrains macroscopic form."
-    )
-    
-    def model(self) -> Dict[str, float]:
-        return {"Snowflake symmetry order": 6}
-    
-    def observations(self) -> Dict[str, float]:
-        return {"Snowflake symmetry order": 6}
-
-
-class BenzeneSixfold(GFDTest):
-    """
-    Benzene (C6H6) has a hexagonal ring of 6 carbons.
-    The archetypal aromatic compound.
-    """
-    name = "Benzene Sixfold Ring"
-    question = "Does benzene (C₆H₆) contain exactly 6 carbon atoms arranged in a hexagonal aromatic ring?"
-    reference_source = "Organic chemistry"
-    tolerance = 0.0
-    derivation = (
-        "PREMISE: Benzene is the archetypal aromatic compound. "
-        "STEP 1: Molecular formula: C₆H₆. "
-        "STEP 2: Structure: planar ring of 6 carbons with delocalized π electrons. "
-        "STEP 3: C-C-C bond angles = 120° (hexagonal geometry). "
-        "STEP 4: All carbon positions equivalent by D6h symmetry. "
-        "OUTPUT: Benzene carbons = 6."
-    )
-    commentary = None  # Well-established molecular structure
-    
-    def model(self) -> Dict[str, float]:
-        return {"Benzene carbons": 6}
-    
-    def observations(self) -> Dict[str, float]:
-        return {"Benzene carbons": 6}
-
-
-class HoneycombSixfold(GFDTest):
-    """
-    Honeycomb cells are hexagonal - the most efficient plane tiling
-    with equal-area cells.
-    """
-    name = "Honeycomb Hexagonal"
-    question = "Are honeycomb cells hexagonal (6-sided), representing the most efficient plane tiling for equal-area cells?"
-    reference_source = "Honeycomb geometry"
-    tolerance = 0.0
-    derivation = (
-        "PREMISE: Bees construct wax cells to store honey and raise larvae. "
-        "STEP 1: Honeycomb cells have 6 sides (hexagonal). "
-        "STEP 2: Hexagonal tiling minimizes perimeter for given area (honeycomb conjecture). "
-        "STEP 3: This minimizes wax usage while maximizing storage. "
-        "STEP 4: Proven mathematically optimal by Hales (1999). "
-        "OUTPUT: Honeycomb cell sides = 6."
-    )
-    commentary = (
-        "Honeycomb hexagonal cells represent optimal efficiency for covering a "
-        "plane with equal-area cells while minimizing perimeter. Bees evolved "
-        "this geometry independently, suggesting universal optimality."
-    )
-    
-    def model(self) -> Dict[str, float]:
-        return {"Honeycomb cell sides": 6}
-    
-    def observations(self) -> Dict[str, float]:
-        return {"Honeycomb cell sides": 6}
-
-
-class ManySixfoldStructures(GFDTest):
-    """
-    Multiple independent systems show 6-fold symmetry.
-    This prevalence suggests a common underlying cause.
-    """
-    name = "Prevalence of Sixfold Symmetry"
-    question = "Do numerous independent natural systems exhibit 6-fold symmetry, suggesting a common geometric optimality principle?"
-    reference_source = None  # Observation across systems
-    derivation = (
-        "PREMISE: If 6-fold symmetry appears in many unrelated systems, a common cause may exist. "
-        "STEP 1: Enumerate known 6-fold structures: Saturn hexagon, snowflakes, benzene, "
-        "honeycomb, graphene, basalt columns, Benard cells, quartz crystals, EZ water. "
-        "STEP 2: Count distinct systems exhibiting this symmetry. "
-        "STEP 3: These systems span astronomy, chemistry, biology, and geology. "
-        "OUTPUT: Number of 6-fold systems = 9."
-    )
-    commentary = (
-        "The prevalence of 6-fold symmetry across disparate physical systems "
-        "suggests geometric optimality as a common cause. Whether this reflects "
-        "deeper structure or efficient packing is context-dependent."
-    )
-    
-    def model(self) -> Dict[str, float]:
-        count = len(SIXFOLD_STRUCTURES)
-        return {"Number of 6-fold systems": count}
-
-
-class LensingM6Prediction(GFDTest):
-    """
-    Prediction: Gravitational lensing may show m=6 angular harmonics
-    if underlying field structure exhibits hexagonal symmetry.
-    """
-    name = "Lensing m=6 Prediction"
-    question = "If underlying field structure is hexagonal, might gravitational lensing show detectable m=6 angular harmonic patterns?"
-    reference_source = "Model prediction (testable)"
-    derivation = (
-        "PREMISE: Hexagonal symmetry should produce m=6 angular modes in physical observables. "
-        "STEP 1: Hexagonal structure has 6-fold rotational symmetry (C6). "
-        "STEP 2: Angular expansion of hexagonal potential has dominant m=6 harmonic. "
-        "STEP 3: Gravitational lensing distortions could preserve this signature. "
-        "STEP 4: This is a testable prediction with high-resolution lensing data. "
-        "OUTPUT: Predicted dominant m = 6, testable = 1."
-    )
-    commentary = (
-        "A testable prediction from hexagonal field structure would be m=6 "
-        "angular harmonics in gravitational lensing. Current observations have "
-        "not tested this specific signature with sufficient sensitivity."
-    )
-    
-    def model(self) -> Dict[str, float]:
-        return {
-            "Predicted dominant m": 6,
-            "Hexagonal packing neighbors": N_NEIGHBORS,
-            "Testable": 1,
-        }
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("Hexagon angle (deg)", 120)
+            .add("Vesica angle (deg)", 120.0)
+            .add("Difference", 0.0)
+        )
 
 
 # =============================================================================
-# RUNNER
+# TEST COLLECTION
 # =============================================================================
 
 ALL_TESTS = [
     HexagonInternalAngle,
-    VesicaMatchesHexagon,
-    SixNeighborsPacking,
-    C6RotationalSymmetry,
-    OptimalPackingIsHexagonal,
-    SaturnHexagonExists,
-    SaturnHexagonIsSixSided,
-    SnowflakeSixfold,
-    BenzeneSixfold,
-    HoneycombSixfold,
-    ManySixfoldStructures,
-    LensingM6Prediction,
+    HexagonalPackingEfficiency,
+    C6SymmetryOrder,
+    VesicaPiscisAngleMatch,
 ]
 
 
-def run_all_tests() -> bool:
-    """Run all sixfold symmetry tests."""
-    return run_test_group(
-        title="Sixfold Symmetry Observations",
+def run_all() -> bool:
+    """Run all hexagonal geometry tests."""
+    return run_tests(
+        title="Hexagonal Geometry Facts",
         summary=(
-            "These tests document the prevalence of six-fold symmetry in natural systems. "
-            "Hexagonal packing (6 nearest neighbors) represents optimal 2D sphere packing "
-            "and creates C6 rotational symmetry. This geometry appears in Saturn's polar "
-            "hexagon, snowflake crystals, benzene rings, honeycomb cells, and many other "
-            "phenomena. A testable prediction is that gravitational lensing may show m=6 "
-            "angular harmonic patterns."
+            "This module documents geometric facts about hexagonal packing.\n\n"
+            "These facts underpin the MOND constitutive law derivation:\n"
+            "- Hexagon internal angle = 120 degrees\n"
+            "- Optimal packing efficiency = 74%\n"
+            "- C6 symmetry order = 6 (60-degree rotation invariance)\n"
+            "- Vesica piscis angle = hexagon angle = 120 degrees\n\n"
+            "These are geometric facts, not emergent constants.\n"
+            "They provide the foundation for the derivation in test_mond_hexagonal.py."
         ),
         test_classes=ALL_TESTS
     )
 
 
 if __name__ == "__main__":
-    success = run_all_tests()
+    success = run_all()
     sys.exit(0 if success else 1)

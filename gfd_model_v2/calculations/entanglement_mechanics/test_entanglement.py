@@ -1,519 +1,405 @@
 """
-Entanglement Mechanics: Quantum Correlations Through Field Closure
+Geometric Analogies to Quantum Entanglement
+============================================
 
-These tests examine quantum entanglement using the GFD framework. The model
-represents entangled particles as sharing a common Tet_B (subspace) configuration.
-Calculated values are compared against established experimental results.
+CRITICAL FRAMING: What These Tests Are and Are Not
+--------------------------------------------------
+
+These tests document GEOMETRIC CORRESPONDENCES between GFD's stellated
+octahedron structure and quantum entanglement phenomena. They are NOT
+derivations of entanglement from GFD.
+
+WHAT GFD CLAIMS:
+- The stellated octahedron (two interlocking tetrahedra) is the Field Chamber
+- Tetrahedron A handles local/causal aspects, Tetrahedron B handles subspace
+- Entangled particles may share Tetrahedron B configurations
+
+WHAT GFD DOES NOT DERIVE:
+- The Tsirelson bound (2*sqrt(2)) from geometry
+- Bell inequality violations from first principles
+- Why quantum correlations exceed classical limits
+- Any quantitative entanglement prediction
+
+HONEST ASSESSMENT:
+Every numerical prediction in these tests comes from quantum mechanics,
+not from GFD. The GFD "interpretations" in commentary are speculative
+geometric analogies, not derivations. The stellated octahedron geometry
+is COMPATIBLE with entanglement phenomena but does not DERIVE them.
+
+This file tests whether GFD's geometric vocabulary can consistently
+describe entanglement phenomena, not whether GFD explains entanglement.
 """
 
 import sys
-import os
 import math
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
-
-from gfd_model_v2.base import GFDTest, run_test_group
-from gfd_model_v2.common import (
-    C, HBAR as H_BAR, H as H_PLANCK, K_CLOSURE, R_E,
-)
-
-# Derived constants
-CLOSURE_FREQUENCY = C / R_E  # ≈ 1.06e23 Hz
-
-# Bell inequality limits
-BELL_CLASSICAL_LIMIT = 2.0
-BELL_QUANTUM_MAX = 2 * math.sqrt(2)  # Tsirelson bound ~2.828
-
-# Experimental results
-ENTANGLEMENT_DISTANCE_RECORD = 1200e3  # meters (Micius satellite)
+from gfd_model_v2.framework import *
+from gfd_model_v2.common import K_CLOSURE
 
 
 # =============================================================================
-# TEST CLASSES
+# GFD GEOMETRIC STRUCTURE (These are GFD claims, not QM)
 # =============================================================================
 
-class SequentialReadingImpossible(GFDTest):
+class ComplementaryVertexPairs(Test):
     """
-    Sequential reading at speed c is impossible for field objects.
+    GFD geometric claim: Stellated octahedron vertices form complementary pairs.
     
-    EQUATION:
-        Cycles during read = t_read × f_closure
-        
-    Where:
-        t_read = object_size / c
-        f_closure = c / r_e ≈ 1.06×10^23 Hz
+    The 8 vertices (labeled 0-7) pair as (V, 7-V):
+    - (0, 7), (1, 6), (2, 5), (3, 4)
+    
+    Each pair spans both tetrahedra: one vertex from Tet_A, one from Tet_B.
+    This is pure geometry of the stellated octahedron.
     """
-    name = "Sequential Reading Impossibility"
+    name = "Complementary Vertex Pairs"
     question = (
-        "Why must quantum state determination occur instantaneously rather than through "
-        "sequential scanning? If a measurement device attempted to read a field object "
-        "sequentially at the speed of light, how many Field Closure cycles would intervene, "
-        "and does this render sequential reading informationally untenable?"
+        "Does the stellated octahedron geometry produce complementary vertex pairs "
+        "that span both tetrahedra? How many such pairs exist, and do they exhaust "
+        "the vertex set?"
     )
-    reference_source = None
-    tolerance = 0.10
-    derivation = (
-        "PREMISE: Consider reading a 1 km field object sequentially at speed c. "
-        "EQUATION: Cycles = t_read × f_closure, where f_closure = c/r_e ≈ 1.06e23 Hz. "
-        "STEP 1: Read time: t_read = 1000 m / (3e8 m/s) = 3.34e-6 s. "
-        "STEP 2: Cycles during read = 3.34e-6 s × 1.06e23 Hz = 3.5e17 cycles. "
-        "OUTPUT: Over 10^17 closure cycles occur during a light-speed scan of 1 km."
-    )
-    commentary = (
-        "With over 10^17 closure events during a sequential scan, the field configuration "
-        "would undergo profound changes during reading, making sequential measurement impossible. "
-        "This necessitates simultaneous (non-local) state access through Tetrahedron B. "
-        "The immense number of Field Closure cycles that would occur during a sequential "
-        "light-speed scan renders such a reading mechanism informationally untenable. "
-        "This corresponds to the quantum mechanical requirement for instantaneous state "
-        "determination, where measurement outcomes emerge as unified events across the Field Chamber."
-    )
-    
-    def model(self):
-        object_size = 1000  # 1 km
-        t_sequential = object_size / C
-        cycles_during_read = t_sequential * CLOSURE_FREQUENCY
-        return {
-            "Object size (m)": object_size,
-            "Sequential read time (s)": t_sequential,
-            "f_closure (Hz)": CLOSURE_FREQUENCY,
-            "Closure cycles during read": cycles_during_read,
-        }
-
-
-class SubspaceSimultaneousAccess(GFDTest):
-    """All gravity fields connect through field origins to Tet_B (subspace)."""
-    name = "Subspace Simultaneous Access"
-    question = (
-        "How does the geometric structure of a Field Chamber enable simultaneous access "
-        "to all field information? Specifically, does the k=4 tetrahedral topology provide "
-        "a unified pathway through which spatially separated systems can share quantum states?"
-    )
-    reference_source = "k=4 tetrahedral coupling"
+    reference = "Stellated octahedron geometry"
     tolerance = 0.01
-    derivation = (
-        "PREMISE: In GFD, k=4 defines the Field Closure constant (tetrahedral face count). "
-        "STEP 1: Each Coupling Port (triangular face) has exactly k=4 vertices in the "
-        "stellated octahedron structure (2k=8 total vertices, but k=4 per tetrahedron). "
-        "STEP 2: All k=4 vertices of each tetrahedron connect through the Field Origin. "
-        "STEP 3: Tetrahedron B represents the subspace (shared) configuration accessible "
-        "through the Field Origin, providing non-local correlation channels. "
-        "OUTPUT: Vertices per gravity field = 4."
-    )
+    level = Standard
+    
     commentary = (
-        "The k=4 structure ensures each Field Chamber has 4 vertices connecting "
-        "to the shared subspace, enabling unified access to entangled configurations. "
-        "The k=4 Coupling Port structure of the stellated octahedron provides each Field "
-        "Chamber with four vertices connecting to Tetrahedron B. This topology may account "
-        "for the non-local character of quantum correlations, as entangled systems share "
-        "access to common Tetrahedron B configurations through their respective Field Origins."
+        "The stellated octahedron has 2k=8 vertices. Each vertex V pairs with "
+        "vertex (7-V), and these pairs span both tetrahedra. This is a geometric "
+        "fact about the stellated octahedron, not a quantum mechanical prediction. "
+        "GFD PROPOSES (but does not derive) that entangled particles share "
+        "complementary vertex configurations across their respective Field Chambers."
     )
     
+    def derivation(self):
+        return (
+            Derivation()
+            .step("PREMISE: The stellated octahedron has 2k=8 vertices, labeled 0 through 7.")
+            .step("Tetrahedron A contains vertices: 0, 3, 5, 6 (even parity under XOR).")
+            .step("Tetrahedron B contains vertices: 1, 2, 4, 7 (odd parity under XOR).")
+            .step("Complementary pairs (V, 7-V): (0,7), (1,6), (2,5), (3,4).")
+            .step("Each pair has one vertex from Tet_A and one from Tet_B.")
+            .step("Total complementary pairs = 8/2 = 4.")
+            .conclude("Complementary pairs = 4, spanning both tetrahedra.")
+        )
+    
     def model(self):
-        return {"Vertices per gravity field": K_CLOSURE}
+        vertices = 2 * K_CLOSURE  # 8 vertices
+        pairs = vertices // 2      # 4 complementary pairs
+        return (
+            Model()
+            .add("Total vertices", vertices)
+            .add("Complementary pairs", pairs)
+        )
     
     def observations(self):
-        return {"Vertices per gravity field": 4}
+        return (
+            Observed()
+            .add("Total vertices", 8)
+            .add("Complementary pairs", 4)
+        )
 
 
-class BellViolationExceedsClassical(GFDTest):
-    """Quantum correlations exceed classical Bell limit."""
-    name = "Bell Inequality Violation"
+class DualTetrahedronStructure(Test):
+    """
+    GFD geometric claim: Field Chamber has dual tetrahedra with distinct roles.
+    
+    This is GFD's PROPOSED interpretation, not a derivation:
+    - Tet_A: local, causal, observable (respects speed c)
+    - Tet_B: subspace, non-local, hidden (shared in entanglement)
+    """
+    name = "Dual Tetrahedron Structure"
     question = (
-        "Why do quantum correlations exceed the classical Bell limit of S=2? What is the "
-        "maximum quantum correlation strength (Tsirelson bound), and by what factor does "
-        "this exceed classical predictions based on local hidden variables?"
+        "Does the GFD Field Chamber geometry provide two distinct domains "
+        "(Tetrahedra A and B) that could correspond to local vs non-local "
+        "aspects of quantum phenomena?"
     )
-    reference_source = "Bell experiments (Aspect, etc.)"
+    reference = "GFD Field Chamber geometry"
     tolerance = 0.01
-    derivation = (
-        "PREMISE: The CHSH form of Bell's inequality states S ≤ 2 for any local hidden variable theory. "
-        "STEP 1: Classical limit S_classical = 2 (maximum achievable with local correlations). "
-        "STEP 2: Quantum mechanics predicts maximum S_quantum = 2√2 ≈ 2.828 (Tsirelson bound). "
-        "STEP 3: Quantum advantage factor = S_quantum / S_classical = 2√2 / 2 = √2 ≈ 1.414. "
-        "OUTPUT: Classical limit = 2.0, Quantum maximum ≈ 2.828, Advantage factor ≈ 1.414."
-    )
+    level = Standard
+    
     commentary = (
-        "In GFD terms, the dual tetrahedra (A and B) of the stellated octahedron "
-        "provide correlation channels: Tet_A handles local observables, while Tet_B adds "
-        "non-local correlation capacity, yielding the √2 enhancement. "
-        "The Tsirelson bound of 2√2 represents a fundamental limit on quantum correlations "
-        "that exceeds the classical Bell limit by a factor of √2. This enhancement is "
-        "consistent with the dual-tetrahedron structure of the stellated octahedron, where "
-        "Tetrahedron B contributes correlation capacity beyond what Tetrahedron A alone "
-        "could provide through local hidden variables."
+        "The stellated octahedron consists of two interlocking tetrahedra. GFD "
+        "PROPOSES that Tetrahedron A governs local/causal phenomena while "
+        "Tetrahedron B provides non-local correlation capacity. This is an "
+        "INTERPRETATION, not a derivation. The geometry is consistent with "
+        "such a division of roles but does not derive quantum non-locality."
     )
     
-    def model(self):
-        quantum_advantage = BELL_QUANTUM_MAX / BELL_CLASSICAL_LIMIT
-        return {
-            "Classical limit": BELL_CLASSICAL_LIMIT,
-            "Quantum maximum": BELL_QUANTUM_MAX,
-            "Advantage factor": quantum_advantage,
-        }
-    
-    def observations(self):
-        return {
-            "Classical limit": 2.0,
-            "Quantum maximum": 2 * math.sqrt(2),
-            "Advantage factor": math.sqrt(2),
-        }
-
-
-class NoSignalingPreserved(GFDTest):
-    """Quantum correlations below signaling threshold (PR box)."""
-    name = "No-Signaling Preserved"
-    question = (
-        "Does nature respect the no-signaling principle despite allowing non-local "
-        "correlations? Is the maximum quantum correlation (Tsirelson bound of 2√2) "
-        "safely below the threshold at which superluminal communication would become possible?"
-    )
-    reference_source = "No-signaling theorem"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: The PR-box represents a theoretical device with S=4 that would enable signaling. "
-        "STEP 1: Tsirelson bound = 2√2 ≈ 2.828 (maximum quantum correlation). "
-        "STEP 2: Signaling threshold = 4.0 (PR-box limit where causality would be violated). "
-        "STEP 3: Check: 2.828 < 4.0 → True, quantum mechanics respects no-signaling. "
-        "OUTPUT: Tsirelson bound ≈ 2.828, Signaling threshold = 4.0, Below threshold = 1 (True)."
-    )
-    commentary = (
-        "In GFD terms, Tetrahedron A governs causal propagation through SPATIAL faces "
-        "(limited to c), while Tetrahedron B provides correlation without information transfer. "
-        "The gap between the Tsirelson bound and the PR-box signaling threshold suggests "
-        "an intrinsic constraint on correlation strength. Within the Field Chamber model, "
-        "this may correspond to the separation between Tetrahedron A (which governs causal "
-        "propagation through SPATIAL faces) and Tetrahedron B (which provides correlation "
-        "without enabling superluminal communication)."
-    )
-    
-    def model(self):
-        tsirelson = BELL_QUANTUM_MAX
-        signaling_threshold = 4.0
-        return {
-            "Tsirelson bound": tsirelson,
-            "Signaling threshold": signaling_threshold,
-            "Below threshold": 1 if tsirelson < signaling_threshold else 0,
-        }
-    
-    def observations(self):
-        return {
-            "Tsirelson bound": 2 * math.sqrt(2),
-            "Signaling threshold": 4.0,
-            "Below threshold": 1,
-        }
-
-
-class DistanceIndependence(GFDTest):
-    """Entanglement correlations are distance-independent."""
-    name = "Distance Independence"
-    question = (
-        "Is quantum entanglement truly independent of spatial separation? Do correlations "
-        "between entangled photons persist unchanged over macroscopic distances, such as "
-        "the 1200 km demonstrated by the Micius satellite experiment?"
-    )
-    reference_source = "Micius satellite experiment (2017)"
-    tolerance = 0.10
-    derivation = (
-        "PREMISE: The Micius satellite demonstrated entanglement over 1200 km (2017). "
-        "STEP 1: Distance = 1200 km = 1.2×10⁶ m. "
-        "STEP 2: Measured fidelity at this distance = 0.869 (>0.5 threshold for entanglement). "
-        "OUTPUT: Distance = 1200 km, Achieved fidelity = 0.869."
-    )
-    commentary = (
-        "In GFD terms, this spans approximately 1.2×10⁶ / (2.8×10⁻¹⁵) ≈ 4×10²⁰ "
-        "Field Chamber diameters (using classical electron radius as scale). "
-        "The persistent correlation indicates that shared Tetrahedron B configurations "
-        "do not attenuate with Tetrahedron A separation (spatial distance). "
-        "Entanglement is distance-independent, consistent with non-local subspace sharing. "
-        "Satellite experiments demonstrate that quantum correlations persist across "
-        "distances spanning approximately 10^20 Field Chambers. This distance independence "
-        "is consistent with entangled particles sharing a common Tetrahedron B configuration "
-        "accessed through their respective Field Origins, where spatial separation in "
-        "Tetrahedron A has no bearing on the shared subspace structure."
-    )
-    
-    def model(self):
-        fidelity_at_1200km = 0.869  # Actual Micius result
-        return {
-            "Distance (km)": ENTANGLEMENT_DISTANCE_RECORD / 1000,
-            "Achieved fidelity": fidelity_at_1200km,
-        }
-    
-    def observations(self):
-        return {
-            "Distance (km)": 1200.0,
-            "Achieved fidelity": 0.869,
-        }
-
-
-class K4MultipartyStructure(GFDTest):
-    """k=4 topology constrains optimal multi-party entanglement."""
-    name = "k=4 Multiparty Structure"
-    question = (
-        "Does the GFD framework suggest natural constraints on multiparty entanglement? "
-        "Given the k=4 tetrahedral structure, what are the optimal configurations for "
-        "multi-party quantum states in terms of parties, pairwise channels, and three-party surfaces?"
-    )
-    reference_source = "Tetrahedral structure"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: In GFD, k=4 is the Field Closure constant (tetrahedral face count). "
-        "STEP 1: A tetrahedron has k=4 vertices → suggests optimal 4-party configurations. "
-        "STEP 2: A tetrahedron has 6 edges (k(k-1)/2 = 4×3/2 = 6) → 6 pairwise correlation channels. "
-        "STEP 3: A tetrahedron has k=4 faces → 4 three-party correlation surfaces. "
-        "OUTPUT: Optimal parties = 4, Pairwise channels = 6, Three-party surfaces = 4."
-    )
-    commentary = (
-        "These geometric constraints map to quantum information: 4 parties share "
-        "correlations through 6 bipartite and 4 tripartite channels naturally. "
-        "The k=4 structure predicts optimal 4-party entanglement with 6 pairwise "
-        "channels and 4 three-party surfaces, matching experimental GHZ and cluster state physics. "
-        "The tetrahedral geometry of Coupling Ports yields four vertices, six edges, and "
-        "four faces, corresponding to natural limits on multiparty entanglement. This "
-        "structure suggests that four-party entanglement may represent an optimal "
-        "configuration, with six pairwise correlation channels and four three-party "
-        "surfaces available within a single Field Chamber topology."
-    )
+    def derivation(self):
+        return (
+            Derivation()
+            .step("PREMISE: The stellated octahedron = two interlocking tetrahedra.")
+            .step("Tetrahedron A has k=4 faces: 1 TIME face + 3 SPATIAL faces.")
+            .step("Tetrahedron B has k=4 faces: 1 TIME face + 3 SPATIAL faces.")
+            .step("The tetrahedra share a common center (Field Origin) but have "
+                  "no shared faces or edges.")
+            .step("GFD proposes Tet_A handles observable/causal aspects.")
+            .step("GFD proposes Tet_B handles subspace/correlation aspects.")
+            .conclude("Two tetrahedra, k=4 faces each, distinct but interlocking.")
+        )
     
     def model(self):
         k = K_CLOSURE
-        vertices = k  # 4 vertices per tetrahedron
-        edges = 6     # 6 edges (pairwise channels)
-        faces = 4     # 4 faces (3-party surfaces)
-        return {
-            "Optimal parties": k,
-            "Pairwise channels": edges,
-            "Three-party surfaces": faces,
-        }
+        total_faces = 2 * k  # 8 faces
+        faces_per_tet = k     # 4 faces each
+        return (
+            Model()
+            .add("Total faces", total_faces)
+            .add("Faces per tetrahedron", faces_per_tet)
+            .add("Tetrahedra count", 2)
+        )
     
     def observations(self):
-        return {
-            "Optimal parties": 4,
-            "Pairwise channels": 6,
-            "Three-party surfaces": 4,
-        }
+        return (
+            Observed()
+            .add("Total faces", 8)
+            .add("Faces per tetrahedron", 4)
+            .add("Tetrahedra count", 2)
+        )
 
 
-class EntanglementMonogamy(GFDTest):
-    """Maximal entanglement with one partner leaves none for others."""
-    name = "Entanglement Monogamy"
-    question = (
-        "Is entanglement a conserved resource? If a quantum system is maximally entangled "
-        "with one partner, how much entanglement capacity remains for additional parties? "
-        "Does the CKW inequality constrain the distribution of quantum correlations?"
-    )
-    reference_source = "CKW inequality"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: The CKW (Coffman-Kundu-Wootters) inequality constrains entanglement sharing. "
-        "STEP 1: For qubit A maximally entangled with qubit B, the tangle τ(A,B) = 1.0 (maximum). "
-        "STEP 2: CKW inequality: τ(A,B) + τ(A,C) ≤ τ(A,BC) for any third party C. "
-        "STEP 3: If τ(A,B) = 1 (maximal), then τ(A,C) = 0 (no remaining entanglement for C). "
-        "OUTPUT: Max tangle with one = 1.0, Remaining for others = 0.0."
-    )
-    commentary = (
-        "In GFD terms, each Field Chamber has finite Coupling Port capacity through "
-        "k=4 vertices. Maximal Tet_B correlation with one partner saturates all channels. "
-        "The CKW inequality establishes that entanglement is a limited resource that "
-        "cannot be freely shared among multiple parties. This monogamy constraint "
-        "corresponds to the finite Coupling Port capacity of each Field Chamber, where "
-        "maximally correlating Tetrahedron B configurations with one partner exhausts "
-        "the available correlation channels for others."
-    )
-    
-    def model(self):
-        max_tangle = 1.0
-        remaining = 0.0
-        return {
-            "Max tangle with one": max_tangle,
-            "Remaining for others": remaining,
-        }
-    
-    def observations(self):
-        return {
-            "Max tangle with one": 1.0,
-            "Remaining for others": 0.0,
-        }
+# =============================================================================
+# COMPATIBILITY CHECKS (Does GFD geometry conflict with QM facts?)
+# =============================================================================
 
-
-class GHZUnifiedConfiguration(GFDTest):
-    """GHZ states show stronger violation than pairwise entanglement."""
-    name = "GHZ Unified Configuration"
-    question = (
-        "Do multiparty entangled states exhibit stronger non-classical correlations than "
-        "bipartite states? Specifically, how much stronger is the Bell inequality violation "
-        "for GHZ (Greenberger-Horne-Zeilinger) states compared to the classical limit?"
-    )
-    reference_source = "Mermin inequality experiments"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: The Mermin inequality generalizes Bell inequalities to N-party systems. "
-        "STEP 1: Classical limit for 3-party Mermin inequality: M_classical = 2. "
-        "STEP 2: 3-party GHZ state achieves M_GHZ = 4 (maximal violation). "
-        "STEP 3: GHZ advantage factor = M_GHZ / M_classical = 4/2 = 2 (doubles classical limit). "
-        "OUTPUT: Mermin classical limit = 2, GHZ achieves = 4."
-    )
-    commentary = (
-        "In GFD terms, GHZ states represent unified Tetrahedron B configurations "
-        "shared among all d=3 SPATIAL faces simultaneously, not just pairwise sharing. "
-        "GHZ states double the classical Mermin limit, demonstrating that "
-        "multiparty entanglement provides stronger non-classical correlations than pairwise. "
-        "The Mermin inequality violation by GHZ states demonstrates that multiparty "
-        "entanglement produces correlations exceeding what any pairwise entanglement "
-        "could achieve. In the Field Chamber framework, this corresponds to a unified "
-        "Tetrahedron B configuration shared across multiple Field Chambers simultaneously."
-    )
-    
-    def model(self):
-        mermin_classical = 2
-        mermin_ghz = 4  # GHZ achieves maximum
-        return {
-            "Mermin classical limit": mermin_classical,
-            "GHZ achieves": mermin_ghz,
-        }
-    
-    def observations(self):
-        return {
-            "Mermin classical limit": 2,
-            "GHZ achieves": 4,
-        }
-
-
-class FrequencyMatchingConservation(GFDTest):
-    """Frequency matching enforced by energy conservation."""
-    name = "Frequency Matching"
-    question = (
-        "How does energy conservation manifest during entangled pair creation? When a "
-        "parent photon spontaneously splits into two entangled daughter photons via "
-        "parametric down-conversion, must their frequencies sum to the original frequency?"
-    )
-    reference_source = "Energy conservation in SPDC"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: In SPDC (Spontaneous Parametric Down-Conversion), one photon becomes two. "
-        "STEP 1: Original pump photon has frequency f_original = 6×10¹⁴ Hz (visible light). "
-        "STEP 2: Energy conservation requires E_original = E_1 + E_2. "
-        "STEP 3: Since E = hf, we have hf_original = hf_1 + hf_2, thus f_1 + f_2 = f_original. "
-        "STEP 4: For symmetric splitting: f_1 = f_2 = 3×10¹⁴ Hz each. "
-        "OUTPUT: Original frequency = 6×10¹⁴ Hz, Sum of split = 6×10¹⁴ Hz."
-    )
-    commentary = (
-        "In GFD terms, Field Closure frequency (related to energy via E=hf) must be "
-        "conserved. The combined closure oscillations of daughter chambers equal the parent. "
-        "Spontaneous parametric down-conversion produces entangled photon pairs whose "
-        "frequencies sum to the original pump frequency. This conservation law is "
-        "consistent with Field Closure requirements, where the combined Field Chamber "
-        "oscillation frequencies of daughter particles must equal the parent frequency "
-        "to maintain energy accounting during the splitting process."
-    )
-    
-    def model(self):
-        f_original = 6e14  # Hz (visible light)
-        f_1 = 3e14
-        f_2 = 3e14
-        sum_conserved = f_1 + f_2
-        return {
-            "Original frequency (Hz)": f_original,
-            "Sum of split (Hz)": sum_conserved,
-        }
-    
-    def observations(self):
-        return {
-            "Original frequency (Hz)": 6e14,
-            "Sum of split (Hz)": 6e14,
-        }
-
-
-class TeleportationResources(GFDTest):
-    """Quantum teleportation requires 2 classical bits + 1 ebit."""
-    name = "Teleportation Resources"
-    question = (
-        "What resources are required for quantum teleportation? Specifically, how many "
-        "classical bits of communication and how many entangled bits (ebits) are needed "
-        "to teleport a single qubit, and why these specific values?"
-    )
-    reference_source = "Bennett et al. teleportation protocol"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: The Bennett teleportation protocol (1993) transfers a qubit using shared entanglement. "
-        "STEP 1: Alice performs a Bell measurement on the qubit-to-teleport and her half of the ebit. "
-        "STEP 2: The Bell measurement has 4 possible outcomes (00, 01, 10, 11), requiring "
-        "log₂(4) = 2 classical bits to communicate the result to Bob. "
-        "STEP 3: Bob applies one of 4 correction operations (I, X, Z, XZ) based on the 2 bits received. "
-        "OUTPUT: Classical bits needed = 2, Ebits needed = 1."
-    )
-    commentary = (
-        "In GFD terms: 1 ebit = shared Tetrahedron B configuration between Alice and Bob. "
-        "2 classical bits = information transmitted via Tetrahedron A (SPATIAL faces, speed ≤ c). "
-        "The k=4 structure provides exactly 4 vertices, corresponding to the 4 measurement outcomes. "
-        "Teleportation requires exactly 2 classical bits + 1 ebit, matching k=4 topology. "
-        "The teleportation protocol's resource requirements may correspond to the "
-        "information-theoretic structure of the Field Chamber. One ebit represents "
-        "the shared Tetrahedron B correlation, while the two classical bits transmitted "
-        "through Tetrahedron A specify which of the four possible measurement outcomes "
-        "was obtained, matching the k=4 Coupling Port structure."
-    )
-    
-    def model(self):
-        return {
-            "Classical bits needed": 2,
-            "Ebits needed": 1,
-        }
-    
-    def observations(self):
-        return {
-            "Classical bits needed": 2,
-            "Ebits needed": 1,
-        }
-
-
-class ClosureFrequencyRelation(GFDTest):
+class CompatibilityWithBellViolations(Test):
     """
-    Fastest gates span many closure cycles.
+    Check: Is GFD's dual-tetrahedron structure compatible with Bell violations?
     
-    EQUATION:
-        Cycles per gate = t_gate × f_closure = t_gate / t_closure
-        
-    Where:
-        t_closure = 1/f_closure = r_e/c ≈ 9.4e-24 s
-        f_closure = c/r_e ≈ 1.06e23 Hz
+    IMPORTANT: This test does NOT derive Bell violations from GFD.
+    It only checks that GFD's structure doesn't contradict them.
+    
+    The Tsirelson bound (2*sqrt(2)) comes from quantum mechanics, not GFD.
     """
-    name = "Closure Cycles per Gate"
+    name = "Compatibility with Bell Violations"
     question = (
-        "How do quantum gate operations relate to the fundamental Field Closure timescale? "
-        "If the fastest achievable quantum gates operate in picoseconds, how many Field "
-        "Closure cycles occur during a single gate operation, and what does this imply?"
+        "Is the GFD dual-tetrahedron structure compatible with the observed "
+        "violation of Bell inequalities? (Note: GFD does not derive these violations.)"
     )
-    reference_source = None
+    reference = "Bell experiments (Aspect 1982, Hensen 2015)"
+    tolerance = 0.01
+    level = Standard
+    
+    commentary = (
+        "Quantum mechanics predicts Bell parameter S up to 2*sqrt(2) (Tsirelson bound). "
+        "Experiments confirm S > 2. GFD's dual-tetrahedron structure is COMPATIBLE "
+        "with this because it provides two domains (Tet_A local, Tet_B non-local). "
+        "However, GFD does NOT derive the value 2*sqrt(2). The sqrt(2) enhancement "
+        "does NOT mathematically follow from having two tetrahedra. This would "
+        "require a derivation that does not exist in GFD."
+    )
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("PREMISE: Bell inequalities are violated by quantum systems.")
+            .step("Classical (local hidden variable) limit: S_classical = 2.0.")
+            .step("Quantum maximum (FROM QM, not GFD): S_quantum = 2*sqrt(2) approx 2.828.")
+            .step("Experimental values: S approx 2.4 to 2.7 depending on experiment.")
+            .step("GFD compatibility check: Does dual-tetrahedron structure forbid S > 2?")
+            .step("No. GFD's Tet_B (subspace) could provide non-local correlation capacity.")
+            .step("But GFD does NOT derive why S_max = 2*sqrt(2) specifically.")
+            .conclude("GFD is compatible with Bell violations but does not derive them.")
+        )
+    
+    def model(self):
+        # These values come from QM, not GFD
+        classical_limit = 2.0
+        quantum_max = 2 * math.sqrt(2)
+        gfd_compatible = 1  # GFD structure doesn't forbid violations
+        return (
+            Model()
+            .add("Classical limit (from LHV)", classical_limit)
+            .add("Quantum maximum (from QM)", quantum_max)
+            .add("GFD compatible", gfd_compatible)
+        )
+    
+    def observations(self):
+        return (
+            Observed()
+            .add("Classical limit (from LHV)", 2.0)
+            .add("Quantum maximum (from QM)", 2 * math.sqrt(2))
+            .add("GFD compatible", 1)
+        )
+
+
+class CompatibilityWithDistanceIndependence(Test):
+    """
+    Check: Is GFD's Tet_B sharing compatible with distance-independent entanglement?
+    
+    IMPORTANT: Distance independence is observed experimentally.
+    GFD's interpretation (Tet_B sharing) is compatible but not derived.
+    """
+    name = "Compatibility with Distance Independence"
+    question = (
+        "Is GFD's concept of shared Tetrahedron B configurations compatible "
+        "with the observed distance independence of quantum entanglement?"
+    )
+    reference = "Micius satellite experiment (2017)"
     tolerance = 0.10
-    derivation = (
-        "PREMISE: Compare fastest quantum gate times to Field Closure period. "
-        "EQUATION: Cycles per gate = t_gate × f_closure. "
-        "STEP 1: Fastest quantum gates: t_gate ≈ 1e-12 s (picoseconds). "
-        "STEP 2: Field Closure frequency: f_closure = c/r_e ≈ 1.06e23 Hz. "
-        "STEP 3: Closure period: t_closure = 1/f_closure ≈ 9.4e-24 s. "
-        "STEP 4: Cycles per gate = 1e-12 / 9.4e-24 ≈ 1.06e11 cycles. "
-        "OUTPUT: Fastest gates span ~10^11 closure cycles."
-    )
+    level = Standard
+    
     commentary = (
-        "Even the fastest quantum gates span approximately 10^11 Field Closure cycles, "
-        "indicating that gate operations are collective (averaged) phenomena, not single-cycle events. "
-        "This may set fundamental limits on achievable gate fidelity. "
-        "Gate operations are collective phenomena averaged over many Field Closure events, "
-        "rather than single-cycle processes, which may inform understanding of gate fidelity limitations."
+        "Entanglement correlations persist unchanged over 1200 km (Micius satellite). "
+        "GFD proposes that entangled particles share Tetrahedron B configurations. "
+        "If Tet_B is truly 'subspace' (non-spatial), distance independence follows. "
+        "However, this is a CONSISTENCY check, not a derivation. GFD assumes "
+        "non-local Tet_B sharing; it does not derive non-locality from geometry."
     )
     
+    def derivation(self):
+        return (
+            Derivation()
+            .step("PREMISE: Quantum entanglement is distance-independent (experimental fact).")
+            .step("Micius satellite demonstrated entanglement over 1200 km.")
+            .step("Fidelity at 1200 km = 0.869 (above 0.5 threshold).")
+            .step("GFD proposes: Tet_B configurations are shared non-locally.")
+            .step("If Tet_B is non-spatial, distance in Tet_A (space) is irrelevant.")
+            .step("Compatibility check: GFD's Tet_B sharing is consistent with observations.")
+            .conclude("GFD compatible with distance independence; does not derive it.")
+        )
+    
     def model(self):
-        t_fastest_gate = 1e-12  # ~ps gates
-        t_closure = 1 / CLOSURE_FREQUENCY
-        cycles_per_gate = t_fastest_gate / t_closure
-        return {
-            "Fastest gate (s)": t_fastest_gate,
-            "f_closure (Hz)": CLOSURE_FREQUENCY,
-            "Closure period (s)": t_closure,
-            "Cycles per gate": cycles_per_gate,
-        }
+        distance_km = 1200.0
+        observed_fidelity = 0.869
+        gfd_compatible = 1
+        return (
+            Model()
+            .add("Distance (km)", distance_km)
+            .add("Observed fidelity", observed_fidelity)
+            .add("GFD compatible", gfd_compatible)
+        )
+    
+    def observations(self):
+        return (
+            Observed()
+            .add("Distance (km)", 1200.0)
+            .add("Observed fidelity", 0.869)
+            .add("GFD compatible", 1)
+        )
+
+
+class CompatibilityWithNoSignaling(Test):
+    """
+    Check: Is GFD's Tet_A/Tet_B division compatible with the no-signaling theorem?
+    
+    IMPORTANT: No-signaling is a theorem of quantum mechanics.
+    GFD must be consistent with it, but does not derive it.
+    """
+    name = "Compatibility with No-Signaling"
+    question = (
+        "Is GFD's proposed division of roles (Tet_A: causal, Tet_B: correlational) "
+        "compatible with the no-signaling theorem that forbids FTL communication?"
+    )
+    reference = "No-signaling theorem"
+    tolerance = 0.01
+    level = Standard
+    
+    commentary = (
+        "The no-signaling theorem states that quantum correlations cannot be used "
+        "for faster-than-light communication. GFD proposes: Tet_A respects causality "
+        "(speed limit c), Tet_B provides correlation without controllable information. "
+        "This division is COMPATIBLE with no-signaling but does not derive it. "
+        "GFD assumes the Tet_A/Tet_B role separation; it is not derived from geometry."
+    )
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("PREMISE: No-signaling theorem forbids FTL communication via entanglement.")
+            .step("Quantum correlations exist but cannot be controlled to send signals.")
+            .step("GFD proposes: Tet_A handles causal/observable propagation (speed <= c).")
+            .step("GFD proposes: Tet_B handles correlation (not controllable information).")
+            .step("If Tet_B correlations are random, they cannot carry chosen messages.")
+            .step("Compatibility check: GFD's role division respects no-signaling.")
+            .conclude("GFD compatible with no-signaling; assumes (not derives) role division.")
+        )
+    
+    def model(self):
+        tsirelson = 2 * math.sqrt(2)
+        signaling_threshold = 4.0  # PR-box limit
+        below_threshold = 1 if tsirelson < signaling_threshold else 0
+        gfd_compatible = 1
+        return (
+            Model()
+            .add("Quantum max (Tsirelson)", tsirelson)
+            .add("Signaling threshold (PR-box)", signaling_threshold)
+            .add("Below threshold", below_threshold)
+            .add("GFD compatible", gfd_compatible)
+        )
+    
+    def observations(self):
+        return (
+            Observed()
+            .add("Quantum max (Tsirelson)", 2 * math.sqrt(2))
+            .add("Signaling threshold (PR-box)", 4.0)
+            .add("Below threshold", 1)
+            .add("GFD compatible", 1)
+        )
+
+
+# =============================================================================
+# SPECULATIVE CORRESPONDENCES (Analogies, not derivations)
+# =============================================================================
+
+class SpeculativeK4Correspondence(Test):
+    """
+    SPECULATIVE: Does k=4 correspond to multiparty entanglement limits?
+    
+    WARNING: This is numerology, not derivation. A tetrahedron has 4 vertices,
+    6 edges, 4 faces. GFD notes these numbers appear in multiparty entanglement.
+    But many geometric objects have 4 somethings. This is pattern-matching.
+    """
+    name = "Speculative k=4 Correspondence"
+    question = (
+        "Do the numbers in tetrahedral geometry (4 vertices, 6 edges, 4 faces) "
+        "correspond to multiparty entanglement structures? (CAUTION: This is "
+        "numerological pattern-matching, not derivation.)"
+    )
+    reference = "Tetrahedral geometry"
+    tolerance = 0.01
+    level = Standard
+    
+    commentary = (
+        "WARNING: This test documents a SPECULATIVE CORRESPONDENCE, not a derivation. "
+        "A tetrahedron has 4 vertices, 6 edges, 4 faces. GHZ states optimally "
+        "involve small numbers of parties, with special structure at 3-4 parties. "
+        "GFD notes the numerical coincidence but does NOT derive multiparty limits "
+        "from geometry. This is pattern-matching. Any 4-faced polyhedron would "
+        "'match' 4-party structures. Caution against over-interpretation."
+    )
+    
+    def derivation(self):
+        return (
+            Derivation()
+            .step("PREMISE: Document tetrahedral geometry numbers.")
+            .step("A tetrahedron has k=4 vertices.")
+            .step("A tetrahedron has 6 edges (k(k-1)/2 = 4*3/2 = 6).")
+            .step("A tetrahedron has 4 faces.")
+            .step("GFD NOTES (does not derive): These numbers appear in multiparty QM.")
+            .step("4-party GHZ states, 6 bipartite correlations, 4 tripartite terms.")
+            .step("CAUTION: This is numerological coincidence, not derivation.")
+            .conclude("Tetrahedral numbers: 4 vertices, 6 edges, 4 faces.")
+        )
+    
+    def model(self):
+        k = K_CLOSURE
+        vertices = k
+        edges = k * (k - 1) // 2
+        faces = k
+        return (
+            Model()
+            .add("Vertices (k)", vertices)
+            .add("Edges (k(k-1)/2)", edges)
+            .add("Faces (k)", faces)
+        )
+    
+    def observations(self):
+        return (
+            Observed()
+            .add("Vertices (k)", 4)
+            .add("Edges (k(k-1)/2)", 6)
+            .add("Faces (k)", 4)
+        )
 
 
 # =============================================================================
@@ -521,35 +407,33 @@ class ClosureFrequencyRelation(GFDTest):
 # =============================================================================
 
 ALL_TESTS = [
-    SequentialReadingImpossible,
-    SubspaceSimultaneousAccess,
-    BellViolationExceedsClassical,
-    NoSignalingPreserved,
-    DistanceIndependence,
-    K4MultipartyStructure,
-    EntanglementMonogamy,
-    GHZUnifiedConfiguration,
-    FrequencyMatchingConservation,
-    TeleportationResources,
-    ClosureFrequencyRelation,
+    # GFD geometric structure (actual GFD claims)
+    ComplementaryVertexPairs,
+    DualTetrahedronStructure,
+    # Compatibility checks (GFD doesn't contradict QM)
+    CompatibilityWithBellViolations,
+    CompatibilityWithDistanceIndependence,
+    CompatibilityWithNoSignaling,
+    # Speculative correspondences (analogies, not derivations)
+    SpeculativeK4Correspondence,
 ]
 
 
-def run_all_tests():
-    """Run all entanglement mechanics tests."""
-    return run_test_group(
-        title="Entanglement Mechanics",
+def run_all():
+    """Run geometric analogy tests for entanglement."""
+    return run_tests(
+        title="Geometric Analogies to Quantum Entanglement",
         summary=(
-            "These tests examine quantum entanglement using the GFD framework. "
-            "The model represents entangled particles as sharing a common Tet_B "
-            "(subspace) configuration. Model calculations are compared against "
-            "established experimental results including Bell inequality violations "
-            "and satellite-distance entanglement."
+            "CRITICAL FRAMING: These tests document geometric CORRESPONDENCES "
+            "between GFD's stellated octahedron structure and quantum entanglement. "
+            "They are NOT derivations. Every quantitative prediction comes from "
+            "quantum mechanics, not GFD. The GFD interpretations are speculative "
+            "analogies. GFD is COMPATIBLE with entanglement but does not DERIVE it."
         ),
         test_classes=ALL_TESTS
     )
 
 
 if __name__ == "__main__":
-    success = run_all_tests()
+    success = run_all()
     sys.exit(0 if success else 1)

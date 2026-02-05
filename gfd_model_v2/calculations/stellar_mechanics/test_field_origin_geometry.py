@@ -1,32 +1,35 @@
 """
-Stellar Mechanics: Gravity Field Envelope and Field Origin Relationships
-=========================================================================
+Field Origin Geometry: Model Definitions and Internal Consistency
+==================================================================
 
-GFD Model V2 - Converted to GFDTest interface
+GFD Model V2
 
-This module examines geometric relationships between gravity field envelope size,
-the Field Origin (vortex eye), and compression ratios.
+HONESTY STATEMENT:
+This module defines GFD model geometry and verifies internal consistency.
+These are MODEL DEFINITIONS, not physics derivations. The geometry is
+chosen to have certain properties, then we verify those properties hold.
 
-KEY CONCEPTS:
-- Field Envelope size: r_e = 2.818 fm (classical electron radius)
-- Field Origin: Center of stellated octahedron, gateway for binding
-- Only UNBOUND fields (squish balls) can pass through field origin
-- BOUND fields (bowling balls) have outward compression that blocks entry
-- Binding requires overcoming compression barrier (~511 keV at r_e)
-- k=4 tetrahedral closure geometry determines nuclear stability
+MODEL DEFINITIONS (not derivations):
+- Field Envelope size r_e = classical electron radius (adopted, not derived)
+- Field Origin = center of stellated octahedron (defined, not derived)
+- k=4 follows from simplex theorem (geometric definition)
+- Stellated octahedron as Field Chamber geometry (model choice)
+
+INTERNAL CONSISTENCY CHECKS:
+- Field Origin is at (0,0,0)
+- All vertices equidistant from origin
+- Tet A and Tet B are symmetric
+
+WHAT THIS MODULE DOES NOT DO:
+- It does not derive the classical electron radius
+- It does not explain WHY k=4 should relate to nuclear stability
+- The observation that A mod 4 = 0 for some stable nuclei is pattern
+  matching, not a GFD prediction
 """
 
-import sys
-import os
 import math
 import numpy as np
-
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
-
-from gfd_model_v2.base import GFDTest, run_test_group
-
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))))
-
+from gfd_model_v2.framework import *
 from gfd_model_v2.common import (
     VERTICES, TET_A, TET_B, K,
     C, HBAR, ALPHA, ME,
@@ -48,358 +51,305 @@ def calculate_field_origin():
 
 
 # =============================================================================
-# TEST CLASSES
+# TEST 1: FIELD ENVELOPE SIZE (Model Definition)
 # =============================================================================
 
-class FieldEnvelopeSize(GFDTest):
-    """Verify the Field Envelope size equals classical electron radius."""
+class FieldEnvelopeSize(Test):
+    """
+    Verify the Field Envelope size equals classical electron radius.
+
+    HONESTY: r_e is the classical electron radius from CODATA. GFD ADOPTS
+    this value as the "Field Envelope" size. This is a model definition,
+    not a derivation.
+    """
     name = "Field Envelope r_e"
-    question = "Does the fundamental Field Envelope size r_e correspond to the classical electron radius (2.818 fm), establishing the length scale of gravity field geometry?"
-    reference_source = "CODATA"
+    question = (
+        "Is the Field Envelope size r_e set to the classical electron radius "
+        "(2.818 fm) from CODATA?"
+    )
+    reference = "CODATA 2018"
     tolerance = 0.01
-    derivation = (
-        "PREMISE: The Field Envelope is the spherical boundary of each gravity field. "
-        "Its radius r_e equals the classical electron radius from CODATA. "
-        "STEP 1: Apply classical electron radius formula: r_e = e^2 / (4*pi*eps0*m_e*c^2). "
-        "STEP 2: CODATA value: r_e = 2.8179403262e-15 m = 2.818 fm. "
-        "STEP 3: This scale determines the size of the field origin gateway. "
-        "OUTPUT: Field Envelope r_e (m) = 2.818e-15."
-    )
+    level = Level.CRITICAL
     commentary = (
-        "The Field Envelope radius r_e = 2.818 fm is the fundamental length scale for gravity "
-        "field geometry. It defines the size of each gravity field's spherical boundary and "
-        "determines the field origin gateway size through which unbound fields (squish balls) "
-        "must pass during binding."
+        "The classical electron radius r_e = 2.818 fm is a measured constant. GFD "
+        "adopts this value as the 'Field Envelope' size. This is a definition that "
+        "sets the model's length scale. GFD does not derive r_e from first principles."
     )
-    
-    def model(self):
-        return {"Field Envelope r_e (m)": R_E}
-    
-    def observations(self):
-        return {"Field Envelope r_e (m)": 2.818e-15}
+
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("DEFINITION: GFD adopts the classical electron radius as Field Envelope size.")
+            .equation("r_e = e^2 / (4*pi*epsilon_0*m_e*c^2) = 2.818 fm (CODATA)")
+            .step("This is the model's fundamental length scale by definition.")
+            .conclude("Field Envelope r_e = 2.818e-15 m (adopted from CODATA).")
+        )
+
+    def model(self) -> Model:
+        return Model().add("Field Envelope r_e (m)", R_E)
+
+    def observations(self) -> Observed:
+        return Observed().add("Field Envelope r_e (m)", 2.818e-15)
 
 
-class FieldEnvelopeLargerThanProton(GFDTest):
-    """Verify Field Envelope is larger than proton radius."""
-    name = "Field Envelope > Proton"
-    question = "Is the Field Envelope size r_e larger than the proton charge radius by a factor > 3, yet fusion still requires stellar temperatures due to compression blocking?"
-    reference_source = "Nuclear Physics / DFP"
-    tolerance = 0.10
-    derivation = (
-        "PREMISE: The Field Envelope (r_e = 2.82 fm) is larger than the proton radius "
-        "(r_p = 0.87 fm), yet fusion requires stellar temperatures. This proves the "
-        "barrier isn't geometric - it's the compression blocking mechanism. "
-        "STEP 1: Field Envelope: r_e = 2.818 fm. "
-        "STEP 2: Proton radius: r_p = 0.87 fm (from electron scattering). "
-        "STEP 3: Ratio: r_e / r_p = 2.818 / 0.87 = 3.24. "
-        "STEP 4: Proton FITS geometrically (r_p < r_e). "
-        "STEP 5: Yet fusion needs ~15 million K - why? "
-        "STEP 6: Because bound atoms (bowling balls) have OUTWARD compression blocking entry. "
-        "OUTPUT: r_e/r_p ratio = 3.24, Proton fits geometrically = 1.0."
+# =============================================================================
+# TEST 2: k=4 FROM SIMPLEX THEOREM (Geometric Definition)
+# =============================================================================
+
+class TetrahedralClosureConstant(Test):
+    """
+    Verify k=4 follows from simplex theorem.
+
+    HONESTY: The simplex theorem states d+1 points are needed to enclose
+    d-dimensional space. For d=3, this gives k=4. GFD DEFINES k=4 as the
+    "Field Closure constant." This is a geometric fact, not a physics derivation.
+    """
+    name = "Tetrahedral Closure k=4"
+    question = (
+        "Does k=4 follow from the simplex theorem (d+1 points for d dimensions)?"
     )
+    reference = "Geometry (simplex theorem)"
+    tolerance = 0.01
+    level = Level.CRITICAL
     commentary = (
-        "The proton is geometrically smaller than the field origin (3.24x smaller), yet fusion "
-        "requires stellar temperatures. This proves the barrier is NOT geometric size - it's the "
-        "compression blocking mechanism. Bound atoms (bowling balls) have outward compression "
-        "that resists entry. Overcoming this barrier (~511 keV) requires stellar energies."
+        "The simplex theorem is pure geometry: to minimally enclose 3D space, you "
+        "need 4 points (a tetrahedron). GFD adopts k=4 as a fundamental constant. "
+        "This is a definition inspired by geometry, not a derivation that k=4 has "
+        "physical significance for nuclear stability."
     )
-    
-    def model(self):
-        ratio = R_E / R_PROTON
-        fits = 1.0 if ratio > 1.0 else 0.0
-        return {"r_e/r_p ratio": ratio, "Proton fits geometrically": fits}
-    
-    def observations(self):
-        return {"r_e/r_p ratio": 3.24, "Proton fits geometrically": 1.0}
+
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("GEOMETRY: Simplex theorem states d+1 points minimally enclose d dimensions.")
+            .equation("For d=3: k = d + 1 = 4")
+            .step("k=4 = tetrahedron vertices = tetrahedron faces.")
+            .step("GFD ADOPTS this as the Field Closure constant.")
+            .step("NOTE: This does not EXPLAIN why He-4 is stable. Shell model does.")
+            .conclude("k = 4 by geometric definition from simplex theorem.")
+        )
+
+    def model(self) -> Model:
+        k = K
+        d = 3
+        simplex = d + 1
+        return (
+            Model()
+            .add("k value", k)
+            .add("d+1 for d=3", simplex)
+            .add("Match", 1.0 if k == simplex else 0.0)
+        )
+
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("k value", 4)
+            .add("d+1 for d=3", 4)
+            .add("Match", 1.0)
+        )
 
 
-class ElectronQuantumExtent(GFDTest):
-    """Verify electron Compton wavelength spans ~861 Field Envelopes."""
-    name = "Electron Quantum Extent"
-    question = "Does the electron Compton wavelength span approximately 861 Field Envelope lengths, representing the electron vortex's quantum extent in gravity field units?"
-    reference_source = "Quantum Mechanics"
-    tolerance = 0.05
-    derivation = (
-        "PREMISE: The electron vortex pattern spans many gravity field lengths. "
-        "The Compton wavelength / Field Envelope gives this count. "
-        "STEP 1: Compton wavelength: lambda_C = 2.426e-12 m. "
-        "STEP 2: Field Envelope: r_e = 2.818e-15 m. "
-        "STEP 3: Ratio: lambda_C / r_e = 2.426e-12 / 2.818e-15 = 861. "
-        "STEP 4: The electron vortex pattern extends across ~861 gravity field units. "
-        "OUTPUT: lambda_C/r_e ratio = 861."
-    )
-    commentary = (
-        "The ~861 ratio between Compton wavelength and Field Envelope represents the quantum "
-        "extent of the electron vortex in gravity field units. The electron is NOT a gravity "
-        "field itself - it's a vortex pattern that orbits outside the nuclear structure, "
-        "spanning many gravity field lengths."
-    )
-    
-    def model(self):
-        ratio = LAMBDA_COMPTON / R_E
-        spans_many = 1.0 if ratio > 800 else 0.0
-        return {"lambda_C/r_e ratio": ratio, "Spans many fields": spans_many}
-    
-    def observations(self):
-        return {"lambda_C/r_e ratio": 861, "Spans many fields": 1.0}
+# =============================================================================
+# TEST 3: FIELD ORIGIN AT CENTER (Internal Consistency)
+# =============================================================================
 
+class FieldOriginAtCenter(Test):
+    """
+    Verify Field Origin is at geometric center of stellated octahedron.
 
-class FieldOriginAtCenter(GFDTest):
-    """Verify Field Origin is at geometric center of stellated octahedron."""
+    HONESTY: This is an internal consistency check. The stellated octahedron
+    is defined with vertices at (+/-1, +/-1, +/-1), so the center is (0,0,0)
+    by construction.
+    """
     name = "Field Origin Location"
-    question = "Is the Field Origin located at the geometric center (0,0,0) of the stellated octahedron, where Tet A and Tet B interpenetrate, serving as the gateway for gravity field binding?"
-    reference_source = "DFP Geometry"
+    question = (
+        "Is the Field Origin at the geometric center (0,0,0) of the stellated "
+        "octahedron?"
+    )
+    reference = "Model Definition"
     tolerance = 0.01
-    derivation = (
-        "PREMISE: The Field Origin is at the geometric center of the stellated octahedron, "
-        "where Tetrahedron A and Tetrahedron B interpenetrate. This is the gateway through "
-        "which unbound gravity fields (squish balls) must pass to bind into Tet B. "
-        "STEP 1: Calculate centroid of all 8 vertices. "
-        "STEP 2: Vertices: {(-1,-1,-1), (-1,-1,1), (-1,1,-1), (-1,1,1), (1,-1,-1), (1,-1,1), (1,1,-1), (1,1,1)}. "
-        "STEP 3: Average x = 0, Average y = 0, Average z = 0. "
-        "STEP 4: Field Origin = (0, 0, 0). "
-        "OUTPUT: Origin = (0, 0, 0), At center = 1.0."
-    )
+    level = Level.CRITICAL
     commentary = (
-        "The Field Origin at the geometric center is the gateway for binding. Only unbound "
-        "gravity fields (squish balls with no outward compression) can pass through. "
-        "Bound fields (bowling balls with outward compression) cannot enter - they must "
-        "first be unbound by overcoming the compression blocking barrier."
+        "The stellated octahedron vertices are at (+/-1, +/-1, +/-1). By symmetry, "
+        "the centroid is at (0,0,0). GFD calls this the 'Field Origin'. This is "
+        "a model definition, not a physics prediction."
     )
-    
-    def model(self):
+
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("GEOMETRY: Stellated octahedron with vertices at (+/-1, +/-1, +/-1).")
+            .step("Centroid = average of all vertices = (0, 0, 0).")
+            .step("GFD defines this as the 'Field Origin'.")
+            .conclude("Field Origin = (0, 0, 0) by construction.")
+        )
+
+    def model(self) -> Model:
         origin = calculate_field_origin()
         at_center = 1.0 if np.allclose(origin, [0, 0, 0]) else 0.0
-        return {"Origin x": origin[0], "Origin y": origin[1], "Origin z": origin[2], "At center": at_center}
-    
-    def observations(self):
-        return {"Origin x": 0.0, "Origin y": 0.0, "Origin z": 0.0, "At center": 1.0}
+        return (
+            Model()
+            .add("Origin x", origin[0])
+            .add("Origin y", origin[1])
+            .add("Origin z", origin[2])
+            .add("At center", at_center)
+        )
+
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("Origin x", 0.0)
+            .add("Origin y", 0.0)
+            .add("Origin z", 0.0)
+            .add("At center", 1.0)
+        )
 
 
-class OriginVertexDistance(GFDTest):
-    """Verify distance from Field Origin to vertices = sqrt(3)."""
+# =============================================================================
+# TEST 4: ORIGIN-VERTEX DISTANCE (Internal Consistency)
+# =============================================================================
+
+class OriginVertexDistance(Test):
+    """
+    Verify distance from Field Origin to vertices = sqrt(3).
+
+    HONESTY: Pure geometry. Distance from (0,0,0) to (+/-1,+/-1,+/-1) is sqrt(3).
+    """
     name = "Origin-Vertex Distance"
-    question = "In the stellated octahedron with unit coordinates, is the distance from Field Origin to each vertex exactly sqrt(3), ensuring symmetric geometry for binding?"
-    reference_source = "Geometry"
+    question = (
+        "In unit coordinates, is the distance from Field Origin to each vertex "
+        "exactly sqrt(3)?"
+    )
+    reference = "Geometry"
     tolerance = 0.01
-    derivation = (
-        "PREMISE: In the stellated octahedron with unit coordinates, all 8 vertices are "
-        "equidistant from the Field Origin. This symmetry is essential for consistent binding. "
-        "STEP 1: Distance for vertex (1, 1, 1): sqrt(1+1+1) = sqrt(3) = 1.732. "
-        "STEP 2: Same for all 8 vertices due to symmetry. "
-        "OUTPUT: Average distance = 1.732, Expected sqrt(3) = 1.732, All equal = 1.0."
-    )
+    level = Level.STANDARD
     commentary = (
-        "The uniform sqrt(3) distance from Field Origin to all vertices ensures symmetric "
-        "binding geometry. Gravity fields approaching from any direction face the same "
-        "geometric constraints at the field origin gateway."
+        "Distance from origin (0,0,0) to any vertex (+/-1,+/-1,+/-1) is sqrt(1+1+1) = "
+        "sqrt(3) = 1.732. This is basic geometry, not a physics prediction."
     )
-    
-    def model(self):
+
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("GEOMETRY: Vertex coordinates are (+/-1, +/-1, +/-1).")
+            .equation("Distance = sqrt(1^2 + 1^2 + 1^2) = sqrt(3) = 1.732")
+            .step("All 8 vertices are equidistant from origin by symmetry.")
+            .conclude("All vertices at distance sqrt(3) = 1.732 from origin.")
+        )
+
+    def model(self) -> Model:
         origin = calculate_field_origin()
         distances = [np.linalg.norm(get_vertex_coords(v) - origin) for v in range(8)]
         avg_dist = sum(distances) / len(distances)
         expected = math.sqrt(3)
         all_equal = 1.0 if all(abs(d - expected) < 0.001 for d in distances) else 0.0
-        return {"Average distance": avg_dist, "Expected sqrt(3)": expected, "All equal": all_equal}
-    
-    def observations(self):
-        return {"Average distance": 1.732, "Expected sqrt(3)": 1.732, "All equal": 1.0}
+        return (
+            Model()
+            .add("Average distance", avg_dist)
+            .add("Expected sqrt(3)", expected)
+            .add("All equal", all_equal)
+        )
+
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("Average distance", 1.732)
+            .add("Expected sqrt(3)", 1.732)
+            .add("All equal", 1.0)
+        )
 
 
-class VortexEyeSize(GFDTest):
-    """Calculate vortex eye (field origin gateway) size."""
-    name = "Vortex Eye / Field Origin Gateway"
-    question = "Is the vortex eye (field origin gateway) approximately r_e/2 in radius, and what is its relationship to the compression blocking barrier?"
-    reference_source = "DFP Model"
-    tolerance = 0.15
-    derivation = (
-        "PREMISE: The vortex eye (field origin gateway) has effective radius ~r_e/2. "
-        "This is the physical aperture through which unbound fields must pass. "
-        "STEP 1: Field Envelope: r_e = 2.818 fm. "
-        "STEP 2: Vortex eye estimate: r_e / 2 = 1.409 fm. "
-        "STEP 3: The Coulomb barrier at r_e is ~511 keV - this is the compression "
-        "blocking energy that must be overcome to unbind atoms and pass fields through. "
-        "OUTPUT: Vortex eye size, Expected r_e/2, Ratio."
+# =============================================================================
+# TEST 5: BIMETRIC SYMMETRY (Internal Consistency)
+# =============================================================================
+
+class BimetricBalance(Test):
+    """
+    Verify Tet A and Tet B are equidistant from Field Origin.
+
+    HONESTY: The stellated octahedron is constructed from two interpenetrating
+    tetrahedra. By symmetry, both are equidistant from the center.
+    """
+    name = "Bimetric Balance"
+    question = (
+        "Are Tet A and Tet B equidistant from the Field Origin?"
     )
-    commentary = (
-        "The vortex eye at the field origin is the gateway for binding. The ~r_e/2 aperture "
-        "is geometrically accessible, but the compression blocking barrier (~511 keV at r_e) "
-        "prevents bound atoms from passing. Only unbound fields (squish balls) can enter."
-    )
-    
-    def model(self):
-        eye_size = calculate_vortex_eye_size_common(R_E)
-        expected = R_E / 2
-        ratio = eye_size / expected
-        return {"Vortex eye size (m)": eye_size, "Expected r_e/2 (m)": expected, "Ratio": ratio}
-
-
-class CompressionRatioForBinding(GFDTest):
-    """Calculate compression needed for gravity field binding."""
-    name = "Compression Ratio for Binding"
-    question = "What compression ratio is required to bring atoms from equilibrium spacing to binding proximity, and does this explain why binding only occurs in stellar cores?"
-    reference_source = "DFP Model"
-    tolerance = 0.20
-    derivation = (
-        "PREMISE: Atoms at equilibrium spacing (~10^-10 m) must be compressed to binding "
-        "proximity (~10^-15 m = r_e). This compression overcomes the bowling ball barrier. "
-        "STEP 1: Equilibrium spacing ~10^-10 m (Bohr radius scale). "
-        "STEP 2: Binding proximity ~10^-15 m (Field Envelope scale). "
-        "STEP 3: Compression ratio = 10^-10 / 10^-15 = 10^5. "
-        "STEP 4: This extreme compression requires stellar core conditions. "
-        "STEP 5: Compression overcomes outward pressure of bowling balls, enabling unbinding. "
-        "OUTPUT: Compression ratio > 10^4."
-    )
-    commentary = (
-        "The >10,000x compression needed to bring atoms to binding proximity explains why "
-        "fusion only occurs in stellar cores. This compression must not only bring atoms "
-        "close together but also provide enough energy (~511 keV) to overcome the compression "
-        "blocking barrier - converting bowling balls to squish balls before they can bind."
-    )
-    
-    def model(self):
-        ratio = compression_ratio_equilibrium_to_tile()
-        high_ratio = 1.0 if ratio > 1e4 else 0.0
-        return {"Compression ratio": ratio, "Exceeds 10^4": high_ratio}
-
-
-class BindingDensityThreshold(GFDTest):
-    """Verify binding threshold density is between WD and nuclear."""
-    name = "Binding Density Threshold"
-    question = "Is the gravity field binding threshold density between white dwarf (~10^9 kg/m^3) and nuclear (~10^17 kg/m^3) densities, consistent with stellar core fusion conditions?"
-    reference_source = "Astrophysics"
+    reference = "Model Geometry"
     tolerance = 0.01
-    derivation = (
-        "PREMISE: Binding threshold density should be intermediate between white dwarf "
-        "and nuclear densities, matching observed stellar core fusion conditions. "
-        "STEP 1: White dwarf density: ~10^9 kg/m^3 (log = 9). "
-        "STEP 2: Binding threshold: ~10^14 kg/m^3 (log = 14) per model. "
-        "STEP 3: Nuclear density: ~10^17 kg/m^3 (log = 17). "
-        "STEP 4: Ordering: WD < binding < nuclear. Correct! "
-        "OUTPUT: Correctly ordered = 1.0."
-    )
+    level = Level.STANDARD
     commentary = (
-        "The intermediate binding density (~10^14 kg/m^3) corresponds to conditions "
-        "between white dwarf and neutron star interiors. At this density, atoms are "
-        "compressed enough that stellar energies can overcome the compression blocking "
-        "barrier, enabling gravity field rebinding."
+        "The stellated octahedron consists of two tetrahedra (Tet A and Tet B) "
+        "with shared center. By construction, both are equidistant from the origin. "
+        "This is geometry, not physics."
     )
-    
-    def model(self):
-        log_wd = math.log10(RHO_WHITE_DWARF)
-        log_bind = math.log10(RHO_FIELD_BINDING)
-        log_nuclear = math.log10(RHO_NUCLEAR)
-        ordered = 1.0 if log_wd < log_bind < log_nuclear else 0.0
-        return {
-            "WD log density": log_wd, 
-            "Binding log density": log_bind, 
-            "Nuclear log density": log_nuclear,
-            "Correctly ordered": ordered,
-        }
-    
-    def observations(self):
-        log_wd = math.log10(RHO_WHITE_DWARF)
-        log_bind = math.log10(RHO_FIELD_BINDING)
-        log_nuclear = math.log10(RHO_NUCLEAR)
-        return {
-            "WD log density": log_wd, 
-            "Binding log density": log_bind, 
-            "Nuclear log density": log_nuclear,
-            "Correctly ordered": 1.0,
-        }
+
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("GEOMETRY: Stellated octahedron = two interpenetrating tetrahedra.")
+            .step("Both tetrahedra share the same center at (0,0,0).")
+            .step("By symmetry, avg distance from origin is the same for both.")
+            .equation("Tet A avg distance = Tet B avg distance = sqrt(3)")
+            .conclude("Bimetric symmetry holds by construction.")
+        )
+
+    def model(self) -> Model:
+        origin = calculate_field_origin()
+        tet_a_dists = [np.linalg.norm(get_vertex_coords(v) - origin) for v in TET_A]
+        tet_b_dists = [np.linalg.norm(get_vertex_coords(v) - origin) for v in TET_B]
+        avg_a = sum(tet_a_dists) / len(tet_a_dists)
+        avg_b = sum(tet_b_dists) / len(tet_b_dists)
+        balanced = 1.0 if abs(avg_a - avg_b) < 0.001 else 0.0
+        return (
+            Model()
+            .add("Tet_A avg distance", avg_a)
+            .add("Tet_B avg distance", avg_b)
+            .add("Balanced", balanced)
+        )
+
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("Tet_A avg distance", 1.732)
+            .add("Tet_B avg distance", 1.732)
+            .add("Balanced", 1.0)
+        )
 
 
-class KMultipleStability(GFDTest):
-    """Verify k-multiple nuclei correspond to complete closure."""
-    name = "K-Multiple = Complete Closure"
-    question = "Do He-4, C-12, and O-16 correspond exactly to k, 3k, and k^2 gravity fields in Tet B, demonstrating complete tetrahedral closure geometry?"
-    reference_source = "Nuclear Physics"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: He-4, C-12, and O-16 should have A = k, 3k, k^2 respectively, "
-        "representing complete closure configurations in Tet B. "
-        "STEP 1: He-4: A = 4 = k = complete first closure. "
-        "STEP 2: C-12: A = 12 = 3k = three nested closures (triple alpha). "
-        "STEP 3: O-16: A = 16 = k^2 = four nested closures. "
-        "STEP 4: All are k-multiples with complete closure geometry. "
-        "OUTPUT: He-4 = k = 1.0, C-12 = 3k = 1.0, O-16 = k^2 = 1.0."
-    )
-    commentary = (
-        "He-4 (k=4), C-12 (3k=12), and O-16 (k^2=16) all have A equal to k-multiples, "
-        "meaning their Tet B contains complete tetrahedral closures with no leftover geometry. "
-        "This complete closure geometry is why these nuclei are among the most stable and "
-        "abundant in the universe - they're key products of stellar nucleosynthesis."
-    )
-    
-    def model(self):
-        k = K
-        he4_is_k = 1.0 if 4 == k else 0.0
-        c12_is_3k = 1.0 if 12 == 3 * k else 0.0
-        o16_is_k2 = 1.0 if 16 == k ** 2 else 0.0
-        return {
-            "He-4 = k": he4_is_k,
-            "C-12 = 3k": c12_is_3k,
-            "O-16 = k^2": o16_is_k2,
-        }
-    
-    def observations(self):
-        return {"He-4 = k": 1.0, "C-12 = 3k": 1.0, "O-16 = k^2": 1.0}
+# =============================================================================
+# TEST 6: INNER OCTAHEDRON (Internal Consistency)
+# =============================================================================
 
+class InnerOctahedronBoundary(Test):
+    """
+    Verify inner octahedron at distance 1.0 from origin.
 
-class TetrahedralClosureConstant(GFDTest):
-    """Verify k=4 follows from simplex theorem."""
-    name = "Tetrahedral Closure k=4"
-    question = "Does k=4 follow from the simplex theorem (d+1 points needed to enclose d-dimensional space), establishing tetrahedral geometry as fundamental?"
-    reference_source = "Geometry (simplex theorem)"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: The Field Closure constant k=4 follows from the simplex theorem: "
-        "to enclose d-dimensional space, you need d+1 points. "
-        "STEP 1: For 3D space: d = 3. "
-        "STEP 2: Minimum enclosing points: k = d + 1 = 3 + 1 = 4. "
-        "STEP 3: k=4 = tetrahedron (4 vertices, 4 faces). "
-        "STEP 4: This is why He-4 (k=4 in Tet B) is the first complete closure. "
-        "OUTPUT: k value = 4, Equals d+1 = 1.0."
-    )
-    commentary = (
-        "k=4 is geometrically necessary - you cannot enclose 3D space with fewer than 4 points. "
-        "This explains why He-4 (A=4 = k fields in Tet B) is the first truly stable closed "
-        "configuration. Configurations with fewer fields (H, D, T, He-3) have incomplete "
-        "geometry (point, line, plane) and cannot achieve full 3D closure."
-    )
-    
-    def model(self):
-        k = K
-        is_4 = 1.0 if k == 4 else 0.0
-        return {"k value": k, "Equals 4": is_4}
-    
-    def observations(self):
-        return {"k value": 4, "Equals 4": 1.0}
-
-
-class InnerOctahedronBoundary(GFDTest):
-    """Verify inner octahedron defines Tet A / Tet B boundary."""
+    HONESTY: The inner octahedron has vertices at (+/-1,0,0), (0,+/-1,0), (0,0,+/-1).
+    Distance from origin is 1.0 by construction.
+    """
     name = "Inner Octahedron Boundary"
-    question = "Do the 6 inner octahedron vertices lie at distance 1.0 from Field Origin, defining the symmetric boundary between Tet A and Tet B?"
-    reference_source = "Geometry"
+    question = (
+        "Do the 6 inner octahedron vertices lie at distance 1.0 from the origin?"
+    )
+    reference = "Geometry"
     tolerance = 0.01
-    derivation = (
-        "PREMISE: The inner octahedron at the stellated octahedron's edge midpoints "
-        "defines the boundary between Tet A and Tet B regions. "
-        "STEP 1: Inner octahedron vertices: (+/-1,0,0), (0,+/-1,0), (0,0,+/-1). "
-        "STEP 2: Distance from origin: sqrt(1) = 1.0 for each. "
-        "STEP 3: All 6 vertices equidistant at 1.0. "
-        "OUTPUT: Average distance = 1.0, All at 1.0 = 1.0."
-    )
+    level = Level.STANDARD
     commentary = (
-        "The inner octahedron marks the boundary between Tet A (physical space) and Tet B "
-        "(where gravity fields bind). The uniform distance of 1.0 reflects the symmetric "
-        "relationship between the two tetrahedra - essential for the bidirectional compression "
-        "shift that occurs during binding."
+        "The inner octahedron vertices are at the axis points (+/-1, 0, 0), etc. "
+        "Distance from (0,0,0) to (1,0,0) is 1.0. This is basic geometry."
     )
-    
-    def model(self):
+
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("GEOMETRY: Inner octahedron at edge midpoints.")
+            .step("Vertices: (+/-1,0,0), (0,+/-1,0), (0,0,+/-1).")
+            .equation("Distance from origin: sqrt(1+0+0) = 1.0")
+            .step("All 6 vertices at distance 1.0 from origin.")
+            .conclude("Inner octahedron at distance 1.0 by construction.")
+        )
+
+    def model(self) -> Model:
         inner_vertices = [
             np.array([1, 0, 0]), np.array([-1, 0, 0]),
             np.array([0, 1, 0]), np.array([0, -1, 0]),
@@ -408,44 +358,127 @@ class InnerOctahedronBoundary(GFDTest):
         origin = calculate_field_origin()
         distances = [np.linalg.norm(v - origin) for v in inner_vertices]
         all_at_1 = 1.0 if all(abs(d - 1.0) < 0.001 for d in distances) else 0.0
-        return {"Average distance": sum(distances)/len(distances), "All at 1.0": all_at_1}
-    
-    def observations(self):
-        return {"Average distance": 1.0, "All at 1.0": 1.0}
+        return (
+            Model()
+            .add("Average distance", sum(distances)/len(distances))
+            .add("All at 1.0", all_at_1)
+        )
+
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("Average distance", 1.0)
+            .add("All at 1.0", 1.0)
+        )
 
 
-class BimetricBalance(GFDTest):
-    """Verify Field Origin is equidistant from both tetrahedra."""
-    name = "Bimetric Balance"
-    question = "Are Tet A and Tet B equidistant from the Field Origin, ensuring symmetric bidirectional compression shift during binding?"
-    reference_source = "DFP Geometry"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: The Field Origin must be equidistant from Tet A and Tet B to ensure "
-        "symmetric bidirectional compression shift during binding. "
-        "STEP 1: Calculate average distance from origin to Tet A vertices. "
-        "STEP 2: Calculate average distance from origin to Tet B vertices. "
-        "STEP 3: Both = sqrt(3) = 1.732 (symmetric). "
-        "OUTPUT: Tet_A avg = 1.732, Tet_B avg = 1.732, Balanced = 1.0."
+# =============================================================================
+# TEST 7: SCALE COMPARISON (Observation, Not Derivation)
+# =============================================================================
+
+class ScaleComparison(Test):
+    """
+    Compare r_e to proton radius.
+
+    HONESTY: This is an observation. r_e > r_proton is a measured fact.
+    GFD does not explain WHY this is so.
+    """
+    name = "Field Envelope vs Proton Size"
+    question = (
+        "Is the Field Envelope size r_e larger than the proton charge radius?"
     )
+    reference = "Nuclear Physics (proton radius)"
+    tolerance = 0.10
+    level = Level.STANDARD
     commentary = (
-        "The bimetric balance (equal distances to Tet A and Tet B) is essential for the "
-        "bidirectional compression shift. When gravity fields bind into Tet B, the compression "
-        "reverses from inward to outward. This symmetry ensures the transition is geometrically "
-        "consistent, creating the stable bowling ball configuration."
+        "r_e = 2.818 fm (classical electron radius) is ~3.2x larger than "
+        "r_proton = 0.87 fm (proton charge radius). This is an observation. "
+        "GFD does not derive either value."
     )
-    
-    def model(self):
-        origin = calculate_field_origin()
-        tet_a_dists = [np.linalg.norm(get_vertex_coords(v) - origin) for v in TET_A]
-        tet_b_dists = [np.linalg.norm(get_vertex_coords(v) - origin) for v in TET_B]
-        avg_a = sum(tet_a_dists) / len(tet_a_dists)
-        avg_b = sum(tet_b_dists) / len(tet_b_dists)
-        balanced = 1.0 if abs(avg_a - avg_b) < 0.001 else 0.0
-        return {"Tet_A avg distance": avg_a, "Tet_B avg distance": avg_b, "Balanced": balanced}
-    
-    def observations(self):
-        return {"Tet_A avg distance": 1.732, "Tet_B avg distance": 1.732, "Balanced": 1.0}
+
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("MEASUREMENT: r_e = 2.818 fm (CODATA).")
+            .step("MEASUREMENT: r_proton = 0.87 fm (electron scattering).")
+            .equation("Ratio = 2.818 / 0.87 = 3.24")
+            .step("OBSERVATION: Field Envelope > proton radius.")
+            .step("GFD does not explain this ratio. It is adopted as given.")
+            .conclude("r_e/r_proton = 3.24 (measured ratio).")
+        )
+
+    def model(self) -> Model:
+        ratio = R_E / R_PROTON
+        return (
+            Model()
+            .add("r_e (fm)", R_E * 1e15)
+            .add("r_proton (fm)", R_PROTON * 1e15)
+            .add("Ratio", ratio)
+        )
+
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("r_e (fm)", 2.818)
+            .add("r_proton (fm)", 0.87)
+            .add("Ratio", 3.24)
+        )
+
+
+# =============================================================================
+# TEST 8: COMPTON WAVELENGTH RATIO (Observation, Not Derivation)
+# =============================================================================
+
+class ComptonWavelengthRatio(Test):
+    """
+    Calculate ratio of Compton wavelength to r_e.
+
+    HONESTY: lambda_C / r_e = 2*pi/alpha ~ 861 is a known result from QED.
+    GFD does not derive this. It observes and adopts it.
+    """
+    name = "Compton / r_e Ratio"
+    question = (
+        "What is the ratio of Compton wavelength to classical electron radius?"
+    )
+    reference = "QED"
+    tolerance = 0.05
+    level = Level.STANDARD
+    commentary = (
+        "lambda_C / r_e = 2*pi/alpha = 861. This is a standard QED result. "
+        "The classical electron radius r_e = alpha * lambda_C / (2*pi), so "
+        "lambda_C / r_e = 2*pi / alpha. GFD observes this ratio but does not "
+        "derive it."
+    )
+
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("STANDARD QED: lambda_C = h/(m_e*c) = 2.426e-12 m.")
+            .step("r_e = alpha^2 * a_0 = alpha * lambda_bar_C = 2.818e-15 m.")
+            .step("lambda_bar_C = lambda_C / (2*pi) (reduced Compton wavelength).")
+            .equation("r_e = alpha * lambda_C / (2*pi)")
+            .equation("lambda_C / r_e = 2*pi / alpha = 861")
+            .step("GFD OBSERVES this ratio. It does not derive it.")
+            .conclude("lambda_C / r_e = 861 (standard QED).")
+        )
+
+    def model(self) -> Model:
+        ratio = LAMBDA_COMPTON / R_E
+        expected = 2 * math.pi / ALPHA
+        return (
+            Model()
+            .add("lambda_C / r_e", ratio)
+            .add("2*pi/alpha", expected)
+            .add("Match", 1.0 if abs(ratio - expected) / expected < 0.001 else 0.0)
+        )
+
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("lambda_C / r_e", 861)
+            .add("2*pi/alpha", 861)
+            .add("Match", 1.0)
+        )
 
 
 # =============================================================================
@@ -454,33 +487,39 @@ class BimetricBalance(GFDTest):
 
 ALL_TESTS = [
     FieldEnvelopeSize,
-    FieldEnvelopeLargerThanProton,
-    ElectronQuantumExtent,
+    TetrahedralClosureConstant,
     FieldOriginAtCenter,
     OriginVertexDistance,
-    VortexEyeSize,
-    CompressionRatioForBinding,
-    BindingDensityThreshold,
-    KMultipleStability,
-    TetrahedralClosureConstant,
-    InnerOctahedronBoundary,
     BimetricBalance,
+    InnerOctahedronBoundary,
+    ScaleComparison,
+    ComptonWavelengthRatio,
 ]
 
 
-def run_all_tests():
-    """Run all field envelope and field origin geometry tests."""
-    summary = (
-        "These tests examine Field Envelope size (r_e = 2.818 fm), the Field Origin geometry, "
-        "and compression ratios for gravity field binding. The Field Origin is the gateway "
-        "through which unbound fields (squish balls) pass to bind into Tet B. Bound atoms "
-        "(bowling balls) cannot enter due to compression blocking (~511 keV barrier). "
-        "k=4 tetrahedral geometry determines nuclear stability."
+def run_all() -> bool:
+    """Run all field origin geometry tests."""
+    return run_tests(
+        title="Field Origin Geometry",
+        summary=(
+            "These tests verify GFD MODEL DEFINITIONS and internal consistency:\n"
+            "1. r_e = 2.818 fm (adopted from CODATA, not derived)\n"
+            "2. k = 4 from simplex theorem (geometric definition)\n"
+            "3. Field Origin at (0,0,0) by construction\n"
+            "4. Stellated octahedron symmetry properties\n\n"
+            "CLARIFICATION: These are model definitions and geometry checks.\n"
+            "GFD does not DERIVE the classical electron radius, proton radius,\n"
+            "or Compton wavelength. It adopts measured values and defines\n"
+            "internal geometric relationships.\n\n"
+            "REMOVED: Tests claiming k-alignment 'explains' nuclear stability.\n"
+            "The observation that some stable nuclei have A mod 4 = 0 is\n"
+            "pattern matching, not a GFD prediction."
+        ),
+        test_classes=ALL_TESTS,
     )
-    
-    return run_test_group("Field Envelope and Origin Geometry", summary, ALL_TESTS)
 
 
 if __name__ == "__main__":
-    success = run_all_tests()
+    import sys
+    success = run_all()
     sys.exit(0 if success else 1)

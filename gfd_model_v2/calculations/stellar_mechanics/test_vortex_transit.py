@@ -1,28 +1,37 @@
 """
-Vortex Eye Transit Tests
-========================
+Vortex Eye Transit: Model Definitions
+======================================
 
-GFD Model V2 - Converted to GFDTest interface
+GFD Model V2
 
-Category B: The Folding Event
+HONESTY STATEMENT:
+This module defines GFD model concepts about the "vortex eye" (Field Origin)
+and verifies internal consistency of those definitions. These are MODEL
+DEFINITIONS, not physics derivations or predictions.
 
-This module tests the physics of gravity fields passing through the field origin
-(vortex eye) and entering the subspace region (Tet_B). The model treats the
-vortex eye as the topological gateway between the two Field Chamber regions,
-with transit requiring energy to overcome a barrier.
+MODEL DEFINITIONS:
+- Vortex eye = center of stellated octahedron = Field Origin
+- Transit barrier = adopted from nuclear binding energies (~8 MeV)
+- Cross-section = geometric calculation from model parameters
+- Transit rate = model function (not derived from physics)
+
+WHAT THIS MODULE DOES:
+- Defines internal model parameters
+- Verifies geometric consistency
+- Shows model behavior (e.g., rate increases with temperature)
+
+WHAT THIS MODULE DOES NOT DO:
+- Derive nuclear binding energies
+- Predict fusion rates
+- Provide new physics beyond standard models
+
+The "transit barrier" of ~8 MeV is ADOPTED from measured nuclear binding
+energies, not derived from GFD geometry.
 """
 
-import sys
-import os
 import math
 import numpy as np
-
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
-
-from gfd_model_v2.base import GFDTest, run_test_group
-
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))))
-
+from gfd_model_v2.framework import *
 from gfd_model_v2.common import (
     VERTICES, TET_A, TET_B,
     G, C, HBAR, ELECTRON_MASS,
@@ -31,14 +40,13 @@ from gfd_model_v2.common import (
     vortex_eye_size,
 )
 
+
 # =============================================================================
 # CONSTANTS
 # =============================================================================
 
-E_PLANCK = math.sqrt(HBAR * C**5 / G)
-E_ELECTRON = M_E * C**2
 MEV_TO_JOULES = 1.60218e-13
-BINDING_ENERGY_PER_NUCLEON = 8.0 * MEV_TO_JOULES
+BINDING_ENERGY_PER_NUCLEON = 8.0 * MEV_TO_JOULES  # ~8 MeV adopted from nuclear data
 
 
 def get_vertex_coords(v):
@@ -52,15 +60,24 @@ def calculate_field_origin():
 
 
 def vortex_eye_cross_section(tile_size=R_E):
+    """Model-defined cross-section (not physically derived)."""
     eye_radius = tile_size / 4
     return math.pi * eye_radius**2
 
 
 def energy_barrier_estimate():
+    """Return adopted barrier from nuclear binding energies."""
     return BINDING_ENERGY_PER_NUCLEON
 
 
 def transit_rate(temperature, barrier):
+    """
+    Model function for transit rate vs temperature.
+
+    HONESTY: This is a model function, not a derivation of fusion rates.
+    It shows qualitative behavior (rate increases with T) but is not
+    quantitatively predictive.
+    """
     K_B = 1.380649e-23
     if temperature <= 0:
         return 0.0
@@ -74,123 +91,203 @@ def transit_rate(temperature, barrier):
 
 
 # =============================================================================
-# TEST CLASSES
+# TEST 1: TRANSIT ENERGY BARRIER (Adopted from Nuclear Data)
 # =============================================================================
 
-class TransitEnergyBarrier(GFDTest):
-    """Estimate energy barrier for vortex eye transit."""
+class TransitEnergyBarrier(Test):
+    """
+    State the adopted transit barrier.
+
+    HONESTY: ~8 MeV is adopted from nuclear binding energies.
+    It is NOT derived from GFD geometry.
+    """
     name = "Transit Energy Barrier"
-    question = "What is the energy barrier for gravity fields to transit through the vortex eye (Field Origin), and is this barrier in the MeV range (1-20 MeV) consistent with the Coulomb barrier and binding energies observed in nuclear fusion?"
-    reference_source = "Nuclear Physics"
+    question = (
+        "What is the adopted transit barrier in the GFD model?"
+    )
+    reference = "Nuclear Physics (binding energies)"
     tolerance = 0.20
-    derivation = (
-        "PREMISE: Energy barrier for gravity fields to transit through vortex eye (Field Origin) "
-        "should be in MeV range (1-20 MeV), consistent with Coulomb barrier in nuclear fusion. "
-        "STEP 1: Estimate barrier from binding energy: 8.0 MeV/nucleon. "
-        "STEP 2: Convert to Joules: 8.0 x 1.602e-13 = 1.28e-12 J. "
-        "STEP 3: Verify in MeV range: 1 < 8.0 < 20. "
-        "OUTPUT: Transit barrier (J) = 1.28e-12, Transit barrier (MeV) = 8.0, In MeV range = 1.0."
-    )
+    level = Level.STANDARD
     commentary = (
-        "The estimated transit barrier in the MeV range is consistent with nuclear binding energy scales. "
-        "This energy requirement for gravity fields to pass through the Field Origin corresponds to the Coulomb "
-        "barrier and strong force contributions observed in nuclear fusion processes."
+        "The transit barrier of ~8 MeV is ADOPTED from measured nuclear "
+        "binding energies (average BE/nucleon near Fe-56). GFD does not "
+        "derive this value. It is a model parameter taken from nuclear data."
     )
-    
-    def model(self):
+
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("MODEL PARAMETER: Transit barrier adopted from nuclear data.")
+            .step("Nuclear binding energies peak at ~8.8 MeV/nucleon (Fe-56).")
+            .step("GFD adopts ~8 MeV as representative barrier energy.")
+            .equation("Barrier = 8.0 MeV = 1.28e-12 J")
+            .step("This is NOT derived from GFD. It is taken from measurements.")
+            .conclude("Transit barrier = 8 MeV (adopted).")
+        )
+
+    def model(self) -> Model:
         barrier = energy_barrier_estimate()
         barrier_mev = barrier / MEV_TO_JOULES
-        in_range = 1.0 if 1 < barrier_mev < 20 else 0.0
-        return {"Transit barrier (J)": barrier, "Transit barrier (MeV)": barrier_mev, "In MeV range": in_range}
-    
-    def observations(self):
-        return {"Transit barrier (J)": 1.28e-12, "Transit barrier (MeV)": 8.0, "In MeV range": 1.0}
+        return (
+            Model()
+            .add("Transit barrier (J)", barrier)
+            .add("Transit barrier (MeV)", barrier_mev)
+            .add("In 1-20 MeV range", 1.0 if 1 < barrier_mev < 20 else 0.0)
+        )
+
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("Transit barrier (J)", 1.28e-12)
+            .add("Transit barrier (MeV)", 8.0)
+            .add("In 1-20 MeV range", 1.0)
+        )
 
 
-class OneWayGateTopology(GFDTest):
-    """Verify one-way gate topology between Tet_A and Tet_B."""
-    name = "One-Way Gate Topology"
-    question = "Are Tetrahedron A and Tetrahedron B geometrically symmetric (equal distances from Field Origin) while maintaining topologically distinct domains, with the Field Origin serving as a one-way gate between them?"
-    reference_source = "Geometry"
+# =============================================================================
+# TEST 2: STELLATED OCTAHEDRON SYMMETRY (Geometry)
+# =============================================================================
+
+class StellatedOctahedronSymmetry(Test):
+    """
+    Verify Tet A and Tet B are equidistant from center.
+
+    HONESTY: This is geometry, not physics.
+    """
+    name = "Tet A / Tet B Symmetry"
+    question = (
+        "Are Tet A and Tet B equidistant from the Field Origin?"
+    )
+    reference = "Geometry"
     tolerance = 0.01
-    derivation = (
-        "PREMISE: Tet_A and Tet_B should be geometrically symmetric (equal distances from "
-        "Field Origin) while maintaining topologically distinct domains. "
-        "STEP 1: Calculate average Tet_A distance: sqrt(3) = 1.732. "
-        "STEP 2: Calculate average Tet_B distance: sqrt(3) = 1.732. "
-        "STEP 3: Verify geometry shared: |1.732 - 1.732| < 0.001. "
-        "OUTPUT: Tet_A avg dist = 1.732, Tet_B avg dist = 1.732, Geometry shared = 1.0."
-    )
+    level = Level.STANDARD
     commentary = (
-        "The symmetric geometry of Tetrahedron A and Tetrahedron B with equal distances from the Field "
-        "Origin is a fundamental property of the stellated octahedron. This shared geometry defines the "
-        "topological relationship between the two Field Chamber regions."
+        "The stellated octahedron consists of two interpenetrating tetrahedra "
+        "centered at the origin. By construction, both are equidistant from "
+        "the center. This is geometry, not a physics prediction."
     )
-    
-    def model(self):
+
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("GEOMETRY: Stellated octahedron structure.")
+            .step("Two tetrahedra share center at (0,0,0).")
+            .step("All vertices at (+/-1, +/-1, +/-1).")
+            .equation("Distance = sqrt(3) = 1.732 for all vertices")
+            .step("By symmetry, avg(Tet A) = avg(Tet B) = sqrt(3).")
+            .conclude("Symmetric by construction.")
+        )
+
+    def model(self) -> Model:
         origin = calculate_field_origin()
         tet_a_dists = [np.linalg.norm(get_vertex_coords(v) - origin) for v in TET_A]
         tet_b_dists = [np.linalg.norm(get_vertex_coords(v) - origin) for v in TET_B]
         avg_a = np.mean(tet_a_dists)
         avg_b = np.mean(tet_b_dists)
-        geometry_shared = 1.0 if abs(avg_a - avg_b) < 0.001 else 0.0
-        return {"Tet_A avg dist": avg_a, "Tet_B avg dist": avg_b, "Geometry shared": geometry_shared}
-    
-    def observations(self):
-        return {"Tet_A avg dist": 1.732, "Tet_B avg dist": 1.732, "Geometry shared": 1.0}
+        return (
+            Model()
+            .add("Tet A avg distance", avg_a)
+            .add("Tet B avg distance", avg_b)
+            .add("Symmetric", 1.0 if abs(avg_a - avg_b) < 0.001 else 0.0)
+        )
+
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("Tet A avg distance", 1.732)
+            .add("Tet B avg distance", 1.732)
+            .add("Symmetric", 1.0)
+        )
 
 
-class VortexEyeCrossSection(GFDTest):
-    """Calculate vortex eye effective cross-section."""
-    name = "Vortex Eye Cross-Section"
-    question = "Is the vortex eye (Field Origin aperture) cross-section approximately 1/16 of the Field Envelope area, with an effective eye radius of r_e/4, indicating that transit requires precise geometric alignment?"
-    reference_source = None  # Model calculation
+# =============================================================================
+# TEST 3: VORTEX EYE SIZE (Model Definition)
+# =============================================================================
+
+class VortexEyeSize(Test):
+    """
+    State the model-defined vortex eye size.
+
+    HONESTY: r_e/4 is a model definition, not a derivation.
+    """
+    name = "Vortex Eye Size"
+    question = (
+        "What is the vortex eye size in the GFD model?"
+    )
+    reference = "Model Definition"
     tolerance = 0.05
-    derivation = (
-        "PREMISE: Vortex eye (Field Origin aperture) cross-section is approximately 1/16 of "
-        "Field Envelope area, with eye radius r_e/4, indicating transit requires precise geometric alignment. "
-        "STEP 1: Calculate eye radius: r_e / 4. "
-        "STEP 2: Calculate eye cross-section: pi x (r_e/4)^2. "
-        "STEP 3: Calculate ratio to Field Envelope area: 1/16 = 0.0625. "
-        "OUTPUT: Eye cross-section (m^2), Ratio to Field Envelope area, Matches 1/16."
-    )
+    level = Level.STANDARD
     commentary = (
-        "The vortex eye cross-section estimate of 1/16 Field Envelope area represents the effective aperture "
-        "through the Field Origin. This small fractional area suggests that transit events are "
-        "geometrically constrained, requiring precise alignment for gravity field passage."
+        "The vortex eye size is defined as r_e/4 in the GFD model. This is "
+        "a MODEL DEFINITION, not a derivation. The factor 1/4 is chosen, "
+        "not derived from first principles."
     )
-    
-    def model(self):
-        sigma = vortex_eye_cross_section(R_E)
-        field_area = math.pi * R_E**2
-        ratio = sigma / field_area
-        expected_ratio = 0.0625  # (0.25)^2
-        match = 1.0 if abs(ratio - expected_ratio) / expected_ratio < 0.01 else 0.0
-        return {"Eye cross-section (m^2)": sigma, "Ratio to Field Envelope area": ratio, "Matches 1/16": match}
+
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("MODEL DEFINITION: Vortex eye size.")
+            .step("r_e = 2.818 fm (classical electron radius).")
+            .step("GFD DEFINES eye radius = r_e / 4.")
+            .equation("Eye radius = 2.818 / 4 = 0.705 fm")
+            .step("This is a model parameter, not derived.")
+            .conclude("Vortex eye = r_e/4 by definition.")
+        )
+
+    def model(self) -> Model:
+        eye_size = vortex_eye_size(R_E)
+        expected = R_E / 4
+        return (
+            Model()
+            .add("Eye size (m)", eye_size)
+            .add("r_e/4 (m)", expected)
+            .add("Match", 1.0 if abs(eye_size - expected) / expected < 0.01 else 0.0)
+        )
+
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("Eye size (m)", R_E / 4)
+            .add("r_e/4 (m)", R_E / 4)
+            .add("Match", 1.0)
+        )
 
 
-class TransitRateVsPressure(GFDTest):
-    """Verify transit rate increases with temperature."""
+# =============================================================================
+# TEST 4: TRANSIT RATE VS TEMPERATURE (Model Behavior)
+# =============================================================================
+
+class TransitRateTemperature(Test):
+    """
+    Show model rate increases with temperature.
+
+    HONESTY: This shows model behavior, not a physics derivation.
+    The model function is qualitative, not quantitatively predictive.
+    """
     name = "Transit Rate vs Temperature"
-    question = "Does the gravity field transit rate through the vortex eye increase monotonically with temperature, consistent with thermally-activated quantum tunneling through the Coulomb barrier?"
-    reference_source = None  # Model behavior
+    question = (
+        "Does the model transit rate increase with temperature?"
+    )
+    reference = "Model Definition"
     tolerance = 0.01
-    derivation = (
-        "PREMISE: Gravity field transit rate through vortex eye should increase monotonically with "
-        "temperature, consistent with thermally-activated quantum tunneling. "
-        "STEP 1: Calculate rate at T = 10^7 K. "
-        "STEP 2: Calculate rate at T = 10^8 K. "
-        "STEP 3: Calculate rate at T = 10^9 K. "
-        "STEP 4: Verify monotonic increase: Rate_1 <= Rate_2 <= Rate_3. "
-        "OUTPUT: Rate at 10^7 K, Rate at 10^8 K, Rate at 10^9 K, Monotonic increase."
-    )
+    level = Level.STANDARD
     commentary = (
-        "The monotonic increase of transit rate with temperature is consistent with thermally-activated "
-        "quantum tunneling processes. This behavior corresponds to the temperature-dependent fusion "
-        "rates observed in stellar cores."
+        "The model transit rate function increases with temperature. This "
+        "is qualitatively consistent with thermally activated processes but "
+        "is not a derivation of fusion rates. It shows model behavior."
     )
-    
-    def model(self):
+
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("MODEL FUNCTION: Transit rate vs temperature.")
+            .step("Higher T = more thermal energy = higher tunneling probability.")
+            .step("Qualitatively correct behavior for activated processes.")
+            .step("NOT a quantitative derivation of fusion rates.")
+            .conclude("Rate increases with T (model behavior).")
+        )
+
+    def model(self) -> Model:
         barrier = energy_barrier_estimate()
         T_low = 1e7
         T_med = 1e8
@@ -199,52 +296,75 @@ class TransitRateVsPressure(GFDTest):
         rate_med = transit_rate(T_med, barrier)
         rate_high = transit_rate(T_high, barrier)
         increasing = 1.0 if rate_low <= rate_med <= rate_high else 0.0
-        return {
-            "Rate at 10^7 K": rate_low,
-            "Rate at 10^8 K": rate_med,
-            "Rate at 10^9 K": rate_high,
-            "Monotonic increase": increasing,
-        }
+        return (
+            Model()
+            .add("Rate at 10^7 K", rate_low)
+            .add("Rate at 10^8 K", rate_med)
+            .add("Rate at 10^9 K", rate_high)
+            .add("Monotonic increase", increasing)
+        )
+
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("Rate at 10^7 K", 0.0)
+            .add("Rate at 10^8 K", 0.0)
+            .add("Rate at 10^9 K", 1.0)
+            .add("Monotonic increase", 1.0)
+        )
 
 
-class FieldOriginStability(GFDTest):
-    """Test if vortex eye is topologically stable."""
-    name = "Vortex Eye Stability"
-    question = "Is the vortex eye (Field Origin) topologically stable, remaining fixed at the center of the stellated octahedron with constant size r_e/4 regardless of external pressure or temperature conditions?"
-    reference_source = "Geometry"
+# =============================================================================
+# TEST 5: FIELD ORIGIN STABILITY (Geometry)
+# =============================================================================
+
+class FieldOriginStability(Test):
+    """
+    Verify Field Origin is at center.
+
+    HONESTY: By construction, the origin is at (0,0,0).
+    """
+    name = "Field Origin Position"
+    question = (
+        "Is the Field Origin at the center (0,0,0) of the stellated octahedron?"
+    )
+    reference = "Geometry"
     tolerance = 0.01
-    derivation = (
-        "PREMISE: Vortex eye (Field Origin) is topologically stable, remaining fixed at "
-        "center with constant size r_e/4 regardless of external conditions. "
-        "STEP 1: Verify Field Origin at center: (0, 0, 0). "
-        "STEP 2: Calculate vortex eye size: r_e / 4 (per common module definition). "
-        "STEP 3: Verify size matches expected r_e/4. "
-        "OUTPUT: Origin at center = 1.0, Eye size (m) = r_e/4, Size stable = 1.0."
-    )
+    level = Level.STANDARD
     commentary = (
-        "The topological stability of the Field Origin at the stellated octahedron center is a geometric "
-        "constraint. The fixed position and size independent of external conditions suggests the Field "
-        "Origin serves as a stable reference point in the Field Chamber structure."
+        "The Field Origin is defined as the centroid of the stellated "
+        "octahedron vertices. With vertices at (+/-1, +/-1, +/-1), the "
+        "centroid is (0,0,0) by symmetry. This is geometry, not physics."
     )
-    
-    def model(self):
+
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("GEOMETRY: Centroid of stellated octahedron.")
+            .step("Vertices at (+/-1, +/-1, +/-1).")
+            .step("Centroid = average = (0, 0, 0).")
+            .conclude("Field Origin at center by construction.")
+        )
+
+    def model(self) -> Model:
         origin = calculate_field_origin()
         at_center = 1.0 if np.allclose(origin, [0, 0, 0]) else 0.0
-        eye_size = vortex_eye_size(R_E)
-        expected_size = R_E / 4  # Per common module: vortex_eye_size returns tile_size / 4
-        size_stable = 1.0 if abs(eye_size - expected_size) / expected_size < 0.001 else 0.0
-        return {
-            "Origin at center": at_center,
-            "Eye size (m)": eye_size,
-            "Size stable": size_stable,
-        }
-    
-    def observations(self):
-        return {
-            "Origin at center": 1.0,
-            "Eye size (m)": R_E / 4,
-            "Size stable": 1.0,
-        }
+        return (
+            Model()
+            .add("Origin x", origin[0])
+            .add("Origin y", origin[1])
+            .add("Origin z", origin[2])
+            .add("At center", at_center)
+        )
+
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("Origin x", 0.0)
+            .add("Origin y", 0.0)
+            .add("Origin z", 0.0)
+            .add("At center", 1.0)
+        )
 
 
 # =============================================================================
@@ -253,25 +373,38 @@ class FieldOriginStability(GFDTest):
 
 ALL_TESTS = [
     TransitEnergyBarrier,
-    OneWayGateTopology,
-    VortexEyeCrossSection,
-    TransitRateVsPressure,
+    StellatedOctahedronSymmetry,
+    VortexEyeSize,
+    TransitRateTemperature,
     FieldOriginStability,
 ]
 
 
-def run_all_tests():
+def run_all() -> bool:
     """Run all vortex transit tests."""
-    summary = (
-        "These tests examine vortex eye transit via spherical packing. The model treats "
-        "gravity field transit through the Field Origin as a transition from Tet_A "
-        "to Tet_B. The calculated energy barrier (~8 MeV) is consistent with "
-        "nuclear binding energies."
+    return run_tests(
+        title="Vortex Eye Transit",
+        summary=(
+            "These tests define GFD model parameters and verify internal consistency.\n\n"
+            "MODEL DEFINITIONS (not derivations):\n"
+            "- Transit barrier = 8 MeV (adopted from nuclear data)\n"
+            "- Vortex eye size = r_e/4 (defined, not derived)\n"
+            "- Field Origin = stellated octahedron center\n\n"
+            "GEOMETRY VERIFIED:\n"
+            "- Tet A and Tet B symmetric about origin\n"
+            "- Field Origin at (0,0,0) by construction\n\n"
+            "MODEL BEHAVIOR:\n"
+            "- Transit rate increases with temperature (qualitative)\n\n"
+            "CLARIFICATION: This module defines model parameters. The ~8 MeV\n"
+            "barrier is taken from nuclear physics, not derived from GFD.\n"
+            "The geometric relationships follow from the stellated octahedron\n"
+            "construction, not from physics principles."
+        ),
+        test_classes=ALL_TESTS,
     )
-    
-    return run_test_group("Vortex Eye Transit", summary, ALL_TESTS)
 
 
 if __name__ == "__main__":
-    success = run_all_tests()
+    import sys
+    success = run_all()
     sys.exit(0 if success else 1)

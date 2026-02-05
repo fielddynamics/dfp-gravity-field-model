@@ -1,63 +1,45 @@
 """
-Binding Pathway Mechanics
-=========================
+Binding Pathway Mechanics: Standard Nuclear Physics
+====================================================
 
-GFD Model V2 - New Test Category
+GFD Model V2
 
-CATEGORY PURPOSE:
-This module probes the COMPLETE PATHWAY by which a gravity envelope becomes
-bound with other gravity fields to create an atom. It bridges the gap between
-the compression blocking tests (which explain WHY binding is hard) and the
-element-level tests (which verify WHAT gets produced). These tests examine
-HOW each stage of binding actually works.
+HONESTY STATEMENT:
+This module verifies STANDARD NUCLEAR PHYSICS data against GFD terminology.
+These tests do NOT derive nuclear physics from GFD geometry. They verify
+that measured nuclear data (binding energies, mass defects, fusion thresholds)
+is correctly referenced and that GFD terminology maps consistently to
+established physics.
 
-THE BINDING PATHWAY (10 stages tested):
-1. FIELD ACTIVATION    - Empty field -> Activated field (938 MeV threshold)
-2. VORTEX CAPTURE      - Activated field captures electron vortex -> Hydrogen
-3. CLOSURE DIMENSION   - k=1,2,3,4 maps to 0D,1D,2D,3D geometry progression
-4. ENERGY BUDGET       - Complete accounting: unbinding cost vs binding gain
-5. HOST FIELD ROLE     - The (1+A) configuration: why there's always a host
-6. PACKING EFFICIENCY  - Binding energy per nucleon as function of A/k ratio
-7. NEUTRON NECESSITY   - Why heavier atoms need neutrons (A/Z > 1)
-8. ALPHA CLUSTERING    - Why nuclei cluster in k=4 sub-units
-9. FUSION CHAIN        - Complete H->He->C->O->Si->Fe pathway verification
-10. IRON WALL          - Why Fe-56 is the endpoint of exothermic fusion
+WHAT GFD CLAIMS (to be tested elsewhere):
+- The stellated octahedron geometry (Field Chamber) constrains nuclear structure
+- k=4 is geometrically necessary (simplex theorem)
+- Binding involves compression shift through the Field Origin
 
-These tests make QUANTITATIVE PREDICTIONS that connect GFD geometry to
-measured nuclear physics data, extending the model's predictive reach.
+WHAT THESE TESTS VERIFY:
+1. Standard nuclear binding energies are correctly referenced
+2. Mass defect calculations follow E=mc^2
+3. Fusion chain temperatures match astrophysical data
+4. Fe-56 is at binding energy peak (standard physics)
+
+NOT TESTED HERE (removed as numerology):
+- Whether A mod 4 = 0 "explains" stability (it does not derive it)
+- Whether k-alignment predicts binding (pattern matching, not derivation)
 
 References:
-- CODATA 2018 nuclear binding energies
-- Standard Solar Model (Bahcall 2005)
-- Nuclear shell model (Mayer & Jensen)
-- AME2020 Atomic Mass Evaluation
+- CODATA 2018 / AME2020 nuclear binding energies
+- Standard Solar Model (Bahcall)
 """
 
-import sys
-import os
 import math
-from typing import Dict
-
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-# Try both import paths to support different execution contexts
-try:
-    from gfd_model_v2.base import GFDTest, run_test_group
-except ImportError:
-    from base import GFDTest, run_test_group
+from gfd_model_v2.framework import *
 
 
 # =============================================================================
-# CONSTANTS
+# PHYSICAL CONSTANTS (CODATA 2018 / AME2020)
 # =============================================================================
 
-# GFD Parameters
-K_CLOSURE = 4               # Tetrahedral closure constant
-D_SPATIAL = 3               # Spatial dimensions
-
-# Physical Constants
 C = 2.998e8                  # Speed of light (m/s)
-R_E = 2.8179403262e-15       # Classical electron radius / Field Envelope (m)
 M_PROTON = 1.67262192e-27    # Proton mass (kg)
 M_NEUTRON = 1.67492749e-27   # Neutron mass (kg)
 M_ELECTRON = 9.1093837e-31   # Electron mass (kg)
@@ -68,34 +50,31 @@ M_PROTON_MEV = 938.272       # Proton rest mass
 M_NEUTRON_MEV = 939.565      # Neutron rest mass
 M_ELECTRON_MEV = 0.511       # Electron rest mass
 
-# Nuclear binding energies (MeV per nucleon) - AME2020/CODATA
+# Nuclear binding energies (MeV per nucleon) from AME2020/CODATA
 BINDING_ENERGY_PER_NUCLEON = {
     'H-1':   0.00,    # Unbound single nucleon
     'H-2':   1.11,    # Deuterium
     'H-3':   2.83,    # Tritium
     'He-3':  2.57,    # Helium-3
-    'He-4':  7.07,    # Alpha particle - first complete closure
+    'He-4':  7.07,    # Alpha particle
     'Li-6':  5.33,
     'Li-7':  5.61,
-    'Be-8':  7.06,    # UNSTABLE - decays in 8.19e-17 s
-    'B-10':  6.47,
-    'C-12':  7.68,    # 3k - triple-alpha product
+    'Be-8':  7.06,    # UNSTABLE (8.19e-17 s half-life)
+    'C-12':  7.68,
     'N-14':  7.48,
-    'O-16':  7.98,    # k^2 - doubly magic
-    'Ne-20': 8.03,    # 5k
-    'Mg-24': 8.26,    # 6k
-    'Si-28': 8.45,    # 7k
-    'S-32':  8.49,    # 8k = 2k^2
-    'Ca-40': 8.55,    # 10k - doubly magic
-    'Ti-48': 8.72,    # 12k
-    'Cr-52': 8.76,    # 13k
-    'Fe-56': 8.79,    # 14k - PEAK binding energy
-    'Ni-62': 8.79,    # Near peak
-    'Zn-64': 8.74,    # k^3
-    'Kr-84': 8.72,    # T_7
-    'Sn-120':8.50,    # 30k
-    'Pb-208':7.87,    # 52k - doubly magic
-    'U-238': 7.57,    # 59.5k
+    'O-16':  7.98,    # Doubly magic
+    'Ne-20': 8.03,
+    'Mg-24': 8.26,
+    'Si-28': 8.45,
+    'S-32':  8.49,
+    'Ca-40': 8.55,    # Doubly magic
+    'Fe-56': 8.79,    # PEAK binding energy per nucleon
+    'Ni-62': 8.79,    # Near peak (highest total BE/A)
+    'Zn-64': 8.74,
+    'Kr-84': 8.72,
+    'Sn-120': 8.50,
+    'Pb-208': 7.87,   # Doubly magic
+    'U-238': 7.57,
 }
 
 # Total binding energies (MeV) for key nuclei
@@ -107,524 +86,475 @@ TOTAL_BINDING_ENERGY = {
     'Fe-56': 492.26,  # Iron
 }
 
-# Fusion thresholds (Kelvin)
+# Fusion thresholds (Kelvin) from stellar physics
 T_H_FUSION = 1.5e7    # pp-chain ignition
 T_HE_FUSION = 1.0e8   # Triple-alpha ignition
 T_C_FUSION = 5.0e8    # Carbon burning
 T_O_FUSION = 1.5e9    # Oxygen burning
 T_SI_FUSION = 2.7e9   # Silicon burning -> Fe
 
-# Cosmic abundances (relative to Si = 10^6) - Anders & Grevesse 1989
-COSMIC_ABUNDANCE = {
-    'H':  2.79e10,
-    'He': 2.72e9,
-    'C':  1.01e7,
-    'N':  3.13e6,
-    'O':  2.38e7,
-    'Ne': 3.44e6,
-    'Mg': 1.07e6,
-    'Si': 1.00e6,
-    'S':  5.15e5,
-    'Fe': 9.00e5,
-    'Ni': 4.93e4,
-}
-
 
 # =============================================================================
-# TEST 1: FIELD ACTIVATION ENERGY
+# TEST 1: PROTON REST MASS (standard physics)
 # =============================================================================
 
-class FieldActivationThreshold(GFDTest):
+class ProtonRestMass(Test):
     """
-    Test the energy threshold for activating an empty gravity field.
-    An empty field (squish ball) becomes an activated field (proton) at ~938 MeV.
-    This is the FIRST step in atom creation.
+    Verify proton rest mass energy.
+
+    HONESTY: This test verifies that we reference the correct CODATA value.
+    GFD does not derive the proton mass. The claim that m_p/m_e = 6*pi^5
+    is a numerical coincidence (accuracy ~0.01%), not a derivation.
     """
-    name = "Field Activation Threshold"
+    name = "Proton Rest Mass Energy"
     question = (
-        "Does the activation energy for converting an empty gravity field into a proton "
-        "(~938 MeV) correspond to the nucleon rest mass, establishing that activated "
-        "gravity fields ARE nucleons and that this threshold sets the minimum energy "
-        "scale for matter creation?"
+        "What is the proton rest mass energy, and how does it compare to the "
+        "electron rest mass?"
     )
-    reference_source = "CODATA (proton mass)"
+    reference = "CODATA 2018"
     tolerance = 0.01
-    derivation = (
-        "PREMISE: An empty gravity field must receive ~938 MeV to become an activated field (proton). "
-        "STEP 1: Proton rest mass energy: E = m_p * c^2 = 1.673e-27 * (2.998e8)^2 = 1.503e-10 J. "
-        "STEP 2: Convert to MeV: 1.503e-10 / 1.602e-13 = 938.3 MeV. "
-        "STEP 3: This energy fills the empty Tet B with internal structure (quarks/gluons in SM). "
-        "STEP 4: In GFD terms: this excites the field from empty geometry into a configuration "
-        "that can participate in binding and attract an electron vortex. "
-        "STEP 5: Activation ratio to electron: 938.3 / 0.511 = 1836 = 6*pi^5. "
-        "OUTPUT: Activation energy = 938.3 MeV, matches proton rest mass."
-    )
+    level = Level.STANDARD
     commentary = (
-        "Field activation is the genesis event for matter. The 938 MeV threshold converts "
-        "empty spacetime geometry (squish ball) into an activated gravity field (proton) "
-        "that can attract a vortex and participate in binding. This energy is supplied by "
-        "the Big Bang or by pair production in high-energy environments. The 6*pi^5 ratio "
-        "to electron mass connects activation energy to the geometric formula for the "
-        "proton-electron mass ratio."
+        "The proton rest mass (938.27 MeV) is a measured fundamental constant. "
+        "The mass ratio m_p/m_e = 1836.15 is empirically determined. The numerical "
+        "coincidence that 6*pi^5 = 1836.12 is noted but does NOT constitute a "
+        "derivation. GFD adopts this value; it does not predict it."
     )
 
-    def model(self) -> Dict[str, float]:
-        # Proton rest mass energy
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("MEASUREMENT: Proton rest mass from CODATA 2018.")
+            .step("m_p = 1.67262192e-27 kg.")
+            .equation("E = m_p * c^2 = 1.503e-10 J = 938.27 MeV")
+            .step("Mass ratio to electron: 938.27 / 0.511 = 1836.15.")
+            .step("NOTE: The numerical coincidence 6*pi^5 = 1836.12 (0.002% match) "
+                  "is observed but unexplained. This is NOT a GFD derivation.")
+            .conclude("Proton rest mass = 938.27 MeV (measured).")
+        )
+
+    def model(self) -> Model:
+        # CODATA proton mass
         E_proton_J = M_PROTON * C**2
         E_proton_MeV = E_proton_J / MEV_TO_JOULES
 
-        # Neutron rest mass energy (second activation mode)
-        E_neutron_J = M_NEUTRON * C**2
-        E_neutron_MeV = E_neutron_J / MEV_TO_JOULES
-
-        # Mass ratio to electron (should be ~6*pi^5)
+        # Mass ratio
         mass_ratio = E_proton_MeV / M_ELECTRON_MEV
-        geometric_prediction = 6 * math.pi**5
 
-        return {
-            "Proton activation (MeV)": E_proton_MeV,
-            "Neutron activation (MeV)": E_neutron_MeV,
-            "m_p/m_e ratio": mass_ratio,
-            "6*pi^5 prediction": geometric_prediction,
-        }
+        # The 6*pi^5 coincidence (noted, not claimed as derivation)
+        six_pi_fifth = 6 * math.pi**5
+        coincidence_error = abs(mass_ratio - six_pi_fifth) / mass_ratio * 100
 
-    def observations(self) -> Dict[str, float]:
-        return {
-            "Proton activation (MeV)": 938.272,
-            "Neutron activation (MeV)": 939.565,
-            "m_p/m_e ratio": 1836.15,
-            "6*pi^5 prediction": 1836.12,
-        }
+        return (
+            Model()
+            .add("Proton mass (MeV)", E_proton_MeV)
+            .add("m_p/m_e ratio", mass_ratio)
+            .add("6*pi^5 value", six_pi_fifth)
+            .add("Coincidence error (%)", coincidence_error)
+        )
+
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("Proton mass (MeV)", 938.272)
+            .add("m_p/m_e ratio", 1836.15)
+            .add("6*pi^5 value", 1836.12)
+            .add("Coincidence error (%)", 0.002)
+        )
 
 
 # =============================================================================
-# TEST 2: VORTEX CAPTURE - HYDROGEN FORMATION
+# TEST 2: HYDROGEN IONIZATION (standard atomic physics)
 # =============================================================================
 
-class VortexCaptureHydrogen(GFDTest):
+class HydrogenIonization(Test):
     """
-    Test the formation of hydrogen: activated field + electron vortex = atom.
-    The vortex binding energy (13.6 eV) is tiny compared to activation (938 MeV),
-    confirming vortex capture is a low-energy electromagnetic process.
+    Verify hydrogen ionization energy.
+
+    HONESTY: This is standard atomic physics (Bohr model / QM).
+    GFD terminology ("vortex capture") is a relabeling, not a derivation.
     """
-    name = "Vortex Capture: Hydrogen Formation"
+    name = "Hydrogen Ionization Energy"
     question = (
-        "Does the hydrogen atom form when an activated gravity field captures an electron "
-        "vortex at 13.6 eV binding energy, and is this electromagnetic binding energy "
-        "negligible (~1.45e-5) compared to the nuclear activation energy, confirming that "
-        "vortex capture and nuclear binding operate at vastly different energy scales?"
+        "What is the hydrogen ionization energy, and how does it compare to "
+        "nuclear binding energies?"
     )
-    reference_source = "CODATA (hydrogen ionization energy)"
-    tolerance = 0.05
-    derivation = (
-        "PREMISE: Hydrogen = activated gravity field + electron vortex. "
-        "STEP 1: Activation energy: 938.272 MeV (nuclear scale). "
-        "STEP 2: Vortex capture energy (ionization): 13.6 eV = 0.0000136 MeV. "
-        "STEP 3: Ratio: 13.6e-6 / 938.272 = 1.45e-8. "
-        "STEP 4: Vortex capture is electromagnetic, not nuclear - 8 orders of magnitude weaker. "
-        "STEP 5: After capture: (1+1) configuration = 1 host + 1 field in Tet B. "
-        "STEP 6: This triggers bidirectional compression shift -> bowling ball state. "
-        "STEP 7: The vortex orbits OUTSIDE the Field Origin (not embedded). "
-        "OUTPUT: Ionization energy = 13.6 eV, Ratio to nuclear = 1.45e-8."
-    )
+    reference = "CODATA (Rydberg energy)"
+    tolerance = 0.01
+    level = Level.STANDARD
     commentary = (
-        "Hydrogen formation reveals two distinct energy scales in atom creation: nuclear "
-        "activation (~938 MeV to create the activated field) and electromagnetic capture "
-        "(~13.6 eV to bind the vortex). The 10^8 ratio between these scales reflects the "
-        "fine structure constant hierarchy: electromagnetic interactions are alpha ~ 1/137 "
-        "weaker than nuclear binding. The vortex orbits outside the Field Origin, establishing "
-        "the (1+1) bowling ball configuration that defines all atoms."
+        "The hydrogen ionization energy (13.6 eV) is derived from QM/Bohr model. "
+        "It is 7 orders of magnitude smaller than nuclear binding (~MeV). This "
+        "scale separation reflects the different physics of electromagnetic vs "
+        "strong force binding. GFD relabels this as 'vortex capture' but does "
+        "not derive it."
     )
 
-    def model(self) -> Dict[str, float]:
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("STANDARD PHYSICS: Hydrogen ionization from Rydberg energy.")
+            .equation("E_ion = 13.6 eV = m_e * alpha^2 * c^2 / 2")
+            .step("Compare to nuclear scale: 938 MeV (proton mass).")
+            .equation("Ratio: 13.6e-6 / 938 = 1.45e-8")
+            .step("Scale separation: ~10^8 between atomic and nuclear.")
+            .conclude("Ionization = 13.6 eV; atomic << nuclear energies.")
+        )
+
+    def model(self) -> Model:
         ionization_eV = 13.6
         ionization_MeV = ionization_eV * 1e-6
-        activation_MeV = M_PROTON_MEV
+        ratio = ionization_MeV / M_PROTON_MEV
+        log_separation = math.log10(M_PROTON_MEV / ionization_MeV)
 
-        # Ratio: electromagnetic / nuclear
-        energy_ratio = ionization_MeV / activation_MeV
+        return (
+            Model()
+            .add("Ionization energy (eV)", ionization_eV)
+            .add("Ratio to proton mass", ratio)
+            .add("Scale separation (orders)", log_separation)
+        )
 
-        # Scale separation in orders of magnitude
-        log_separation = math.log10(activation_MeV / ionization_MeV)
-
-        # After capture: hydrogen is (1+1) = bowling ball
-        k_in_tetb = 1
-        is_bowling_ball = 1.0 if k_in_tetb >= 1 else 0.0
-
-        return {
-            "Ionization energy (eV)": ionization_eV,
-            "Energy ratio (EM/nuclear)": energy_ratio,
-            "Scale separation (orders)": log_separation,
-            "k in Tet B": k_in_tetb,
-            "Is bowling ball": is_bowling_ball,
-        }
-
-    def observations(self) -> Dict[str, float]:
-        return {
-            "Ionization energy (eV)": 13.6,
-            "Energy ratio (EM/nuclear)": 1.45e-8,
-            "Scale separation (orders)": 7.84,
-            "k in Tet B": 1,
-            "Is bowling ball": 1.0,
-        }
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("Ionization energy (eV)", 13.6)
+            .add("Ratio to proton mass", 1.45e-8)
+            .add("Scale separation (orders)", 7.84)
+        )
 
 
 # =============================================================================
-# TEST 3: CLOSURE DIMENSION PROGRESSION
+# TEST 3: HELIUM-4 BINDING (standard nuclear physics)
 # =============================================================================
 
-class ClosureDimensionProgression(GFDTest):
+class Helium4Binding(Test):
     """
-    Test the geometric dimension progression as fields pack into Tet B.
-    k=1 -> 0D (point), k=2 -> 1D (line), k=3 -> 2D (plane), k=4 -> 3D (volume).
-    This explains WHY He-4 is special: it's the FIRST complete 3D closure.
+    Verify He-4 (alpha particle) binding energy.
+
+    HONESTY: The exceptional stability of He-4 is well-known in nuclear physics.
+    It is explained by the nuclear shell model (doubly magic: Z=N=2).
+    GFD notes that 4 = k, but this does NOT explain the stability.
     """
-    name = "Closure Dimension Progression"
+    name = "He-4 Binding Energy"
     question = (
-        "Does each additional gravity field in Tetrahedron B increase the geometric "
-        "dimension by one (k=1:0D, k=2:1D, k=3:2D, k=4:3D), and does this progression "
-        "explain the dramatic jump in binding energy at He-4 where complete 3D closure "
-        "first occurs?"
+        "What is the He-4 binding energy, and why is it exceptionally stable?"
     )
-    reference_source = "Nuclear Physics (binding energies) / Simplex Theorem"
-    tolerance = 0.10
-    derivation = (
-        "PREMISE: The simplex theorem requires d+1 points to enclose d-dimensional space. "
-        "STEP 1: k=1 (H-1): 1 point defines 0D geometry. BE/A = 0.00 MeV. "
-        "STEP 2: k=2 (H-2): 2 points define 1D line. BE/A = 1.11 MeV. "
-        "STEP 3: k=3 (He-3): 3 points define 2D plane. BE/A = 2.57 MeV. "
-        "STEP 4: k=4 (He-4): 4 points define 3D volume = COMPLETE CLOSURE. BE/A = 7.07 MeV. "
-        "STEP 5: Jump from k=3 to k=4: 7.07 - 2.57 = 4.50 MeV (175% increase). "
-        "STEP 6: Jump from k=1 to k=2: 1.11 - 0.00 = 1.11 MeV. "
-        "STEP 7: Jump from k=2 to k=3: 2.57 - 1.11 = 1.46 MeV. "
-        "STEP 8: The k=3->4 jump is 3-4x larger than earlier jumps = closure bonus. "
-        "OUTPUT: Dimension at each k, BE/A at each k, closure jump magnitude."
-    )
-    commentary = (
-        "The dimension progression reveals why He-4 is exceptionally stable: it achieves "
-        "the first complete 3D enclosure. The binding energy jumps incrementally for "
-        "k=1->2->3 (adding line and plane geometry) but leaps dramatically at k=4 when "
-        "the tetrahedron CLOSES. This closure bonus of ~4.5 MeV/nucleon is the energy "
-        "released by the bidirectional compression shift when Tet B transitions from open "
-        "to enclosed geometry. No partial closure (k<4) can produce this stability."
-    )
-
-    def model(self) -> Dict[str, float]:
-        be_k1 = BINDING_ENERGY_PER_NUCLEON['H-1']   # 0.00
-        be_k2 = BINDING_ENERGY_PER_NUCLEON['H-2']   # 1.11
-        be_k3 = BINDING_ENERGY_PER_NUCLEON['He-3']   # 2.57
-        be_k4 = BINDING_ENERGY_PER_NUCLEON['He-4']   # 7.07
-
-        # Dimension at each k (simplex theorem: d = k - 1)
-        dim_k1 = 0  # point
-        dim_k2 = 1  # line
-        dim_k3 = 2  # plane
-        dim_k4 = 3  # volume (CLOSED)
-
-        # Incremental jumps
-        jump_12 = be_k2 - be_k1  # 1.11
-        jump_23 = be_k3 - be_k2  # 1.46
-        jump_34 = be_k4 - be_k3  # 4.50 - closure bonus
-
-        # Closure bonus ratio: jump_34 / average of earlier jumps
-        avg_early = (jump_12 + jump_23) / 2
-        closure_bonus_ratio = jump_34 / avg_early if avg_early > 0 else 0
-
-        return {
-            "Dimension at k=1": dim_k1,
-            "Dimension at k=2": dim_k2,
-            "Dimension at k=3": dim_k3,
-            "Dimension at k=4": dim_k4,
-            "BE/A at k=4 (MeV)": be_k4,
-            "Closure jump (MeV)": jump_34,
-            "Closure bonus ratio": closure_bonus_ratio,
-        }
-
-    def observations(self) -> Dict[str, float]:
-        return {
-            "Dimension at k=1": 0,
-            "Dimension at k=2": 1,
-            "Dimension at k=3": 2,
-            "Dimension at k=4": 3,
-            "BE/A at k=4 (MeV)": 7.07,
-            "Closure jump (MeV)": 4.50,
-            "Closure bonus ratio": 3.50,
-        }
-
-
-# =============================================================================
-# TEST 4: BINDING ENERGY BUDGET
-# =============================================================================
-
-class BindingEnergyBudget(GFDTest):
-    """
-    Complete energy accounting for He-4 formation from 4 hydrogen atoms.
-    Verifies that input energy (unbinding 4 bowling balls) is less than
-    output energy (new k=4 closure), confirming exothermic fusion.
-    """
-    name = "Binding Energy Budget"
-    question = (
-        "Does the complete energy accounting for He-4 formation show that the binding "
-        "energy released by k=4 closure (28.3 MeV) exceeds the input energy required "
-        "to unbind 4 hydrogen atoms, and does the net energy output (26.7 MeV) match "
-        "the observed pp-chain energy release?"
-    )
-    reference_source = "Nuclear Physics (pp chain)"
+    reference = "Nuclear Physics (AME2020)"
     tolerance = 0.05
-    derivation = (
-        "PREMISE: He-4 forms from 4 protons. Complete energy budget must balance. "
-        "STEP 1: Input: 4 separate protons, each with mass 938.272 MeV. "
-        "STEP 2: Total input mass: 4 * 938.272 = 3753.09 MeV. "
-        "STEP 3: Output: He-4 nucleus mass = 3727.38 MeV (measured). "
-        "STEP 4: Mass defect: 3753.09 - 3727.38 = 25.71 MeV (protons only). "
-        "STEP 5: Including 2 positron annihilation (2 * 2 * 0.511 = 2.04 MeV) and "
-        "2 neutrinos (~0.5 MeV): total pp-chain release = ~26.7 MeV. "
-        "STEP 6: He-4 total binding energy: 4 * 7.07 = 28.3 MeV. "
-        "STEP 7: Fraction of mass converted: 26.7 / 3753.09 = 0.00711 = 0.7%. "
-        "OUTPUT: Mass defect = 25.7 MeV, Total release = 26.7 MeV, Fraction = 0.7%."
-    )
+    level = Level.CRITICAL
     commentary = (
-        "The energy budget proves He-4 formation is exothermic: the new k=4 closure "
-        "releases more energy (28.3 MeV total binding) than it costs to unbind and "
-        "reconfigure the inputs. The 0.7% mass defect is the fraction of rest mass "
-        "converted to energy via the bidirectional compression shift. This precise "
-        "accounting - input mass minus output mass equals radiated energy - is the "
-        "mechanism by which stars shine: k=4 closure converts mass to light."
+        "He-4 (alpha particle) has BE/A = 7.07 MeV, much higher than neighbors "
+        "(He-3: 2.57, Li-6: 5.33). Standard explanation: He-4 is doubly magic "
+        "(closed proton and neutron shells at Z=N=2). GFD notes 4 = k (tetrahedral "
+        "number), but this observation does not constitute a derivation of WHY "
+        "He-4 is stable. The shell model provides the mechanistic explanation."
     )
 
-    def model(self) -> Dict[str, float]:
-        # Input: 4 protons (in pp-chain, 2 convert to neutrons)
-        input_mass = 4 * M_PROTON_MEV
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("MEASUREMENT: He-4 binding energy from AME2020.")
+            .step("BE/A (He-4) = 7.07 MeV/nucleon.")
+            .step("Total BE = 4 * 7.07 = 28.3 MeV.")
+            .step("COMPARISON to neighbors:")
+            .step("  He-3: BE/A = 2.57 MeV (incomplete closure)")
+            .step("  Li-6: BE/A = 5.33 MeV")
+            .equation("Jump He-3 -> He-4: 7.07 - 2.57 = 4.50 MeV")
+            .step("STANDARD EXPLANATION: He-4 is doubly magic (shell closure).")
+            .step("GFD OBSERVATION: A=4 equals k. This is noted but not explanatory.")
+            .conclude("He-4 BE/A = 7.07 MeV; stability from shell closure.")
+        )
 
-        # Output: He-4 nucleus
-        he4_binding_total = 4 * BINDING_ENERGY_PER_NUCLEON['He-4']
-        he4_mass = 2 * M_PROTON_MEV + 2 * M_NEUTRON_MEV - he4_binding_total
+    def model(self) -> Model:
+        be_he3 = BINDING_ENERGY_PER_NUCLEON['He-3']
+        be_he4 = BINDING_ENERGY_PER_NUCLEON['He-4']
+        be_li6 = BINDING_ENERGY_PER_NUCLEON['Li-6']
 
-        # Mass defect (protons only, before weak interaction corrections)
-        mass_defect_protons = input_mass - he4_mass
+        jump_to_he4 = be_he4 - be_he3
+        total_be = 4 * be_he4
 
-        # Full pp-chain accounting includes positron annihilation + neutrinos
-        # Net energy release per He-4: well-established at 26.7 MeV
-        pp_chain_release = 26.7
+        return (
+            Model()
+            .add("He-3 BE/A (MeV)", be_he3)
+            .add("He-4 BE/A (MeV)", be_he4)
+            .add("Li-6 BE/A (MeV)", be_li6)
+            .add("Jump He-3 to He-4 (MeV)", jump_to_he4)
+            .add("He-4 total BE (MeV)", total_be)
+        )
+
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("He-3 BE/A (MeV)", 2.57)
+            .add("He-4 BE/A (MeV)", 7.07)
+            .add("Li-6 BE/A (MeV)", 5.33)
+            .add("Jump He-3 to He-4 (MeV)", 4.50)
+            .add("He-4 total BE (MeV)", 28.30)
+        )
+
+
+# =============================================================================
+# TEST 4: MASS DEFECT AND E=mc^2 (standard physics)
+# =============================================================================
+
+class MassDefectVerification(Test):
+    """
+    Verify E=mc^2 for nuclear mass defect.
+
+    HONESTY: This is standard physics (Einstein 1905).
+    GFD terminology does not change the physics.
+    """
+    name = "Mass Defect E=mc^2"
+    question = (
+        "Does the mass defect in He-4 formation correctly yield the binding "
+        "energy via E=mc^2?"
+    )
+    reference = "Einstein (1905), CODATA"
+    tolerance = 0.05
+    level = Level.CRITICAL
+    commentary = (
+        "The mass defect (constituent mass minus nuclear mass) times c^2 equals "
+        "the binding energy. For He-4: mass defect = 0.75%, yielding 28.3 MeV. "
+        "This is standard physics, universally accepted. GFD adopts E=mc^2; "
+        "it does not provide an alternative."
+    )
+
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("STANDARD PHYSICS: Mass defect relates to binding energy via E=mc^2.")
+            .step("He-4: Z=2 protons, N=2 neutrons.")
+            .equation("Constituent mass = 2*938.27 + 2*939.57 = 3755.68 MeV")
+            .step("Nuclear mass (from measured He-4 atomic mass minus electrons):")
+            .equation("m_He4 = 3727.38 MeV")
+            .equation("Mass defect = 3755.68 - 3727.38 = 28.30 MeV")
+            .step("This equals the measured total binding energy. E=mc^2 verified.")
+            .equation("Mass fraction converted = 28.30 / 3755.68 = 0.75%")
+            .conclude("Mass defect = 28.3 MeV = BE_total. E=mc^2 confirmed.")
+        )
+
+    def model(self) -> Model:
+        # Constituent masses
+        M_const = 2 * M_PROTON_MEV + 2 * M_NEUTRON_MEV
+
+        # He-4 binding energy (measured)
+        BE_total = TOTAL_BINDING_ENERGY['He-4']
+
+        # Nuclear mass = constituents - binding
+        M_nuclear = M_const - BE_total
 
         # Mass fraction converted
-        mass_fraction = pp_chain_release / input_mass
+        mass_fraction = BE_total / M_const
 
-        # Exothermic check
-        is_exothermic = 1.0 if pp_chain_release > 0 else 0.0
+        return (
+            Model()
+            .add("Constituent mass (MeV)", M_const)
+            .add("Nuclear mass (MeV)", M_nuclear)
+            .add("Mass defect (MeV)", BE_total)
+            .add("Mass fraction converted", mass_fraction)
+        )
 
-        return {
-            "Input mass (MeV)": input_mass,
-            "He-4 total BE (MeV)": he4_binding_total,
-            "pp-chain release (MeV)": pp_chain_release,
-            "Mass fraction converted": mass_fraction,
-            "Is exothermic": is_exothermic,
-        }
-
-    def observations(self) -> Dict[str, float]:
-        return {
-            "Input mass (MeV)": 3753.09,
-            "He-4 total BE (MeV)": 28.30,
-            "pp-chain release (MeV)": 26.7,
-            "Mass fraction converted": 0.00711,
-            "Is exothermic": 1.0,
-        }
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("Constituent mass (MeV)", 3755.68)
+            .add("Nuclear mass (MeV)", 3727.38)
+            .add("Mass defect (MeV)", 28.30)
+            .add("Mass fraction converted", 0.0075)
+        )
 
 
 # =============================================================================
-# TEST 5: HOST FIELD ROLE - THE (1+A) CONFIGURATION
+# TEST 5: FUSION TEMPERATURE CHAIN (standard astrophysics)
 # =============================================================================
 
-class HostFieldConfiguration(GFDTest):
+class FusionTemperatureChain(Test):
     """
-    Every atom has a host gravity field plus A fields packed in Tet B.
-    Total gravity fields = 1 (host) + A (bound). This explains why
-    nuclear binding is always INSIDE a host structure.
+    Verify stellar fusion temperature progression.
+
+    HONESTY: These are measured/modeled astrophysical values.
+    GFD terminology ("bigger bowling balls") is metaphor, not derivation.
     """
-    name = "Host Field (1+A) Configuration"
+    name = "Stellar Fusion Temperature Chain"
     question = (
-        "Does every atom require exactly 1 host gravity field plus A bound fields in "
-        "Tetrahedron B, giving a total of (1+A) gravity fields, and does this explain "
-        "why 4 separate hydrogen atoms (8 total fields) differ fundamentally from "
-        "He-4 (5 total fields)?"
+        "Does stellar fusion require progressively higher temperatures for "
+        "heavier element formation?"
     )
-    reference_source = "GFD Nuclear Model"
-    tolerance = 0.01
-    derivation = (
-        "PREMISE: Atom = 1 host field + A fields packed in host's Tet B. "
-        "STEP 1: Hydrogen (A=1): 1 host + 1 bound = 2 total gravity fields. "
-        "STEP 2: Helium-4 (A=4): 1 host + 4 bound = 5 total gravity fields. "
-        "STEP 3: Carbon-12 (A=12): 1 host + 12 bound = 13 total gravity fields. "
-        "STEP 4: Iron-56 (A=56): 1 host + 56 bound = 57 total gravity fields. "
-        "STEP 5: Compare 4 separate H atoms: 4 * 2 = 8 total fields. "
-        "STEP 6: He-4: 5 total fields. FEWER fields, MORE stability. "
-        "STEP 7: Field count reduction: 8 - 5 = 3 fields freed during binding. "
-        "STEP 8: The freed host fields return to empty spacetime. "
-        "OUTPUT: Verifies (1+A) rule and field count differences."
-    )
+    reference = "Stellar Physics (Standard Solar Model)"
+    tolerance = 0.15
+    level = Level.STANDARD
     commentary = (
-        "The (1+A) configuration is central to understanding atom creation. During "
-        "fusion, multiple atoms contribute their bound fields to a SINGLE host's Tet B. "
-        "The extra host fields are released back to empty spacetime. This field count "
-        "reduction explains the mass defect: the system has fewer gravity fields in "
-        "bound configurations, and the excess binding energy radiates away. Every atom "
-        "in the universe follows this architecture - one host providing the Field Chamber, "
-        "A fields packed inside."
+        "Fusion of heavier elements requires higher temperatures because: "
+        "(1) Higher Coulomb barriers from more protons, "
+        "(2) Gamow peak shifts to higher energies. "
+        "This is standard nuclear astrophysics. GFD's metaphor of 'bigger "
+        "bowling balls needing bigger hammers' captures the intuition but "
+        "does not derive the temperatures."
     )
 
-    def model(self) -> Dict[str, float]:
-        # (1+A) configurations
-        h_total = 1 + 1     # Hydrogen
-        he_total = 1 + 4    # Helium-4
-        c_total = 1 + 12    # Carbon-12
-        fe_total = 1 + 56   # Iron-56
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("ASTROPHYSICS: Fusion thresholds from stellar models.")
+            .step("H -> He (pp-chain): T ~ 1.5e7 K")
+            .step("He -> C (triple-alpha): T ~ 1.0e8 K")
+            .step("C -> O (carbon burning): T ~ 5.0e8 K")
+            .step("O -> Si (oxygen burning): T ~ 1.5e9 K")
+            .step("Si -> Fe (silicon burning): T ~ 2.7e9 K")
+            .equation("Temperature ratio: T_Si / T_H = 180x")
+            .step("EXPLANATION: Higher Coulomb barriers require higher "
+                  "kinetic energies for tunneling.")
+            .conclude("Fusion temperatures increase monotonically with product mass.")
+        )
 
-        # 4 separate H vs 1 He-4
-        four_h_fields = 4 * h_total  # 4 * 2 = 8
-        he4_fields = he_total        # 5
+    def model(self) -> Model:
+        temps = [T_H_FUSION, T_HE_FUSION, T_C_FUSION, T_O_FUSION, T_SI_FUSION]
 
-        # Field reduction during fusion
-        fields_freed = four_h_fields - he4_fields  # 8 - 5 = 3
+        # Check monotonic increase
+        monotonic = 1.0 if all(temps[i] < temps[i+1] for i in range(len(temps)-1)) else 0.0
 
-        # Host fraction decreases with A (host becomes smaller fraction of total)
-        host_frac_h = 1 / h_total      # 0.50
-        host_frac_he = 1 / he_total    # 0.20
-        host_frac_fe = 1 / fe_total    # 0.0175
+        # Temperature range
+        temp_ratio = temps[-1] / temps[0]
 
-        return {
-            "H total fields": h_total,
-            "He-4 total fields": he_total,
-            "4H total fields": four_h_fields,
-            "Fields freed (4H->He)": fields_freed,
-            "Host fraction (H)": host_frac_h,
-            "Host fraction (He)": host_frac_he,
-            "Host fraction (Fe)": host_frac_fe,
-        }
+        return (
+            Model()
+            .add("H fusion (K)", temps[0])
+            .add("He fusion (K)", temps[1])
+            .add("C fusion (K)", temps[2])
+            .add("Si fusion (K)", temps[4])
+            .add("Temperature ratio (Si/H)", temp_ratio)
+            .add("Monotonic increase", monotonic)
+        )
 
-    def observations(self) -> Dict[str, float]:
-        return {
-            "H total fields": 2,
-            "He-4 total fields": 5,
-            "4H total fields": 8,
-            "Fields freed (4H->He)": 3,
-            "Host fraction (H)": 0.50,
-            "Host fraction (He)": 0.20,
-            "Host fraction (Fe)": 0.0175,
-        }
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("H fusion (K)", 1.5e7)
+            .add("He fusion (K)", 1.0e8)
+            .add("C fusion (K)", 5.0e8)
+            .add("Si fusion (K)", 2.7e9)
+            .add("Temperature ratio (Si/H)", 180.0)
+            .add("Monotonic increase", 1.0)
+        )
 
 
 # =============================================================================
-# TEST 6: PACKING EFFICIENCY VS K-ALIGNMENT
+# TEST 6: IRON-56 BINDING PEAK (standard nuclear physics)
 # =============================================================================
 
-class PackingEfficiencyKAlignment(GFDTest):
+class Iron56BindingPeak(Test):
     """
-    Test whether k-aligned nuclei (A divisible by 4) systematically have
-    higher binding energy per nucleon than non-k-aligned neighbors.
-    This probes whether complete tetrahedral closure sub-units enhance stability.
+    Verify Fe-56 has peak binding energy per nucleon.
+
+    HONESTY: This is measured data. The standard explanation involves the
+    balance of volume (attractive strong force) and surface/Coulomb
+    (repulsive) terms in the semi-empirical mass formula.
     """
-    name = "Packing Efficiency at k-Multiples"
+    name = "Fe-56 Binding Energy Peak"
     question = (
-        "Do k-aligned nuclei (A mod 4 = 0) exhibit systematically higher binding "
-        "energy per nucleon than their non-k-aligned neighbors, confirming that "
-        "complete tetrahedral closure sub-units within Tet B enhance stability?"
+        "Does Fe-56 have the highest binding energy per nucleon among stable "
+        "nuclei, making it the endpoint of exothermic fusion?"
     )
-    reference_source = "Nuclear Physics (AME2020)"
+    reference = "Nuclear Physics (AME2020)"
+    tolerance = 0.05
+    level = Level.CRITICAL
+    commentary = (
+        "Fe-56 (and Ni-62) sit at the peak of the binding energy curve with "
+        "BE/A ~ 8.79 MeV. Lighter nuclei release energy by fusion toward Fe; "
+        "heavier nuclei release energy by fission toward Fe. Standard explanation: "
+        "the semi-empirical mass formula (Weizsacker) balances volume, surface, "
+        "Coulomb, asymmetry, and pairing terms. The observation that 56 = 14*4 "
+        "is numerology, not explanation."
+    )
+
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("MEASUREMENT: Binding energies from AME2020.")
+            .step("Fe-56: BE/A = 8.79 MeV/nucleon.")
+            .step("Compare to lighter nuclei:")
+            .step("  O-16: 7.98 MeV/nucleon")
+            .step("  Si-28: 8.45 MeV/nucleon")
+            .step("  Ca-40: 8.55 MeV/nucleon")
+            .step("Compare to heavier nuclei:")
+            .step("  Kr-84: 8.72 MeV/nucleon")
+            .step("  Pb-208: 7.87 MeV/nucleon")
+            .step("  U-238: 7.57 MeV/nucleon")
+            .step("Fe-56 is the peak. Fusion to Fe releases energy; past Fe absorbs.")
+            .step("STANDARD EXPLANATION: Balance of SEMF terms at A~56.")
+            .conclude("Fe-56 BE/A = 8.79 MeV is maximum; fusion endpoint.")
+        )
+
+    def model(self) -> Model:
+        fe_be = BINDING_ENERGY_PER_NUCLEON['Fe-56']
+
+        # Compare to lighter
+        lighter = ['O-16', 'Si-28', 'Ca-40']
+        fe_above_lighter = all(fe_be > BINDING_ENERGY_PER_NUCLEON[n] for n in lighter)
+
+        # Compare to heavier
+        heavier = ['Kr-84', 'Pb-208', 'U-238']
+        fe_above_heavier = all(fe_be > BINDING_ENERGY_PER_NUCLEON[n] for n in heavier)
+
+        return (
+            Model()
+            .add("Fe-56 BE/A (MeV)", fe_be)
+            .add("Above lighter nuclei", 1.0 if fe_above_lighter else 0.0)
+            .add("Above heavier nuclei", 1.0 if fe_above_heavier else 0.0)
+        )
+
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("Fe-56 BE/A (MeV)", 8.79)
+            .add("Above lighter nuclei", 1.0)
+            .add("Above heavier nuclei", 1.0)
+        )
+
+
+# =============================================================================
+# TEST 7: NEUTRON EXCESS IN HEAVY NUCLEI (standard nuclear physics)
+# =============================================================================
+
+class NeutronExcessScaling(Test):
+    """
+    Verify N/Z ratio increases with atomic number.
+
+    HONESTY: This follows from Coulomb repulsion scaling as Z^2.
+    Standard nuclear physics, not a GFD prediction.
+    """
+    name = "Neutron-Proton Ratio Scaling"
+    question = (
+        "Does the neutron-to-proton ratio (N/Z) increase with atomic number "
+        "for stable nuclei?"
+    )
+    reference = "Nuclear Physics (valley of stability)"
     tolerance = 0.10
-    derivation = (
-        "PREMISE: k-aligned nuclei should have enhanced stability from complete closure. "
-        "STEP 1: Collect BE/A for k-aligned nuclei: He-4(7.07), C-12(7.68), O-16(7.98), "
-        "Ne-20(8.03), Mg-24(8.26), Si-28(8.45), S-32(8.49), Ca-40(8.55), Fe-56(8.79). "
-        "STEP 2: Average BE/A for k-aligned (A=4 to A=56): compute mean. "
-        "STEP 3: Compare to non-k-aligned neighbors: H-2(1.11), He-3(2.57), Li-6(5.33), "
-        "Li-7(5.61), B-10(6.47), N-14(7.48). "
-        "STEP 4: Average BE/A for non-k-aligned light nuclei: compute mean. "
-        "STEP 5: k-aligned advantage = k-aligned average - non-k average. "
-        "OUTPUT: k-aligned BE/A average, non-k BE/A average, advantage."
-    )
+    level = Level.STANDARD
     commentary = (
-        "The systematic enhancement of binding energy at k-multiples supports the "
-        "hypothesis that complete tetrahedral sub-units (multiples of k=4 fields) pack "
-        "more efficiently in Tet B. Each complete k=4 sub-group achieves full 3D closure, "
-        "while partial groups (A not divisible by 4) leave incomplete geometric configurations "
-        "that store less binding energy. This is the geometric basis for the alpha-clustering "
-        "phenomenon observed in nuclear physics."
+        "Light stable nuclei have N=Z (symmetric). Heavy stable nuclei have "
+        "N > Z because Coulomb repulsion between protons grows as Z^2 while "
+        "nuclear binding grows roughly as A. Extra neutrons dilute the Coulomb "
+        "energy without adding repulsion. This is standard nuclear physics "
+        "(liquid drop model, SEMF). GFD does not derive this."
     )
 
-    def model(self) -> Dict[str, float]:
-        # k-aligned nuclei up to Fe
-        k_aligned = ['He-4', 'C-12', 'O-16', 'Ne-20', 'Mg-24', 'Si-28', 'S-32',
-                      'Ca-40', 'Ti-48', 'Cr-52', 'Fe-56']
-        k_aligned_be = [BINDING_ENERGY_PER_NUCLEON[n] for n in k_aligned]
-        k_avg = sum(k_aligned_be) / len(k_aligned_be)
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("STANDARD PHYSICS: N/Z scaling from Coulomb vs strong force.")
+            .step("He-4: Z=2, N=2, N/Z = 1.00")
+            .step("Ca-40: Z=20, N=20, N/Z = 1.00 (doubly magic)")
+            .step("Fe-56: Z=26, N=30, N/Z = 1.15")
+            .step("Sn-120: Z=50, N=70, N/Z = 1.40")
+            .step("Pb-208: Z=82, N=126, N/Z = 1.54 (doubly magic)")
+            .step("U-238: Z=92, N=146, N/Z = 1.59")
+            .step("EXPLANATION: Coulomb term in SEMF proportional to Z^2/A^(1/3).")
+            .step("To minimize energy, heavy nuclei add neutrons to increase A, R.")
+            .conclude("N/Z increases with Z; Coulomb dilution by neutrons.")
+        )
 
-        # Non-k-aligned light nuclei
-        non_k = ['H-2', 'He-3', 'Li-6', 'Li-7', 'B-10', 'N-14']
-        non_k_be = [BINDING_ENERGY_PER_NUCLEON[n] for n in non_k]
-        non_k_avg = sum(non_k_be) / len(non_k_be)
-
-        advantage = k_avg - non_k_avg
-        has_advantage = 1.0 if advantage > 0 else 0.0
-
-        return {
-            "k-aligned avg BE/A (MeV)": k_avg,
-            "Non-k avg BE/A (MeV)": non_k_avg,
-            "k-alignment advantage (MeV)": advantage,
-            "k-aligned higher": has_advantage,
-        }
-
-    def observations(self) -> Dict[str, float]:
-        k_aligned_be = [7.07, 7.68, 7.98, 8.03, 8.26, 8.45, 8.49, 8.55, 8.72, 8.76, 8.79]
-        non_k_be = [1.11, 2.57, 5.33, 5.61, 6.47, 7.48]
-        return {
-            "k-aligned avg BE/A (MeV)": sum(k_aligned_be) / len(k_aligned_be),
-            "Non-k avg BE/A (MeV)": sum(non_k_be) / len(non_k_be),
-            "k-alignment advantage (MeV)": sum(k_aligned_be)/len(k_aligned_be) - sum(non_k_be)/len(non_k_be),
-            "k-aligned higher": 1.0,
-        }
-
-
-# =============================================================================
-# TEST 7: NEUTRON NECESSITY FOR HEAVY NUCLEI
-# =============================================================================
-
-class NeutronNecessityScaling(GFDTest):
-    """
-    Test why heavier atoms need progressively more neutrons (A/Z > 2).
-    In GFD terms: extra fields in Tet B dilute Coulomb repulsion between
-    protons without adding charge, enabling stable packing at higher A.
-    """
-    name = "Neutron Necessity Scaling"
-    question = (
-        "Does the neutron-to-proton ratio (N/Z) increase systematically with atomic "
-        "number, from N/Z=1 for light stable nuclei to N/Z~1.5 for heavy nuclei, "
-        "confirming that additional uncharged gravity fields are needed to dilute "
-        "Coulomb repulsion and stabilize larger packing configurations in Tet B?"
-    )
-    reference_source = "Nuclear Physics (valley of stability)"
-    tolerance = 0.10
-    derivation = (
-        "PREMISE: Heavier nuclei need more neutrons to stabilize the packing. "
-        "STEP 1: He-4: Z=2, A=4, N=2, N/Z = 1.00 (symmetric). "
-        "STEP 2: Ca-40: Z=20, A=40, N=20, N/Z = 1.00 (still symmetric at doubly magic). "
-        "STEP 3: Fe-56: Z=26, A=56, N=30, N/Z = 1.15 (slight excess). "
-        "STEP 4: Sn-120: Z=50, A=120, N=70, N/Z = 1.40 (growing). "
-        "STEP 5: Pb-208: Z=82, A=208, N=126, N/Z = 1.54 (significant excess). "
-        "STEP 6: U-238: Z=92, A=238, N=146, N/Z = 1.59 (maximum stable). "
-        "STEP 7: Trend: N/Z increases monotonically with Z for stable nuclei. "
-        "OUTPUT: N/Z values and monotonic increase verification."
-    )
-    commentary = (
-        "Neutrons serve as uncharged packing material in Tet B. For light nuclei, "
-        "the Coulomb repulsion between protons is manageable with N=Z. But as Z grows, "
-        "the repulsive energy scales as Z^2 while the binding energy scales linearly, "
-        "creating instability. Extra neutrons (additional fields in Tet B without charge) "
-        "provide binding energy without adding repulsion, diluting the Coulomb stress. "
-        "This is why the valley of stability curves toward N > Z for heavy elements."
-    )
-
-    def model(self) -> Dict[str, float]:
-        # Key nuclei along the valley of stability
+    def model(self) -> Model:
         nuclei = [
             ('He-4',   2,   4),
             ('Ca-40',  20,  40),
@@ -634,281 +564,102 @@ class NeutronNecessityScaling(GFDTest):
             ('U-238',  92,  238),
         ]
 
-        nz_ratios = {}
-        for name, z, a in nuclei:
-            n = a - z
-            nz_ratios[name] = n / z
+        nz_ratios = {name: (a - z) / z for name, z, a in nuclei}
 
-        # Check monotonic increase (excluding Ca-40 which is doubly magic)
-        heavy_ratios = [nz_ratios[n] for n in ['Fe-56', 'Sn-120', 'Pb-208', 'U-238']]
-        is_increasing = 1.0 if all(heavy_ratios[i] < heavy_ratios[i+1]
-                                    for i in range(len(heavy_ratios)-1)) else 0.0
+        # Check that heavy elements have higher N/Z
+        heavy_ratios = [nz_ratios['Fe-56'], nz_ratios['Sn-120'],
+                        nz_ratios['Pb-208'], nz_ratios['U-238']]
+        is_increasing = all(heavy_ratios[i] <= heavy_ratios[i+1]
+                            for i in range(len(heavy_ratios)-1))
 
-        return {
-            "N/Z He-4": nz_ratios['He-4'],
-            "N/Z Fe-56": nz_ratios['Fe-56'],
-            "N/Z Pb-208": nz_ratios['Pb-208'],
-            "N/Z U-238": nz_ratios['U-238'],
-            "Heavy N/Z increasing": is_increasing,
-        }
+        return (
+            Model()
+            .add("N/Z He-4", nz_ratios['He-4'])
+            .add("N/Z Fe-56", nz_ratios['Fe-56'])
+            .add("N/Z Pb-208", nz_ratios['Pb-208'])
+            .add("N/Z U-238", nz_ratios['U-238'])
+            .add("Heavy N/Z increasing", 1.0 if is_increasing else 0.0)
+        )
 
-    def observations(self) -> Dict[str, float]:
-        return {
-            "N/Z He-4": 1.00,
-            "N/Z Fe-56": 1.154,
-            "N/Z Pb-208": 1.537,
-            "N/Z U-238": 1.587,
-            "Heavy N/Z increasing": 1.0,
-        }
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("N/Z He-4", 1.00)
+            .add("N/Z Fe-56", 1.154)
+            .add("N/Z Pb-208", 1.537)
+            .add("N/Z U-238", 1.587)
+            .add("Heavy N/Z increasing", 1.0)
+        )
 
 
 # =============================================================================
-# TEST 8: ALPHA CLUSTERING - k=4 SUB-UNITS
+# TEST 8: BE-8 INSTABILITY (standard nuclear physics)
 # =============================================================================
 
-class AlphaClusteringPattern(GFDTest):
+class Beryllium8Instability(Test):
     """
-    Test that light even-even nuclei preferentially form as multiples of
-    alpha particles (He-4), confirming k=4 sub-unit clustering in Tet B.
-    Be-8 (2 alphas) is unstable but C-12 (3 alphas) and O-16 (4 alphas) are stable.
+    Verify Be-8 is unstable despite high binding energy per nucleon.
+
+    HONESTY: Be-8 instability is explained by the nuclear shell model and
+    the Q-value for alpha decay. Not a GFD prediction.
     """
-    name = "Alpha Clustering Pattern"
+    name = "Be-8 Instability"
     question = (
-        "Do alpha-conjugate nuclei (A = 4n: He-4, Be-8, C-12, O-16, Ne-20, Mg-24, Si-28) "
-        "show the characteristic pattern of k=4 sub-unit clustering, with Be-8 uniquely "
-        "unstable because 2k cannot nest two complete tetrahedra in one Tet B?"
+        "Why is Be-8 extremely unstable (half-life 8e-17 s) despite having "
+        "high binding energy per nucleon?"
     )
-    reference_source = "Nuclear Physics (alpha cluster model)"
-    tolerance = 0.10
-    derivation = (
-        "PREMISE: Alpha-conjugate nuclei (N=Z, A=4n) should show k=4 clustering effects. "
-        "STEP 1: He-4 (1 alpha): 7.07 MeV/n - first complete closure. "
-        "STEP 2: Be-8 (2 alphas): 7.06 MeV/n but UNSTABLE (half-life 8.19e-17 s). "
-        "STEP 3: C-12 (3 alphas): 7.68 MeV/n - stable, Hoyle state enables formation. "
-        "STEP 4: O-16 (4 alphas): 7.98 MeV/n - very stable, doubly magic. "
-        "STEP 5: Be-8 instability: 2k = 8 fields means two complete tetrahedra, but "
-        "closure locality requires closure in ONE Tet B. Two tetrahedra cannot nest. "
-        "STEP 6: C-12 and O-16 work because 3k and 4k find valid packing configurations. "
-        "OUTPUT: Alpha-conjugate BE/A values and Be-8 instability flag."
-    )
+    reference = "Nuclear Physics (alpha decay)"
+    tolerance = 0.20
+    level = Level.STANDARD
     commentary = (
-        "Alpha clustering is one of the strongest pieces of evidence for k=4 sub-unit "
-        "structure in nuclei. The preference for alpha-conjugate configurations (A = 4n) "
-        "in light nuclei maps directly to Tet B packing in multiples of complete k=4 "
-        "tetrahedra. Be-8's unique instability at exactly 2k validates the closure "
-        "locality principle: two separate complete closures cannot coexist stably in "
-        "the same Tet B. Nature must find alternative packing arrangements at higher k."
+        "Be-8 has BE/A = 7.06 MeV, comparable to He-4's 7.07 MeV. Yet it decays "
+        "almost instantly to two alpha particles. STANDARD EXPLANATION: The "
+        "Q-value for Be-8 -> 2*He-4 is +92 keV, making decay energetically "
+        "favorable. The coincidence that 8 = 2*4 (two alphas) is noted but "
+        "does not EXPLAIN the instability. The shell model and Q-value do."
     )
 
-    def model(self) -> Dict[str, float]:
-        # Alpha-conjugate nuclei
-        alpha_nuclei = {
-            'He-4':  (1, BINDING_ENERGY_PER_NUCLEON['He-4']),
-            'Be-8':  (2, BINDING_ENERGY_PER_NUCLEON['Be-8']),
-            'C-12':  (3, BINDING_ENERGY_PER_NUCLEON['C-12']),
-            'O-16':  (4, BINDING_ENERGY_PER_NUCLEON['O-16']),
-            'Ne-20': (5, BINDING_ENERGY_PER_NUCLEON['Ne-20']),
-            'Mg-24': (6, BINDING_ENERGY_PER_NUCLEON['Mg-24']),
-            'Si-28': (7, BINDING_ENERGY_PER_NUCLEON['Si-28']),
-        }
+    def derivation(self) -> Derivation:
+        return (
+            Derivation()
+            .step("MEASUREMENT: Be-8 properties from nuclear data.")
+            .step("Be-8: BE/A = 7.06 MeV (high, comparable to He-4).")
+            .step("Half-life: 8.19e-17 seconds (extremely short).")
+            .step("Decay: Be-8 -> 2 * He-4 (alpha decay).")
+            .equation("Q-value = 2*BE(He-4) - BE(Be-8) = 2*28.30 - 56.50 = +0.092 MeV")
+            .step("Positive Q-value means decay is energetically favorable.")
+            .step("The high BE/A is irrelevant; what matters is BE(products) > BE(parent).")
+            .step("STANDARD PHYSICS: Q-value determines decay energetics.")
+            .conclude("Be-8 unstable due to positive Q-value for alpha decay.")
+        )
 
-        # Be-8 instability check
-        be8_unstable = 1.0  # Half-life 8.19e-17 s = effectively instant decay
+    def model(self) -> Model:
+        be8_bea = BINDING_ENERGY_PER_NUCLEON['Be-8']
+        he4_bea = BINDING_ENERGY_PER_NUCLEON['He-4']
 
-        # C-12 vs Be-8: does tripling work where doubling doesn't?
-        c12_stable = 1.0
-        be8_to_c12_jump = (BINDING_ENERGY_PER_NUCLEON['C-12'] -
-                           BINDING_ENERGY_PER_NUCLEON['Be-8'])
+        # Total binding energies
+        be8_total = 8 * be8_bea
+        he4_total = 4 * he4_bea
 
-        # All alpha-conjugates above Be-8 are stable
-        above_be8_stable = 1.0
+        # Q-value for decay
+        q_value = 2 * he4_total - be8_total
 
-        return {
-            "He-4 BE/A (MeV)": BINDING_ENERGY_PER_NUCLEON['He-4'],
-            "Be-8 BE/A (MeV)": BINDING_ENERGY_PER_NUCLEON['Be-8'],
-            "C-12 BE/A (MeV)": BINDING_ENERGY_PER_NUCLEON['C-12'],
-            "O-16 BE/A (MeV)": BINDING_ENERGY_PER_NUCLEON['O-16'],
-            "Be-8 unstable": be8_unstable,
-            "Be-8 to C-12 jump (MeV)": be8_to_c12_jump,
-        }
+        return (
+            Model()
+            .add("Be-8 BE/A (MeV)", be8_bea)
+            .add("He-4 BE/A (MeV)", he4_bea)
+            .add("Q-value (MeV)", q_value)
+            .add("Decay favorable (Q>0)", 1.0 if q_value > 0 else 0.0)
+        )
 
-    def observations(self) -> Dict[str, float]:
-        return {
-            "He-4 BE/A (MeV)": 7.07,
-            "Be-8 BE/A (MeV)": 7.06,
-            "C-12 BE/A (MeV)": 7.68,
-            "O-16 BE/A (MeV)": 7.98,
-            "Be-8 unstable": 1.0,
-            "Be-8 to C-12 jump (MeV)": 0.62,
-        }
-
-
-# =============================================================================
-# TEST 9: COMPLETE FUSION CHAIN VERIFICATION
-# =============================================================================
-
-class FusionChainPathway(GFDTest):
-    """
-    Verify the complete stellar fusion chain: H->He->C->O->Si->Fe.
-    Each step requires higher temperature (bigger bowling balls to crack)
-    and produces a heavier k-multiple nucleus.
-    """
-    name = "Complete Fusion Chain Pathway"
-    question = (
-        "Does the stellar fusion chain (H->He->C->O->Si->Fe) follow a monotonic "
-        "progression where each successive stage requires higher temperature to overcome "
-        "larger compression barriers, produces heavier k-multiple nuclei, and releases "
-        "progressively less net energy per nucleon?"
-    )
-    reference_source = "Astrophysics (stellar nucleosynthesis)"
-    tolerance = 0.15
-    derivation = (
-        "PREMISE: Each fusion stage overcomes a larger compression barrier. "
-        "STEP 1: H->He: T=1.5e7 K, product He-4 (k=4), BE/A=7.07 MeV. "
-        "STEP 2: He->C: T=1.0e8 K, product C-12 (3k=12), BE/A=7.68 MeV. "
-        "STEP 3: C->O: T=5.0e8 K, product O-16 (4k=16), BE/A=7.98 MeV. "
-        "STEP 4: O->Si: T=1.5e9 K, product Si-28 (7k=28), BE/A=8.45 MeV. "
-        "STEP 5: Si->Fe: T=2.7e9 K, product Fe-56 (14k=56), BE/A=8.79 MeV. "
-        "STEP 6: Temperature increases monotonically: confirms bigger bowling balls. "
-        "STEP 7: BE/A increases monotonically to Fe: confirms approaching optimal packing. "
-        "STEP 8: All products are k-multiples: confirms tetrahedral packing preference. "
-        "OUTPUT: Temperature and BE/A sequences, k-multiple verification."
-    )
-    commentary = (
-        "The fusion chain is the periodic table being built in real time inside stars. "
-        "Each stage follows the GFD pattern: bowling balls (bound atoms) are cracked open "
-        "by sufficient heat, their freed squish balls re-pack into a heavier k-multiple "
-        "configuration with higher packing efficiency. The chain must terminate at Fe-56 "
-        "(14k) because no heavier configuration releases net energy. The monotonic "
-        "temperature progression reflects progressively larger compression barriers: "
-        "bigger bowling balls need bigger hammers."
-    )
-
-    def model(self) -> Dict[str, float]:
-        temps = [T_H_FUSION, T_HE_FUSION, T_C_FUSION, T_O_FUSION, T_SI_FUSION]
-        products = ['He-4', 'C-12', 'O-16', 'Si-28', 'Fe-56']
-        k_factors = [4/4, 12/4, 16/4, 28/4, 56/4]
-
-        # Check monotonic temperature increase
-        temp_monotonic = 1.0 if all(temps[i] < temps[i+1]
-                                     for i in range(len(temps)-1)) else 0.0
-
-        # Check BE/A increases to Fe
-        be_values = [BINDING_ENERGY_PER_NUCLEON[p] for p in products]
-        be_monotonic = 1.0 if all(be_values[i] < be_values[i+1]
-                                   for i in range(len(be_values)-1)) else 0.0
-
-        # Check all products are k-multiples
-        all_k_mult = 1.0 if all(kf == int(kf) for kf in k_factors) else 0.0
-
-        # Temperature ratio: hottest / coolest
-        temp_range = temps[-1] / temps[0]
-
-        return {
-            "Stages in chain": len(temps),
-            "Temperature monotonic": temp_monotonic,
-            "BE/A monotonic to Fe": be_monotonic,
-            "All products k-multiples": all_k_mult,
-            "Temperature range ratio": temp_range,
-            "Fe-56 BE/A (MeV)": be_values[-1],
-        }
-
-    def observations(self) -> Dict[str, float]:
-        return {
-            "Stages in chain": 5,
-            "Temperature monotonic": 1.0,
-            "BE/A monotonic to Fe": 1.0,
-            "All products k-multiples": 1.0,
-            "Temperature range ratio": 180.0,
-            "Fe-56 BE/A (MeV)": 8.79,
-        }
-
-
-# =============================================================================
-# TEST 10: THE IRON WALL - WHY FUSION STOPS AT Fe-56
-# =============================================================================
-
-class IronWallEndpoint(GFDTest):
-    """
-    Test why Fe-56 (14k) is the endpoint of exothermic fusion.
-    Beyond Fe-56, fusion CONSUMES energy instead of releasing it.
-    This is the Iron Wall: the geometric limit of packing efficiency.
-    """
-    name = "Iron Wall: Fusion Endpoint at 14k"
-    question = (
-        "Does iron-56 (A=56 = 14k) represent the maximum binding energy per nucleon, "
-        "beyond which fusion becomes endothermic, and does the simultaneous identity "
-        "56 = T_6 (6th tetrahedral number) confirm that optimal Tet B packing efficiency "
-        "occurs at the intersection of k-multiple and tetrahedral number series?"
-    )
-    reference_source = "Nuclear Physics (binding energy curve)"
-    tolerance = 0.05
-    derivation = (
-        "PREMISE: Fe-56 has maximum BE/A, making it the fusion endpoint. "
-        "STEP 1: Fe-56 BE/A = 8.79 MeV/n (peak of binding energy curve). "
-        "STEP 2: Lighter nuclei: O-16 = 7.98, Si-28 = 8.45 (below Fe). "
-        "STEP 3: Heavier nuclei: Kr-84 = 8.72, Pb-208 = 7.87 (below Fe). "
-        "STEP 4: Fusion of nuclei heavier than Fe ABSORBS energy (endothermic). "
-        "STEP 5: Fe-56 = 14 * k = 14 * 4 (k-multiple). "
-        "STEP 6: Fe-56 = T_6 = 6*7*8/6 = 56 (6th tetrahedral number). "
-        "STEP 7: Fe-56 is BOTH 14k AND T_6 - intersection of two geometric series. "
-        "STEP 8: Energy above Fe: fission releases energy (heavy -> Fe direction). "
-        "STEP 9: Energy below Fe: fusion releases energy (light -> Fe direction). "
-        "STEP 10: Fe is the attractor: all nuclear processes drive toward it. "
-        "OUTPUT: Fe at peak, lighter below, heavier below, dual identity."
-    )
-    commentary = (
-        "The Iron Wall is the most consequential prediction of packing geometry for "
-        "astrophysics. Every massive star builds elements up to iron, then can go no "
-        "further without energy input. The core collapses, triggering a supernova that "
-        "both creates heavier elements (via endothermic neutron capture) and disperses "
-        "them into space. Iron's dual identity as 14k AND T_6 places it at the "
-        "intersection of the k-multiple series (tetrahedral closure multiples) and the "
-        "tetrahedral number series (cumulative packing efficiency). This geometric "
-        "coincidence creates a uniquely deep energy minimum that shapes the chemical "
-        "composition of the entire universe."
-    )
-
-    def model(self) -> Dict[str, float]:
-        fe_be = BINDING_ENERGY_PER_NUCLEON['Fe-56']
-
-        # Compare to lighter and heavier nuclei
-        lighter = ['O-16', 'Si-28', 'Ca-40']
-        heavier = ['Kr-84', 'Sn-120', 'Pb-208', 'U-238']
-
-        fe_above_lighter = 1.0 if all(fe_be > BINDING_ENERGY_PER_NUCLEON[n]
-                                       for n in lighter) else 0.0
-        fe_above_heavier = 1.0 if all(fe_be > BINDING_ENERGY_PER_NUCLEON[n]
-                                       for n in heavier) else 0.0
-
-        # Dual identity
-        is_14k = 1.0 if 56 == 14 * K_CLOSURE else 0.0
-        T_6 = 6 * 7 * 8 // 6  # 6th tetrahedral number
-        is_T6 = 1.0 if 56 == T_6 else 0.0
-
-        # Ni-62 is actually slightly higher BE/A but Fe-56 is produced more
-        # efficiently in stellar nucleosynthesis
-        ni62_be = BINDING_ENERGY_PER_NUCLEON['Ni-62']
-        fe_ni_comparable = 1.0 if abs(fe_be - ni62_be) < 0.05 else 0.0
-
-        return {
-            "Fe-56 BE/A (MeV)": fe_be,
-            "Fe > lighter nuclei": fe_above_lighter,
-            "Fe > heavier nuclei": fe_above_heavier,
-            "56 = 14k": is_14k,
-            "56 = T_6": is_T6,
-            "Fe-Ni comparable": fe_ni_comparable,
-        }
-
-    def observations(self) -> Dict[str, float]:
-        return {
-            "Fe-56 BE/A (MeV)": 8.79,
-            "Fe > lighter nuclei": 1.0,
-            "Fe > heavier nuclei": 1.0,
-            "56 = 14k": 1.0,
-            "56 = T_6": 1.0,
-            "Fe-Ni comparable": 1.0,
-        }
+    def observations(self) -> Observed:
+        return (
+            Observed()
+            .add("Be-8 BE/A (MeV)", 7.06)
+            .add("He-4 BE/A (MeV)", 7.07)
+            .add("Q-value (MeV)", 0.092)
+            .add("Decay favorable (Q>0)", 1.0)
+        )
 
 
 # =============================================================================
@@ -916,45 +667,42 @@ class IronWallEndpoint(GFDTest):
 # =============================================================================
 
 ALL_TESTS = [
-    FieldActivationThreshold,
-    VortexCaptureHydrogen,
-    ClosureDimensionProgression,
-    BindingEnergyBudget,
-    HostFieldConfiguration,
-    PackingEfficiencyKAlignment,
-    NeutronNecessityScaling,
-    AlphaClusteringPattern,
-    FusionChainPathway,
-    IronWallEndpoint,
+    ProtonRestMass,
+    HydrogenIonization,
+    Helium4Binding,
+    MassDefectVerification,
+    FusionTemperatureChain,
+    Iron56BindingPeak,
+    NeutronExcessScaling,
+    Beryllium8Instability,
 ]
 
 
-def run_all_tests():
+def run_all() -> bool:
     """Run all binding pathway mechanics tests."""
-    return run_test_group(
+    return run_tests(
         title="Binding Pathway Mechanics",
         summary=(
-            "These tests trace the COMPLETE PATHWAY by which gravity envelopes become "
-            "bound to create atoms, from field activation through stellar nucleosynthesis "
-            "to the iron endpoint.\n\n"
-            "THE BINDING PATHWAY:\n"
-            "1. Field Activation: Empty field + 938 MeV -> Activated field (proton)\n"
-            "2. Vortex Capture: Proton + electron vortex -> Hydrogen (13.6 eV)\n"
-            "3. Closure Dimensions: k=1(0D) -> k=2(1D) -> k=3(2D) -> k=4(3D)\n"
-            "4. Energy Budget: 4H -> He-4 releases 26.7 MeV (0.7% mass defect)\n"
-            "5. Host Field: Every atom = (1+A) configuration\n"
-            "6. Packing Efficiency: k-multiples have enhanced BE/A\n"
-            "7. Neutron Necessity: N/Z grows with Z (Coulomb dilution)\n"
-            "8. Alpha Clustering: k=4 sub-units in nuclei; Be-8(2k) unstable\n"
-            "9. Fusion Chain: H->He->C->O->Si->Fe (monotonic T, all k-multiples)\n"
-            "10. Iron Wall: Fe-56 = 14k = T_6 = maximum BE/A\n\n"
-            "These tests connect GFD tetrahedral geometry to measured nuclear data, "
-            "demonstrating that the binding pathway follows from k=4 closure rules."
+            "These tests verify STANDARD NUCLEAR PHYSICS data against GFD terminology. "
+            "They confirm that measured values (binding energies, mass defects, fusion "
+            "temperatures) are correctly referenced. These tests do NOT claim that GFD "
+            "derives nuclear physics.\n\n"
+            "KEY VERIFICATIONS:\n"
+            "1. Proton mass = 938.27 MeV (measured, 6*pi^5 coincidence noted)\n"
+            "2. H ionization = 13.6 eV (standard QM)\n"
+            "3. He-4 BE/A = 7.07 MeV (doubly magic shell closure)\n"
+            "4. Mass defect follows E=mc^2 exactly\n"
+            "5. Fusion temperatures increase with product mass\n"
+            "6. Fe-56 is the binding energy peak\n"
+            "7. N/Z increases with Z (Coulomb dilution)\n"
+            "8. Be-8 unstable due to positive Q-value for alpha decay\n\n"
+            "REMOVED (was numerology): k-alignment tests, (1+A) field counting."
         ),
         test_classes=ALL_TESTS,
     )
 
 
 if __name__ == "__main__":
-    success = run_all_tests()
+    import sys
+    success = run_all()
     sys.exit(0 if success else 1)
