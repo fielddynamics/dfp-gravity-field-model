@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gravity Field Model</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-top-bar"></div>
+            <div class="sidebar-header">
+                <div class="model-selector">
+                    <span class="model-name">Gravity Field Model</span>
+                    <span class="research-badge">RESEARCH PREVIEW</span>
+                </div>
+            </div>
+
+            <div class="file-filter-section">
+                <div class="section-header">
+                    <span>Search</span>
+                </div>
+                <div class="filter-input-container">
+                    <input type="text" id="file-filter" class="filter-input"
+                        placeholder="Filter tests... (e.g. *causality*)" oninput="filterFiles(this.value)">
+                </div>
+            </div>
+
+            <div class="file-tree-section">
+                <div class="section-header">
+                    <span>Files</span>
+                    <span id="file-count" class="file-count"></span>
+                </div>
+                <div id="file-tree" class="file-tree">
+                    <!-- File tree will be populated by JavaScript -->
+                    <div class="loading">Loading files...</div>
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- Resize Handle -->
+        <div class="resize-handle" id="resize-handle"></div>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <div class="content-wrapper" id="welcome-view">
+                <!-- Welcome Panel -->
+                <div class="action-cards">
+                    <div class="action-card welcome-card">
+                        <div class="card-content">
+                            <h3>Welcome to Gravity Field Dynamics</h3>
+                            <p class="welcome-text">Use the <strong>file tree on the left</strong> to browse all tests.
+                                Click any test file to view its source code here, then click <strong>Run</strong> to
+                                execute it and see the results.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Test Results -->
+                <div class="action-cards">
+                    <div class="action-card">
+                        <div class="card-content">
+                            <h3>Test Results</h3>
+                            <div class="test-results-inline" id="test-results-inline">
+                                <div class="loading-dots" id="test-loading">
+                                    <div class="dot"></div>
+                                    <div class="dot"></div>
+                                    <div class="dot"></div>
+                                </div>
+                                <div class="results-list" id="results-list" style="display: none;">
+                                    <div class="result-line" id="engine-line"></div>
+                                    <div class="result-line" id="calc-line"></div>
+                                    <div class="result-line total" id="total-line"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- File Viewer (hidden by default) -->
+            <div class="file-viewer" id="file-viewer" style="display: none;">
+                <div class="file-header">
+                    <div class="file-tab">
+                        <span class="file-icon-py">&#128013;</span>
+                        <span id="current-file-name">No file open</span>
+                        <button class="close-file-btn" onclick="closeFile()">&#10005;</button>
+                    </div>
+                    <div class="file-actions">
+                        <button class="run-btn" onclick="runCurrentFile()">&#9654; Run</button>
+                    </div>
+                </div>
+                <div class="file-content">
+                    <div class="file-content-scroll">
+                        <div class="line-numbers" id="line-numbers"></div>
+                        <div class="code-editor-container">
+                            <pre class="code-highlight" id="code-highlight"><code id="code-highlight-code"></code></pre>
+                            <textarea id="code-editor" class="code-editor" spellcheck="false"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="editor-status-bar" id="editor-status-bar">
+                    <span class="status-text" id="editor-status">Ready</span>
+                    <span class="status-position" id="cursor-position">Ln 1, Col 1</span>
+                    <button class="save-btn" id="save-btn" onclick="saveFile()" disabled>Save</button>
+                </div>
+            </div>
+
+            <!-- Output Viewer (hidden by default) -->
+            <div class="output-viewer" id="output-viewer" style="display: none;">
+                <div class="file-header">
+                    <div class="file-tab">
+                        <span class="file-icon-output">&#128196;</span>
+                        <span id="output-file-name">Output</span>
+                        <button class="close-file-btn" onclick="closeOutput()">&#10005;</button>
+                    </div>
+                    <div class="file-actions">
+                        <button class="source-btn" onclick="showSource()">&#9664; Source</button>
+                    </div>
+                </div>
+                <div class="output-content" id="output-content">
+                    <!-- Output will be rendered here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+
+</html>

@@ -4,9 +4,33 @@
 [![Tests: 813 Passing](https://img.shields.io/badge/Tests-813%20Passing-brightgreen.svg)](#test-suite)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/downloads/)
 
-**Distributed Field Processing (DFP)** is a physics framework that derives gravitational dynamics from the topology of spacetime. This repository contains the **Gravity Field Model** - a computational validation suite that tests DFP predictions against physical constants and observations.
+**Distributed Field Processing (DFP)** is a physics framework that derives gravitational dynamics from the topology of spacetime. This repository contains the **Gravity Field Model**, a computational validation suite that tests DFP predictions against physical constants and observations.
 
 **Author:** Stephen Nelson | [fielddynamics.org](https://fielddynamics.org)
+
+---
+
+## Quick Start
+
+Launch the interactive test explorer in 3 steps:
+
+```bash
+# 1. Clone and enter the repository
+git clone https://github.com/your-username/dfp-gravity-field-model.git
+cd dfp-gravity-field-model
+
+# 2. Install dependencies
+pip install flask numpy
+
+# 3. Launch the web interface
+python gravity_field_model/web_interface/run_web.py
+```
+
+Your browser will open automatically to `http://localhost:5005`. Use the file tree on the left to browse tests, click any test to view its source code, then click **Run** to execute it.
+
+---
+
+## Overview
 
 The model requires no dark matter and no free parameters beyond established physical constants. All predictions derive from a single geometric fact: in 3+1 dimensions, gravitational field closure requires exactly k=4 coupling channels.
 
@@ -97,57 +121,35 @@ All four roads lead to the same destination: **two tetrahedra with opposite orie
 
 ---
 
-## Installation
-
-```bash
-git clone https://github.com/your-username/dfp-gravity-field-model.git
-cd dfp-gravity-field-model
-pip install -r requirements.txt
-```
-
-**Requirements:**
-- Python 3.10+
-- Flask (for web interface)
-- NumPy (for numerical computations)
-
----
-
-## Usage
+## Running Tests
 
 ### Web Interface (Recommended)
 
-The primary way to explore and run tests is through the web interface:
-
-```bash
-cd gfd_model_v2/web_interface
-python run_web.py
-```
-
-This starts a local server at `http://localhost:5005` and opens your browser automatically.
-
-The web interface provides:
+See [Quick Start](#quick-start) above. The web interface provides:
 - File browser for all test modules
 - Syntax-highlighted code viewing
 - One-click test execution
-- Formatted test results with derivations, models, and observations
-- Support for both legacy (v1) and new framework (v2) tests
+- Formatted results with derivations, models, and observations
 
-### Running Individual Tests
+### Command Line
 
-You can also run any test file directly:
+Run any test file directly:
 
 ```bash
-python gfd_model_v2/engine_core/geometry/test_port_ratio.py
-python gfd_model_v2/calculations/stellar_mechanics/test_power_output.py
+python gravity_field_model/engine_core/geometry/test_port_ratio.py
+python gravity_field_model/calculations/stellar_mechanics/test_power_output.py
+```
+
+Or use the module runner:
+
+```bash
+python -m gravity_field_model.run_test ClosureStatisticsReasonable
 ```
 
 ### Custom Port
 
-To run the web interface on a different port:
-
 ```bash
-cd gfd_model_v2/web_interface
-python run_web.py --port 8080
+python gravity_field_model/web_interface/run_web.py --port 8080
 ```
 
 ---
@@ -185,11 +187,10 @@ The validation suite contains **813 tests** across 16 categories:
 
 ```
 dfp-gravity-field-model/
-├── LICENSE                  # MIT License
 ├── README.md                # This file
-├── requirements.txt         # Python dependencies
+├── LICENSE                  # MIT License
 │
-└── gfd_model_v2/            # Main model package
+└── gravity_field_model/     # Main model package
     │
     ├── common/              # Shared constants and data
     │   ├── constants_codata.py  # CODATA 2022 physical constants
@@ -263,7 +264,7 @@ This is not a curve fit. It is the unique solution satisfying closure constraint
 All constants derive from CODATA 2022 values:
 
 ```python
-from gfd_model_v2.common import C, HBAR, ALPHA, M_E, R_E, K
+from gravity_field_model.common import C, HBAR, ALPHA, M_E, R_E, K
 
 C = 299792458        # Speed of light (m/s, exact)
 HBAR = 1.054571817e-34  # Reduced Planck constant (J*s)
@@ -282,8 +283,8 @@ K = 4                   # Tetrahedral closure constant
 Tests use the builder pattern with `Test`, `Derivation`, `Model`, and `Observed`:
 
 ```python
-from gfd_model_v2.framework import *
-from gfd_model_v2.common.constants_codata import C, HBAR
+from gravity_field_model.framework import *
+from gravity_field_model.common.constants_codata import C, HBAR
 
 class MyTest(Test):
     name = "My Test Name"
@@ -314,7 +315,7 @@ if __name__ == "__main__":
 Older tests inherit from `GFDTest`:
 
 ```python
-from gfd_model_v2.base import GFDTest
+from gravity_field_model.base import GFDTest
 
 class MyTest(GFDTest):
     name = "My Test"
@@ -382,6 +383,6 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) for detai
 
 ---
 
-**DFP: Gravity Field Model v2.0.0**
+**DFP: Gravity Field Model**
 
 *The constants of nature are geometric necessities, not accidents.*
