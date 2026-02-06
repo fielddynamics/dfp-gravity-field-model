@@ -12,7 +12,7 @@
 
 ## Quick Start
 
-Launch the interactive test explorer in 3 steps:
+Launch the interactive test explorer in three steps:
 
 ```bash
 # 1. Clone and enter the repository
