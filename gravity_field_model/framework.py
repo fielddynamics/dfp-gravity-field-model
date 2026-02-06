@@ -547,6 +547,53 @@ class Test(ABC):
     # Score of None means not yet audited
     audit_score: Optional[int] = None
     
+    # Scientific Contribution Score (0-100)
+    # Measures the VALUE of this test's findings to the overall system
+    # Based on CONTRIBUTION_SCORING_FRAMEWORK.md criteria:
+    #
+    # DISCOVERY VALUE (0-40 points):
+    #   40: Answers a fundamental unsolved problem in physics
+    #   30: Reveals a previously unknown relationship or pattern
+    #   20: Confirms a theoretical prediction with new evidence
+    #   10: Extends known physics to a new domain
+    #   0:  Routine verification of established results
+    #
+    # PRECISION & RIGOR (0-20 points):
+    #   20: Multiple independent confirmations, high precision (<0.1%)
+    #   15: Strong confirmation with good precision (<1%)
+    #   10: Reasonable confirmation with moderate precision (<5%)
+    #   5:  Suggestive but needs more precision
+    #   0:  Inconclusive or low precision
+    #
+    # CROSS-DOMAIN IMPACT (0-20 points):
+    #   20: Unifies multiple domains (e.g., GW + particle + cosmology)
+    #   15: Connects two previously separate domains
+    #   10: Suggests connections worth investigating
+    #   5:  Domain-specific insight
+    #   0:  No cross-domain relevance
+    #
+    # FALSIFIABILITY & PREDICTIONS (0-20 points):
+    #   20: Makes testable predictions that could be checked experimentally
+    #   15: Makes predictions testable with future observations
+    #   10: Constrains parameter space meaningfully
+    #   5:  Suggests what to look for next
+    #   0:  No predictive power
+    #
+    # Score interpretation:
+    #   90-100: Profound (potential paradigm shift)
+    #   70-89:  Significant (advances understanding materially)
+    #   50-69:  Valuable (solid contribution to the field)
+    #   30-49:  Incremental (useful but not groundbreaking)
+    #   0-29:   Routine (verification, no new insight)
+    #
+    # Score of None means not yet assessed
+    contribution_score: Optional[int] = None
+    
+    # Explanation of contribution score
+    # Document WHY this test earned its contribution score
+    # Example: "Discovery: 30 (new pattern 3/8=d/2^d found), Precision: 15 ..."
+    contribution_notes: Optional[str] = None
+    
     def derivation(self) -> Derivation:
         """Return derivation steps. Override in subclass."""
         return Derivation()
