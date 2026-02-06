@@ -50,4 +50,9 @@ htmlcov/
 docs/
 
 # Markdown files (working documents)
+# Ignore all .md files by default
 *.md
+
+# But allow .md files in the framework folder (these are essential project documentation)
+!framework/
+!framework/*.md
