@@ -48,7 +48,7 @@ class ISCOFactorSix(Test):
     
     reference = "Bardeen, Press & Teukolsky (1972); MTW Gravitation Ch. 25"
     
-    tolerance = 0.001  # Exact match expected
+    tolerance = 0.001
     
     level = Level.STANDARD
     
@@ -65,23 +65,20 @@ class ISCOFactorSix(Test):
         "established physics from speculative observations."
     )
     
-    # DEV's claimed score (UAT will independently verify this)
-    # Honest self-assessment aligned with UAT criteria
     audit_score = 85
     audit_notes = (
-        "Question: 13/15 - Good 'why/how' mystery framing. "
-        "Derivation: 12/15 - Structured steps, GR context. "
-        "Commentary: 13/15 - Epistemic honesty about observation status. "
-        "Model: 8/10 - Clean comparison output. "
-        "Observations: 9/10 - Well-sourced from GR literature. "
-        "Constants: 8/10 - Uses framework, no hardcoded values. "
-        "Accessibility: 12/15 - Graduate level, good explanation depth. "
-        "Header: 10/10 - Comprehensive module docstring."
+        "Question: 13/15, good why/how mystery framing. "
+        "Derivation: 12/15, structured steps, GR context. "
+        "Commentary: 13/15, epistemic honesty about observation status. "
+        "Model: 8/10, clean comparison output. "
+        "Observations: 9/10, well sourced from GR literature. "
+        "Constants: 8/10, uses framework, no hardcoded values. "
+        "Accessibility: 12/15, graduate level, good explanation depth. "
+        "Header: 10/10, comprehensive module docstring."
     )
     
-    # DO NOT SET THESE - UAT and PROD assign them
-    academic_paper = None  # UAT_MODULE writes this
-    contribution_score = None  # PROD_MODULE assigns this
+    academic_paper = None
+    contribution_score = None
     
     def derivation(self) -> Derivation:
         return (
@@ -98,10 +95,7 @@ class ISCOFactorSix(Test):
         )
     
     def model(self) -> Model:
-        # GR prediction
         isco_factor_gr = 6.0
-        
-        # GFD observation: spatial faces
         faces_per_tet = 3
         num_tetrahedra = 2
         spatial_faces = faces_per_tet * num_tetrahedra

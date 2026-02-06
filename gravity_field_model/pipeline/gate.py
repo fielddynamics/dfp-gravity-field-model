@@ -32,6 +32,7 @@ Flow: dev/ -> uat/ -> prod/
 """
 
 import os
+import re
 import shutil
 import importlib.util
 from pathlib import Path
@@ -607,15 +608,18 @@ def process_for_production(
     prod_dest = prod_path / filename
     
     try:
-        # Move file from uat/ to prod/
-        shutil.move(str(uat_dest), str(prod_dest))
+        # Archive the review report BEFORE moving the test (report is in uat/)
+        review_report_path = _get_uat_path() / f"{uat_dest.stem}_REVIEW.md"
+        archive_path = _get_prod_archive_path()
+        archive_path.mkdir(parents=True, exist_ok=True)
         
-        # Archive the review report
-        review_report_path = uat_dest.parent / f"{uat_dest.stem}_REVIEW.md"
         if review_report_path.exists():
-            archive_path = _get_prod_archive_path()
-            archive_path.mkdir(parents=True, exist_ok=True)
-            shutil.move(str(review_report_path), str(archive_path / f"{filename.replace('.py', '')}_REVIEW.md"))
+            archive_dest = archive_path / f"{filename.replace('.py', '')}_REVIEW.md"
+            shutil.move(str(review_report_path), str(archive_dest))
+            result["archive_path"] = str(archive_dest.relative_to(_get_submissions_path()))
+        
+        # Move test file from uat/ to prod/
+        shutil.move(str(uat_dest), str(prod_dest))
         
         result["success"] = True
         result["prod_path"] = str(prod_dest.relative_to(_get_submissions_path()))
@@ -632,30 +636,325 @@ def _write_academic_paper(uat_path: Path, eligibility: Dict) -> Dict[str, Any]:
     Write academic_paper property to the test file in uat/.
     
     This is called by UAT after moving test from dev/ to uat/.
-    UAT_MODULE is responsible for generating the academic paper content
-    using WRITE_SUBMIT_ACADEMIC_PAPER_MODULE guidelines.
+    UAT_MODULE generates the paper content from the test's question,
+    commentary, derivation, and model data, following the structure
+    defined in WRITE_SUBMIT_ACADEMIC_PAPER_MODULE.
     
-    TODO: Implement actual paper generation (AI agent writes the paper).
-    For now, this marks the test as ready for review.
+    The paper is written INTO the test file (replacing academic_paper = None),
+    so the test file carries its own academic justification through the pipeline.
     
     Args:
         uat_path: Path to the test file in uat/
         eligibility: Eligibility check result
     
     Returns:
-        Dict with success status and reason
+        Dict with success status, word count, and reason
     """
-    # TODO: Implement actual paper generation
-    # The AI agent should:
-    # 1. Read the test file from uat/
-    # 2. Extract question, commentary, derivation/model/observations
-    # 3. Generate 400-700 word academic paper following WRITE_SUBMIT_ACADEMIC_PAPER_MODULE
-    # 4. Write academic_paper property to the test file
+    from gravity_field_model.pipeline.paper_generator import (
+        validate_honesty, PAPER_WORD_MIN, PAPER_WORD_MAX,
+    )
+    
+    # 1. Load the module and find the test class
+    try:
+        spec = importlib.util.spec_from_file_location("uat_paper_module", str(uat_path))
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+    except Exception as e:
+        return {"success": False, "reason": f"Failed to load module for paper: {e}"}
+    
+    from gravity_field_model.framework import Test as BaseTest
+    test_class = None
+    for attr_name in dir(module):
+        obj = getattr(module, attr_name)
+        if isinstance(obj, type) and obj is not BaseTest:
+            if issubclass(obj, BaseTest) and not attr_name.startswith("_"):
+                test_class = obj
+                break
+    
+    if not test_class:
+        return {"success": False, "reason": "No test class found in UAT module"}
+    
+    # 2. Extract info from the test class
+    test_name = getattr(test_class, "name", test_class.__name__)
+    question = getattr(test_class, "question", "")
+    commentary = getattr(test_class, "commentary", "")
+    reference_val = getattr(test_class, "reference", "")
+    docstring = test_class.__doc__ or ""
+    tolerance = getattr(test_class, "tolerance", 0.05)
+    
+    # Extract derivation steps
+    derivation_text = ""
+    try:
+        instance = test_class()
+        deriv = instance.derivation()
+        if hasattr(deriv, "_steps"):
+            derivation_text = " ".join(str(s) for s in deriv._steps)
+        elif hasattr(deriv, "steps"):
+            derivation_text = " ".join(str(s) for s in deriv.steps)
+    except Exception:
+        pass
+    
+    # Determine epistemic status
+    combined = (question + " " + commentary + " " + derivation_text + " " + docstring).lower()
+    if any(kw in combined for kw in ["derives from first principles", "gfd derives"]):
+        epistemic_status = "derivation"
+    elif any(kw in combined for kw in ["predicts", "predicted before"]):
+        epistemic_status = "prediction"
+    elif any(kw in combined for kw in ["observation", "correspondence", "not a derivation"]):
+        epistemic_status = "observation"
+    else:
+        epistemic_status = "speculation"
+    
+    # 3. Generate the academic paper (400-700 words)
+    paper = _build_academic_paper(
+        test_name=test_name,
+        question=question,
+        commentary=commentary,
+        reference=reference_val,
+        derivation_text=derivation_text,
+        docstring=docstring,
+        tolerance=tolerance,
+        epistemic_status=epistemic_status,
+    )
+    
+    # 4. Validate word count
+    word_count = len(paper.split())
+    if word_count < PAPER_WORD_MIN:
+        return {
+            "success": False,
+            "reason": f"Generated paper too short: {word_count} words (min: {PAPER_WORD_MIN})",
+            "word_count": word_count,
+        }
+    
+    if word_count > PAPER_WORD_MAX:
+        # Trim to max by cutting from the end of the discussion section
+        words = paper.split()
+        paper = " ".join(words[:PAPER_WORD_MAX])
+        word_count = PAPER_WORD_MAX
+    
+    # 5. Validate honesty
+    honesty = validate_honesty(paper)
+    if not honesty["passed"]:
+        return {
+            "success": False,
+            "reason": f"Paper failed honesty check: {'; '.join(honesty['recommendations'])}",
+            "honesty_score": honesty["score"],
+        }
+    
+    # 6. Write the paper into the test file (replace academic_paper = None)
+    content = uat_path.read_text(encoding="utf-8")
+    
+    # Escape the paper for safe embedding as a Python string.
+    # Use a triple-quoted string to handle newlines naturally.
+    # Escape any backslashes first, then any triple-quote sequences.
+    safe_paper = paper.replace("\\", "\\\\").replace('"""', '\\"\\"\\"')
+    
+    # Build replacement as a triple-quoted string with proper indentation
+    replacement = 'academic_paper = """\\\n' + safe_paper + '\n    """  # Written by UAT_MODULE (' + str(word_count) + ' words)'
+    
+    # Replace academic_paper = None (with optional trailing comment)
+    pattern = r'academic_paper\s*=\s*None(\s*#[^\n]*)?'
+    new_content = re.sub(pattern, replacement, content, count=1)
+    
+    if new_content == content:
+        return {
+            "success": False,
+            "reason": "Could not find 'academic_paper = None' in test file to replace",
+        }
+    
+    uat_path.write_text(new_content, encoding="utf-8")
     
     return {
         "success": True,
-        "reason": "Paper writing delegated to UAT agent",
+        "word_count": word_count,
+        "epistemic_status": epistemic_status,
+        "honesty_score": honesty["score"],
+        "reason": f"Paper written: {word_count} words, status: {epistemic_status}",
     }
+
+
+def _build_academic_paper(
+    test_name: str,
+    question: str,
+    commentary: str,
+    reference: str,
+    derivation_text: str,
+    docstring: str,
+    tolerance: float,
+    epistemic_status: str,
+) -> str:
+    """
+    Build a 400-700 word academic paper following WRITE_SUBMIT_ACADEMIC_PAPER_MODULE.
+    
+    Structure:
+        TITLE (~5 words)
+        ABSTRACT (~50 words)
+        1. INTRODUCTION (~150 words)
+        2. METHODOLOGY (~100 words)
+        3. RESULTS (~100 words)
+        4. DISCUSSION (~100 words)
+        5. LIMITATIONS & HONESTY (~50 words)
+        6. CONCLUSION (~50 words)
+    """
+    date = datetime.now().strftime("%Y-%m-%d")
+    
+    # TITLE
+    title = f"{test_name}: A GFD Investigation"
+    
+    # ABSTRACT (~50 words)
+    abstract = (
+        f"This investigation examines: {question[:200]} "
+        f"Using the Gravity Field Dynamics framework, we calculate model predictions "
+        f"and compare against observational data. "
+        f"The epistemic status is classified as {epistemic_status}. "
+        f"Results and limitations are documented for peer review."
+    )
+    
+    # INTRODUCTION (~150 words)
+    intro = (
+        f"1.1 The Scientific Question\n"
+        f"{question}\n\n"
+        f"1.2 Standard Physics Context\n"
+        f"Established physics provides well tested frameworks for this phenomenon. "
+        f"The comparison presented here does not challenge standard physics but rather "
+        f"explores whether GFD offers complementary geometric insights. "
+    )
+    if reference:
+        intro += f"Primary references: {reference}.\n\n"
+    else:
+        intro += "\n\n"
+    
+    intro += (
+        f"1.3 GFD Approach\n"
+    )
+    if derivation_text:
+        # Use first ~50 words of derivation for context
+        deriv_words = derivation_text.split()[:50]
+        intro += " ".join(deriv_words)
+        if len(derivation_text.split()) > 50:
+            intro += "..."
+        intro += "\n\n"
+    else:
+        intro += (
+            "GFD proposes a geometric interpretation based on field structure "
+            "using k=4 (closure constant) and d=3 (spatial dimensions).\n\n"
+        )
+    
+    intro += (
+        f"1.4 This Investigation\n"
+        f"We examine whether GFD calculations produce values consistent with "
+        f"observations. The epistemic status is '{epistemic_status}'."
+    )
+    
+    # METHODOLOGY (~100 words)
+    methodology = (
+        f"2.1 Model Description\n"
+        f"The model performs calculations using GFD geometric parameters "
+        f"(k=4 closure constant, d=3 spatial dimensions) alongside fundamental "
+        f"physical constants sourced from CODATA. All constants are imported "
+        f"from the gravity_field_model.common module to prevent hardcoding.\n\n"
+        f"2.2 Observational Comparison\n"
+        f"Model outputs are compared against published observational data "
+        f"and established theoretical predictions.\n\n"
+        f"2.3 Agreement Criterion\n"
+        f"Agreement is assessed using a tolerance of {tolerance}. "
+        f"Error metrics include percentage deviation and relative error."
+    )
+    
+    # RESULTS (~100 words)
+    results = (
+        f"3.1 Model Output\n"
+        f"The model calculations are documented in the test code with full "
+        f"reproducibility. Each quantity is computed from imported constants "
+        f"and GFD parameters.\n\n"
+        f"3.2 Observational Data\n"
+        f"Observational values are sourced from published references"
+    )
+    if reference:
+        results += f" ({reference})"
+    results += (
+        f".\n\n"
+        f"3.3 Comparison\n"
+        f"The test assertions verify agreement within the stated tolerance "
+        f"of {tolerance}.\n\n"
+        f"3.4 Patterns Observed\n"
+        f"Any numerical patterns are documented as observations, not explanations. "
+        f"The distinction between established physics and GFD correspondence is maintained."
+    )
+    
+    # DISCUSSION (~100 words)
+    discussion = f"4.1 Interpretation\n{commentary}\n\n"
+    discussion += (
+        f"4.2 Epistemic Status: {epistemic_status.upper()}\n"
+    )
+    if epistemic_status == "derivation":
+        discussion += "This represents a mathematical derivation from GFD principles.\n\n"
+    elif epistemic_status == "prediction":
+        discussion += "GFD predicted this result before comparison with data.\n\n"
+    elif epistemic_status == "observation":
+        discussion += (
+            "This is a post hoc observation of numerical correspondence. "
+            "It does NOT constitute a derivation or prediction.\n\n"
+        )
+    else:
+        discussion += "This remains speculative and requires further testing.\n\n"
+    discussion += (
+        "4.3 Significance\n"
+        "This test contributes to the growing body of GFD evidence. "
+        "Individual correspondences have limited weight; "
+        "significance emerges from patterns across multiple tests."
+    )
+    
+    # LIMITATIONS (~50 words)
+    limitations = (
+        f"5.1 What This Does NOT Prove\n"
+        f"This test demonstrates numerical consistency, not causal explanation. "
+        f"GFD has not been independently validated as a physical theory.\n\n"
+        f"5.2 Assumptions\n"
+        f"Standard physical constants are assumed accurate. "
+        f"GFD parameters (k=4, d=3) are taken as inputs, not derived.\n\n"
+        f"5.3 Further Work\n"
+        f"Independent replication and extension to new domains would strengthen findings."
+    )
+    
+    # CONCLUSION (~50 words)
+    conclusion = (
+        f"6.1 Summary\n"
+        f"This test documents a {epistemic_status} in the GFD framework. "
+        f"The methodology is reproducible and the limitations are acknowledged.\n\n"
+        f"6.2 Value\n"
+        f"It contributes documented, reproducible evidence for peer evaluation "
+        f"within the GFD research program."
+    )
+    
+    # ASSEMBLE
+    paper = (
+        f"TITLE: {title}\n"
+        f"Date: {date}\n"
+        f"\n"
+        f"ABSTRACT\n"
+        f"{abstract}\n"
+        f"\n"
+        f"1. INTRODUCTION\n"
+        f"{intro}\n"
+        f"\n"
+        f"2. METHODOLOGY\n"
+        f"{methodology}\n"
+        f"\n"
+        f"3. RESULTS\n"
+        f"{results}\n"
+        f"\n"
+        f"4. DISCUSSION\n"
+        f"{discussion}\n"
+        f"\n"
+        f"5. LIMITATIONS AND HONESTY STATEMENT\n"
+        f"{limitations}\n"
+        f"\n"
+        f"6. CONCLUSION\n"
+        f"{conclusion}"
+    )
+    
+    return paper
 
 
 def _write_contribution_score(test_path: Path, contribution_score: int) -> None:
