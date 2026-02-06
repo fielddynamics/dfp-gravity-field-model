@@ -2,7 +2,56 @@
 Test Template: [CATEGORY NAME]
 ==============================
 
-Copy this template when creating new tests. Follow the TEST_QUALITY_FRAMEWORK.md.
+Copy this template when creating new tests. Follow the TEST_QUALITY_MODULE.md.
+
+================================================================================
+WHO SETS WHAT (Pipeline Stages)
+================================================================================
+
+| Field             | Set By         | When                  |
+|-------------------|----------------|-----------------------|
+| question          | DEV (you)      | During test creation  |
+| commentary        | DEV (you)      | During test creation  |
+| audit_score       | START_RESEARCH_MODULE | After quality audit   |
+| academic_paper    | UAT_MODULE     | After UAT acceptance  |
+| contribution_score| PROD_MODULE    | During peer review    |
+
+DEV MUST NOT SET: academic_paper, contribution_score (desk rejection if set)
+
+================================================================================
+DESK REJECTION RULES (checked by UAT_MODULE)
+================================================================================
+
+Your test will be DESK REJECTED if ANY of these fail:
+
+  [X] ONE TEST CLASS per file         Multiple tests = REJECT
+  [X] question = "..."                Empty or missing = REJECT  
+  [X] commentary = "..."              Empty or missing = REJECT
+  [X] derivation/observations/model   At least ONE method = REJECT
+  [X] audit_score >= 85               Below 85 = REJECT
+  [X] academic_paper = None           If set by DEV = REJECT (UAT writes it)
+  [X] contribution_score = None       If set by DEV = REJECT (PROD sets it)
+
+Desk rejection = immediate failure, no review, no feedback. Fix and resubmit.
+
+================================================================================
+DEV STAGE REQUIRED FIELDS
+================================================================================
+
+| Field             | Type   | Requirement                              |
+|-------------------|--------|------------------------------------------|
+| question          | str    | Non-empty, describes what you investigate|
+| commentary        | str    | Non-empty, interprets the results        |
+| audit_score       | int    | Set by START_RESEARCH_MODULE, must be >= 85     |
+| academic_paper    | None   | DO NOT SET (UAT writes this)             |
+| contribution_score| None   | DO NOT SET (PROD assigns this)           |
+
+Plus ONE of these methods:
+- derivation() returning Derivation object
+- observations() returning Observed object
+- model() returning Model object
+
+================================================================================
 
 Architecture (Three Layers):
 1. CONSTANTS: Import from constants_codata.py (never hardcode)
@@ -10,11 +59,6 @@ Architecture (Three Layers):
 3. TESTS: Validate functions using Depends() injection
 
 Reference example: gravity_field_model/examples/example_power_output.py
-
-Before writing:
-1. What question does this test answer? (Hook the curiosity)
-2. What would failure mean? (Stakes)
-3. What is the pass/fail criterion? (Clear verdict)
 
 Delete these instructions after copying.
 """
@@ -93,6 +137,7 @@ class ExampleGoodTest(Test):
     2. DERIVATION: Build mental scaffolding (intuition before math)
     3. MODEL: Show the data (reader is now ready)
     4. COMMENTARY: Deliver the "aha" moment (the insight)
+    5. ACADEMIC_PAPER: Formal submission for peer review (700 words max)
     """
     
     # Clear, descriptive name that hints at the mystery
@@ -125,6 +170,117 @@ class ExampleGoodTest(Test):
         "circles. If confirmed, this would mean the strength of electromagnetism "
         "is determined by geometry, not by accident."
     )
+    
+    # =========================================================================
+    # SCORING (assigned at different pipeline stages)
+    # =========================================================================
+    
+    # audit_score: Assigned by START_RESEARCH_MODULE (test quality assessment)
+    # Range: 0-100, threshold >= 85 for UAT promotion
+    # DESK REJECT if < 85 or missing
+    audit_score = 87
+    audit_notes = "Question: 14/15, Derivation: 14/15, Commentary: 13/15, ..."
+    
+    # =========================================================================
+    # DO NOT SET THESE IN DEV (desk rejection if present)
+    # =========================================================================
+    
+    # academic_paper: Written by UAT_MODULE after test is accepted to UAT
+    # DO NOT set this in DEV stage. UAT writes the 400-700 word paper.
+    academic_paper = None  # UAT_MODULE writes this
+    
+    # contribution_score: Assigned by PROD_MODULE during peer review
+    # Range: 0-100, threshold >= 70 for production acceptance
+    # DO NOT set this yourself. PROD_MODULE assigns it as the journal review.
+    contribution_score = None  # PROD_MODULE assigns this
+    
+    # =========================================================================
+    # EXAMPLE ACADEMIC PAPER (for reference only, UAT generates this)
+    # =========================================================================
+    #
+    # STRUCTURE: See WRITE_SUBMIT_ACADEMIC_PAPER_MODULE.md
+    #   - TITLE
+    #   - ABSTRACT (50 words)
+    #   - 1. INTRODUCTION (150 words)
+    #   - 2. METHODOLOGY (100 words)
+    #   - 3. RESULTS (150 words)
+    #   - 4. DISCUSSION (150 words)
+    #   - 5. LIMITATIONS & HONESTY STATEMENT (50 words)
+    #   - 6. CONCLUSION (50 words)
+    #
+    # HONESTY REQUIREMENTS:
+    #   - Distinguish DERIVATION from OBSERVATION
+    #   - Acknowledge limitations and assumptions
+    #   - Never overclaim ("proves", "undeniable", "clearly demonstrates")
+    #   - Use measured language ("consistent with", "suggests", "observes")
+    # =========================================================================
+    
+    _example_academic_paper = """
+TITLE
+Fine Structure Constant from Stellated Octahedron Geometry:
+A Numerical Correspondence Investigation
+
+ABSTRACT
+This investigation examines whether the fine structure constant alpha can
+be derived from pure geometry. Using the ratio of inner to outer radii
+of a stellated octahedron, we find a value matching alpha to within 0.1%.
+This is documented as a numerical OBSERVATION, not a derivation.
+
+1. INTRODUCTION: THE SCIENTIFIC QUESTION
+The fine structure constant alpha = 1/137.036 governs electromagnetic
+interactions. For a century, physicists have questioned whether this
+precise value is fundamental or emergent. Standard physics treats it as
+a measured constant with no geometric origin.
+
+GFD proposes that fundamental constants may emerge from geometric
+structures. This test investigates whether alpha corresponds to any
+natural ratio in a stellated octahedron (two interlocking tetrahedra),
+a shape central to GFD field geometry.
+
+We ask: does the ratio r_inner/r_outer equal alpha? If so, this would
+suggest alpha has geometric rather than arbitrary origins.
+
+2. METHODOLOGY
+We construct a stellated octahedron with unit outer radius. The inner
+radius is calculated from the geometry of interlocking tetrahedra.
+The ratio r_inner/r_outer is compared against CODATA 2022 value for alpha.
+
+Agreement criterion: match within 1% is considered significant.
+Data source: CODATA 2022 (alpha = 1/137.035999084).
+
+3. RESULTS
+Model output:
+  - Geometric ratio (r_inner/r_outer): 0.007297
+  - CODATA alpha: 0.007297352569
+  - Difference: 0.08%
+
+The geometric ratio matches the measured fine structure constant to
+within 0.1%, well within our 1% significance threshold.
+
+4. DISCUSSION
+The correspondence between the geometric ratio and alpha is striking.
+However, we must be epistemically clear: this is an OBSERVATION of
+numerical correspondence, NOT a derivation from first principles.
+
+GFD does not claim to derive alpha mathematically from geometry.
+Rather, we note that if field interactions occur on stellated octahedral
+structures, the characteristic ratio of that structure equals alpha.
+
+This pattern gains significance alongside similar correspondences
+found for other constants (see related tests in particle_physics/).
+
+5. LIMITATIONS & HONESTY STATEMENT
+This test does NOT prove alpha has geometric origin. The match could
+be coincidental. GFD has not been validated as a physical theory.
+Alternative geometric ratios might also approximate alpha.
+Further independent verification is needed.
+
+6. CONCLUSION
+We document a precise numerical correspondence between the stellated
+octahedron inner/outer radius ratio and the fine structure constant.
+This merits inclusion as part of the broader pattern of GFD-constant
+correspondences, while acknowledging its status as observation only.
+    """.strip()
 
     def derivation(self) -> Derivation:
         """

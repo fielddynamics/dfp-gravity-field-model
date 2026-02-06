@@ -1,4 +1,12 @@
-# Contribution Scoring Framework
+# Contribution Scoring Module
+
+**Module Type:** STATELESS (utility library, no folder to guard)
+
+**Purpose:** Provides value assessment rules for test contributions. This module defines the 4 dimensions and thresholds for determining whether a test provides sufficient scientific value.
+
+**Called by:** START_RESEARCH_MODULE (Stage 5: Contribution Assessment)
+
+---
 
 A guide for assessing the scientific value of a test's findings.
 
@@ -364,4 +372,4 @@ A test that can answer all four questions convincingly has earned a high contrib
 
 *Document version: 1.0*
 *Last updated: 2026-02-04*
-*Location: framework/CONTRIBUTION_SCORING_FRAMEWORK.md*
+*Location: framework/CONTRIBUTION_SCORING_MODULE.md*

@@ -1,4 +1,12 @@
-ts# Test Quality Framework
+# Test Quality Module
+
+**Module Type:** STATELESS (utility library, no folder to guard)
+
+**Purpose:** Provides audit scoring rules for test quality. This module defines the 8 criteria and thresholds for assessing whether a test meets quality standards.
+
+**Called by:** START_RESEARCH_MODULE (Stage 4: Audit)
+
+---
 
 A guide for writing tests that communicate clearly and provide genuine value.
 

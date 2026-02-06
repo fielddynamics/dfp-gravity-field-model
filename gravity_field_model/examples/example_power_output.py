@@ -98,6 +98,22 @@ def get_binding_energy(A: int) -> float:
         "Power = Binding Energy x Field Closure Frequency. "
         "Peaks at Fe-56 where BE/nucleon is maximum (8.79 MeV)."
     ),
+    # GRADUATION SCORES (required for central registry)
+    audit_score=82,
+    audit_notes=(
+        "Equation: Clear and documented. "
+        "Inputs/Outputs: Well specified with units. "
+        "Description: Explains physics meaning. "
+        "Validation: CRITICAL test in same file. "
+        "Constants: All from CODATA via common module."
+    ),
+    contribution_score=75,
+    contribution_notes=(
+        "Discovery: 28/40 - Core GFD concept linking binding energy to field closure. "
+        "Precision: 18/20 - Exact calculation, validated against nuclear data. "
+        "Cross-Domain: 17/20 - Used in stellar mechanics, fusion analysis, element studies. "
+        "Falsifiability: 12/20 - Predicts Fe-56 peak, testable against nuclear physics."
+    ),
 )
 def fn_get_power_output_per_field(mass_number: int) -> float:
     """

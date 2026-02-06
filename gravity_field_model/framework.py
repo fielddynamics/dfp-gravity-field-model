@@ -151,16 +151,28 @@ class FunctionRegistry:
     
     _functions: Dict[str, Dict[str, Any]] = {}
     
+    # Graduation thresholds (same as tests)
+    AUDIT_THRESHOLD = 65
+    CONTRIBUTION_THRESHOLD = 70
+    
     @classmethod
     def register(cls, name: str, fn: Callable, equation: str, 
                  inputs: Dict[str, str], outputs: Dict[str, str],
-                 description: str = ""):
+                 description: str = "",
+                 audit_score: Optional[int] = None,
+                 audit_notes: Optional[str] = None,
+                 contribution_score: Optional[int] = None,
+                 contribution_notes: Optional[str] = None):
         cls._functions[name] = {
             'fn': fn,
             'equation': equation,
             'inputs': inputs,
             'outputs': outputs,
             'description': description,
+            'audit_score': audit_score,
+            'audit_notes': audit_notes,
+            'contribution_score': contribution_score,
+            'contribution_notes': contribution_notes,
         }
     
     @classmethod
@@ -180,6 +192,34 @@ class FunctionRegistry:
     @classmethod
     def all(cls) -> Dict[str, Dict]:
         return dict(cls._functions)
+    
+    @classmethod
+    def is_graduated(cls, name: str) -> bool:
+        """Check if a function meets graduation criteria."""
+        if name not in cls._functions:
+            return False
+        meta = cls._functions[name]
+        audit = meta.get('audit_score')
+        contrib = meta.get('contribution_score')
+        if audit is None or contrib is None:
+            return False
+        return audit >= cls.AUDIT_THRESHOLD and contrib >= cls.CONTRIBUTION_THRESHOLD
+    
+    @classmethod
+    def graduated_functions(cls) -> Dict[str, Dict]:
+        """Return only functions that meet graduation criteria."""
+        return {
+            name: meta for name, meta in cls._functions.items()
+            if cls.is_graduated(name)
+        }
+    
+    @classmethod
+    def pending_functions(cls) -> Dict[str, Dict]:
+        """Return functions that have not yet graduated."""
+        return {
+            name: meta for name, meta in cls._functions.items()
+            if not cls.is_graduated(name)
+        }
 
 
 # =============================================================================
@@ -187,7 +227,11 @@ class FunctionRegistry:
 # =============================================================================
 
 def Fn(*, equation: str, inputs: Dict[str, str], outputs: Dict[str, str], 
-       description: str = ""):
+       description: str = "",
+       audit_score: Optional[int] = None,
+       audit_notes: Optional[str] = None,
+       contribution_score: Optional[int] = None,
+       contribution_notes: Optional[str] = None):
     """
     Decorator to register a function as a reusable, documented component.
     
@@ -196,12 +240,38 @@ def Fn(*, equation: str, inputs: Dict[str, str], outputs: Dict[str, str],
             equation="P(A) = BE(A) * f_closure",
             inputs={"A": "int: Mass number"},
             outputs={"watts": "float: Power per field"},
+            description="Power output per gravity field from binding energy.",
+            # Scoring (required for graduation to central registry):
+            audit_score=78,
+            audit_notes="Clear equation, good docs, validated by CRITICAL test.",
+            contribution_score=72,
+            contribution_notes="Discovery: 28/40, Precision: 15/20, Cross-Domain: 17/20, Falsifiability: 12/20",
         )
         def power_per_field(A: int) -> float:
             ...
     
     The function is automatically registered and can be injected into tests
     using Depends(power_per_field).
+    
+    GRADUATION CRITERIA (same as tests):
+        - audit_score >= 65 (quality threshold)
+        - contribution_score >= 70 (must be "Significant" or higher)
+    
+    Only graduated functions are included in the central functions/ registry.
+    Functions without scores or below threshold remain in their source files
+    but are not exposed through gravity_field_model.functions.
+    
+    SCORING GUIDE:
+        audit_score (0-100): How well documented and validated is the function?
+        - Equation clarity, input/output docs, description quality
+        - Validated by at least one CRITICAL test
+        - Constants from common module
+        
+        contribution_score (0-100): How valuable is this function?
+        - Discovery Value (0-40): Does it encapsulate novel calculation?
+        - Precision & Rigor (0-20): How reliable?
+        - Cross-Domain Impact (0-20): Used across multiple domains?
+        - Falsifiability (0-20): Does it make testable predictions?
     """
     def decorator(fn: F) -> F:
         # Attach metadata to function
@@ -210,6 +280,10 @@ def Fn(*, equation: str, inputs: Dict[str, str], outputs: Dict[str, str],
         fn._fn_inputs = inputs
         fn._fn_outputs = outputs
         fn._fn_description = description
+        fn._fn_audit_score = audit_score
+        fn._fn_audit_notes = audit_notes
+        fn._fn_contribution_score = contribution_score
+        fn._fn_contribution_notes = contribution_notes
         
         # Register in global registry
         FunctionRegistry.register(
@@ -219,6 +293,10 @@ def Fn(*, equation: str, inputs: Dict[str, str], outputs: Dict[str, str],
             inputs=inputs,
             outputs=outputs,
             description=description,
+            audit_score=audit_score,
+            audit_notes=audit_notes,
+            contribution_score=contribution_score,
+            contribution_notes=contribution_notes,
         )
         
         return fn
@@ -518,7 +596,7 @@ class Test(ABC):
     
     Audit notes (for Feynman framework compliance):
         audit_notes = "NEEDS WORK: Missing commentary. Reframe question..."
-        audit_score = 75  # 0-100 based on TEST_QUALITY_FRAMEWORK.md
+        audit_score = 75  # 0-100 based on TEST_QUALITY_MODULE.md
     
     Scoring (25 points each):
         - Question hooks curiosity (why before what)
@@ -539,7 +617,7 @@ class Test(ABC):
     audit_notes: Optional[str] = None
     
     # Feynman framework compliance score (0-100)
-    # Based on TEST_QUALITY_FRAMEWORK.md criteria:
+    # Based on TEST_QUALITY_MODULE.md criteria:
     #   - Question hooks curiosity (why before what): 25 pts
     #   - Derivation builds intuition before math: 25 pts
     #   - Model output summarizes (not data dump): 25 pts
@@ -549,7 +627,7 @@ class Test(ABC):
     
     # Scientific Contribution Score (0-100)
     # Measures the VALUE of this test's findings to the overall system
-    # Based on CONTRIBUTION_SCORING_FRAMEWORK.md criteria:
+    # Based on CONTRIBUTION_SCORING_MODULE.md criteria:
     #
     # DISCOVERY VALUE (0-40 points):
     #   40: Answers a fundamental unsolved problem in physics

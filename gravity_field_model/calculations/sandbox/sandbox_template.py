@@ -4,20 +4,32 @@ SANDBOX: <Specific Descriptive Topic>
 
 STATUS: Work in progress.
 
+CRITICAL: ONE TEST PER FILE
+---------------------------
+Each sandbox file should contain ONE test class investigating ONE question.
+Do NOT create test groups during development. Test groups are for organizing
+graduated production tests, not for development.
+
+WHY SINGLE TESTS?
+- Each test requires its own academic_paper (400-700 words)
+- Each test goes through peer review independently
+- Quality is easier to achieve with focused scope
+- Rejection = DELETION, so smaller scope = smaller risk
+
 NAMING REQUIREMENTS:
 --------------------
 File names MUST be descriptive and specific. Follow this pattern:
     sandbox_<domain>_<specific_phenomenon>_<focus>.py
 
 GOOD examples:
-    sandbox_gw_quadrupole_coefficient_32.py
+    sandbox_gw_chirp_mass_exponent.py
     sandbox_bh_isco_geometric_factor.py
     sandbox_ns_density_nuclear_ratio.py
 
 BAD examples:
     sandbox_gw_probing.py        (too vague: "probing" what?)
+    sandbox_gw_tests.py          (multiple tests, should be ONE)
     sandbox_stuff.py             (meaningless)
-    sandbox_physics.py           (everything is physics)
 
 COPY THIS FILE:
     cp sandbox_template.py sandbox_<domain>_<phenomenon>_<focus>.py
@@ -26,18 +38,52 @@ RUN:
     python -m gravity_field_model.calculations.sandbox.sandbox_<your_descriptive_name>
 
 EXPLORING:
-- <What specific question are you trying to answer?>
-- <What specific patterns are you looking for?>
+- <What ONE specific question are you trying to answer?>
+- <What ONE specific pattern are you looking for?>
 - <What standard physics are you verifying?>
 
-GRADUATION CHECKLIST:
+WHO SETS WHAT (Pipeline Stages):
+=================================
+| Field             | Set By         | When                  |
+|-------------------|----------------|-----------------------|
+| question          | DEV (you)      | During test creation  |
+| commentary        | DEV (you)      | During test creation  |
+| audit_score       | START_RESEARCH_MODULE | After quality audit   |
+| academic_paper    | UAT_MODULE     | After UAT acceptance  |
+| contribution_score| PROD_MODULE    | During peer review    |
+
+DESK REJECTION RULES (UAT Guards):
+===================================
+Your test will be DESK REJECTED if ANY fail:
+
+  DEV MUST SET:
+  [X] ONE TEST CLASS per file         Multiple tests = REJECT
+  [X] question = "..."                Empty or missing = REJECT  
+  [X] commentary = "..."              Empty or missing = REJECT
+  [X] derivation/observations/model   At least ONE method = REJECT
+  [X] audit_score >= 85               Below 85 = REJECT
+
+  DEV MUST NOT SET (desk reject if present):
+  [X] academic_paper = None           If set by DEV = REJECT (UAT writes it)
+  [X] contribution_score = None       If set by DEV = REJECT (PROD sets it)
+
+GRADUATION CHECKLIST (before calling request_promotion):
+========================================================
 [ ] File name is descriptive (not "probing" or "stuff")
+[ ] Only ONE test class in file
+[ ] question is set (non-empty string)
+[ ] commentary is set (non-empty string)
+[ ] Has derivation() or observations() or model() method
 [ ] All tests pass
-[ ] audit_score >= 65 (quality, see TEST_QUALITY_FRAMEWORK.md)
-[ ] contribution_score assessed (see CONTRIBUTION_SCORING_FRAMEWORK.md)
-[ ] Move to appropriate domain folder
-[ ] Rename to test_<domain>_<phenomenon>_<focus>.py
-[ ] Delete this sandbox file
+[ ] audit_score >= 85 (quality, see TEST_QUALITY_MODULE.md)
+[ ] academic_paper = None (UAT will write this)
+[ ] contribution_score = None (PROD will assign this)
+[ ] Call request_promotion() to move to UAT
+
+IF AUDIT_SCORE < 85:
+- Test remains in sandbox until quality improved
+- Review TEST_QUALITY_MODULE.md for scoring criteria
+- Improve documentation, derivation clarity, or commentary
 
 GFD Model V2
 
@@ -96,12 +142,12 @@ class ExampleProbingTest(Test):
     HONESTY: <What is standard physics vs what is GFD observation>
     """
     # QUALITY: How well is this test written? (0-100)
-    # See TEST_QUALITY_FRAMEWORK.md for criteria
+    # See TEST_QUALITY_MODULE.md for criteria
     audit_score = None  # Set after audit (target >= 75)
     audit_notes = None  # Fill in during audit
     
     # CONTRIBUTION: How valuable are the findings? (0-100)
-    # See CONTRIBUTION_SCORING_FRAMEWORK.md for criteria
+    # See CONTRIBUTION_SCORING_MODULE.md for criteria
     # - Discovery Value (0-40): What's new?
     # - Precision & Rigor (0-20): How confident?
     # - Cross-Domain Impact (0-20): Connects domains?
@@ -182,9 +228,10 @@ def run_all() -> bool:
             "STATUS: Work in progress\n\n"
             "EXPLORING:\n"
             "- <What this sandbox is investigating>\n\n"
-            "WHEN READY:\n"
-            "- audit_score >= 75\n"
-            "- Move to calculations/<domain>/test_<topic>.py"
+            "GRADUATION CRITERIA (for UAT promotion):\n"
+            "- audit_score >= 85 (quality, high bar)\n"
+            "- academic_paper property (400-700 words)\n\n"
+            "If criteria not met, test remains in sandbox for improvement."
         ),
         test_classes=ALL_TESTS,
     )

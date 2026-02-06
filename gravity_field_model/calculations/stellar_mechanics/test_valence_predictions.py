@@ -125,6 +125,22 @@ _ELEMENT_LOOKUP = {sym: (name, z, a) for sym, name, z, a, _r, _v in ELEMENTS_118
         "have been tuned to minimize prediction error. "
         "Accuracy: ~13% average error across 118 elements."
     ),
+    # GRADUATION SCORES (required for central registry)
+    audit_score=78,
+    audit_notes=(
+        "Equation: Complex but documented. "
+        "Inputs/Outputs: Clear with units. "
+        "Description: Honest about fitted nature. "
+        "Validation: Multiple tests in same file. "
+        "Constants: Uses CODATA values for a_bohr."
+    ),
+    contribution_score=71,
+    contribution_notes=(
+        "Discovery: 25/40 - Empirical formula with GFD-inspired constants (84/137, k/pi^2). "
+        "Precision: 14/20 - ~13% average error, good for empirical formula. "
+        "Cross-Domain: 18/20 - Covers all 118 elements, links atomic to nuclear physics. "
+        "Falsifiability: 14/20 - Predictions testable against measured radii."
+    ),
 )
 def fn_get_element_field_radius(symbol: str) -> float:
     """Empirical atomic radius prediction (fitted formula)."""

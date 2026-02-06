@@ -1,4 +1,19 @@
-# Probing Test Framework for Gravity Field Model
+# Start Research Module
+
+**Module Type:** ORCHESTRATOR (coordinates the full test development pipeline)
+
+**Purpose:** Entry point for all test development. Coordinates workflow and SCORES tests. Does NOT promote tests. Kicks off UAT_MODULE for promotion decisions.
+
+**Delegates to:**
+- TEST_QUALITY_MODULE (Stage 4: Audit scoring, sets `audit_score`)
+- CONTRIBUTION_SCORING_MODULE (Stage 5: Self-assessment guidance only)
+- SCIENTIFIC_REASONING_MODULE (Stage 6: Scientific Reasoning)
+- **UAT_MODULE (Stage 7: Promotion decisions)** - START_RESEARCH_MODULE only requests, UAT decides
+- FUNCTION_REGISTRY (Function Graduation)
+
+**Note on contribution_score:** START_RESEARCH_MODULE may use CONTRIBUTION_SCORING_MODULE for self-assessment, but the test's `contribution_score` property MUST be `None` at promotion. PROD_MODULE assigns the official contribution score during peer review.
+
+---
 
 ## The Central Question
 
@@ -12,7 +27,7 @@ This question grounds all probing work. You are not starting from scratch. You a
 
 ## Purpose
 
-This framework guides you in writing academically rigorous **probing tests** that:
+This module guides you in writing academically rigorous **probing tests** that:
 
 1. **Start from what exists** in a test folder
 2. **Identify what is already known** from those tests
@@ -21,6 +36,53 @@ This framework guides you in writing academically rigorous **probing tests** tha
 5. **Document findings honestly** (observations vs derivations)
 
 These are CERN-level quality tests that investigate, not merely validate.
+
+---
+
+## CRITICAL: One Test at a Time
+
+**When probing, create ONE TEST per effort, not a test group.**
+
+| DO | DON'T |
+|----|-------|
+| Create `sandbox_chirp_mass.py` with one test class | Create a file with 5+ test classes |
+| Focus on ONE specific question | Try to cover an entire domain |
+| One `academic_paper` per test | Multiple papers in one file |
+| Depth over breadth | Breadth over depth |
+
+**Why single tests?**
+- Each test requires its own `academic_paper` (400-700 words)
+- Each test goes through peer review independently
+- Quality is easier to achieve with focused scope
+- Rejection means deletion, so smaller scope = smaller risk
+
+Test groups are for organizing **graduated** tests in production, not for development.
+
+---
+
+## Required Fields (Source of Truth: test_template.py)
+
+**All required fields are defined in:** `gravity_field_model/templates/test_template.py`
+
+### WHO Sets WHAT (Critical Pipeline Stages)
+
+| Field | Set By | When | Notes |
+|-------|--------|------|-------|
+| `question` | DEV (you) | During test development | Non-empty string |
+| `commentary` | DEV (you) | During test development | Non-empty string |
+| `audit_score` | START_RESEARCH_MODULE | After quality audit | Must be >= 85 |
+| `academic_paper` | **UAT_MODULE** | After UAT acceptance | **MUST be `None` at DEV submission** |
+| `contribution_score` | **PROD_MODULE** | During peer review | **MUST be `None` at DEV submission** |
+
+**DEV stage sets:** `question`, `commentary`, methods, `audit_score`
+**DEV MUST NOT set:** `academic_paper`, `contribution_score` (desk rejection if set)
+
+Plus at least ONE of these methods:
+- `derivation()` returning Derivation
+- `observations()` returning Observed  
+- `model()` returning Model
+
+**Desk rejection = test is not reviewed. Fix and resubmit.**
 
 ---
 
@@ -672,18 +734,23 @@ class TOVMassValidation(Test):
 
 **Always write new tests in the sandbox folder first.** This allows rapid iteration without polluting the main test folders.
 
-**Location:** `gravity_field_model/calculations/sandbox/`
+**Location:** `gravity_field_model/submissions/dev/`
+
+**IMPORTANT: ONE TEST PER FILE**
+
+Each sandbox file should contain **ONE test class** investigating **ONE question**. Do not create test groups during development. Test groups are for organizing graduated production tests.
 
 **Workflow:**
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│  STEP 1: CREATE IN SANDBOX                                          │
+│  STEP 1: CREATE SINGLE TEST IN SANDBOX                              │
 │  ─────────────────────────────────────────────────────────────────  │
-│  File: sandbox/sandbox_<topic>.py                                   │
-│  Example: sandbox/sandbox_gw_probing.py                             │
+│  File: dev/dev_<specific_topic>.py                                  │
+│  Example: dev/dev_chirp_mass_exponent.py (ONE test)                 │
 │                                                                     │
-│  Write your tests here. Iterate freely. Make mistakes.              │
+│  Write ONE test class. Focus on ONE question.                       │
+│  Include ONE academic_paper property (400-700 words).               │
 └─────────────────────────────────────────────────────────────────────┘
                               │
                               ▼
@@ -702,45 +769,76 @@ class TOVMassValidation(Test):
 ┌─────────────────────────────────────────────────────────────────────┐
 │  STEP 3: QUALITY AUDIT                                              │
 │  ─────────────────────────────────────────────────────────────────  │
-│  Apply TEST_QUALITY_FRAMEWORK.md to your sandbox tests.             │
+│  Apply TEST_QUALITY_MODULE.md to your sandbox tests.                │
 │  Add audit_score and audit_notes to each test class.                │
-│  Target: audit_score >= 75 for STANDARD, >= 65 for EXPLORATORY      │
+│  Target: audit_score >= 85 for UAT promotion (high quality bar)     │
 └─────────────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│  STEP 4: CONTRIBUTION SCORING                                       │
+│  STEP 4: PRE-SUBMISSION CHECKLIST (REQUIRED FIELDS)                 │
 │  ─────────────────────────────────────────────────────────────────  │
-│  Apply CONTRIBUTION_SCORING_FRAMEWORK.md to assess scientific value │
-│  Add contribution_score and contribution_notes to each test class.  │
 │                                                                     │
-│  Score on 4 dimensions (100 points total):                          │
-│  - Discovery Value (0-40): What's new here?                         │
-│  - Precision & Rigor (0-20): How confident are we?                  │
-│  - Cross-Domain Impact (0-20): Does this connect domains?           │
-│  - Falsifiability (0-20): Does this make predictions?               │
+│  Before requesting promotion, verify ALL required fields are set.   │
+│  Missing fields = DESK REJECTION (test won't even be reviewed).     │
 │                                                                     │
-│  Interpretation:                                                    │
-│  - 70+: Significant contribution (high priority to keep)            │
-│  - 50-69: Valuable contribution (worth keeping)                     │
-│  - 30-49: Incremental (useful but not essential)                    │
-│  - <30: Routine (consider if needed)                                │
+│  See: gravity_field_model/templates/test_template.py for full spec  │
+│                                                                     │
+│  ┌─────────────────────────────────────────────────────────────┐    │
+│  │  DESK REJECTION CHECKLIST (UAT Guards)                      │    │
+│  │  ─────────────────────────────────────────────────────────  │    │
+│  │                                                             │    │
+│  │  DEV MUST SET:                                              │    │
+│  │  [ ] ONE TEST CLASS per file (no test groups)               │    │
+│  │  [ ] question = "..." (non-empty string)                    │    │
+│  │  [ ] commentary = "..." (non-empty string)                  │    │
+│  │  [ ] derivation() OR observations() OR model() method       │    │
+│  │  [ ] audit_score = NN (>= 85 required)                      │    │
+│  │                                                             │    │
+│  │  DEV MUST NOT SET (desk reject if present):                 │    │
+│  │  [ ] academic_paper = None (UAT writes this)                │    │
+│  │  [ ] contribution_score = None (PROD assigns this)          │    │
+│  │                                                             │    │
+│  │  If ANY check fails: DESK REJECT                            │    │
+│  └─────────────────────────────────────────────────────────────┘    │
+│                                                                     │
 └─────────────────────────────────────────────────────────────────────┘
                               │
                               ▼
 ┌─────────────────────────────────────────────────────────────────────┐
-│  STEP 5: GRADUATE TO FINAL LOCATION                                 │
+│  STEP 5: REQUEST PROMOTION (KICK OFF UAT_MODULE)                    │
 │  ─────────────────────────────────────────────────────────────────  │
-│  Once quality AND contribution assessed:                            │
-│  1. Move file to appropriate domain folder                          │
-│  2. Rename: sandbox_<topic>.py -> test_<topic>.py                   │
-│  3. Update imports if needed                                        │
-│  4. Run tests one more time from final location                     │
-│  5. Delete sandbox file (or keep for reference)                     │
 │                                                                     │
-│  Graduation criteria:                                               │
-│  - audit_score >= 65 (quality)                                      │
-│  - contribution_score assessed (any value, but documented)          │
+│  IMPORTANT: START_RESEARCH_MODULE only SCORES tests. It does NOT promote.  │
+│  Promotion decisions are made by UAT_MODULE.                        │
+│                                                                     │
+│  GRADUATION CRITERIA (checked by UAT_MODULE):                       │
+│  ┌─────────────────────────────────────────────────────────────┐    │
+│  │  All desk rejection checks pass (see Step 4 checklist)      │    │
+│  │  audit_score >= 85         (quality threshold, high bar)    │    │
+│  │  academic_paper = None     (UAT writes it after acceptance) │    │
+│  │  contribution_score = None (PROD assigns during review)     │    │
+│  └─────────────────────────────────────────────────────────────┘    │
+│                                                                     │
+│  TO REQUEST PROMOTION:                                              │
+│  ```python                                                          │
+│  from gravity_field_model.pipeline import process_for_production         │
+│                                                                     │
+│  result = process_for_production(                                   │
+│      source_file="dev/dev_my_test.py",                              │
+│  )                                                                  │
+│                                                                     │
+│  if result["success"]:                                              │
+│      print(f"Promoted to prod: {result['prod_path']}")              │
+│      print(f"Contribution score: {result['contribution_score']}")   │
+│  else:                                                              │
+│      print(f"Rejected: {result['reason']}")                         │
+│  ```                                                                │
+│                                                                     │
+│  IF ACCEPTED -> Test moves to prod/                                 │
+│  IF REJECTED -> Test DELETED, review archived                       │
+│                                                                     │
+│  See UAT_MODULE.md for the full CI/CD pipeline.                     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -776,8 +874,8 @@ Examples:
 
 | Stage | Filename | Location |
 |-------|----------|----------|
-| Development | `sandbox_gw_quadrupole_coefficient_32.py` | `calculations/sandbox/` |
-| Production | `test_gw_quadrupole_coefficient_32.py` | `calculations/field_theory/` |
+| Development | `dev_gw_quadrupole_coefficient_32.py` | `submissions/dev/` |
+| Production | `test_gw_quadrupole_coefficient_32.py` | `submissions/prod/` |
 
 **Class Naming Convention:**
 
@@ -801,13 +899,13 @@ Test class names should be equally descriptive:
 **Example sandbox file:**
 
 ```python
-# gravity_field_model/calculations/sandbox/sandbox_ns_density_nuclear_ratio.py
-# NOTE: Name is specific! Not "sandbox_ns_probing.py" or "sandbox_neutron_stuff.py"
+# gravity_field_model/submissions/dev/dev_ns_density_nuclear_ratio.py
+# NOTE: Name is specific! Not "dev_ns_probing.py" or "dev_neutron_stuff.py"
 """
 SANDBOX: Neutron Star Central Density to Nuclear Saturation Ratio
 =================================================================
 
-STATUS: Work in progress. Do not move until audit_score >= 65.
+STATUS: Work in progress. Do not move until audit_score >= 85.
 
 WHY THIS NAME:
 - Domain: ns (neutron star)
@@ -840,7 +938,15 @@ if __name__ == "__main__":
 
 ### 4.1 Contribution Scoring: Assessing Scientific Value
 
-After the quality audit, assess each test's contribution using `CONTRIBUTION_SCORING_FRAMEWORK.md`.
+After the quality audit, assess each test's contribution using `CONTRIBUTION_SCORING_MODULE.md`.
+
+**IMPORTANT:** This is for SELF-ASSESSMENT and GUIDANCE only. Use this to gauge whether your test is worth submitting. However, the `contribution_score` property on the test class **MUST be `None`** when you submit. PROD_MODULE assigns the official contribution score during peer review.
+
+```python
+# CORRECT: contribution_score must be None at submission
+contribution_score = None  # PROD assigns this during peer review
+contribution_notes = "..."  # You can keep notes for your own reference
+```
 
 **The Four Dimensions (100 points total):**
 
@@ -887,16 +993,18 @@ After the quality audit, assess each test's contribution using `CONTRIBUTION_SCO
 | 30-49 | Incremental | Useful supporting evidence |
 | <30 | Routine | Consider if test adds value |
 
-**Example contribution_notes:**
+**Example contribution_notes (for self-assessment):**
 
 ```python
-contribution_score = 72
+# Self-assessed score for guidance (use to decide if worth submitting)
+# DO NOT set contribution_score on the test class, it MUST be None
+contribution_score = None  # <-- REQUIRED: PROD assigns the official score
 contribution_notes = (
+    "Self-assessment: ~72/100. "
     "Discovery: 28/40 - Pattern 3/5 = d/(k+1) is novel observation. "
     "Precision: 15/20 - Mathematical exactness, part of larger pattern set. "
     "Cross-Domain: 17/20 - Chirp mass appears in all GW observations. "
-    "Falsifiability: 12/20 - Predicts other exponents should follow same pattern. "
-    "TOTAL: 72/100 - Significant pattern in GW physics."
+    "Falsifiability: 12/20 - Predicts other exponents should follow same pattern."
 )
 ```
 
@@ -1078,6 +1186,105 @@ if __name__ == "__main__":
 
 ---
 
+## Phase 6: Scientific Reasoning Extension
+
+For high-contribution tests (contribution_score >= 70), apply the **SCIENTIFIC_REASONING_MODULE** to explore implications and generate the next chain of discovery.
+
+**This phase delegates to SCIENTIFIC_REASONING_MODULE for all rules and thresholds.**
+
+See: `framework/SCIENTIFIC_REASONING_MODULE.md` for full documentation.
+
+### 6.0 Module Delegation
+
+START_RESEARCH_MODULE delegates scientific reasoning logic to SCIENTIFIC_REASONING_MODULE. That module is the **single source of truth** for:
+
+| Threshold | Value | Defined In |
+|-----------|-------|------------|
+| Brainstorm IMMEDIATE | >= 80 | SCIENTIFIC_REASONING_MODULE |
+| Brainstorm QUEUE | >= 60 | SCIENTIFIC_REASONING_MODULE |
+| Error Significance | >= 5% | SCIENTIFIC_REASONING_MODULE |
+| Error Partial Match | >= 30% | SCIENTIFIC_REASONING_MODULE |
+
+### 6.1 Three Modes of Reasoning
+
+The SCIENTIFIC_REASONING_MODULE provides three complementary modes:
+
+| Mode | Question | When to Use |
+|------|----------|-------------|
+| **Mapping Mode** | "What else should this connect to?" | After a validated test |
+| **Equation Derivation** | "Can I derive this from GFD first principles?" | When encountering known physics |
+| **Function Extraction** | "Can I make this reusable?" | When calculation appears in 2+ tests |
+
+**Functions are just as valuable as tests.** See `examples/example_power_output.py` for the full pattern.
+
+### 6.2 Brainstorming (delegates to SCIENTIFIC_REASONING_MODULE)
+
+When a test validates a concept, apply the **Ten Mapping Brainstorm**:
+
+1. Generate 10 ideas across the mapping categories
+2. Score each on 5 criteria (Testability, Plausibility, Novelty, Impact, GFD Relevance)
+3. Select based on thresholds (>= 80 immediate, >= 60 queue)
+
+See `SCIENTIFIC_REASONING_MODULE.md` Part 2 for full protocol.
+
+### 6.3 Error Bridge (delegates to SCIENTIFIC_REASONING_MODULE)
+
+When error >= 5%, apply the **Error Bridge Protocol**:
+
+1. Brainstorm 10 error source hypotheses
+2. Design bridge tests for each plausible source
+3. Track error reduction through the chain
+
+See `SCIENTIFIC_REASONING_MODULE.md` Part 3 for full protocol.
+
+### 6.4 Equation Derivation (delegates to SCIENTIFIC_REASONING_MODULE)
+
+When encountering a standard physics equation:
+
+1. Apply WHY protocol (3 questions)
+2. Analyze components for GFD interpretation
+3. Assess derivability score
+
+See `SCIENTIFIC_REASONING_MODULE.md` Part 8 for full protocol.
+
+### 6.5 Function Extraction (delegates to SCIENTIFIC_REASONING_MODULE + FUNCTION_REGISTRY)
+
+When same calculation appears in 2+ tests:
+
+1. Assess extraction criteria (from SCIENTIFIC_REASONING_MODULE Part 9)
+2. Create @Fn function with audit_score and contribution_score
+3. Check graduation status via FUNCTION_REGISTRY:
+
+```python
+from gravity_field_model.functions import assess_function_for_graduation
+
+if assess_function_for_graduation(my_function):
+    # Register in central catalog
+    pass
+```
+
+### 6.6 Function Registry Integration
+
+Functions must meet graduation criteria before being added to the central registry:
+- `audit_score >= 65` (quality, from TEST_QUALITY_MODULE)
+- `contribution_score >= 70` (value, from CONTRIBUTION_SCORING_MODULE)
+
+The FUNCTION_REGISTRY is the **single source of truth** for graduation rules.
+
+```python
+# Check graduation status
+from gravity_field_model.functions import assess_function_for_graduation
+assess_function_for_graduation(my_function)
+
+# Discover existing graduated functions
+from gravity_field_model.functions import list_all_functions
+list_all_functions()
+```
+
+See `framework/FUNCTION_REGISTRY_GUIDE.md` for full documentation.
+
+---
+
 ## Imports Reference
 
 ```python
@@ -1240,7 +1447,7 @@ After writing a new test group, you MUST run the quality assurance pipeline befo
 ┌─────────────────────────────────────────────────────────────────────┐
 │  STEP 2: AUDIT AGAINST QUALITY FRAMEWORK                            │
 │  ─────────────────────────────────────────────────────────────────  │
-│  Apply TEST_QUALITY_FRAMEWORK.md to each test class.                │
+│  Apply TEST_QUALITY_MODULE.md to each test class.                   │
 │  Score all 8 criteria (100 points total):                           │
 │                                                                     │
 │  | Criterion              | Points | Key Question                   │
@@ -1613,13 +1820,16 @@ After completing a probing effort, **update the Pattern Catalog in Section 0.5**
 
 ---
 
-*Document version: 4.1*
+*Document version: 6.0*
 *Last updated: 2026-02-04*
-*Location: framework/PROBING_FRAMEWORK.md*
+*Location: framework/START_RESEARCH_MODULE.md*
 
 **Changelog:**
-- v4.1: Added sandbox-first workflow (Section 4.0). Tests are now written in `calculations/sandbox/` first, then graduated to final location after quality audit
-- v4.0: Reframed around central question "How do I contribute value to what's here?" Added Phase 5 (Contribution Summary), Value Contribution Analysis template, Entry Question requirement
+- v6.0: START_RESEARCH_MODULE no longer graduates tests. It only SCORES them. Graduation is delegated to UAT_MODULE which guards uat/ folder. This creates proper CI/CD pipeline separation. Step 5 now kicks off UAT_MODULE instead of doing promotion directly.
+- v5.0: Renamed from FRAMEWORK to MODULE. Established as ORCHESTRATOR.
+- v4.2: (Deprecated) Phase 6 delegated to Python module
+- v4.1: Added sandbox-first workflow (Section 4.0)
+- v4.0: Reframed around central question "How do I contribute value?"
 - v3.0: Added Phase 4 (Quality Assurance Pipeline) with audit integration
-- v2.0: Added Phase 0.6 (Advanced Probing Methodology) with 10-idea brainstorm and statistical methods
-- v1.0: Initial probing framework with gap analysis and test templates
+- v2.0: Added Phase 0.6 (Advanced Probing Methodology)
+- v1.0: Initial framework

@@ -52,7 +52,7 @@ REMAINING CONTENT:
 - One GR reference test (verifies constants are correctly implemented)
 - One exploratory test (marks a research direction for future work)
 
-TEST GROUP AUDIT (TEST_QUALITY_FRAMEWORK):
+TEST GROUP AUDIT (TEST_QUALITY_MODULE):
 - SchwarzschildRadiusReference: 95/100 (Strong GR reference with excellent pedagogy)
 - FieldClosureAtHorizon: 91/100 (Honest exploratory with clear research gaps)
 - Module Header: 10/10 (Comprehensive honesty statement, clear scope)
@@ -107,7 +107,7 @@ class SchwarzschildRadiusReference(Test):
     reference = "Schwarzschild (1916); LIGO GW150914 (2016); EHT M87* (2019)"
     tolerance = 0.01
     
-    # Audit (TEST_QUALITY_FRAMEWORK scoring, 100 points total):
+    # Audit (TEST_QUALITY_MODULE scoring, 100 points total):
     #   Question (15 pts):        15 - Strong "why" hook with physical curiosity
     #   Derivation (15 pts):      14 - Builds intuition before math, good analogy
     #   Commentary (15 pts):      14 - Delivers insight about topology and verification
@@ -215,7 +215,7 @@ class FieldClosureAtHorizon(Test):
     reference = None
     tolerance = 0.50
     
-    # Audit (TEST_QUALITY_FRAMEWORK scoring, 100 points total):
+    # Audit (TEST_QUALITY_MODULE scoring, 100 points total):
     #   Question (15 pts):        14 - Strong "why might" framing connecting to textbook
     #   Derivation (15 pts):      14 - Clear calculation with intuition and honest limits
     #   Commentary (15 pts):      14 - Excellent honesty about what's missing
