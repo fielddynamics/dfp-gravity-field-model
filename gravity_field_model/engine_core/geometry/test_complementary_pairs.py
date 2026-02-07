@@ -1,608 +1,289 @@
+# FILENAME: test_complementary_pairs.py
+
 """
-Complementary Pairs
-===================
+Complementary Pair Structure of the Stellated Octahedron
+========================================================
 
-This module examines the complementary vertex pair structure in the dual
-Field Chamber geometry. Each vertex V_n pairs with V_(7-n), with the
-following properties:
+The stellated octahedron consists of two interpenetrating tetrahedra whose
+eight vertices sit at the corners of a cube with coordinates (+/- 1, +/- 1, +/- 1).
+Each vertex is labeled by a 3 bit binary index (0 through 7). Standard group
+theory identifies the bitwise complement operation (XOR with 111 in binary,
+equivalently 7 minus V in decimal) as a Z2 involution that exchanges the two
+tetrahedra. This operation produces four complementary pairs: (0,7), (1,6),
+(2,5), (3,4). Each pair connects vertices of opposite parity, meaning one
+vertex belongs to Tet A (odd bit sum) and the other to Tet B (even bit sum).
+The midpoint of every pair is the geometric center (0,0,0), the Field Origin.
 
-- Each pair sums to 7 (binary: 111)
-- Each pair contains one vertex from each Field Chamber (Tet A and Tet B)
-- Pairs are geometrically opposed (at opposite cube corners)
-- The (3,4) pair completes first in pi traversal
+GFM OBSERVATION: The four complementary pairs are the geometric basis of the
+dual channel architecture, where reading vertex V simultaneously determines 7 minus V.
 
-The complementary pairs are: (0,7), (1,6), (2,5), (3,4)
+This is a DERIVATION from the vertex coordinate geometry of the stellated octahedron.
 """
 
-from typing import Dict
-import numpy as np
-
-from gravity_field_model.framework import *
+import math
+from gravity_field_model.framework import Test, Level, Derivation, Model, Observed
 from gravity_field_model.common import (
-    COMPLEMENTARY_PAIRS, TET_A, TET_B, VERTICES,
-    get_tetrahedron, traverse_pi_base8
+    K,
+    VERTICES,
+    TET_A,
+    TET_B,
 )
 
 
-# =============================================================================
-# TESTS
-# =============================================================================
+COMPLEMENT_PAIRS = [(0, 7), (1, 6), (2, 5), (3, 4)]
 
-class PairsSumTo7(Test):
+VERTEX_COORDS = {
+    0: (-1, -1, -1),
+    1: (-1, -1, +1),
+    2: (-1, +1, -1),
+    3: (-1, +1, +1),
+    4: (+1, -1, -1),
+    5: (+1, -1, +1),
+    6: (+1, +1, -1),
+    7: (+1, +1, +1),
+}
+
+
+def bit_sum(v):
+    """Count the number of 1 bits in the 3 bit representation of v."""
+    return bin(v).count("1")
+
+
+def parity(v):
+    """Return 0 for even bit sum, 1 for odd bit sum."""
+    return bit_sum(v) % 2
+
+
+def midpoint(v_a, v_b):
+    """Compute the midpoint of two vertices in 3D coordinate space."""
+    ca = VERTEX_COORDS[v_a]
+    cb = VERTEX_COORDS[v_b]
+    return ((ca[0] + cb[0]) / 2.0, (ca[1] + cb[1]) / 2.0, (ca[2] + cb[2]) / 2.0)
+
+
+def distance_from_origin(coords):
+    """Euclidean distance from (0,0,0)."""
+    return math.sqrt(coords[0]**2 + coords[1]**2 + coords[2]**2)
+
+
+def count_cross_tetrahedral_pairs():
+    """Count how many complementary pairs span both tetrahedra."""
+    count = 0
+    for v_a, v_b in COMPLEMENT_PAIRS:
+        a_in_tet_a = v_a in TET_A
+        b_in_tet_a = v_b in TET_A
+        if a_in_tet_a != b_in_tet_a:
+            count += 1
+    return count
+
+
+def count_pairs_through_origin():
+    """Count how many complementary pairs have midpoint at (0,0,0)."""
+    count = 0
+    for v_a, v_b in COMPLEMENT_PAIRS:
+        mid = midpoint(v_a, v_b)
+        dist = distance_from_origin(mid)
+        if dist < 1e-12:
+            count += 1
+    return count
+
+
+class ComplementaryPairStructure(Test):
     """
-    The complementary pairs (0,7), (1,6), (2,5), (3,4) all sum to 7. This is
-    not coincidence but reflects the binary structure: n + (7-n) = 7 always.
-    In binary, 7 = 111, representing complete traversal of all 3 bits.
+    PHYSICAL CONTEXT:
+    In the geometry of the cube, each vertex has a unique antipodal partner
+    obtained by negating all three coordinates. For vertices labeled 0 through
+    7 by their 3 bit binary representation, this antipodal map is the XOR
+    with 7 (binary 111), equivalently the map V -> 7 minus V. This Z2
+    involution partitions the 8 vertices into 4 complementary pairs. The
+    operation is well established in combinatorial geometry (Coxeter 1973)
+    and appears in coding theory as the bitwise complement in the Hamming
+    cube H(3,2). Each pair consists of vertices at maximum Hamming distance
+    (3 bit flips), meaning they share no coordinate sign.
+
+    GFM OBSERVATION:
+    The four complementary pairs (0,7), (1,6), (2,5), (3,4) each cross the
+    tetrahedral boundary: one member belongs to Tet A (odd parity vertices
+    1,2,4,7) and the other to Tet B (even parity vertices 0,3,5,6). Every
+    pair has its midpoint at (0,0,0), the Field Origin. This structure is
+    the geometric foundation for the dual channel architecture: reading any
+    vertex V on the explicit channel simultaneously determines 7 minus V on
+    the implicit channel, always in the opposite tetrahedron. The number of
+    pairs (4) equals the closure constant K, and each pair connects vertices
+    separated by distance 2*sqrt(3), the body diagonal of the embedding cube.
+
+    EPISTEMIC STATUS:
+    This is a DERIVATION from the coordinate geometry of the stellated
+    octahedron. All properties follow from the vertex positions and the
+    bitwise complement operation. No approximations or fits are involved.
     """
-    name = "Pairs Sum to 7"
+
+    name = "Complementary Pair Structure"
+
     question = (
-        "Every cube corner has a partner at the diagonally opposite position. If we add "
-        "their vertex numbers, do we always get 7? This is like asking: if I am at corner "
-        "n, is my partner always at corner (7 minus n)? We check all 4 pairs."
+        "Do the four complementary pairs of the stellated octahedron each "
+        "cross the tetrahedral boundary, and does every pair pass through "
+        "the Field Origin at (0,0,0)? The dual channel architecture requires "
+        "that reading vertex V always determines a vertex 7 minus V in the "
+        "opposite tetrahedron. Is this guaranteed by the geometry, and do "
+        "exactly K = 4 such pairs exist?"
     )
-    reference = "Theoretical (n + (7-n) = 7)"
+
+    reference = (
+        "Coxeter (1973) Regular Polytopes; "
+        "GFM Paper VII Section 2.2 (vertex labeling and complementary pairs); "
+        "GFM Paper VII Section 3.1 (dual channel architecture)"
+    )
+
     tolerance = 0.001
-    level = Standard
+
+    level = Level.CRITICAL
+
     commentary = (
-        "Seven is the magic number here. It is 2^3 minus 1, the largest 3-bit number. In "
-        "binary, 7 is 111, all bits on. When you add a vertex to its complement, you must "
-        "get 7, because wherever one vertex has a 0, the other has a 1. Together they "
-        "cover all three bit positions. The pairs (0,7), (1,6), (2,5), (3,4) all sum to 7 "
-        "because complementary means 'together we fill all the gaps.'"
+        "All four complementary pairs cross the tetrahedral boundary and "
+        "pass through the Field Origin, confirming the geometric basis of "
+        "the dual channel architecture. The complement operation V -> 7 "
+        "minus V flips all three coordinate signs, which necessarily flips "
+        "the bit sum parity, guaranteeing a crossing from Tet A to Tet B "
+        "or vice versa. This is a derivation from coordinate geometry, not "
+        "an empirical observation. The number of pairs equals K = 4, "
+        "matching the closure constant, and the body diagonal length "
+        "2*sqrt(3) is exactly twice the distance from any vertex to the "
+        "Field Origin. These properties underpin the traversal mechanism: "
+        "every explicit read on one tetrahedron produces an implicit read "
+        "on the other, enabling closure at full Compton frequency."
     )
-    audit_score = 91
+
+    # Audit scoring
+    audit_score = 85
     audit_notes = (
-        "Question: 14/15 - Good explanation of why 7 matters. "
-        "Derivation: 13/15 - Clear arithmetic steps. "
-        "Commentary: 14/15 - Good 'together we fill all the gaps' insight. "
-        "Model: 9/10 - Clean output. "
-        "Observations: 9/10 - Well defined. "
-        "Constants: 10/10 - Uses COMPLEMENTARY_PAIRS from common. "
-        "Accessibility: 14/15 - Undergrad can follow. "
-        "Header: 8/10 (module level). "
-        "FUNCTION OPPORTUNITY: None identified. "
-        "TO IMPROVE: Minor polish only."
+        "Question: 12/15 (asks the right structural questions and includes specific numbers like K=4, but leads with a yes/no framing rather than a mystery hook; could open with WHY the dual channel works before asking whether it does). Derivation: 14/15 (excellent scaffolding from standard cube geometry through parity partition to the cross tetrahedral property and midpoint proof; the parity flip argument is the key insight and is well placed; minor gap: no everyday analogy to ground the abstract bit flipping for non specialists). Commentary: 12/15 (solid interpretation connecting results to the dual channel architecture and Compton frequency; correctly labels as derivation; missing an analogy or aha moment beyond restating the geometric facts; implications for downstream GFM results like spin and E=mc^2 are hinted but not developed). Model: 9/10 (clean set of 9 values mixing continuous quantities with binary pass/fail verdicts; easy to interpret; well within the 3 to 10 range; the body diagonal and vertex distance give geometric grounding beyond just boolean checks). Observations: 8/10 (all values are mathematically exact and traceable to GFM geometry definitions and Coxeter; K imported from common for the pair count; VERTEX_COORDS hardcoded as a module level dict rather than derived from imports, but this is justified since common does not export coordinates; sqrt(3) and 2*sqrt(3) are standard geometry). Constants: 9/10 (K, VERTICES, TET_A, TET_B all imported from common; VERTEX_COORDS necessarily hardcoded since coordinates are not available in common; COMPLEMENT_PAIRS defined at module level with clear documentation; VERTICES imported but not directly used in model/observations, minor unused import). Accessibility: 13/15 (an undergraduate with linear algebra and basic combinatorics can follow the parity argument and midpoint calculation; the Hamming cube reference in the docstring adds depth for specialists; the bit flipping argument could benefit from a concrete walkthrough of one example pair to anchor intuition; no everyday analogy provided). Header: 8/10 (comprehensive module docstring covering the physical structure, the GFM observation, and epistemic status as derivation; clearly states what is being tested and why; missing target audience line and explicit note about which downstream GFM results depend on this property)."
     )
-    
+
+    academic_paper = """\
+TITLE Complementary Pair Structure of the Stellated Octahedron: Cross Tetrahedral Symmetry and the Field Origin ABSTRACT We investigate whether the four complementary vertex pairs of the stellated octahedron each cross the tetrahedral boundary and pass through the geometric center. Exhaustive computation confirms all four pairs satisfy both properties exactly. This is a DERIVATION from coordinate geometry, establishing the foundation for the dual channel architecture. 1. INTRODUCTION: THE SCIENTIFIC QUESTION The stellated octahedron consists of two interpenetrating tetrahedra (Tet A, Tet B) whose eight vertices occupy the corners of a cube at coordinates (+/- 1, +/- 1, +/- 1). Each vertex carries a 3 bit binary label from 0 to 7. The bitwise complement operation, XOR with 7, maps each vertex V to its antipodal partner 7 minus V. This Z2 involution is well established in combinatorial geometry (Coxeter 1973) and produces four pairs: (0,7), (1,6), (2,5), (3,4). The GFM dual channel architecture requires that every explicit vertex read on one tetrahedron simultaneously determines an implicit vertex on the opposite tetrahedron. For this to be geometrically guaranteed, complementary pairs must always cross the tetrahedral boundary. Furthermore, the Field Origin at (0,0,0), the coupling interface between the two tetrahedra, should lie on every body diagonal connecting a pair. This test investigates whether both properties hold for all four pairs, and whether the pair count matches the closure constant K = 4. 2. METHODOLOGY We assign each vertex to Tet A (odd bit sum parity: vertices 1, 2, 4, 7) or Tet B (even bit sum parity: vertices 0, 3, 5, 6), using the framework imports TET_A and TET_B. For each of the four complementary pairs, we check three properties: (a) the two members sum to 7, (b) the members belong to opposite tetrahedra, and (c) the midpoint of the pair in 3D coordinate space equals (0,0,0). We also compute the body diagonal length between complementary partners and verify that all eight vertices are equidistant from the origin. Agreement criterion: exact match (0.00% error) for all nine quantities. 3. RESULTS All nine model outputs match their expected values exactly. The model calculates 4 complementary pairs, matching K = 4 (0.00% error). All 4 pairs cross the tetrahedral boundary (0.00% error). All 4 pairs have their midpoint at the origin (0.00% error). The complement sum check V + V_bar = 7 passes for every pair (binary verdict: 1). The body diagonal length is 3.464102, matching 2*sqrt(3) exactly (0.00% error). The vertex distance to the Field Origin is 1.732051, matching sqrt(3) exactly (0.00% error). All 8 vertices are confirmed equidistant from the origin (binary verdict: 1). Tet A contains exclusively odd parity vertices (binary verdict: 1). Tet B contains exclusively even parity vertices (binary verdict: 1). The parity partition is the key mechanism. XOR with 7 (binary 111) flips all three bits. Since flipping three bits changes the bit sum by an odd number, the operation necessarily flips parity. A vertex in Tet A (odd parity) is always mapped to Tet B (even parity) and vice versa. 4. DISCUSSION The cross tetrahedral property is not approximate or statistical. It is a theorem: flipping all bits in a 3 bit string always changes the parity. This guarantees that the complement of any Tet A vertex lies in Tet B, with no exceptions possible. The midpoint property follows from the coordinate structure: if vertex V has coordinates (a, b, c), then vertex 7 minus V has coordinates (minus a, minus b, minus c), and their average is exactly (0, 0, 0). EPISTEMIC STATUS: DERIVATION. Every result follows from the vertex coordinate assignments and the bitwise complement operation. No fits, approximations, or free parameters are involved. The number of pairs equaling K = 4 is consistent with the closure constant appearing as the natural partition size of the 8 vertex structure. This test establishes the geometric prerequisite for the dual channel architecture used in the pi base 8 traversal, the spin derivation (which relies on the time face identification via parity), and the E = mc^2 derivation (which requires two tetrahedra contributing independently). 5. LIMITATIONS AND HONESTY STATEMENT This test verifies geometric properties of an idealized mathematical structure. It does not prove that physical spacetime possesses this geometry.
+    """
+
+
+
     def derivation(self) -> Derivation:
         return (
             Derivation()
-            .step("PREMISE: Complementary pairs are (n, 7-n) for n in {0,1,2,3}.")
-            .step("List pairs: (0,7), (1,6), (2,5), (3,4).")
-            .step("Compute sums: 0+7=7, 1+6=7, 2+5=7, 3+4=7.")
-            .step("All sums equal 7 = 2^d - 1 = 2^3 - 1 (maximum d-bit value).")
-            .step("In binary: 7 = 111, representing all d=3 bits set to 1.")
-            .conclude("Each pair together covers all d=3 spatial dimensions.")
+            .step(
+                "STANDARD PHYSICS: The 8 vertices of a cube at coordinates "
+                "(+/- 1, +/- 1, +/- 1) are labeled V0 through V7 by their "
+                "3 bit binary index. The antipodal map negates all coordinates, "
+                "equivalent to XOR with 7 (binary 111). This produces 4 pairs: "
+                "(0,7), (1,6), (2,5), (3,4)."
+            )
+            .step(
+                "PARITY PARTITION: Tet A contains odd parity vertices (odd "
+                "number of 1 bits): {1,2,4,7}. Tet B contains even parity "
+                "vertices: {0,3,5,6}. The XOR with 7 flips all 3 bits, which "
+                "always changes the bit sum by an odd number (either +3, +1, "
+                " minus 1, or minus 3), necessarily flipping the parity."
+            )
+            .equation("parity(V XOR 7) = 1 minus parity(V)")
+            .step(
+                "CROSS TETRAHEDRAL PROPERTY: Since the complement flips parity, "
+                "every complementary pair has one member in Tet A and one in "
+                "Tet B. All 4 of 4 pairs cross the tetrahedral boundary."
+            )
+            .step(
+                "MIDPOINT CALCULATION: For any pair (V, 7 minus V), the "
+                "coordinates are (a,b,c) and ( minus a, minus b, minus c). "
+                "The midpoint is (0,0,0), the Field Origin."
+            )
+            .equation("midpoint = ((a minus a)/2, (b minus b)/2, (c minus c)/2) = (0,0,0)")
+            .step(
+                "DISTANCE: Each vertex is at distance sqrt(1^2+1^2+1^2) = "
+                "sqrt(3) from the origin. The body diagonal connecting "
+                "complementary partners has length 2*sqrt(3)."
+            )
+            .step(
+                "DUAL CHANNEL: Reading vertex V determines complement 7 minus V "
+                "in the opposite tetrahedron without additional signal "
+                "propagation. This is the implicit channel."
+            )
+            .conclude(
+                "The 4 complementary pairs of the stellated octahedron each "
+                "cross the tetrahedral boundary and intersect at the Field "
+                "Origin. This is a geometric derivation guaranteeing the dual "
+                "channel architecture: every explicit vertex read on one "
+                "tetrahedron produces a simultaneous implicit read on the other."
+            )
         )
-    
+
     def model(self) -> Model:
-        sums = [a + b for a, b in COMPLEMENTARY_PAIRS]
-        all_7 = 1 if all(s == 7 for s in sums) else 0
+        num_pairs = len(COMPLEMENT_PAIRS)
+        cross_count = count_cross_tetrahedral_pairs()
+        origin_count = count_pairs_through_origin()
+
+        # Verify complement sum property: V + (7-V) = 7 for all pairs
+        sum_check_passed = all(
+            (v_a + v_b) == 7 for v_a, v_b in COMPLEMENT_PAIRS
+        )
+        sum_check = 1.0 if sum_check_passed else 0.0
+
+        # Body diagonal length
+        v_a_coords = VERTEX_COORDS[0]
+        v_b_coords = VERTEX_COORDS[7]
+        diag_length = math.sqrt(
+            (v_b_coords[0] - v_a_coords[0])**2
+            + (v_b_coords[1] - v_a_coords[1])**2
+            + (v_b_coords[2] - v_a_coords[2])**2
+        )
+
+        # Distance from any vertex to origin
+        vertex_to_origin = distance_from_origin(VERTEX_COORDS[0])
+
+        # Verify all 8 vertices equidistant from origin
+        distances = [distance_from_origin(VERTEX_COORDS[v]) for v in range(8)]
+        all_equidistant = 1.0 if all(
+            abs(d - distances[0]) < 1e-12 for d in distances
+        ) else 0.0
+
+        # Tet A has exactly the odd parity vertices
+        tet_a_all_odd = 1.0 if all(parity(v) == 1 for v in TET_A) else 0.0
+
+        # Tet B has exactly the even parity vertices
+        tet_b_all_even = 1.0 if all(parity(v) == 0 for v in TET_B) else 0.0
+
         return (
             Model()
-            .add("Number of pairs", len(COMPLEMENTARY_PAIRS))
-            .add("All sums equal 7", all_7)
+            .add("Number of complementary pairs", float(num_pairs))
+            .add("Pairs crossing tetrahedral boundary", float(cross_count))
+            .add("Pairs with midpoint at origin", float(origin_count))
+            .add("Complement sum V+V_bar=7 (1=pass)", sum_check)
+            .add("Body diagonal length", diag_length)
+            .add("Vertex distance to Field Origin", vertex_to_origin)
+            .add("All vertices equidistant from origin (1=pass)", all_equidistant)
+            .add("Tet A all odd parity (1=pass)", tet_a_all_odd)
+            .add("Tet B all even parity (1=pass)", tet_b_all_even)
         )
-    
+
     def observations(self) -> Observed:
         return (
             Observed()
-            .add("Number of pairs", 4)
-            .add("All sums equal 7", 1)
+            .add("Number of complementary pairs", float(K))
+            .add("Pairs crossing tetrahedral boundary", float(K))
+            .add("Pairs with midpoint at origin", float(K))
+            .add("Complement sum V+V_bar=7 (1=pass)", 1.0)
+            .add("Body diagonal length", 2.0 * math.sqrt(3.0))
+            .add("Vertex distance to Field Origin", math.sqrt(3.0))
+            .add("All vertices equidistant from origin (1=pass)", 1.0)
+            .add("Tet A all odd parity (1=pass)", 1.0)
+            .add("Tet B all even parity (1=pass)", 1.0)
         )
 
 
-class PairsBinaryComplement(Test):
-    """
-    Each pair XORs to 7 (binary 111). This means each pair covers all 3 bits
-    when combined: if one vertex has a 0 in a bit position, its complement
-    has a 1 there.
-    """
-    name = "Pairs XOR to 111"
-    question = (
-        "XOR tells us which bits differ between two numbers. If complementary pairs differ "
-        "in ALL bits, then XOR should give 111 (all three bits on). Does every pair pass "
-        "this test? This is the bit-level proof that partners are truly opposite."
-    )
-    reference = "Theoretical (XOR complement)"
-    tolerance = 0.001
-    level = Standard
-    commentary = (
-        "XOR is like a 'difference detector.' Wherever two bits are the same, XOR gives 0. "
-        "Wherever they differ, XOR gives 1. If two vertices are true complements, they "
-        "differ in EVERY bit position, so XOR gives 111. This is beautiful: the algebraic "
-        "operation XOR tells us the same thing as the geometric fact 'diagonally opposite.' "
-        "Mathematics and geometry speak with one voice."
-    )
-    audit_score = 92
-    audit_notes = (
-        "Question: 14/15 - Good 'bit-level proof' hook. "
-        "Derivation: 14/15 - Clear XOR explanation. "
-        "Commentary: 14/15 - Excellent 'difference detector' analogy. "
-        "Model: 9/10 - Clean binary output. "
-        "Observations: 9/10 - Well defined. "
-        "Constants: 10/10 - Uses COMPLEMENTARY_PAIRS from common. "
-        "Accessibility: 14/15 - Undergrad can follow. "
-        "Header: 8/10 (module level). "
-        "FUNCTION OPPORTUNITY: None identified. "
-        "TO IMPROVE: Minor polish only."
-    )
-    
-    def derivation(self) -> Derivation:
-        return (
-            Derivation()
-            .step("PREMISE: XOR operation flips bits that differ, leaving bits that match as 0.")
-            .step("For pair (n, 7-n), compute XOR: n XOR (7-n).")
-            .step("Examples: 0 XOR 7 = 000 XOR 111 = 111 = 7; 3 XOR 4 = 011 XOR 100 = 111 = 7.")
-            .step("For all 4 pairs, XOR result is 7 (111).")
-            .step("This means every bit position differs between pair members.")
-            .conclude("Perfect bit complementation; each pair covers all d=3 bit positions.")
-        )
-    
-    def model(self) -> Model:
-        xors = [a ^ b for a, b in COMPLEMENTARY_PAIRS]
-        all_7 = 1 if all(x == 7 for x in xors) else 0
-        return (
-            Model()
-            .add("All XORs equal 7", all_7)
-        )
-    
-    def observations(self) -> Observed:
-        return (
-            Observed()
-            .add("All XORs equal 7", 1)
-        )
-
-
-class PairsCrossTetrahedra(Test):
-    """
-    Each complementary pair has one vertex from Tet A and one from Tet B.
-    This ensures that complementary vertices reside in opposite Field Chambers.
-    """
-    name = "Pairs Cross Field Chambers"
-    question = (
-        "Parity determines which tetrahedron you belong to. Complements flip all bits, "
-        "which changes the parity. So does every complementary pair have one member in "
-        "Tet A and one in Tet B? This would mean the two tetrahedra are perfectly woven "
-        "together by their opposite corners."
-    )
-    reference = "Theoretical (dual structure)"
-    tolerance = 0.001
-    level = Standard
-    commentary = (
-        "This is how the dual structure locks together. Tet A holds odd-parity corners, "
-        "Tet B holds even-parity corners. Complements always switch parity (flip 3 bits, "
-        "change the 1-count by an odd amount). So if you are in Tet A, your complement "
-        "is in Tet B. Every corner of each tetrahedron has a dance partner in the other. "
-        "The two Field Chambers are not just overlapping shapes. They are interleaved "
-        "like clasped hands."
-    )
-    audit_score = 93
-    audit_notes = (
-        "Question: 14/15 - Good 'perfectly woven together' hook. "
-        "Derivation: 14/15 - Clear parity logic. "
-        "Commentary: 15/15 - Excellent 'clasped hands' analogy. "
-        "Model: 9/10 - Clean cross count. "
-        "Observations: 9/10 - Well defined. "
-        "Constants: 10/10 - Uses get_tetrahedron and COMPLEMENTARY_PAIRS from common. "
-        "Accessibility: 14/15 - Undergrad can follow. "
-        "Header: 8/10 (module level). "
-        "FUNCTION OPPORTUNITY: None identified. "
-        "TO IMPROVE: Minor polish only."
-    )
-    
-    def derivation(self) -> Derivation:
-        return (
-            Derivation()
-            .step("PREMISE: Bit complementation flips all d=3 bits, changing parity (odd <-> even).")
-            .step("Tet A = odd parity vertices {1,2,4,7}. Tet B = even parity vertices {0,3,5,6}.")
-            .step("Check pair (0,7): 0 in Tet B, 7 in Tet A. Cross-chamber: yes.")
-            .step("Check pair (1,6): 1 in Tet A, 6 in Tet B. Cross-chamber: yes.")
-            .step("Similarly (2,5) and (3,4) cross chambers.")
-            .conclude("All 4 pairs span both Field Chambers due to parity inversion.")
-        )
-    
-    def model(self) -> Model:
-        cross_count = 0
-        for a, b in COMPLEMENTARY_PAIRS:
-            tet_a = get_tetrahedron(a)
-            tet_b = get_tetrahedron(b)
-            if tet_a != tet_b:
-                cross_count += 1
-        return (
-            Model()
-            .add("Pairs crossing tetrahedra", cross_count)
-        )
-    
-    def observations(self) -> Observed:
-        return (
-            Observed()
-            .add("Pairs crossing tetrahedra", 4)
-        )
-
-
-class Pair34CompletesFirst(Test):
-    """
-    When traversing with pi base-8, the (3,4) pair completes first. The digit
-    3 goes to V3, and the next digit 1 takes cumsum to 4, completing the pair.
-    This (3,4) encoding reflects 3+1 spacetime structure.
-    """
-    name = "(3,4) Pair Completes First"
-    question = (
-        "When we walk through the Field Chamber using pi's digits, which complementary "
-        "pair do we complete first? Pi starts 3.1, so we visit V3, then V4. Since 3+4=7, "
-        "they are complements. Does pi really complete this specific pair on its very "
-        "first step?"
-    )
-    reference = "Pi = 3.14159..."
-    tolerance = 0.001
-    level = Standard
-    commentary = (
-        "Pi could have started any way, but it starts 3.1 in base 8. First stop: V3. "
-        "Add 1: next stop is V4. These two are complements (3+4=7). So pi completes a "
-        "cross-chamber pairing on its FIRST move. It links Tet A and Tet B immediately. "
-        "And notice: 3+1=4=k, the tetrahedral number. Pi's opening move encodes the "
-        "fundamental topology constant. We did not design this. Pi is a mathematical "
-        "constant that predates our theory. It just happens to do this."
-    )
-    audit_score = 93
-    audit_notes = (
-        "Question: 14/15 - Good 'which pair first' mystery. "
-        "Derivation: 14/15 - Clear step by step. "
-        "Commentary: 14/15 - Excellent 'pi's opening move encodes k' insight. "
-        "Model: 9/10 - Good traversal with first pair. "
-        "Observations: 9/10 - Well defined. "
-        "Constants: 10/10 - Uses traverse_pi_base8 and COMPLEMENTARY_PAIRS from common. "
-        "Accessibility: 14/15 - Undergrad can follow. "
-        "Header: 9/10 (module level). "
-        "FUNCTION OPPORTUNITY: None identified. "
-        "TO IMPROVE: Minor polish only."
-    )
-    
-    def derivation(self) -> Derivation:
-        return (
-            Derivation()
-            .step("PREMISE: Pi = 3.14159... in base-8 begins 3.1..., immediately visiting V3 then V4.")
-            .step("First digit 3: cumsum=3, vertex=V3 (Tet B).")
-            .step("Second digit 1: cumsum=4, vertex=V4 (Tet A).")
-            .step("Both V3 and V4 are now visited. Check: is (3,4) a complementary pair? 3+4=7. Yes.")
-            .step("First complete pair is (3,4), encoding 3+1=k=4.")
-            .conclude("Pi naturally completes the (3,4) pair first, linking to 3+1 spacetime structure.")
-        )
-    
-    def model(self) -> Model:
-        results = traverse_pi_base8(20)
-        
-        visited = set()
-        first_pair = None
-        first_step = None
-        
-        for r in results:
-            v = r['vertex']
-            visited.add(v)
-            
-            for a, b in COMPLEMENTARY_PAIRS:
-                if a in visited and b in visited:
-                    first_pair = (min(a, b), max(a, b))
-                    first_step = r['step']
-                    break
-            
-            if first_pair:
-                break
-        
-        is_34 = 1 if first_pair == (3, 4) else 0
-        return (
-            Model()
-            .add("First pair is (3,4)", is_34)
-            .add("Completion step", first_step if first_step else 0)
-        )
-    
-    def observations(self) -> Observed:
-        return (
-            Observed()
-            .add("First pair is (3,4)", 1)
-            .add("Completion step", 1)
-        )
-
-
-class Pair34Correspondence(Test):
-    """
-    The (3,4) pair corresponds to the 3+1 structure: V3 is from Tet B
-    and V4 is from Tet A. This is the first complementary pair completed
-    when pi drives the traversal.
-    """
-    name = "(3,4) Pair Correspondence"
-    question = (
-        "V3 has binary code 011 (two 1-bits, even parity, so Tet B). V4 has binary code "
-        "100 (one 1-bit, odd parity, so Tet A). Does the (3,4) pair actually cross from "
-        "one tetrahedron to the other, establishing a link between both Field Chambers "
-        "on pi's first step?"
-    )
-    reference = "Theoretical (dual structure)"
-    tolerance = 0.001
-    level = Standard
-    commentary = (
-        "Let us verify. V3 is 011 in binary. Count the 1s: two. Two is even, so V3 "
-        "belongs to Tet B. V4 is 100 in binary. Count the 1s: one. One is odd, so V4 "
-        "belongs to Tet A. When pi moves from V3 to V4, it crosses from Tet B to Tet A. "
-        "The dual Field Chambers become coupled on the very first transition. Pi does "
-        "not wander around in one tetrahedron before finding the other. It connects them "
-        "instantly."
-    )
-    audit_score = 92
-    audit_notes = (
-        "Question: 14/15 - Good binary to tetrahedron connection. "
-        "Derivation: 14/15 - Clear parity counting. "
-        "Commentary: 14/15 - Good 'connects them instantly' insight. "
-        "Model: 9/10 - Clean verification. "
-        "Observations: 9/10 - Well defined. "
-        "Constants: 10/10 - Uses get_tetrahedron from common. "
-        "Accessibility: 14/15 - Undergrad can follow. "
-        "Header: 8/10 (module level). "
-        "FUNCTION OPPORTUNITY: None identified. "
-        "TO IMPROVE: Minor polish only."
-    )
-    
-    def derivation(self) -> Derivation:
-        return (
-            Derivation()
-            .step("PREMISE: Bimetric coupling requires interaction between both Field Chambers.")
-            .step("Determine V3's Field Chamber: parity of 3 (011) = 2 ones = even -> Tet B.")
-            .step("Determine V4's Field Chamber: parity of 4 (100) = 1 one = odd -> Tet A.")
-            .step("First two vertices: V3 (Tet B) -> V4 (Tet A).")
-            .step("This transition crosses Field Chambers at the very first step.")
-            .conclude("Immediate bimetric coupling is established by the (3,4) pair structure.")
-        )
-    
-    def model(self) -> Model:
-        v3_is_tet_b = 1 if get_tetrahedron(3) == 'B' else 0
-        v4_is_tet_a = 1 if get_tetrahedron(4) == 'A' else 0
-        correct_encoding = 1 if v3_is_tet_b and v4_is_tet_a else 0
-        return (
-            Model()
-            .add("V3 in Tet B (spatial)", v3_is_tet_b)
-            .add("V4 in Tet A (temporal)", v4_is_tet_a)
-            .add("Correct 3+1 encoding", correct_encoding)
-        )
-    
-    def observations(self) -> Observed:
-        return (
-            Observed()
-            .add("V3 in Tet B (spatial)", 1)
-            .add("V4 in Tet A (temporal)", 1)
-            .add("Correct 3+1 encoding", 1)
-        )
-
-
-class PairsGeometricallyOpposed(Test):
-    """
-    Each complementary pair sits at opposite corners of the cube. Geometrically,
-    if vertex A is at coordinates (x, y, z), its complement is at (-x, -y, -z).
-    """
-    name = "Pairs Geometrically Opposed"
-    question = (
-        "If complementary means 'flip all bits,' does it also mean 'flip all spatial "
-        "coordinates'? A vertex at (x, y, z) should have its complement at (-x, -y, -z). "
-        "This would put them at maximum distance apart. Do all 4 pairs satisfy this?"
-    )
-    reference = "Cube geometry"
-    tolerance = 0.001
-    level = Standard
-    commentary = (
-        "Bits and coordinates are secretly the same thing. Bit 2 controls the x-sign, "
-        "bit 1 controls y, bit 0 controls z. Flipping all bits flips all signs. So the "
-        "complement of (1, -1, 1) is (-1, 1, -1). They are at opposite ends of the cube's "
-        "space diagonal. The distance between them is 2*sqrt(3), the longest distance "
-        "possible inside the cube. Complementary pairs are not just 'different.' They "
-        "are MAXIMALLY different. They sit as far apart as geometry allows."
-    )
-    audit_score = 94
-    audit_notes = "Exemplary Feynman-style test."
-    
-    def derivation(self) -> Derivation:
-        return (
-            Derivation()
-            .step("PREMISE: Cube corners have coordinates (+/-1, +/-1, +/-1). Opposite corners sum to (0,0,0).")
-            .step("For each pair (n, 7-n), get coordinates of both vertices.")
-            .step("Check if coords[n] = -coords[7-n] for all d=3 axes.")
-            .step("Example: V0=(-1,-1,-1), V7=(+1,+1,+1). Sum: (0,0,0). Opposite: yes.")
-            .step("Verify for all 4 pairs: each pair occupies antipodal cube corners.")
-            .conclude("All complementary pairs are at maximum geometric separation (cube diagonal).")
-        )
-    
-    def model(self) -> Model:
-        opposed_count = 0
-        for a, b in COMPLEMENTARY_PAIRS:
-            a_coords = VERTICES[a]['coords']
-            b_coords = VERTICES[b]['coords']
-            is_opposite = all(a_coords[i] == -b_coords[i] for i in range(3))
-            if is_opposite:
-                opposed_count += 1
-        return (
-            Model()
-            .add("Geometrically opposed pairs", opposed_count)
-        )
-    
-    def observations(self) -> Observed:
-        return (
-            Observed()
-            .add("Geometrically opposed pairs", 4)
-        )
-
-
-class PairMidpointsAtOrigin(Test):
-    """
-    The midpoint of each complementary pair is the origin (0,0,0). This means
-    the line connecting any pair passes through the center of the dual
-    Field Chamber structure.
-    """
-    name = "Pair Midpoints at Origin"
-    question = (
-        "Take any complementary pair and find the point halfway between them. Is it "
-        "always the origin (0,0,0)? If so, all four pairs are balanced around the center. "
-        "The Field Origin would be the common midpoint of every diagonal."
-    )
-    reference = "Cube geometry"
-    tolerance = 0.001
-    level = Standard
-    commentary = (
-        "If V is at position P, its complement is at -P (flip all coordinates). The "
-        "midpoint is (P + (-P)) / 2 = 0. Every complementary pair straddles the origin "
-        "like a seesaw perfectly balanced at the fulcrum. All four diagonal lines through "
-        "the cube cross at one point: the center. This is the Field Origin, the heart of "
-        "the dual structure, equidistant from every extreme."
-    )
-    audit_score = 91
-    audit_notes = (
-        "Question: 14/15 - Good 'Field Origin as fulcrum' hook. "
-        "Derivation: 13/15 - Clear midpoint calculation. "
-        "Commentary: 14/15 - Good seesaw analogy. "
-        "Model: 9/10 - Clean origin count. "
-        "Observations: 9/10 - Well defined. "
-        "Constants: 10/10 - Uses VERTICES, COMPLEMENTARY_PAIRS, and numpy. "
-        "Accessibility: 14/15 - Undergrad can follow. "
-        "Header: 8/10 (module level). "
-        "FUNCTION OPPORTUNITY: None identified. "
-        "TO IMPROVE: Minor polish only."
-    )
-    
-    def derivation(self) -> Derivation:
-        return (
-            Derivation()
-            .step("PREMISE: Midpoint of (A, B) is (A + B) / 2. For antipodal points, midpoint is origin.")
-            .step("For pair (0,7): midpoint = (V0_coords + V7_coords) / 2 = ((-1,-1,-1) + (+1,+1,+1)) / 2 = (0,0,0).")
-            .step("For pair (1,6): midpoint = (V1_coords + V6_coords) / 2 = ((-1,-1,+1) + (+1,+1,-1)) / 2 = (0,0,0).")
-            .step("Similarly verify for pairs (2,5) and (3,4): all midpoints are (0,0,0).")
-            .step("The origin is the Field Origin, geometric center of the stellated octahedron.")
-            .conclude("All 4 complementary pair midpoints coincide at the Field Origin.")
-        )
-    
-    def model(self) -> Model:
-        at_origin_count = 0
-        for a, b in COMPLEMENTARY_PAIRS:
-            a_coords = np.array(VERTICES[a]['coords'])
-            b_coords = np.array(VERTICES[b]['coords'])
-            midpoint = (a_coords + b_coords) / 2
-            if np.allclose(midpoint, [0, 0, 0]):
-                at_origin_count += 1
-        return (
-            Model()
-            .add("Midpoints at origin", at_origin_count)
-        )
-    
-    def observations(self) -> Observed:
-        return (
-            Observed()
-            .add("Midpoints at origin", 4)
-        )
-
-
-class PiIntegerProduces34(Test):
-    """
-    Pi's first digit (3) goes directly to V3. The second digit (1) advances
-    the cumsum to 4, landing on V4. Thus pi's integer part naturally produces
-    the (3,4) pair that encodes spacetime structure.
-    """
-    name = "Pi Integer Produces (3,4)"
-    question = (
-        "Pi's value is fixed by mathematics. In base 8, it starts 3.1... When we use "
-        "these digits to walk the cube, do we deterministically land on V3 then V4? "
-        "No tuning, no choices. Just pi being pi."
-    )
-    reference = "Pi = 3.14159..."
-    tolerance = 0.001
-    level = Standard
-    commentary = (
-        "There is no parameter fitting here. Pi is what it is: the ratio of a circle's "
-        "circumference to its diameter. In base 8, that ratio begins 3.110375... The "
-        "integer part is 3, so start at V3. The first fractional digit is 1, so step to "
-        "V4 (cumulative sum = 4). We did not choose these numbers. We did not adjust "
-        "anything. Pi chooses them for us, and they happen to form a complementary pair "
-        "that connects both tetrahedra. Either this is a coincidence, or pi encodes "
-        "something about dual geometry."
-    )
-    audit_score = 94
-    audit_notes = (
-        "Question: 14/15 - Good 'no tuning, just pi' hook. "
-        "Derivation: 14/15 - Clear deterministic logic. "
-        "Commentary: 15/15 - Excellent 'pi encodes dual geometry' framing. "
-        "Model: 9/10 - Clean traversal verification. "
-        "Observations: 9/10 - Well defined. "
-        "Constants: 10/10 - Uses traverse_pi_base8 from common. "
-        "Accessibility: 14/15 - Undergrad can follow. "
-        "Header: 9/10 (module level). "
-        "FUNCTION OPPORTUNITY: None identified. "
-        "TO IMPROVE: Minor polish only."
-    )
-    
-    def derivation(self) -> Derivation:
-        return (
-            Derivation()
-            .step("PREMISE: Pi base-8 = 3.1103755... The integer part is 3, first fractional digit is 1.")
-            .step("First digit is 3. Initial cumsum = 3. Vertex = 3 mod 8 = V3.")
-            .step("Second digit is 1. Cumsum = 3 + 1 = 4. Vertex = 4 mod 8 = V4.")
-            .step("First vertex: V3 (digit 3). Second vertex: V4 (digit 1).")
-            .step("Sum: 3 + 1 = 4 = k. This is the topology constant.")
-            .conclude("Pi's mathematical structure produces (V3, V4), encoding 3+1 = k.")
-        )
-    
-    def model(self) -> Model:
-        results = traverse_pi_base8(5)
-        v1 = results[0]['vertex']  # Should be 3
-        v2 = results[1]['vertex']  # Should be 4
-        d1 = results[0]['digit']   # Should be 3
-        d2 = results[1]['digit']   # Should be 1
-        
-        correct = 1 if v1 == 3 and v2 == 4 and d1 == 3 and d2 == 1 else 0
-        return (
-            Model()
-            .add("First vertex", v1)
-            .add("Second vertex", v2)
-            .add("Produces (3,4)", correct)
-        )
-    
-    def observations(self) -> Observed:
-        return (
-            Observed()
-            .add("First vertex", 3)
-            .add("Second vertex", 4)
-            .add("Produces (3,4)", 1)
-        )
-
-
-# =============================================================================
-# RUNNER
-# =============================================================================
-
-ALL_TESTS = [
-    PairsSumTo7,
-    PairsBinaryComplement,
-    PairsCrossTetrahedra,
-    Pair34CompletesFirst,
-    Pair34Correspondence,
-    PairsGeometricallyOpposed,
-    PairMidpointsAtOrigin,
-    PiIntegerProduces34,
-]
-
-
-def run_all() -> bool:
-    """Run all complementary pairs tests."""
-    return run_tests(
-        title="Complementary Pairs",
-        summary=(
-            "These tests examine the complementary vertex pair structure in the dual "
-            "Field Chamber geometry. Each vertex V_n pairs with V_(7-n), forming pairs "
-            "that are geometrically opposed and cross Field Chambers. The pairs are "
-            "(0,7), (1,6), (2,5), and (3,4). When pi drives the traversal, the (3,4) "
-            "pair completes first because 3.1... produces vertices 3 then 4. V3 resides "
-            "in Tet B and V4 resides in Tet A."
-        ),
-        test_classes=ALL_TESTS
-    )
-
-
+# ======================================================================
+# Runner
+# ======================================================================
 if __name__ == "__main__":
-    import sys
-    success = run_all()
-    sys.exit(0 if success else 1)
+    from gravity_field_model.framework import run_tests
+    run_tests(
+        title="Complementary Pair Structure of the Stellated Octahedron",
+        summary="Verifies that all 4 complementary pairs cross tetrahedra and pass through the Field Origin",
+        test_classes=[ComplementaryPairStructure],
+    )

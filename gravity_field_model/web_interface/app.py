@@ -176,6 +176,125 @@ def create_app():
         except Exception as e:
             return jsonify({'error': str(e)}), 500
     
+    @app.route('/api/top-papers')
+    def get_top_papers():
+        """Find test files with academic_paper and audit_score >= 89, sorted by recency."""
+        import importlib.util
+        import re as re_mod
+        
+        results = []
+        min_score = 89
+        
+        # Walk all .py files in the project
+        for root_dir, dirs, files in os.walk(project_root):
+            # Skip non-test directories
+            dirs[:] = [d for d in dirs if d not in ('__pycache__', '.git', 'sandbox', 'common', 'templates', 'web_interface', 'examples', 'functions', 'pipeline', 'submissions')]
+            
+            for fname in files:
+                if not fname.startswith('test_') or not fname.endswith('.py'):
+                    continue
+                
+                fpath = os.path.join(root_dir, fname)
+                
+                try:
+                    content = open(fpath, 'r', encoding='utf-8').read()
+                    
+                    # Quick check: does it have both academic_paper and audit_score?
+                    if 'academic_paper' not in content or 'audit_score' not in content:
+                        continue
+                    
+                    # Extract audit_score via regex (faster than importing)
+                    score_match = re_mod.search(r'audit_score\s*=\s*(\d+)', content)
+                    if not score_match:
+                        continue
+                    
+                    score = int(score_match.group(1))
+                    if score < min_score:
+                        continue
+                    
+                    # Check academic_paper is not None
+                    if re_mod.search(r'academic_paper\s*=\s*None', content):
+                        continue
+                    
+                    # Extract test name
+                    name_match = re_mod.search(r'name\s*=\s*["\']([^"\']+)["\']', content)
+                    test_name = name_match.group(1) if name_match else fname.replace('.py', '').replace('test_', '').replace('_', ' ').title()
+                    
+                    # Get file modification time
+                    mtime = os.path.getmtime(fpath)
+                    rel_path = os.path.relpath(fpath, project_root).replace('\\', '/')
+                    
+                    # Extract domain from path
+                    parts = rel_path.split('/')
+                    domain = parts[1] if len(parts) > 2 else parts[0]
+                    
+                    results.append({
+                        'filename': fname,
+                        'path': rel_path,
+                        'name': test_name,
+                        'audit_score': score,
+                        'domain': domain,
+                        'modified': mtime,
+                    })
+                except Exception:
+                    continue
+        
+        # Sort by modification time, most recent first
+        results.sort(key=lambda x: x['modified'], reverse=True)
+        
+        # Limit to top 20
+        results = results[:20]
+        
+        return jsonify(results)
+    
+    @app.route('/api/paper/<path:filepath>')
+    def get_paper(filepath):
+        """Extract academic_paper property from a test file."""
+        full_path = os.path.join(project_root, filepath)
+        
+        if not os.path.exists(full_path):
+            return jsonify({'error': 'File not found', 'has_paper': False}), 404
+        
+        try:
+            import importlib.util
+            spec = importlib.util.spec_from_file_location("paper_extract", full_path)
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            
+            # Find test class with academic_paper
+            paper_text = None
+            test_name = None
+            test_question = None
+            test_reference = None
+            audit_score = None
+            
+            for name in dir(module):
+                obj = getattr(module, name)
+                if isinstance(obj, type) and hasattr(obj, 'academic_paper'):
+                    paper = getattr(obj, 'academic_paper', None)
+                    if paper and isinstance(paper, str) and paper.strip():
+                        paper_text = paper.strip()
+                        test_name = getattr(obj, 'name', name)
+                        test_question = getattr(obj, 'question', '')
+                        test_reference = getattr(obj, 'reference', '')
+                        audit_score = getattr(obj, 'audit_score', None)
+                        break
+            
+            if not paper_text:
+                return jsonify({'has_paper': False, 'error': 'No academic_paper found'})
+            
+            return jsonify({
+                'has_paper': True,
+                'paper': paper_text,
+                'test_name': test_name,
+                'question': test_question,
+                'reference': test_reference,
+                'audit_score': audit_score,
+                'filename': os.path.basename(filepath),
+            })
+        except Exception as e:
+            return jsonify({'has_paper': False, 'error': str(e)})
+    
     @app.route('/api/file/<path:filepath>', methods=['PUT'])
     def save_file(filepath):
         """Save file contents."""

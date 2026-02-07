@@ -55,24 +55,16 @@
         <!-- Main Content Area -->
         <main class="main-content">
             <div class="content-wrapper" id="welcome-view">
-                <!-- Welcome Panel -->
-                <div class="action-cards">
+                <!-- Welcome + Test Results side by side -->
+                <div class="action-cards two-col">
                     <div class="action-card welcome-card">
                         <div class="card-content">
-                            <h3>Welcome to Gravity Field Dynamics</h3>
+                            <h3>Welcome to Gravity Field Model</h3>
                             <p class="welcome-text">Use the <strong>test tree</strong> to browse tests of interest.
                                 Click any test file to view its source code, then click <strong>Run</strong> to execute
                                 it and observe the results.</p>
-                            <p class="welcome-text" style="margin-top: 12px;">This test suite provides a rigorous
-                                validation framework for field closure and the Distributed Field Processing (DFP)
-                                Gravity Field Model, employing methodologies consistent with experimental verification
-                                standards.</p>
                         </div>
                     </div>
-                </div>
-
-                <!-- Test Results -->
-                <div class="action-cards">
                     <div class="action-card">
                         <div class="card-content">
                             <h3>Test Results</h3>
@@ -91,6 +83,22 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Top Rated Papers -->
+                <div class="action-cards">
+                    <div class="action-card papers-card">
+                        <div class="card-content">
+                            <h3>Top Rated Papers <span class="badge">audit >= 89</span></h3>
+                            <div class="papers-list" id="papers-list">
+                                <div class="loading-dots" id="papers-loading">
+                                    <div class="dot"></div>
+                                    <div class="dot"></div>
+                                    <div class="dot"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- File Viewer (hidden by default) -->
@@ -102,6 +110,7 @@
                         <button class="close-file-btn" onclick="closeFile()">&#10005;</button>
                     </div>
                     <div class="file-actions">
+                        <button class="paper-btn" id="paper-btn" onclick="showPaper()" style="display: none;">&#128220; Paper</button>
                         <button class="run-btn" onclick="runCurrentFile()">&#9654; Run</button>
                     </div>
                 </div>
@@ -118,6 +127,25 @@
                     <span class="status-text" id="editor-status">Ready</span>
                     <span class="status-position" id="cursor-position">Ln 1, Col 1</span>
                     <button class="save-btn" id="save-btn" onclick="saveFile()" disabled>Save</button>
+                </div>
+            </div>
+
+            <!-- Paper Viewer (hidden by default) -->
+            <div class="paper-viewer" id="paper-viewer" style="display: none;">
+                <div class="file-header">
+                    <div class="file-tab">
+                        <span class="file-icon-paper">&#128220;</span>
+                        <span id="paper-file-name">Academic Paper</span>
+                        <button class="close-file-btn" onclick="closePaper()">&#10005;</button>
+                    </div>
+                    <div class="file-actions">
+                        <button class="source-btn" onclick="showSource()">&#9664; Source</button>
+                    </div>
+                </div>
+                <div class="paper-content">
+                    <div class="paper-page" id="paper-page">
+                        <!-- Paper will be rendered here -->
+                    </div>
                 </div>
             </div>
 

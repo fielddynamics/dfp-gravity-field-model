@@ -25,6 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
         initialTestsRun = true;
         runInitialTests();
     }
+
+    // Load top rated papers
+    loadTopPapers();
 });
 
 /**
@@ -59,6 +62,48 @@ async function runInitialTests() {
     } catch (error) {
         console.error('Failed to run initial tests:', error);
         if (loadingDots) loadingDots.style.display = 'none';
+    }
+}
+
+/**
+ * Load top rated papers (audit_score >= 89)
+ */
+async function loadTopPapers() {
+    const container = document.getElementById('papers-list');
+    const loading = document.getElementById('papers-loading');
+    if (!container) return;
+
+    try {
+        const response = await fetch('/api/top-papers');
+        const papers = await response.json();
+
+        if (loading) loading.style.display = 'none';
+
+        if (papers.length === 0) {
+            container.innerHTML = '<div class="no-papers">No papers with audit score >= 89</div>';
+            return;
+        }
+
+        let html = '';
+        for (const p of papers) {
+            const date = new Date(p.modified * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            html += `<div class="paper-row" onclick="openFile('${p.path}')">
+                <div class="paper-row-main">
+                    <span class="paper-row-name">${escapeHtml(p.name)}</span>
+                    <span class="paper-row-score">${p.audit_score}</span>
+                </div>
+                <div class="paper-row-meta">
+                    <span class="paper-row-domain">${escapeHtml(p.domain)}</span>
+                    <span class="paper-row-date">${date}</span>
+                </div>
+            </div>`;
+        }
+        container.innerHTML = html;
+
+    } catch (error) {
+        console.error('Failed to load papers:', error);
+        if (loading) loading.style.display = 'none';
+        container.innerHTML = '<div class="no-papers">Could not load papers</div>';
     }
 }
 
@@ -557,6 +602,9 @@ async function openFile(filepath) {
 
         // Render code in editor
         renderCode(data.content);
+
+        // Check if file has an academic paper
+        checkForPaper(filepath);
 
         // Reset editor status
         const saveBtn = document.getElementById('save-btn');
@@ -1702,4 +1750,223 @@ function formatTestForClipboard(test) {
     }
 
     return lines.join('\n');
+}
+
+
+// =========================================================================
+// ACADEMIC PAPER VIEWER
+// =========================================================================
+
+/**
+ * Check if the current file has an academic paper and show/hide the Paper button
+ */
+async function checkForPaper(filepath) {
+    const paperBtn = document.getElementById('paper-btn');
+    if (!paperBtn) return;
+
+    try {
+        const response = await fetch(`/api/paper/${filepath}`);
+        const data = await response.json();
+        paperBtn.style.display = data.has_paper ? 'block' : 'none';
+    } catch (e) {
+        paperBtn.style.display = 'none';
+    }
+}
+
+/**
+ * Show the academic paper in a polished LaTeX-like view
+ */
+async function showPaper() {
+    if (!currentFile) return;
+
+    try {
+        const response = await fetch(`/api/paper/${currentFile}`);
+        const data = await response.json();
+
+        if (!data.has_paper) {
+            alert('No academic paper found in this test file.');
+            return;
+        }
+
+        // Hide other views, show paper
+        document.getElementById('welcome-view').style.display = 'none';
+        document.getElementById('file-viewer').style.display = 'none';
+        document.getElementById('output-viewer').style.display = 'none';
+        document.getElementById('paper-viewer').style.display = 'flex';
+
+        // Update header
+        document.getElementById('paper-file-name').textContent = `Paper: ${data.test_name || data.filename}`;
+
+        // Render the paper
+        const paperPage = document.getElementById('paper-page');
+        paperPage.innerHTML = renderAcademicPaper(data);
+
+    } catch (error) {
+        console.error('Error loading paper:', error);
+    }
+}
+
+/**
+ * Close the paper viewer and return to source
+ */
+function closePaper() {
+    document.getElementById('paper-viewer').style.display = 'none';
+    document.getElementById('file-viewer').style.display = 'flex';
+}
+
+/**
+ * Render the academic paper as formatted HTML.
+ * Handles both newline-separated papers and single-line papers.
+ */
+function renderAcademicPaper(data) {
+    let paper = data.paper;
+
+    // Normalize: if paper is mostly one line, split on section markers
+    const lineCount = paper.split('\n').filter(l => l.trim().length > 0).length;
+    if (lineCount < 5) {
+        // Single-line paper: insert newlines before known section markers
+        paper = paper
+            .replace(/\bTITLE\b/i, '\nTITLE')
+            .replace(/\bABSTRACT\b/i, '\nABSTRACT\n')
+            .replace(/\b(1\.\s*INTRODUCTION)/i, '\n$1\n')
+            .replace(/\b(2\.\s*METHODOLOGY)/i, '\n$1\n')
+            .replace(/\b(3\.\s*RESULTS)/i, '\n$1\n')
+            .replace(/\b(4\.\s*DISCUSSION)/i, '\n$1\n')
+            .replace(/\b(5\.\s*LIMITATIONS)/i, '\n$1\n')
+            .replace(/\b(6\.\s*CONCLUSION)/i, '\n$1\n')
+            .trim();
+    }
+
+    const lines = paper.split('\n');
+
+    let html = '<article class="arxiv-paper">';
+    html += '<header class="paper-header">';
+    html += '<div class="paper-meta">Gravity Field Model  |  Research Paper</div>';
+
+    // Parse sections
+    let currentSection = '';
+    let sectionContent = '';
+    let sections = [];
+
+    for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed) {
+            sectionContent += '\n';
+            continue;
+        }
+
+        // Detect section starts
+        let newSection = null;
+
+        if (/^TITLE:?\s/i.test(trimmed) || /^TITLE$/i.test(trimmed)) {
+            newSection = 'TITLE';
+            const titleText = trimmed.replace(/^TITLE:?\s*/i, '');
+            if (currentSection) sections.push({ type: currentSection, content: sectionContent.trim() });
+            currentSection = newSection;
+            sectionContent = titleText;
+            continue;
+        }
+        if (/^ABSTRACT/i.test(trimmed)) {
+            newSection = 'ABSTRACT';
+            const bodyText = trimmed.replace(/^ABSTRACT:?\s*/i, '');
+            if (currentSection) sections.push({ type: currentSection, content: sectionContent.trim() });
+            currentSection = newSection;
+            sectionContent = bodyText;
+            continue;
+        }
+        if (/^[1-6]\.\s/.test(trimmed)) {
+            if (currentSection) sections.push({ type: currentSection, content: sectionContent.trim() });
+            currentSection = trimmed.split(/\n/)[0];
+            sectionContent = trimmed.replace(/^[1-6]\.\s*[A-Z][A-Z\s&:]+/i, '').trim();
+            continue;
+        }
+
+        sectionContent += trimmed + '\n';
+    }
+    if (currentSection) sections.push({ type: currentSection, content: sectionContent.trim() });
+
+    // Render each section
+    for (const section of sections) {
+        if (section.type === 'TITLE') {
+            const titleText = section.content || 'Untitled';
+            html += `<h1 class="paper-title">${escapeHtml(titleText)}</h1>`;
+            html += '<div class="paper-authors">GFM Research Agent</div>';
+            html += '<div class="paper-date">' + new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) + '</div>';
+            if (data.audit_score) {
+                html += `<div class="paper-score">Audit Score: ${data.audit_score}/100</div>`;
+            }
+            html += '</header>';
+        } else if (section.type === 'ABSTRACT') {
+            html += '<div class="paper-abstract">';
+            html += '<h2>Abstract</h2>';
+            html += `<p>${formatPaperText(section.content)}</p>`;
+            html += '</div>';
+            html += '<hr class="paper-rule">';
+        } else {
+            // Numbered sections
+            const sectionTitle = section.type;
+            const sectionBody = section.content;
+            html += '<section class="paper-section">';
+            html += `<h2>${escapeHtml(sectionTitle)}</h2>`;
+            // Split into paragraphs on double newlines or long runs
+            const paragraphs = sectionBody.split(/\n\n+/);
+            for (const para of paragraphs) {
+                if (para.trim()) {
+                    // If paragraph is very long (500+ chars), try splitting on sentence boundaries
+                    const text = para.trim();
+                    if (text.length > 500 && !text.includes('\n')) {
+                        // Split into ~2 sentence chunks for readability
+                        const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+                        let chunk = '';
+                        for (const s of sentences) {
+                            chunk += s;
+                            if (chunk.length > 250) {
+                                html += `<p>${formatPaperText(chunk.trim())}</p>`;
+                                chunk = '';
+                            }
+                        }
+                        if (chunk.trim()) html += `<p>${formatPaperText(chunk.trim())}</p>`;
+                    } else {
+                        html += `<p>${formatPaperText(text)}</p>`;
+                    }
+                }
+            }
+            html += '</section>';
+        }
+    }
+
+    // Footer
+    html += '<footer class="paper-footer">';
+    html += '<hr class="paper-rule">';
+    if (data.reference) {
+        html += `<div class="paper-references"><strong>References:</strong> ${escapeHtml(data.reference)}</div>`;
+    }
+    html += `<div class="paper-source">Source: ${escapeHtml(data.filename || '')}</div>`;
+    html += '</footer>';
+
+    html += '</article>';
+    return html;
+}
+
+/**
+ * Format paper text: handle inline math-like expressions and emphasis
+ */
+function formatPaperText(text) {
+    let html = escapeHtml(text);
+    // Bold section labels like "[3.1]" or "EPISTEMIC STATUS:"
+    html = html.replace(/\[(\d+\.\d+)\]/g, '<strong>[$1]</strong>');
+    html = html.replace(/(EPISTEMIC STATUS|DERIVATION|OBSERVATION|SPECULATION|STANDARD PHYSICS|GFM OBSERVATION):/g, '<strong>$1:</strong>');
+    // Inline code-like expressions (things with = signs, formulas)
+    html = html.replace(/(\w+(?:_\w+)*\s*=\s*[\d.eE+\-x^*\/()]+(?:\s*[a-zA-Z/%]+)?)/g, '<code class="paper-math">$1</code>');
+    // Newlines to line breaks within paragraphs
+    html = html.replace(/\n/g, ' ');
+    return html;
+}
+
+function escapeHtml(text) {
+    return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
 }
