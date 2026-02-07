@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gravity-field-model"
+version = "2.0.0"
+description = "Gravity Field Model"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["gravity_field_model*"]

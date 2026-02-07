@@ -14,10 +14,10 @@ import argparse
 import sys
 import os
 
-# Add the gravity_field_model directory to the path
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), 'gravity_field_model'))
+# Add the project root to the path so 'from gravity_field_model.xxx import yyy' works
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from web_interface.app import run_server
+from gravity_field_model.web_interface.app import run_server
 
 
 def main():
