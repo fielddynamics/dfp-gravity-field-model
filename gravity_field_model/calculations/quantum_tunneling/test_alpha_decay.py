@@ -7,7 +7,7 @@ in radioactive nuclei, a phenomenon spanning 24 orders of magnitude in
 decay rates from microseconds (Po-212) to billions of years (U-238).
 The Geiger-Nuttall law provides exquisitely precise predictions.
 
-GFD OBSERVATION: The k=4 closure constant appears in barrier penetration.
+GFM OBSERVATION: The k=4 closure constant appears in barrier penetration.
 
 This is an OBSERVATION, not a derivation.
 """
@@ -30,16 +30,16 @@ class AlphaDecayGamowTheory(Test):
     remarkable precision, making it one of the most stringent tests of
     quantum tunneling theory.
     
-    GFD OBSERVATION:
+    GFM OBSERVATION:
     The Gamow factor contains 2*pi, which relates to the spherical geometry
     of the Coulomb barrier. The k=4 closure constant might contribute to
     barrier penetration integrals in stellated octahedron geometry, though
-    no derivation connects GFD to the Gamow formula.
+    no derivation connects GFM to the Gamow formula.
     
     EPISTEMIC STATUS:
     This test is an OBSERVATION, not an explanation. It compares standard
     Gamow theory predictions against measured alpha decay lifetimes to
-    establish baseline accuracy before exploring whether GFD geometry
+    establish baseline accuracy before exploring whether GFM geometry
     contributes any testable modifications.
     """
     
@@ -65,18 +65,18 @@ class AlphaDecayGamowTheory(Test):
         "barrier. The decay constant depends exponentially on the Gamow factor "
         "G = 2*pi*Z*e^2*sqrt(2*m_alpha*c^2/E_alpha)/(hbar*c), where Z is the "
         "daughter nucleus charge. The Geiger-Nuttall law log(lambda) proportional "
-        "to Z/sqrt(E_alpha) emerges naturally. GFD observation: the factor 2*pi "
+        "to Z/sqrt(E_alpha) emerges naturally. GFM observation: the factor 2*pi "
         "relates to angular integration around spherical barriers, where k=4 "
         "stellated octahedron geometry might contribute, but no derivation exists. "
         "This test establishes that standard QM accurately predicts nuclear "
-        "lifetimes before exploring potential GFD corrections."
+        "lifetimes before exploring potential GFM corrections."
     )
     
     audit_score = 89
     audit_notes = (
         "Question: 14/15 (clear mystery with specific numbers). "
         "Derivation: 13/15 (good Gamow derivation, could detail WKB integration). "
-        "Commentary: 14/15 (honest about GFD observation status). "
+        "Commentary: 14/15 (honest about GFM observation status). "
         "Model: 9/10 (computes multiple nuclei correctly). "
         "Observations: 9/10 (uses measured values). "
         "Constants: 10/10 (proper use of fundamental constants). "
@@ -136,16 +136,16 @@ class AlphaDecayGamowTheory(Test):
                 "shape, and centrifugal effects."
             )
             .step(
-                "GFD OBSERVATION: The Gamow factor contains 2*pi from angular integration "
+                "GFM OBSERVATION: The Gamow factor contains 2*pi from angular integration "
                 "in spherical geometry. The k=4 closure constant appears in surface area "
-                "calculations (4*pi*r^2), suggesting GFD geometry might relate to barrier "
+                "calculations (4*pi*r^2), suggesting GFM geometry might relate to barrier "
                 "penetration, but no derivation connects stellated octahedron packing to "
                 "the Gamow formula. This remains an observation, not a prediction."
             )
             .conclude(
                 "Gamow theory explains alpha decay lifetimes across 24 orders of magnitude "
                 "using only quantum tunneling and Coulomb potential geometry. The 2*pi factor "
-                "is a geometric consequence of spherical barriers. GFD observes k=4 in related "
+                "is a geometric consequence of spherical barriers. GFM observes k=4 in related "
                 "surface integrals but provides no alternative calculation of decay rates."
             )
         )

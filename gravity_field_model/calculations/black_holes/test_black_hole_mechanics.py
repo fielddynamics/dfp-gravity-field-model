@@ -18,34 +18,34 @@ communicate.
 HONEST ASSESSMENT:
 This file originally contained 12 tests covering Schwarzschild radius, Hawking
 temperature, photon sphere, ISCO, entropy, time dilation, and other black hole
-phenomena. All were removed because GFD does not independently derive any of them.
+phenomena. All were removed because GFM does not independently derive any of them.
 
 What was happening before:
 - Standard GR formulas (R_s = 2GM/c^2, T_H = hbar*c^3/(8*pi*G*M*k_B), etc.)
 - Calculated using universal constants (G, c, hbar, k_B)
 - Commentary claimed vague connections to "Field Chambers" and "TIME faces"
-- No actual GFD derivation: just GR physics with GFD vocabulary overlaid
+- No actual GFM derivation: just GR physics with GFM vocabulary overlaid
 
 The problem:
-Including tests like "Schwarzschild Radius" in a GFD test suite implies that GFD
+Including tests like "Schwarzschild Radius" in a GFM test suite implies that GFM
 derives the Schwarzschild solution. It does not. Einstein derived R_s = 2GM/c^2
-from the field equations of General Relativity in 1916. The GFD model uses the
-same formula because it uses GR, not because GFD provides an alternative derivation.
+from the field equations of General Relativity in 1916. The GFM model uses the
+same formula because it uses GR, not because GFM provides an alternative derivation.
 
 CONNECTION TO FIELD CLOSURE (from textbook):
 Field closure is the process by which gravitational configurations resolve to
 geometric consistency. At a black hole horizon, something remarkable happens:
 the metric determinant approaches zero in certain coordinates (though this is
-a coordinate artifact, not physical degeneracy). The question for GFD research
+a coordinate artifact, not physical degeneracy). The question for GFM research
 is whether the k=4 tetrahedral structure has anything to say about horizons.
 
-What would constitute genuine GFD black hole physics:
+What would constitute genuine GFM black hole physics:
 1. A derivation of R_s from k=4 tetrahedral geometry (not just restating 2GM/c^2)
 2. A prediction for photon sphere radius that differs from GR's 1.5*R_s
 3. Black hole entropy derived from Coupling Port counting (not area law)
 4. Novel predictions for gravitational wave signatures from mergers
 
-None of these exist in the current GFD model. The model is consistent with GR
+None of these exist in the current GFM model. The model is consistent with GR
 for black holes, but "consistent with" is not "derives".
 
 REMAINING CONTENT:
@@ -84,16 +84,16 @@ from gravity_field_model.common import C, G, M_SOLAR as M_SUN, R_E, K
 # GR REFERENCE TESTS
 # =============================================================================
 #
-# Why include GR reference tests in GFD?
+# Why include GR reference tests in GFM?
 # These tests verify that our implementation correctly uses standard physics.
-# They are NOT claims that GFD derives black hole physics. They are
+# They are NOT claims that GFM derives black hole physics. They are
 # consistency checks ensuring our constants and formulas work correctly.
 
 class SchwarzschildRadiusReference(Test):
     """
     GR REFERENCE: Verifies correct implementation of Schwarzschild radius.
     
-    This is NOT a GFD derivation. It confirms our code uses GR correctly.
+    This is NOT a GFM derivation. It confirms our code uses GR correctly.
     The Schwarzschild radius is where gravity becomes so strong that light
     cannot escape, creating the event horizon of a black hole.
     
@@ -147,8 +147,8 @@ class SchwarzschildRadiusReference(Test):
         "are inseparable. At r = R_s, spacetime curves so severely that all "
         "future light cones point inward. This is not just 'strong gravity' but "
         "a topological feature of spacetime itself.\n\n"
-        "GFD does not derive this result. Einstein's field equations yield the "
-        "Schwarzschild solution uniquely (Birkhoff's theorem). GFD incorporates "
+        "GFM does not derive this result. Einstein's field equations yield the "
+        "Schwarzschild solution uniquely (Birkhoff's theorem). GFM incorporates "
         "GR for black holes rather than replacing it. The value R_s = 2.95 km "
         "for one solar mass has been confirmed indirectly by LIGO's gravitational "
         "wave observations and directly by EHT's imaging of M87*'s shadow."
@@ -185,7 +185,7 @@ class SchwarzschildRadiusReference(Test):
 
 
 # =============================================================================
-# EXPLORATORY: Potential GFD Research Directions
+# EXPLORATORY: Potential GFM Research Directions
 # =============================================================================
 #
 # Why keep exploratory tests?
@@ -195,7 +195,7 @@ class SchwarzschildRadiusReference(Test):
 
 class FieldClosureAtHorizon(Test):
     """
-    EXPLORATORY: Does the event horizon have geometric significance in GFD?
+    EXPLORATORY: Does the event horizon have geometric significance in GFM?
     
     STATUS: Speculative. This is a research question, not a confirmed result.
     The test is retained to mark the inquiry for future investigation.
@@ -230,32 +230,32 @@ class FieldClosureAtHorizon(Test):
     # Questions an undergraduate might have after reading this test
     future_questions = (
         "Q1: If 10^18 is not a power of k=4, could it be related to some OTHER "
-        "geometric constant in GFD, like the number of faces (8) or orbits (137)? "
+        "geometric constant in GFM, like the number of faces (8) or orbits (137)? "
         "(Answering would improve Derivation +2: We could check if 10^18 relates to "
         "8^n, 137^n, or combinations. Currently untested.) "
         "Q2: What would 'Field Closure at the horizon' even mean physically? The "
-        "horizon is a global causal boundary, not a local structure. How could GFD's "
+        "horizon is a global causal boundary, not a local structure. How could GFM's "
         "tetrahedral geometry interact with it? (Answering would improve Commentary +3: "
         "This is the core conceptual gap. Without a mechanism, the ratio is numerology.) "
         "Q3: Do smaller black holes (stellar mass) or larger ones (supermassive, 10^9 "
         "solar masses) give ratios that fit k=4 patterns better or worse? "
         "(Answering would improve Model Output +2: Testing across mass scales might "
-        "reveal if there's a preferred scale where GFD geometry becomes relevant.)"
+        "reveal if there's a preferred scale where GFM geometry becomes relevant.)"
     )
     
     question = (
-        "Why might the event horizon connect to GFD's field closure mechanism? "
+        "Why might the event horizon connect to GFM's field closure mechanism? "
         "Field closure (Chapter 3) requires configurations to resolve to geometric "
         "consistency. At the horizon, spacetime curvature becomes extreme. "
-        "Does the ratio between the horizon size (R_s) and GFD's fundamental "
+        "Does the ratio between the horizon size (R_s) and GFM's fundamental "
         "length scale (r_e) reveal any k=4 pattern, or is this just numerology?"
     )
     
     commentary = (
-        "This test explores whether GFD's fundamental length scale (r_e) connects "
+        "This test explores whether GFM's fundamental length scale (r_e) connects "
         "to black hole geometry. The ratio R_s/r_e for a solar mass is roughly 10^18. "
         "This number does not obviously relate to k=4 geometry (4^n gives different "
-        "scales) or other GFD structures.\n\n"
+        "scales) or other GFM structures.\n\n"
         "WHAT WOULD A REAL CONNECTION REQUIRE?\n"
         "1. A derivation showing WHY the horizon should relate to r_e\n"
         "2. A testable prediction that differs from standard GR\n"
@@ -272,7 +272,7 @@ class FieldClosureAtHorizon(Test):
         return (
             Derivation()
             .step("INTUITION: Think about two length scales in physics. "
-                  "GFD uses the classical electron radius r_e = 2.818e-15 m as its "
+                  "GFM uses the classical electron radius r_e = 2.818e-15 m as its "
                   "fundamental tile size. Black holes have a characteristic size R_s. "
                   "How do these scales compare?")
             .step("THE QUESTION: Is the ratio R_s/r_e a 'nice' number in k=4 terms?")
@@ -327,21 +327,21 @@ def run_all():
     return run_tests(
         title="Black Hole Mechanics",
         summary=(
-            "WHY BLACK HOLES MATTER FOR GFD:\n"
+            "WHY BLACK HOLES MATTER FOR GFM:\n"
             "Black holes represent the extreme limit of gravitational physics. "
             "Any theory of gravity must either derive black hole properties or "
-            "acknowledge where it defers to General Relativity. GFD takes the "
+            "acknowledge where it defers to General Relativity. GFM takes the "
             "honest path: it does not claim to derive black hole physics.\n\n"
             "WHAT THIS FILE TESTS:\n"
             "1. GR Reference (95/100): Verifies our implementation correctly computes "
             "the Schwarzschild radius using standard physics. Explains the profound "
             "connection between gravity and spacetime topology.\n"
             "2. Exploratory (91/100): Marks a research question about whether the event "
-            "horizon has meaning in terms of GFD's r_e length scale. Connects to the "
+            "horizon has meaning in terms of GFM's r_e length scale. Connects to the "
             "textbook's field closure concept while honestly noting the 10^18 ratio "
             "does not fit k=4 patterns.\n\n"
             "WHAT WAS REMOVED:\n"
-            "11 tests that dressed up standard GR formulas in GFD vocabulary, "
+            "11 tests that dressed up standard GR formulas in GFM vocabulary, "
             "creating false impressions of novel derivations. Honesty matters more "
             "than test count.\n\n"
             "FUTURE QUESTIONS (for research):\n"

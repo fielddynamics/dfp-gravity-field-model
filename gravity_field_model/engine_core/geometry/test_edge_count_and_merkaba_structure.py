@@ -17,7 +17,7 @@ Field Origin (the geometric center where all body diagonals intersect)
 to the 12 edges produces the constant 13 that appears in the coupling
 denominator.
 
-GFD OBSERVATION: 12 edges + 1 center = 13 = kd + 1 (Merkaba edge structure).
+GFM OBSERVATION: 12 edges + 1 center = 13 = kd + 1 (Merkaba edge structure).
 
 This is an OBSERVATION, not a derivation.
 """
@@ -46,7 +46,7 @@ class MerkabaEdgeStructure(Test):
     placed at alternating corners of a cube with coordinates in {-1, +1}^3.
     The edge length is 2*sqrt(2) for a unit cube of half side 1.
 
-    GFD OBSERVATION:
+    GFM OBSERVATION:
     The total edge count 12 plus the single Field Origin at (0,0,0) gives
     13 = kd + 1, where k = 4 and d = 3. This constant 13 appears as the
     denominator in the G formula: 13 = 12 spatial couplings + 1 structural
@@ -71,7 +71,7 @@ class MerkabaEdgeStructure(Test):
 
     reference = (
         "Coxeter, Regular Polytopes (1973), Ch. 1: simplex edge counts. "
-        "GFD Textbook Ch.9 Sec.9.4: Merkaba edge structure and kd+1 constant. "
+        "GFM Textbook Ch.9 Sec.9.4: Merkaba edge structure and kd+1 constant. "
         "Paper VII Sec.4.1: G = (17/13) * alpha^21 * (hbar*c/m_e^2)."
     )
 
@@ -127,7 +127,7 @@ TITLE Edge Count and Regularity of the Stellated Octahedron: Validating the kd+1
             )
             .equation("edge_length = 2*sqrt(2) for all edges in both tetrahedra")
             .step(
-                "GFD OBSERVATION: The Field Origin at (0,0,0) is equidistant "
+                "GFM OBSERVATION: The Field Origin at (0,0,0) is equidistant "
                 "from all 8 vertices at distance sqrt(3). Adding this single "
                 "center point to the 12 edges gives the structural count "
                 "12 + 1 = 13."

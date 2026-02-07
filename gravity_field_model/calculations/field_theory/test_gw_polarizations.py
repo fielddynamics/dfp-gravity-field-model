@@ -3,7 +3,7 @@ Gravitational Wave Polarizations from Bimetric Structure
 ========================================================
 
 This module derives the number of gravitational wave polarizations
-from GFD's k=4 bimetric geometry.
+from GFM's k=4 bimetric geometry.
 
 WHY THIS MATTERS:
 
@@ -11,7 +11,7 @@ General Relativity predicts exactly 2 tensor polarizations for gravitational
 waves (plus and cross). This was confirmed by LIGO observations. Alternative
 theories often predict additional scalar or vector modes.
 
-GFD DERIVATION:
+GFM DERIVATION:
 
 The stellated octahedron has 2 interpenetrating tetrahedra (Tet A and Tet B).
 This bimetric structure has:
@@ -22,7 +22,7 @@ This bimetric structure has:
 For a massless spin-2 field in d=3 spatial dimensions:
     DOF = (d-1) * d / 2 - 1 = 2 * 3 / 2 - 1 = 2
 
-But GFD gives an alternative counting:
+But GFM gives an alternative counting:
     - 2 tetrahedra with bimetric coupling
     - Constraint: waves must couple identically to both
     - This reduces DOF to: 2 tensor modes (plus, cross)
@@ -33,7 +33,7 @@ The k=4 Field Closure constraint ensures that scalar and vector modes
 are projected out. Only tensor perturbations survive.
 
 References:
-- GFD Textbook Chapter 2 (Bimetric Gravity)
+- GFM Textbook Chapter 2 (Bimetric Gravity)
 - LIGO gravitational wave detections (GW150914, GW170817)
 - Will, C. M. (2014) "The Confrontation between GR and Experiment"
 """
@@ -77,9 +77,9 @@ def count_gw_dof_standard(d: int) -> int:
     return (d - 1) * d // 2
 
 
-def count_gw_dof_gfd(k: int) -> int:
+def count_gw_dof_GFM(k: int) -> int:
     """
-    Count gravitational wave DOF using GFD geometry.
+    Count gravitational wave DOF using GFM geometry.
     
     The k=4 bimetric structure with dual tetrahedra gives:
     - 2 metric sectors (A and B)
@@ -124,11 +124,11 @@ class BimetricStructure(Test):
     """
     name = "Bimetric Structure: 2 Tetrahedra"
     question = (
-        "Why does GFD require exactly 2 interpenetrating tetrahedra? The stellated "
+        "Why does GFM require exactly 2 interpenetrating tetrahedra? The stellated "
         "octahedron's dual structure creates bimetric coupling, essential for "
         "consistent gravity wave propagation."
     )
-    reference = "GFD Textbook Chapter 2"
+    reference = "GFM Textbook Chapter 2"
     tolerance = 0.0
     level = Level.STANDARD
     audit_score = 88
@@ -151,7 +151,7 @@ class BimetricStructure(Test):
         "them determines how gravitational perturbations propagate.\n\n"
         "BIMETRIC GRAVITY:\n"
         "In bimetric theories, there are two metric tensors g and f.\n"
-        "GFD identifies these with Tet A and Tet B respectively.\n"
+        "GFM identifies these with Tet A and Tet B respectively.\n"
         "The physical metric is the consistent coupling between both."
     )
     
@@ -272,35 +272,35 @@ class GWPolarizationCountGR(Test):
         )
 
 
-class GWPolarizationCountGFD(Test):
+class GWPolarizationCountGFM(Test):
     """
-    THE MAIN RESULT: GFD's k=4 bimetric structure predicts 2 polarizations.
+    THE MAIN RESULT: GFM's k=4 bimetric structure predicts 2 polarizations.
     
     The 2 TIME faces (one per tetrahedron) correspond to the 2 tensor
     polarizations. The SPATIAL faces are constrained to match.
     """
-    name = "GFD Prediction: 2 Polarizations from TIME Faces"
+    name = "GFM Prediction: 2 Polarizations from TIME Faces"
     question = (
-        "Why does GFD's bimetric structure predict exactly 2 GW polarizations? "
+        "Why does GFM's bimetric structure predict exactly 2 GW polarizations? "
         "The 2 TIME faces (one per tetrahedron) act as gravitational coupling "
         "channels, giving 2 tensor modes with no additional scalar or vector modes."
     )
-    reference = "GFD Textbook Chapter 2"
+    reference = "GFM Textbook Chapter 2"
     tolerance = 0.0
     level = Level.CRITICAL
     audit_score = 92
     audit_notes = None
     future_questions = (
-        "Q1: Could LIGO observations distinguish GFD's geometric prediction from GR's gauge argument? "
+        "Q1: Could LIGO observations distinguish GFM's geometric prediction from GR's gauge argument? "
         "(Answering would improve Observation Quality by +3 points: experimental test) "
         "Q2: How does the TIME face coupling relate to the plus/cross basis? "
         "(Answering would improve Derivation by +3 points: concrete mapping) "
-        "Q3: In scalar-tensor theories with extra modes, what GFD structure would change? "
+        "Q3: In scalar-tensor theories with extra modes, what GFM structure would change? "
         "(Answering would improve Commentary by +2 points: falsifiability)"
     )
     
     commentary = (
-        "GFD GEOMETRIC PREDICTION:\n\n"
+        "GFM GEOMETRIC PREDICTION:\n\n"
         "The stellated octahedron has 8 faces:\n"
         "- 2 TIME faces (FACE_A7 and FACE_B0)\n"
         "- 6 SPATIAL faces (3 per tetrahedron)\n\n"
@@ -318,7 +318,7 @@ class GWPolarizationCountGFD(Test):
     def derivation(self) -> Derivation:
         return (
             Derivation()
-            .step("GFD GW POLARIZATION COUNT:")
+            .step("GFM GW POLARIZATION COUNT:")
             .step("Stellated octahedron has 2 tetrahedra (bimetric).")
             .step("Each tetrahedron has 1 TIME face (FACE_A7 or FACE_B0).")
             .step("TIME faces mediate gravitational coupling between sectors.")
@@ -333,15 +333,15 @@ class GWPolarizationCountGFD(Test):
         n_time_faces = len(TIME_FACES)
         n_spatial_faces = len(SPATIAL_FACES)
         n_tetrahedra = 2
-        gfd_polarizations = count_gw_dof_gfd(K)
+        GFM_polarizations = count_gw_dof_GFM(K)
         
         return (
             Model()
             .add("TIME faces", n_time_faces)
             .add("SPATIAL faces", n_spatial_faces)
             .add("Tetrahedra (metric sectors)", n_tetrahedra)
-            .add("GFD polarizations", gfd_polarizations)
-            .add("Matches GR", 1 if gfd_polarizations == GR_TENSOR_POLARIZATIONS else 0)
+            .add("GFM polarizations", GFM_polarizations)
+            .add("Matches GR", 1 if GFM_polarizations == GR_TENSOR_POLARIZATIONS else 0)
         )
     
     def observations(self) -> Observed:
@@ -350,7 +350,7 @@ class GWPolarizationCountGFD(Test):
             .add("TIME faces", 2)
             .add("SPATIAL faces", 6)
             .add("Tetrahedra (metric sectors)", 2)
-            .add("GFD polarizations", 2)
+            .add("GFM polarizations", 2)
             .add("Matches GR", 1)
         )
 
@@ -435,18 +435,18 @@ class LIGOConfirmation(Test):
 
 class NoScalarModeExplanation(Test):
     """
-    EXPLAIN: Why GFD's k=4 structure forbids scalar GW modes.
+    EXPLAIN: Why GFM's k=4 structure forbids scalar GW modes.
     
     Scalar modes would require breathing (isotropic) deformations,
     which break the tetrahedral closure constraint.
     """
     name = "No Scalar Mode: k=4 Closure Constraint"
     question = (
-        "Why does GFD predict no scalar gravitational wave modes? Scalar (breathing) "
+        "Why does GFM predict no scalar gravitational wave modes? Scalar (breathing) "
         "modes require isotropic expansion, which would violate the k=4 Field Closure "
         "constraint that preserves tetrahedral structure."
     )
-    reference = "GFD Field Closure Constraint"
+    reference = "GFM Field Closure Constraint"
     tolerance = 0.0
     level = Level.STANDARD
     audit_score = 85
@@ -454,7 +454,7 @@ class NoScalarModeExplanation(Test):
     future_questions = (
         "Q1: How does the scalar mode constraint relate to the conformal mode in GR? "
         "(Answering would improve Derivation by +3 points: gauge theory connection) "
-        "Q2: Could a massive graviton in GFD emerge from broken k=4 symmetry? "
+        "Q2: Could a massive graviton in GFM emerge from broken k=4 symmetry? "
         "(Answering would improve Commentary by +3 points: mass generation mechanism) "
         "Q3: Does the absence of scalar mode have consequences for dark energy? "
         "(Answering would improve Question by +2 points: cosmological implications)"
@@ -466,7 +466,7 @@ class NoScalarModeExplanation(Test):
         "- h_ij proportional to delta_ij (identity matrix)\n"
         "- All directions stretch/compress equally\n"
         "- Changes volume without changing shape\n\n"
-        "GFD CONSTRAINT:\n"
+        "GFM CONSTRAINT:\n"
         "- Field Closure requires k=4 faces to close\n"
         "- Isotropic breathing would change face areas equally\n"
         "- This would break the closure condition\n"
@@ -609,7 +609,7 @@ class PlusCrossBasis(Test):
 ALL_TESTS = [
     BimetricStructure,
     GWPolarizationCountGR,
-    GWPolarizationCountGFD,
+    GWPolarizationCountGFM,
     LIGOConfirmation,
     NoScalarModeExplanation,
     PlusCrossBasis,
@@ -621,9 +621,9 @@ def run_all() -> bool:
     return run_tests(
         title="Gravitational Wave Polarizations from Bimetric Structure",
         summary=(
-            "This module derives the number of GW polarizations from GFD geometry.\n\n"
+            "This module derives the number of GW polarizations from GFM geometry.\n\n"
             "KEY RESULT:\n"
-            "GFD's k=4 bimetric structure predicts exactly 2 tensor polarizations,\n"
+            "GFM's k=4 bimetric structure predicts exactly 2 tensor polarizations,\n"
             "matching both General Relativity and LIGO observations.\n\n"
             "THE DERIVATION:\n"
             "1. Stellated octahedron has 2 interpenetrating tetrahedra\n"

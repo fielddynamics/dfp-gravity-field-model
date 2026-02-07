@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-GFD Model Test Runner
+GFM Model Test Runner
 =====================
 
 Run individual tests or test files easily.
@@ -117,7 +117,7 @@ def run_single_test(test_class, test_name: str):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="GFD Model Test Runner",
+        description="GFM Model Test Runner",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:

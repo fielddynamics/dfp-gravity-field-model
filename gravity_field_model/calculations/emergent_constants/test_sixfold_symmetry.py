@@ -112,9 +112,9 @@ class HexagonalPackingEfficiency(Test):
     future_questions = (
         "Q1: Why did the Kepler conjecture take nearly 400 years to prove? "
         "(Answering would improve Audience Accessibility by +3 points: historical and mathematical context) "
-        "Q2: Does the 74% packing efficiency relate to any GFD predictions? "
+        "Q2: Does the 74% packing efficiency relate to any GFM predictions? "
         "(Answering would improve Commentary by +3 points: connecting optimality to field closure) "
-        "Q3: How does FCC (face-centered cubic) compare to HCP (hexagonal close-packed) in GFD? "
+        "Q3: How does FCC (face-centered cubic) compare to HCP (hexagonal close-packed) in GFM? "
         "(Answering would improve Derivation by +2 points: addressing 3D packing alternatives)"
     )
     
@@ -166,7 +166,7 @@ class C6SymmetryOrder(Test):
     future_questions = (
         "Q1: How does C6 symmetry relate to the 6 neighbors in hexagonal packing? "
         "(Answering would improve Commentary by +2 points: connecting symmetry order to neighbor count) "
-        "Q2: Why does graphene exhibit C6 symmetry and what does GFD predict about it? "
+        "Q2: Why does graphene exhibit C6 symmetry and what does GFM predict about it? "
         "(Answering would improve Observation Quality by +3 points: connecting to real materials) "
         "Q3: Could field envelopes exhibit higher symmetry like C12 under certain conditions? "
         "(Answering would improve Question by +2 points: exploring symmetry extensions)"

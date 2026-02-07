@@ -2,11 +2,11 @@
 Subspace Packing: Nuclear Physics Observations
 ===============================================
 
-GFD Model V2
+GFM Model V2
 
 HONESTY STATEMENT:
 This module verifies STANDARD NUCLEAR PHYSICS data and makes observations
-about patterns. GFD provides terminology (Field Chamber, Tet B, k-packing)
+about patterns. GFM provides terminology (Field Chamber, Tet B, k-packing)
 but does not DERIVE nuclear physics from geometry.
 
 WHAT IS VERIFIED (standard physics):
@@ -105,9 +105,9 @@ class K4PackingGeometry(Test):
     level = Level.CRITICAL
     commentary = (
         "The simplex theorem states d+1 points minimally enclose d-dimensional "
-        "space. For d=3, this gives k=4 (tetrahedron). GFD DEFINES k=4 as the "
+        "space. For d=3, this gives k=4 (tetrahedron). GFM DEFINES k=4 as the "
         "'closure number'. This is geometry, not physics. The observation that "
-        "He-4 has A=4 is a COINCIDENCE that GFD notes, not explains."
+        "He-4 has A=4 is a COINCIDENCE that GFM notes, not explains."
     )
 
     def derivation(self) -> Derivation:
@@ -117,7 +117,7 @@ class K4PackingGeometry(Test):
             .equation("Minimal enclosure requires d+1 points.")
             .equation("For d=3: k = 3 + 1 = 4")
             .step("k=4 is the tetrahedron vertex count.")
-            .step("GFD DEFINES this as the closure constant.")
+            .step("GFM DEFINES this as the closure constant.")
             .step("NOTE: This does not EXPLAIN why He-4 is stable.")
             .step("Nuclear shell model explains He-4 stability (doubly magic).")
             .conclude("k = 4 by geometric definition.")
@@ -236,7 +236,7 @@ class Be8Instability(Test):
     Verify Be-8 is unstable despite high BE/A.
 
     HONESTY: Be-8 instability is explained by the positive Q-value for
-    alpha decay. Standard nuclear physics, not a GFD prediction.
+    alpha decay. Standard nuclear physics, not a GFM prediction.
     """
     audit_score = 88
     audit_notes = None
@@ -421,7 +421,7 @@ class AlphaDecayEjection(Test):
         "Alpha decay always emits He-4 (alpha particles). EXPLANATION: He-4 is "
         "doubly magic (Z=2, N=2 are magic numbers) and exceptionally bound. "
         "It's energetically favorable to emit a tightly bound cluster. The "
-        "observation that 4=k is a coincidence GFD notes, not an explanation."
+        "observation that 4=k is a coincidence GFM notes, not an explanation."
     )
 
     def derivation(self) -> Derivation:
@@ -432,7 +432,7 @@ class AlphaDecayEjection(Test):
             .step("He-4 is doubly magic: Z=2, N=2 are shell closures.")
             .step("High BE/A (7.07 MeV) makes it energetically favored.")
             .step("Alpha energies: Po-210 = 5.4 MeV, U-238 = 4.3 MeV.")
-            .step("OBSERVATION: A=4 equals k (GFD notes this coincidence).")
+            .step("OBSERVATION: A=4 equals k (GFM notes this coincidence).")
             .conclude("Alpha = He-4 due to shell closure stability.")
         )
 
@@ -495,7 +495,7 @@ class MagicNumbersComparison(Test):
     commentary = (
         "Nuclear magic numbers (2, 8, 20, 28, 50, 82, 126) come from the shell "
         "model (spin-orbit coupling creates energy gaps). Some are k-multiples "
-        "(8=2k, 20=5k, 28=7k), some are not (2, 50, 82, 126). GFD observes this "
+        "(8=2k, 20=5k, 28=7k), some are not (2, 50, 82, 126). GFM observes this "
         "partial correlation but does not derive magic numbers from k."
     )
 
@@ -568,7 +568,7 @@ class NeutronProtonMassDifference(Test):
     commentary = (
         "The neutron is ~1.3 MeV heavier than the proton (~0.14% of nucleon mass). "
         "This small difference allows beta decay (n -> p + e + nu) and determines "
-        "nuclear stability. Standard physics, not a GFD prediction."
+        "nuclear stability. Standard physics, not a GFM prediction."
     )
 
     def derivation(self) -> Derivation:
@@ -636,7 +636,7 @@ class NuclearRadiusScale(Test):
     commentary = (
         "Nuclear radii follow R = r_0 * A^(1/3) with r_0 ~ 1.2 fm. This is "
         "measured by electron scattering. The fact that r_0 ~ 0.4 * r_e is "
-        "an observation GFD notes, not an explanation."
+        "an observation GFM notes, not an explanation."
     )
 
     def derivation(self) -> Derivation:
@@ -647,7 +647,7 @@ class NuclearRadiusScale(Test):
             .step("This empirical formula fits nuclear data.")
             .step("Compare to classical electron radius r_e = 2.82 fm.")
             .equation("r_0 / r_e = 1.2 / 2.82 = 0.43")
-            .step("OBSERVATION: r_0 ~ 0.4 * r_e (GFD notes this).")
+            .step("OBSERVATION: r_0 ~ 0.4 * r_e (GFM notes this).")
             .conclude("r_0 = 1.2 fm (measured), r_0/r_e ~ 0.4.")
         )
 
@@ -701,7 +701,7 @@ def run_all() -> bool:
             "4. Alpha decay emits He-4 (doubly magic)\n"
             "5. Magic numbers from shell model\n"
             "6. Neutron-proton mass difference = 1.3 MeV\n\n"
-            "CLARIFICATION: GFD's k=4 from simplex theorem is a geometric\n"
+            "CLARIFICATION: GFM's k=4 from simplex theorem is a geometric\n"
             "DEFINITION. The observations that He-4 has A=4 and Fe-56 has\n"
             "A=14*4 are COINCIDENCES or CORRELATIONS, not explanations.\n"
             "Nuclear stability is explained by the shell model, not k-alignment."

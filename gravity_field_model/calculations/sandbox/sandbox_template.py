@@ -85,19 +85,19 @@ IF AUDIT_SCORE < 85:
 - Review TEST_QUALITY_MODULE.md for scoring criteria
 - Improve documentation, derivation clarity, or commentary
 
-GFD Model V2
+GFM Model V2
 
 HONESTY STATEMENT:
 This module verifies STANDARD <DOMAIN> PHYSICS and explores potential
-GFD correspondences. The physics is well established. GFD provides
+GFM correspondences. The physics is well established. GFM provides
 a geometric framework for interpretation but does NOT derive these
 values from first principles.
 
 WHAT IS VERIFIED (standard physics):
 - <List what you're verifying from established theory>
 
-GFD OBSERVATIONS (patterns noted, not derived):
-- <List any GFD patterns you're documenting>
+GFM OBSERVATIONS (patterns noted, not derived):
+- <List any GFM patterns you're documenting>
 
 TARGET DOMAIN FOLDER: calculations/<domain>/
 """
@@ -139,7 +139,7 @@ class ExampleProbingTest(Test):
     """
     Brief description of what this test probes.
     
-    HONESTY: <What is standard physics vs what is GFD observation>
+    HONESTY: <What is standard physics vs what is GFM observation>
     """
     # QUALITY: How well is this test written? (0-100)
     # See TEST_QUALITY_MODULE.md for criteria
@@ -175,7 +175,7 @@ class ExampleProbingTest(Test):
     commentary = (
         "<Explain the significance of what we're testing.> "
         "<Connect to the bigger picture.> "
-        "<Note what is standard physics vs GFD observation.> "
+        "<Note what is standard physics vs GFM observation.> "
         "<Add an analogy if helpful.>"
     )
     
@@ -187,7 +187,7 @@ class ExampleProbingTest(Test):
             .step("<Logical step 1>")
             .step("<Logical step 2>")
             .equation("<Key equation>")
-            .step("GFD OBSERVATION: <Pattern noted, if any>")
+            .step("GFM OBSERVATION: <Pattern noted, if any>")
             .conclude("<What we learn from this>")
         )
     

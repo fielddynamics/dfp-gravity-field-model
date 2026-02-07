@@ -1,5 +1,5 @@
 """
-GFD Interpretation of Entanglement Phenomena
+GFM Interpretation of Entanglement Phenomena
 =============================================
 
 TEST GROUP GOALS
@@ -8,15 +8,15 @@ This module explores a fundamental question in physics: Why do quantum
 correlations transcend classical limits, and can geometric structure
 provide vocabulary for describing this behavior?
 
-The tests examine how GFD's stellated octahedron geometry INTERPRETS
+The tests examine how GFM's stellated octahedron geometry INTERPRETS
 (but does not derive) quantum entanglement phenomena. The pattern:
 1. Quantum mechanics makes a prediction (e.g., S_max = 2*sqrt(2))
 2. Experiments confirm the prediction
-3. GFD proposes geometric vocabulary to describe what happens
+3. GFM proposes geometric vocabulary to describe what happens
 
 CRITICAL DISTINCTION
 --------------------
-GFD provides INTERPRETATION, not DERIVATION. The dual-tetrahedron
+GFM provides INTERPRETATION, not DERIVATION. The dual-tetrahedron
 structure offers vocabulary (Tet_B sharing, Coupling Port correlation)
 but does not derive the Tsirelson bound or Bell violations from
 first principles. Understanding this distinction is essential.
@@ -39,7 +39,7 @@ from gravity_field_model.common import K_CLOSURE
 # CONSTANTS
 # =============================================================================
 # Bell inequality and Tsirelson bound are QM results, defined here for clarity.
-# These are not GFD derivations but QM facts used for compatibility checks.
+# These are not GFM derivations but QM facts used for compatibility checks.
 
 BELL_CLASSICAL_LIMIT = 2.0                    # Local hidden variable limit
 TSIRELSON_BOUND = 2 * math.sqrt(2)            # QM maximum (~2.828)
@@ -47,29 +47,29 @@ SQRT_2 = math.sqrt(2)                         # Enhancement factor
 
 
 # =============================================================================
-# GFD VOCABULARY FOR QM PHENOMENA
+# GFM VOCABULARY FOR QM PHENOMENA
 # =============================================================================
 
-class GFDVocabularyForEntangledEntropy(Test):
+class GFMVocabularyForEntangledEntropy(Test):
     """
     Why does looking at one half of an entangled pair reveal nothing about
     the whole, yet measuring both reveals perfect correlation?
     
     QM fact: Maximally entangled subsystems have entropy S = ln(2).
-    GFD vocabulary: "Shared Tet_B configuration is fully specified jointly."
+    GFM vocabulary: "Shared Tet_B configuration is fully specified jointly."
     
-    NOTE: GFD does not derive S = ln(2). It provides geometric vocabulary
+    NOTE: GFM does not derive S = ln(2). It provides geometric vocabulary
     for describing why local measurements appear random while joint
     measurements reveal definite structure.
     
 """
-    name = "GFD Vocabulary: Entanglement Entropy"
+    name = "GFM Vocabulary: Entanglement Entropy"
     audit_score = 88
     audit_notes = None
     future_questions = (
         "Q1: Why does the Bell state (|00> + |11>)/sqrt(2) give exactly S = ln(2) and not some other value? "
         "(Answering would improve Derivation by +3 points: explicit QM calculation of reduced density matrix eigenvalues) "
-        "Q2: If GFD's Tet_B is 'jointly definite,' why can't we access joint information faster than light? "
+        "Q2: If GFM's Tet_B is 'jointly definite,' why can't we access joint information faster than light? "
         "(Answering would improve Commentary by +2 points: clarify no-signaling constraint on shared configurations) "
         "Q3: How does decoherence reduce subsystem entropy from ln(2) toward zero in real experiments? "
         "(Answering would improve Observation Quality by +2 points: connect ideal theory to experimental coherence times)"
@@ -77,7 +77,7 @@ class GFDVocabularyForEntangledEntropy(Test):
     question = (
         "Why does measuring one subsystem of a maximally entangled pair yield "
         "maximum uncertainty (S = ln(2)), while joint measurement reveals "
-        "perfect correlation? How does GFD's geometric vocabulary describe this?"
+        "perfect correlation? How does GFM's geometric vocabulary describe this?"
     )
     reference = "von Neumann entropy (QM), Gravity_Field_Dynamics_Textbook Ch. 9"
     tolerance = 0.01
@@ -89,7 +89,7 @@ class GFDVocabularyForEntangledEntropy(Test):
         "random outcomes (50/50), yet their results are perfectly correlated. "
         "QM DERIVATION: The reduced density matrix rho = (|0><0| + |1><1|)/2 "
         "gives S = ln(2), the maximum for a 2-level system. "
-        "GFD VOCABULARY: The Tet_B configuration is 'jointly definite but locally "
+        "GFM VOCABULARY: The Tet_B configuration is 'jointly definite but locally "
         "random.' This rephrasing captures the qualitative structure but does not "
         "derive the quantitative value ln(2) from geometry."
     )
@@ -103,10 +103,10 @@ class GFDVocabularyForEntangledEntropy(Test):
                   "trace out one subsystem.")
             .step("Reduced density matrix: rho_A = (|0><0| + |1><1|)/2.")
             .step("von Neumann entropy: S = -Tr(rho ln(rho)) = ln(2) = 0.693.")
-            .step("GFD VOCABULARY: 'Tet_B is jointly specified across Field Chambers.'")
+            .step("GFM VOCABULARY: 'Tet_B is jointly specified across Field Chambers.'")
             .step("The dual-tetrahedron structure provides space for 'local' (Tet_A) "
                   "and 'shared' (Tet_B) aspects, matching this phenomenology.")
-            .conclude("S = ln(2) from QM. GFD provides compatible vocabulary, not derivation.")
+            .conclude("S = ln(2) from QM. GFM provides compatible vocabulary, not derivation.")
         )
     
     def model(self):
@@ -117,7 +117,7 @@ class GFDVocabularyForEntangledEntropy(Test):
             Model()
             .add("Subsystem entropy S", entropy)
             .add("Maximum possible for 2-level", math.log(2))
-            .add("Source (0=QM, 1=GFD)", 0)
+            .add("Source (0=QM, 1=GFM)", 0)
         )
     
     def observations(self):
@@ -125,29 +125,29 @@ class GFDVocabularyForEntangledEntropy(Test):
             Observed()
             .add("Subsystem entropy S", math.log(2))
             .add("Maximum possible for 2-level", math.log(2))
-            .add("Source (0=QM, 1=GFD)", 0)
+            .add("Source (0=QM, 1=GFM)", 0)
         )
 
 
-class GFDVocabularyForMonogamy(Test):
+class GFMVocabularyForMonogamy(Test):
     """
     Why can a quantum system be maximally entangled with only one partner,
     never with multiple partners simultaneously?
     
     QM fact: Entanglement is monogamous (CKW inequality).
-    GFD vocabulary: "Finite Coupling Port capacity is exhausted."
+    GFM vocabulary: "Finite Coupling Port capacity is exhausted."
     
-    NOTE: GFD does not derive monogamy from k=4 geometry. The numerical
+    NOTE: GFM does not derive monogamy from k=4 geometry. The numerical
     coincidence (4 vertices, 4 coupling channels) is vocabulary, not proof.
     
 """
-    name = "GFD Vocabulary: Entanglement Monogamy"
+    name = "GFM Vocabulary: Entanglement Monogamy"
     audit_score = 87
     audit_notes = None
     future_questions = (
         "Q1: Why does the CKW inequality use 'tangle' (concurrence squared) rather than other entanglement measures? "
         "(Answering would improve Derivation by +3 points: explain why tangle has the right mathematical properties) "
-        "Q2: Can monogamy be violated in higher-dimensional Hilbert spaces, and how does GFD's k=4 vocabulary adapt? "
+        "Q2: Can monogamy be violated in higher-dimensional Hilbert spaces, and how does GFM's k=4 vocabulary adapt? "
         "(Answering would improve Commentary by +2 points: address limitations of k=4 analogy for qudits) "
         "Q3: What experimental setups best demonstrate monogamy, and what are typical measured tangle values? "
         "(Answering would improve Observation Quality by +2 points: cite specific experimental confirmations)"
@@ -155,7 +155,7 @@ class GFDVocabularyForMonogamy(Test):
     question = (
         "Why is entanglement 'monogamous': if A is maximally entangled with B, "
         "why must A have zero entanglement with any third party C? How does "
-        "GFD's k=4 geometry provide vocabulary for this constraint?"
+        "GFM's k=4 geometry provide vocabulary for this constraint?"
     )
     reference = "CKW inequality (Coffman-Kundu-Wootters 2000)"
     tolerance = 0.01
@@ -166,7 +166,7 @@ class GFDVocabularyForMonogamy(Test):
         "attention to partner B, you have 0% left for partner C. Entanglement "
         "behaves similarly: quantum correlation capacity is finite and exclusive. "
         "QM THEOREM: The CKW inequality tau(A,B) + tau(A,C) <= tau(A,BC) proves "
-        "this mathematically. GFD VOCABULARY: The tetrahedron has k=4 vertices, "
+        "this mathematically. GFM VOCABULARY: The tetrahedron has k=4 vertices, "
         "providing k=4 'Coupling Port' channels. When all channels correlate with "
         "one partner, none remain for others. This is an evocative rephrasing, "
         "not a derivation. The number 4 appears in both places but the connection "
@@ -181,10 +181,10 @@ class GFDVocabularyForMonogamy(Test):
             .step("QM THEOREM: CKW inequality bounds distributed entanglement.")
             .step("For tangle measure tau: tau(A,B) + tau(A,C) <= tau(A,BC).")
             .step("If tau(A,B) = 1 (maximal Bell pair), then tau(A,C) = 0.")
-            .step("GFD VOCABULARY: 'Field Chamber has k=4 Coupling Ports.'")
+            .step("GFM VOCABULARY: 'Field Chamber has k=4 Coupling Ports.'")
             .step("When all k=4 channels are committed to one partner, capacity "
                   "is 'saturated.' But k=4 is not mathematically linked to CKW.")
-            .conclude("Monogamy from QM. GFD k=4 vocabulary is compatible, not derived.")
+            .conclude("Monogamy from QM. GFM k=4 vocabulary is compatible, not derived.")
         )
     
     def model(self):
@@ -193,7 +193,7 @@ class GFDVocabularyForMonogamy(Test):
         remaining = 0.0
         return (
             Model()
-            .add("GFD coupling channels (k)", k)
+            .add("GFM coupling channels (k)", k)
             .add("Max tangle with one partner", max_tangle)
             .add("Remaining capacity for others", remaining)
         )
@@ -201,25 +201,25 @@ class GFDVocabularyForMonogamy(Test):
     def observations(self):
         return (
             Observed()
-            .add("GFD coupling channels (k)", K_CLOSURE)
+            .add("GFM coupling channels (k)", K_CLOSURE)
             .add("Max tangle with one partner", 1.0)
             .add("Remaining capacity for others", 0.0)
         )
 
 
-class GFDVocabularyForSwapping(Test):
+class GFMVocabularyForSwapping(Test):
     """
     Why can particles A and D become entangled even though they never
     interacted, simply by measuring particles B and C?
     
     QM fact: Entanglement swapping creates A-D correlation via B-C measurement.
-    GFD vocabulary: "Tet_B configurations transitively link through measurement."
+    GFM vocabulary: "Tet_B configurations transitively link through measurement."
     
-    NOTE: GFD vocabulary describes the transitive linking but does not derive
+    NOTE: GFM vocabulary describes the transitive linking but does not derive
     why Bell measurement on B-C has this effect.
     
 """
-    name = "GFD Vocabulary: Entanglement Swapping"
+    name = "GFM Vocabulary: Entanglement Swapping"
     audit_score = 86
     audit_notes = None
     future_questions = (
@@ -233,7 +233,7 @@ class GFDVocabularyForSwapping(Test):
     question = (
         "Why can entanglement 'teleport' across particles that never met? "
         "If A-B are entangled and C-D are entangled, why does measuring B-C "
-        "together make A-D entangled? How does GFD describe this transitive linking?"
+        "together make A-D entangled? How does GFM describe this transitive linking?"
     )
     reference = "Zukowski et al. 1993, Pan et al. 1998 (experimental)"
     tolerance = 0.01
@@ -245,7 +245,7 @@ class GFDVocabularyForSwapping(Test):
         "Alice and Dave's information becomes correlated, even though they never "
         "met. QM MECHANISM: Bell measurement on B-C projects them into a Bell "
         "state, which via the initial entanglement chains A-B and C-D, induces "
-        "A-D entanglement. GFD VOCABULARY: 'Tet_B configurations are shared; "
+        "A-D entanglement. GFM VOCABULARY: 'Tet_B configurations are shared; "
         "measurement reconciles the B-C interface, propagating correlation to A-D.' "
         "This vocabulary captures the structure but does not derive the mechanism."
     )
@@ -260,10 +260,10 @@ class GFDVocabularyForSwapping(Test):
             .step("QM OPERATION: Bell measurement on B-C.")
             .step("This projects B-C onto one of four Bell states, collapsing the "
                   "joint A-B-C-D state and inducing A-D correlation.")
-            .step("GFD VOCABULARY: 'Tet_B sharing propagates transitively.'")
+            .step("GFM VOCABULARY: 'Tet_B sharing propagates transitively.'")
             .step("A shares Tet_B with B; C shares Tet_B with D; measuring B-C "
                   "'connects' these shared structures.")
-            .conclude("Swapping from QM. GFD vocabulary describes transitivity, not derivation.")
+            .conclude("Swapping from QM. GFM vocabulary describes transitivity, not derivation.")
         )
     
     def model(self):
@@ -287,19 +287,19 @@ class GFDVocabularyForSwapping(Test):
         )
 
 
-class GFDVocabularyForDelayedChoice(Test):
+class GFMVocabularyForDelayedChoice(Test):
     """
     Why does it not matter who measures first, or whether measurement
     choices are made before or after the particles are in flight?
     
     QM fact: Measurement timing doesn't affect correlation statistics.
-    GFD vocabulary: "Tet_B correlations are established at creation, not measurement."
+    GFM vocabulary: "Tet_B correlations are established at creation, not measurement."
     
     NOTE: This timing independence challenges naive causality intuitions.
-    GFD's vocabulary provides a frame for thinking about it, not an explanation.
+    GFM's vocabulary provides a frame for thinking about it, not an explanation.
     
 """
-    name = "GFD Vocabulary: Delayed Choice"
+    name = "GFM Vocabulary: Delayed Choice"
     audit_score = 87
     audit_notes = None
     future_questions = (
@@ -307,13 +307,13 @@ class GFDVocabularyForDelayedChoice(Test):
         "(Answering would improve Observation Quality by +3 points: explain acoustic-optical modulators and switching times) "
         "Q2: Why does the Wheeler delayed-choice experiment not allow retrocausal signaling despite its 'spooky' appearance? "
         "(Answering would improve Commentary by +2 points: clarify why measurement statistics remain random) "
-        "Q3: How does GFD's 'atemporal Tet_B' vocabulary differ from block universe interpretations of delayed choice? "
-        "(Answering would improve Derivation by +2 points: distinguish GFD vocabulary from other interpretive frameworks)"
+        "Q3: How does GFM's 'atemporal Tet_B' vocabulary differ from block universe interpretations of delayed choice? "
+        "(Answering would improve Derivation by +2 points: distinguish GFM vocabulary from other interpretive frameworks)"
     )
     question = (
         "Why are quantum correlations independent of measurement timing? "
         "If Alice measures before Bob, or vice versa, or simultaneously, "
-        "why do the statistics remain identical? How does GFD frame this?"
+        "why do the statistics remain identical? How does GFM frame this?"
     )
     reference = "Wheeler delayed choice, Aspect et al. 1982 timing experiments"
     tolerance = 0.01
@@ -325,7 +325,7 @@ class GFDVocabularyForDelayedChoice(Test):
         "order reveals the same correlated contents. QM PREDICTION: Lorentz "
         "invariance requires that spacelike-separated measurements have no "
         "preferred ordering. Statistics depend on angle settings, not timing. "
-        "S/S_classical = sqrt(2) always. GFD VOCABULARY: 'Tet_B correlations "
+        "S/S_classical = sqrt(2) always. GFM VOCABULARY: 'Tet_B correlations "
         "exist in subspace, which is atemporal. Measurements in Tet_A (spacetime) "
         "reveal but do not create the correlation.' This frames timing independence "
         "geometrically but does not derive it."
@@ -338,11 +338,11 @@ class GFDVocabularyForDelayedChoice(Test):
                   "(spacelike separation), results cannot depend on ordering.")
             .step("QM REQUIREMENT: Lorentz invariance demands consistent statistics.")
             .step("TEST: Alice first, Bob first, simultaneous: all give S/S_classical = sqrt(2).")
-            .step("GFD VOCABULARY: 'Tet_B (subspace) is atemporal.'")
+            .step("GFM VOCABULARY: 'Tet_B (subspace) is atemporal.'")
             .step("Correlations are established at creation (in Tet_B).")
             .step("Measurements occur in Tet_A (spacetime) but merely reveal Tet_B structure.")
             .step("Timing in Tet_A cannot affect atemporal Tet_B correlations.")
-            .conclude("Timing independence from QM/Lorentz. GFD provides vocabulary frame.")
+            .conclude("Timing independence from QM/Lorentz. GFM provides vocabulary frame.")
         )
     
     def model(self):
@@ -365,30 +365,30 @@ class GFDVocabularyForDelayedChoice(Test):
         )
 
 
-class HonestAssessmentOfGFDEntanglement(Test):
+class HonestAssessmentOfGFMEntanglement(Test):
     """
     Why should we clearly distinguish between 'vocabulary' and 'derivation'
-    when GFD discusses quantum entanglement?
+    when GFM discusses quantum entanglement?
     
     META-TEST: This test explicitly documents the epistemological status
-    of GFD's entanglement claims. Intellectual honesty requires knowing
+    of GFM's entanglement claims. Intellectual honesty requires knowing
     what a framework can and cannot do.
     
 """
-    name = "Honest Assessment: GFD and Entanglement"
+    name = "Honest Assessment: GFM and Entanglement"
     audit_score = 90
     audit_notes = None
     future_questions = (
-        "Q1: What would constitute a genuine GFD prediction about entanglement that differs from standard QM? "
+        "Q1: What would constitute a genuine GFM prediction about entanglement that differs from standard QM? "
         "(Answering would improve Question by +3 points: clarify the bar for 'derivation' vs. 'vocabulary') "
-        "Q2: Are there any entanglement phenomena where GFD vocabulary provides clearer intuition than standard QM language? "
+        "Q2: Are there any entanglement phenomena where GFM vocabulary provides clearer intuition than standard QM language? "
         "(Answering would improve Commentary by +2 points: identify specific pedagogical advantages if any) "
-        "Q3: How would one experimentally test whether GFD's Tet_A/Tet_B distinction has physical content beyond vocabulary? "
+        "Q3: How would one experimentally test whether GFM's Tet_A/Tet_B distinction has physical content beyond vocabulary? "
         "(Answering would improve Observation Quality by +2 points: propose falsifiable experimental signatures)"
     )
     question = (
         "Why is it important to distinguish vocabulary from derivation? "
-        "What does GFD actually claim about entanglement, what does it "
+        "What does GFM actually claim about entanglement, what does it "
         "derive, and what does it merely rephrase in geometric terms?"
     )
     reference = "Gravity_Field_Dynamics_Textbook Ch. 8-9"
@@ -398,30 +398,30 @@ class HonestAssessmentOfGFDEntanglement(Test):
     commentary = (
         "EPISTEMOLOGICAL CLARITY: Science requires honest accounting. A theory "
         "can be (a) compatible with observations, (b) able to derive predictions, "
-        "or (c) merely provide vocabulary. GFD claims (a) and (c) for entanglement, "
-        "not (b). This is not a weakness if stated honestly. GFD's dual-tetrahedron "
+        "or (c) merely provide vocabulary. GFM claims (a) and (c) for entanglement, "
+        "not (b). This is not a weakness if stated honestly. GFM's dual-tetrahedron "
         "structure (Tet_A local, Tet_B non-local) provides geometric language "
         "for discussing entanglement. But 2*sqrt(2), monogamy constraints, and "
-        "swapping mechanisms are QM derivations that GFD rephrases, not derives. "
-        "Understanding these limits helps the reader know when GFD vocabulary is "
+        "swapping mechanisms are QM derivations that GFM rephrases, not derives. "
+        "Understanding these limits helps the reader know when GFM vocabulary is "
         "illuminating vs. when QM mathematics is essential."
     )
     
     def derivation(self):
         return (
             Derivation()
-            .step("EPISTEMIC QUESTION: What can GFD actually claim about entanglement?")
-            .step("LEVEL 1 (Vocabulary): GFD provides geometric terms for QM concepts.")
-            .step("  - 'Tet_B sharing' = entanglement in GFD language")
-            .step("  - 'Coupling Port saturation' = monogamy in GFD language")
-            .step("LEVEL 2 (Compatibility): GFD structure does not contradict QM.")
+            .step("EPISTEMIC QUESTION: What can GFM actually claim about entanglement?")
+            .step("LEVEL 1 (Vocabulary): GFM provides geometric terms for QM concepts.")
+            .step("  - 'Tet_B sharing' = entanglement in GFM language")
+            .step("  - 'Coupling Port saturation' = monogamy in GFM language")
+            .step("LEVEL 2 (Compatibility): GFM structure does not contradict QM.")
             .step("  - Two tetrahedra can accommodate local vs. non-local aspects")
             .step("  - k=4 is compatible with (but does not derive) finite entanglement")
-            .step("LEVEL 3 (Derivation): GFD does NOT derive QM predictions.")
+            .step("LEVEL 3 (Derivation): GFM does NOT derive QM predictions.")
             .step("  - Tsirelson bound 2*sqrt(2) is not derived from stellated octahedron")
             .step("  - Bell violations are not derived from k=4 geometry")
             .step("  - No unique predictions that differ from standard QM")
-            .conclude("GFD status: Vocabulary=1, Compatibility=1, Derivation=0.")
+            .conclude("GFM status: Vocabulary=1, Compatibility=1, Derivation=0.")
         )
     
     def model(self):
@@ -448,24 +448,24 @@ class HonestAssessmentOfGFDEntanglement(Test):
 # =============================================================================
 
 ALL_TESTS = [
-    GFDVocabularyForEntangledEntropy,
-    GFDVocabularyForMonogamy,
-    GFDVocabularyForSwapping,
-    GFDVocabularyForDelayedChoice,
-    HonestAssessmentOfGFDEntanglement,
+    GFMVocabularyForEntangledEntropy,
+    GFMVocabularyForMonogamy,
+    GFMVocabularyForSwapping,
+    GFMVocabularyForDelayedChoice,
+    HonestAssessmentOfGFMEntanglement,
 ]
 
 
 def run_all():
-    """Run GFD vocabulary interpretation tests for entanglement phenomena."""
+    """Run GFM vocabulary interpretation tests for entanglement phenomena."""
     return run_tests(
-        title="GFD Interpretation of Entanglement Phenomena",
+        title="GFM Interpretation of Entanglement Phenomena",
         summary=(
             "Why do quantum correlations transcend classical limits? These tests "
-            "explore how GFD's dual-tetrahedron geometry provides VOCABULARY for "
+            "explore how GFM's dual-tetrahedron geometry provides VOCABULARY for "
             "describing entanglement (Tet_B sharing, Coupling Port correlation). "
             "CRITICAL DISTINCTION: All quantitative predictions (Tsirelson bound, "
-            "monogamy constraints, swapping) come from QM. GFD provides geometric "
+            "monogamy constraints, swapping) come from QM. GFM provides geometric "
             "rephrasing compatible with these results, not derivation from them."
         ),
         test_classes=ALL_TESTS

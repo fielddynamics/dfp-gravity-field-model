@@ -3,7 +3,7 @@ Binary Interpretation Comparison: Little-Endian vs Big-Endian
 =============================================================
 
 This test module rigorously compares two competing interpretations of the
-vertex-trigram mapping in the GFD field closure model:
+vertex-trigram mapping in the GFM field closure model:
 
 1. LITTLE-ENDIAN: bit 0 = bottom line, bit 2 = top line (Russell Cottrell)
 2. BIG-ENDIAN: bit 2 = bottom line, bit 0 = top line (Shao Yong surface reading)
@@ -83,16 +83,16 @@ def get_trigram_name(vertex: int, endian: str) -> str:
 
 def check_complementary_pair_match(endian: str) -> Tuple[int, List[Tuple]]:
     """
-    Check how many GFD complementary pairs (V_m + V_n = 7) match
+    Check how many GFM complementary pairs (V_m + V_n = 7) match
     traditional I Ching complementary pairs under the given interpretation.
     
     Returns (match_count, list_of_pair_results)
     """
-    gfd_pairs = [(0, 7), (1, 6), (2, 5), (3, 4)]
+    GFM_pairs = [(0, 7), (1, 6), (2, 5), (3, 4)]
     results = []
     matches = 0
     
-    for a, b in gfd_pairs:
+    for a, b in GFM_pairs:
         trig_a = get_trigram_name(a, endian)
         trig_b = get_trigram_name(b, endian)
         expected_b = TRADITIONAL_COMPLEMENTS[trig_a]
@@ -236,7 +236,7 @@ def calculate_yang_balance_by_chamber(endian: str) -> Dict:
 
 class ComplementaryPairPreservation(Test):
     """
-    The definitive test: Do GFD complementary pairs (V_m + V_n = 7) match
+    The definitive test: Do GFM complementary pairs (V_m + V_n = 7) match
     traditional I Ching complementary pairs (Earlier Heaven arrangement)?
     
     Little-endian: 4/4 match (100%)
@@ -248,7 +248,7 @@ class ComplementaryPairPreservation(Test):
     question = (
         "Which interpretation preserves traditional I Ching complementary pairs? "
         "The Earlier Heaven arrangement defines Heaven opposite Earth, Fire opposite Water, "
-        "Thunder opposite Wind, Lake opposite Mountain. The GFD model defines complementary "
+        "Thunder opposite Wind, Lake opposite Mountain. The GFM model defines complementary "
         "vertices as V_m + V_n = 7. Which bit ordering makes these definitions align?"
     )
     reference = "Earlier Heaven (Fu Xi) arrangement"
@@ -258,7 +258,7 @@ class ComplementaryPairPreservation(Test):
     def derivation(self):
         return (
             Derivation()
-            .step("PREMISE: GFD complementary pairs are vertices where V_m + V_n = 7.")
+            .step("PREMISE: GFM complementary pairs are vertices where V_m + V_n = 7.")
             .step("These pairs are: (V0,V7), (V1,V6), (V2,V5), (V3,V4).")
             .step("Traditional I Ching complements: Heaven/Earth, Fire/Water, Thunder/Wind, Lake/Mountain.")
             .step("LITTLE-ENDIAN mapping: V0=Earth, V1=Thunder, V2=Water, V3=Lake, V4=Mountain, V5=Fire, V6=Wind, V7=Heaven.")
@@ -702,7 +702,7 @@ class InterpretationSummaryScore(Test):
         "This is not a close call. The only point big-endian earns is from the "
         "Earth-Heaven complementary pair, which matches under BOTH interpretations "
         "because 000 and 111 are bit-palindromic. "
-        "MATHEMATICAL NECESSITY: The GFD model's geometric complementarity "
+        "MATHEMATICAL NECESSITY: The GFM model's geometric complementarity "
         "(vertex sum = 7) can only match traditional I Ching cosmological "
         "complementarity under little-endian bit ordering. This is proven, "
         "not assumed. "

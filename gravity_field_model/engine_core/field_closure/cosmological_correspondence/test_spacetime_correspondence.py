@@ -5,7 +5,7 @@ Spacetime Correspondence Validation
 INTERPRETIVE ANALYSIS: 3+1 Spacetime Structure
 
 This module contains tests that explore the structural correspondence between
-the GFD field closure geometry and the 3+1 dimensional structure of spacetime
+the GFM field closure geometry and the 3+1 dimensional structure of spacetime
 in general relativity.
 
 IMPORTANT: These tests are INTERPRETIVE, not core engine tests.
@@ -346,7 +346,7 @@ def run_all():
         title="Spacetime Correspondence Validation",
         summary=(
             "INTERPRETIVE ANALYSIS: These tests explore structural parallels between "
-            "GFD field closure geometry and the 3+1 dimensional structure of spacetime "
+            "GFM field closure geometry and the 3+1 dimensional structure of spacetime "
             "in general relativity. The TIME/SPATIAL face classification is an imposed "
             "labeling by analogy. The core algorithm does not distinguish face types. "
             "Key observations: TIME faces complete later than SPATIAL faces, the 3:1 "

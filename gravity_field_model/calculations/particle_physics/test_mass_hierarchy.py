@@ -3,7 +3,7 @@ Proton-Electron Mass Ratio: Geometric Interpretation
 ====================================================
 
 This module examines the proton-to-electron mass ratio m_p/m_e ~ 1836
-and its possible geometric interpretations within the GFD framework.
+and its possible geometric interpretations within the GFM framework.
 
 THE FUNDAMENTAL RATIO:
 
@@ -12,7 +12,7 @@ m_p / m_e = 1836.152673426 (CODATA 2022)
 This dimensionless ratio is one of the most important numbers in physics.
 It determines atomic structure, chemistry, and ultimately life.
 
-GFD OBSERVATIONS (not derivations):
+GFM OBSERVATIONS (not derivations):
 
 1. The ratio is close to 6 * pi^5 ~ 1836.12 (error: 0.002%)
    - 6 could relate to SPATIAL faces (6 of 8 total)
@@ -24,8 +24,8 @@ GFD OBSERVATIONS (not derivations):
 
 CRITICAL HONESTY:
 
-GFD does NOT derive m_p/m_e. The proton mass arises from QCD confinement,
-which is not part of the GFD geometric framework. The coincidences
+GFM does NOT derive m_p/m_e. The proton mass arises from QCD confinement,
+which is not part of the GFM geometric framework. The coincidences
 noted above are observations, not explanations.
 
 The standard model explains the proton mass through:
@@ -34,7 +34,7 @@ The standard model explains the proton mass through:
 - Lattice QCD calculations match observation
 
 References:
-- GFD Textbook (mass correspondences)
+- GFM Textbook (mass correspondences)
 - CODATA 2022 values
 - PDG (Particle Data Group) for QCD mass calculations
 """
@@ -291,8 +291,8 @@ class QCDExplanation(Test):
         "(Answering would improve Derivation by +3 points: mass breakdown) "
         "Q2: Why does QCD confinement produce exactly this binding energy? "
         "(Answering would improve Commentary by +4 points: deep QCD physics) "
-        "Q3: Can GFD geometry relate to color confinement? "
-        "(Answering would improve Question by +3 points: GFD-QCD connection)"
+        "Q3: Can GFM geometry relate to color confinement? "
+        "(Answering would improve Question by +3 points: GFM-QCD connection)"
     )
     
     commentary = (
@@ -306,9 +306,9 @@ class QCDExplanation(Test):
         "Numerical simulations of QCD on a spacetime lattice.\n"
         "BMW collaboration (2008): m_p predicted within 2%.\n"
         "Current precision: ~1%.\n\n"
-        "IMPLICATION FOR GFD:\n"
+        "IMPLICATION FOR GFM:\n"
         "The proton mass is explained by QCD, not geometry.\n"
-        "Any GFD interpretation must connect to QCD dynamics."
+        "Any GFM interpretation must connect to QCD dynamics."
     )
     
     def derivation(self) -> Derivation:
@@ -431,22 +431,22 @@ class AlphaRelationship(Test):
         )
 
 
-class GFDInterpretation(Test):
+class GFMInterpretation(Test):
     """
-    GFD SPECULATION: 6 SPATIAL faces and pi^5.
+    GFM SPECULATION: 6 SPATIAL faces and pi^5.
     
     The stellated octahedron has 6 SPATIAL faces and 2 TIME faces.
     The factor 6 in 6*pi^5 could relate to SPATIAL faces.
     
     HONESTY: This is speculation, not derivation.
     """
-    name = "GFD Speculation: 6 SPATIAL Faces and pi^5"
+    name = "GFM Speculation: 6 SPATIAL Faces and pi^5"
     question = (
         "Could 6*pi^5 have geometric meaning? The stellated octahedron has "
         "6 SPATIAL faces. If pi^5 relates to 5D closure, then 6*pi^5 ~ m_p/m_e "
         "would connect mass ratio to geometry. HONESTY: This is speculation."
     )
-    reference = "GFD geometric interpretation"
+    reference = "GFM geometric interpretation"
     tolerance = 0.0
     level = Level.EXPLORATORY
     audit_score = 60
@@ -456,12 +456,12 @@ class GFDInterpretation(Test):
         "(Answering would improve Derivation by +4 points: face role distinction) "
         "Q2: Does pi^5 appear in any 5D physics (Kaluza-Klein, etc.)? "
         "(Answering would improve Commentary by +3 points: dimensional connection) "
-        "Q3: Could the proton be a 5D object projected to 3D in GFD? "
+        "Q3: Could the proton be a 5D object projected to 3D in GFM? "
         "(Answering would improve Question by +5 points: proton geometry)"
     )
     
     commentary = (
-        "GFD SPECULATION:\n\n"
+        "GFM SPECULATION:\n\n"
         "The stellated octahedron has:\n"
         "- 8 total faces\n"
         "- 2 TIME faces (opposite apexes)\n"
@@ -482,7 +482,7 @@ class GFDInterpretation(Test):
     def derivation(self) -> Derivation:
         return (
             Derivation()
-            .step("GFD SPECULATION:")
+            .step("GFM SPECULATION:")
             .step("Stellated octahedron: 8 faces = 2 TIME + 6 SPATIAL.")
             .step("Hypothesis: m_p/m_e involves SPATIAL count (6).")
             .equation("m_p/m_e ~ 6 * (geometric factor)")
@@ -609,7 +609,7 @@ ALL_TESTS = [
     SixPi5Coincidence,
     QCDExplanation,
     AlphaRelationship,
-    GFDInterpretation,
+    GFMInterpretation,
     FormulaSearch,
 ]
 
@@ -623,7 +623,7 @@ def run_all() -> bool:
             "m_p/m_e = 1836.15 and its possible geometric interpretations.\n\n"
             "KEY OBSERVATION:\n"
             "m_p/m_e ~ 6 * pi^5 with 0.002% error\n\n"
-            "POSSIBLE GFD CONNECTION:\n"
+            "POSSIBLE GFM CONNECTION:\n"
             "- 6 = number of SPATIAL faces in stellated octahedron\n"
             "- pi^5 = unknown geometric origin\n\n"
             "STANDARD EXPLANATION:\n"
@@ -631,10 +631,10 @@ def run_all() -> bool:
             "- Lattice QCD predicts m_p within ~1%\n"
             "- The electron mass is a separate parameter\n\n"
             "CRITICAL ASSESSMENT:\n"
-            "- GFD does NOT derive m_p/m_e\n"
+            "- GFM does NOT derive m_p/m_e\n"
             "- The 6*pi^5 coincidence is intriguing but unexplained\n"
             "- Multiple formulas can approximate any number (selection bias)\n"
-            "- A true derivation would require GFD to connect to QCD\n\n"
+            "- A true derivation would require GFM to connect to QCD\n\n"
             "STATUS: Numerical coincidence, not a derivation."
         ),
         test_classes=ALL_TESTS

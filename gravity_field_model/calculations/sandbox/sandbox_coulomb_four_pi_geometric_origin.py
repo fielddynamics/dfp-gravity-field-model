@@ -18,14 +18,14 @@ GRADUATION CHECKLIST:
 [x] Rename to test_coulomb_four_pi_geometric_origin.py
 [ ] Delete this sandbox file
 
-GFD Model V2
+GFM Model V2
 
 HONESTY STATEMENT:
 This module verifies STANDARD ELECTROSTATICS (Coulomb 1785, Gauss,
-Jackson "Classical Electrodynamics") and explores potential GFD
+Jackson "Classical Electrodynamics") and explores potential GFM
 correspondences. The physics is well established. The factor 4*pi in
 Coulomb's law arises because the surface area of a unit sphere in d=3
-spatial dimensions is 4*pi. This IS the physical explanation. GFD
+spatial dimensions is 4*pi. This IS the physical explanation. GFM
 observes that d=3 is encoded in the Merkaba geometry and that 4 = k =
 K_CLOSURE.
 
@@ -36,7 +36,7 @@ WHAT IS VERIFIED (standard physics):
 - Fine structure constant: alpha = e^2 / (4*pi*epsilon_0*hbar*c)
 - Inverse-square exponent = d - 1 = 2 for d = 3
 
-GFD OBSERVATIONS (patterns noted, not derived):
+GFM OBSERVATIONS (patterns noted, not derived):
 - 4*pi = k * pi, where k = K_CLOSURE = 4
 - Exponent 2 = d - 1 = len(TIME_FACES)
 - The factor 4 specifically arises because d = 3 (spatial faces per
@@ -114,13 +114,13 @@ class CoulombFourPiFromUnitSphere(Test):
 
     HONESTY: This is STANDARD physics. The 4*pi arises from Gauss's law
     applied to a spherical surface in 3D. The factor 4 = k = K_CLOSURE
-    is a GFD OBSERVATION that 4 specifically appears because d = 3.
+    is a GFM OBSERVATION that 4 specifically appears because d = 3.
     """
     audit_score = 90
     audit_notes = (
         "Question: 14/15 - Good 'why 4*pi specifically' hook with dimensional context. "
         "Derivation: 14/15 - Builds from Gauss's law to unit sphere naturally. "
-        "Commentary: 14/15 - Honest about standard physics, clear GFD observation. "
+        "Commentary: 14/15 - Honest about standard physics, clear GFM observation. "
         "Model: 10/10 - Clean computation with exact match verification. "
         "Observations: 9/10 - All from standard mathematics (Gamma function). "
         "Constants: 10/10 - All from common module. "
@@ -131,7 +131,7 @@ class CoulombFourPiFromUnitSphere(Test):
     contribution_notes = (
         "Discovery: 22/40 - Observation that 4*pi = k*pi where k = K_CLOSURE. "
         "The link between Coulomb's 4*pi and the unit sphere is textbook physics. "
-        "GFD adds: the specific value 4 arises because d=3 is encoded in Merkaba. "
+        "GFM adds: the specific value 4 arises because d=3 is encoded in Merkaba. "
         "Precision: 16/20 - Exact mathematical identity. No approximation involved. "
         "Cross-Domain: 12/20 - Connects Coulomb's law to BH entropy (also factor 4=k) "
         "and to the GW pattern catalog where k appears repeatedly. "
@@ -144,10 +144,10 @@ class CoulombFourPiFromUnitSphere(Test):
         "formulation). Is this the SAME geometric 4*pi or a separate coincidence? "
         "(Answering would improve Cross-Domain by +5: gravity-EM connection) "
         "Q2: In string theory extra dimensions, the Coulomb law changes. Does the "
-        "compactification radius introduce GFD numbers? "
+        "compactification radius introduce GFM numbers? "
         "(Answering would improve Falsifiability by +5: testable in extra-dim models) "
         "Q3: The factor 4*pi*epsilon_0 appears together as a unit. If we define "
-        "Gaussian units where 4*pi is absorbed, does GFD lose its foothold? "
+        "Gaussian units where 4*pi is absorbed, does GFM lose its foothold? "
         "(Answering would improve Commentary by +3: unit-system independence)"
     )
     name = "Coulomb 4*pi Factor: Unit Sphere in d=3"
@@ -157,7 +157,7 @@ class CoulombFourPiFromUnitSphere(Test):
         "From Gauss's law: the electric flux through a closed surface equals "
         "Q/epsilon_0. For a sphere of radius r in d=3 dimensions, the surface "
         "area is 4*pi*r^2, so E = Q/(4*pi*epsilon_0*r^2). The 4*pi is "
-        "literally the solid angle of all space in d=3. GFD notes that "
+        "literally the solid angle of all space in d=3. GFM notes that "
         "4 = k = K_CLOSURE — is the Coulomb prefactor a geometric constant?"
     )
     reference = (
@@ -175,7 +175,7 @@ class CoulombFourPiFromUnitSphere(Test):
         "The 4*pi is the surface area of a unit sphere: S_2 = 2*pi^(3/2) / "
         "Gamma(3/2) = 2*pi^(3/2) / (sqrt(pi)/2) = 4*pi. This is the total "
         "solid angle in 3 spatial dimensions.\n\n"
-        "GFD OBSERVATION: 4*pi = k * pi where k = K_CLOSURE = 4. In GFD, "
+        "GFM OBSERVATION: 4*pi = k * pi where k = K_CLOSURE = 4. In GFM, "
         "k = 4 is the number of vertices per tetrahedron, the closure constant. "
         "The reason k = 4 appears specifically is that d = 3: for a unit sphere "
         "in d dimensions, S_{d-1} = 2*pi^(d/2)/Gamma(d/2), and this equals "
@@ -202,8 +202,8 @@ class CoulombFourPiFromUnitSphere(Test):
             .equation("S_{d-1} = 2 * pi^(d/2) / Gamma(d/2)")
             .step("For d=3: S_2 = 2 * pi^(3/2) / Gamma(3/2) = "
                   "2 * pi^(3/2) / (sqrt(pi)/2) = 4 * pi")
-            .step("GFD OBSERVATION: 4 = k = K_CLOSURE. The factor 4 in 4*pi "
-                  "comes from d=3. In GFD, d=3 is the spatial dimension count "
+            .step("GFM OBSERVATION: 4 = k = K_CLOSURE. The factor 4 in 4*pi "
+                  "comes from d=3. In GFM, d=3 is the spatial dimension count "
                   "encoded in the Merkaba (3 spatial faces per tetrahedron).")
             .conclude("The 4*pi in Coulomb's law = surface area of the unit sphere "
                       "in d=3 = k*pi where k = K_CLOSURE.")
@@ -216,7 +216,7 @@ class CoulombFourPiFromUnitSphere(Test):
         # Extract the integer coefficient (should be 4)
         coefficient = S2 / math.pi  # Should be exactly 4.0
 
-        # GFD comparison
+        # GFM comparison
         k = K_CLOSURE  # 4
 
         # Verify: coefficient equals k?
@@ -258,7 +258,7 @@ class InverseSquareExponentFromDimension(Test):
 
     HONESTY: This is STANDARD physics. The inverse-square law follows from
     Gauss's law in d=3. The exponent 2 = d - 1 = len(TIME_FACES) is a
-    GFD observation.
+    GFM observation.
     """
     audit_score = 87
     audit_notes = (
@@ -274,12 +274,12 @@ class InverseSquareExponentFromDimension(Test):
     contribution_score = 50
     contribution_notes = (
         "Discovery: 18/40 - Observation that exponent 2 = len(TIME_FACES). "
-        "The d-1 dependence is textbook. GFD adds the TIME_FACES link. "
+        "The d-1 dependence is textbook. GFM adds the TIME_FACES link. "
         "Precision: 16/20 - Exact mathematical identity. "
         "Cross-Domain: 10/20 - Connects to BH evaporation exponent (also d-related) "
         "and gravitational inverse-square law. "
         "Falsifiability: 6/20 - In d != 3, exponent changes. Standard dimensional "
-        "analysis, not uniquely GFD. "
+        "analysis, not uniquely GFM. "
         "TOTAL: 50/100 - Solid but incremental. The TIME_FACES observation is notable."
     )
     future_questions = (
@@ -288,7 +288,7 @@ class InverseSquareExponentFromDimension(Test):
         "trivially required by Gauss's law? "
         "(Answering would improve Commentary by +3: clarifies universality) "
         "Q2: In 2D electrostatics (e.g., charged wire), the potential is "
-        "logarithmic (r^0). Does d=2 have a GFD interpretation? "
+        "logarithmic (r^0). Does d=2 have a GFM interpretation? "
         "(Answering would improve Discovery by +5: extends to lower dimensions) "
         "Q3: The exponent 2 = TIME_FACES count. Is there a deep reason why "
         "the force law exponent equals the number of temporal faces? "
@@ -299,7 +299,7 @@ class InverseSquareExponentFromDimension(Test):
         "Coulomb's law gives F proportional to r^{-2}. WHY the exponent 2? "
         "In d spatial dimensions, Gauss's law distributes flux over a "
         "(d-1)-sphere, giving F proportional to r^{-(d-1)}. For d=3, the "
-        "exponent is 2. GFD notes that 2 = len(TIME_FACES) — the number "
+        "exponent is 2. GFM notes that 2 = len(TIME_FACES) — the number "
         "of temporal faces on the Merkaba. Is the inverse-square law "
         "controlled by the time-face structure?"
     )
@@ -320,7 +320,7 @@ class InverseSquareExponentFromDimension(Test):
         "EHRENFEST'S ARGUMENT (1917): Stable planetary orbits require "
         "d = 3 (or d <= 3 with some caveats). The inverse-square law "
         "is tied to dimensional stability.\n\n"
-        "GFD OBSERVATION: The exponent 2 = d - 1 = len(TIME_FACES). "
+        "GFM OBSERVATION: The exponent 2 = d - 1 = len(TIME_FACES). "
         "The Merkaba has exactly 2 time-faces (FACE_A7 and FACE_B0). "
         "This is a numerical observation, not a derivation."
     )
@@ -337,7 +337,7 @@ class InverseSquareExponentFromDimension(Test):
             .step("For d=2: F proportional to r^{-1} (logarithmic potential)")
             .step("For d=3: F proportional to r^{-2} (inverse-square law)")
             .step("For d=4: F proportional to r^{-3} (inverse-cube)")
-            .step("GFD OBSERVATION: For d=3, exponent = 2 = len(TIME_FACES)")
+            .step("GFM OBSERVATION: For d=3, exponent = 2 = len(TIME_FACES)")
             .conclude("The inverse-square exponent is d-1 = 2 = TIME_FACES count for d=3.")
         )
 
@@ -346,7 +346,7 @@ class InverseSquareExponentFromDimension(Test):
         d = D_SPATIAL
         exponent = d - 1  # Should be 2
 
-        # GFD: TIME_FACES count
+        # GFM: TIME_FACES count
         n_time_faces = len(TIME_FACES)  # Should be 2
 
         # Match check
@@ -387,7 +387,7 @@ class GaussLawSurfaceAreaDecomposition(Test):
     exponent 2 = d-1 = TIME_FACES.
 
     HONESTY: The surface area of a sphere is standard geometry (Archimedes).
-    The decomposition into GFD numbers is an OBSERVATION.
+    The decomposition into GFM numbers is an OBSERVATION.
     """
     audit_score = 86
     audit_notes = (
@@ -413,10 +413,10 @@ class GaussLawSurfaceAreaDecomposition(Test):
     )
     future_questions = (
         "Q1: The volume of a sphere is (4/3)*pi*r^3. Does the 4/3 = k/d "
-        "decompose cleanly into GFD numbers? "
-        "(Answering would improve Discovery by +5: volume formula GFD link) "
+        "decompose cleanly into GFM numbers? "
+        "(Answering would improve Discovery by +5: volume formula GFM link) "
         "Q2: The surface area formula is the derivative of the volume formula "
-        "with respect to r. Does this derivative operation have a GFD meaning? "
+        "with respect to r. Does this derivative operation have a GFM meaning? "
         "(Answering would improve Commentary by +3: calculus-geometry connection) "
         "Q3: Gauss's theorem relates volume integrals to surface integrals. "
         "Is the theorem itself a statement about k and d? "
@@ -427,7 +427,7 @@ class GaussLawSurfaceAreaDecomposition(Test):
         "The surface area of a sphere is S = 4*pi*r^2. This formula has "
         "two numerical features: the coefficient 4 and the exponent 2. "
         "The coefficient comes from S_{d-1} = 4*pi for d=3. The exponent "
-        "is d-1 = 2. GFD identifies: 4 = k = K_CLOSURE and 2 = d-1 = "
+        "is d-1 = 2. GFM identifies: 4 = k = K_CLOSURE and 2 = d-1 = "
         "len(TIME_FACES). Are BOTH numbers in the sphere area formula "
         "encoded in the Merkaba geometry?"
     )
@@ -445,12 +445,12 @@ class GaussLawSurfaceAreaDecomposition(Test):
         "- Black hole entropy (A = 4*pi*R_s^2)\n"
         "- Stefan-Boltzmann radiation (surface area of star)\n\n"
         "DECOMPOSITION:\n"
-        "- Coefficient: 4 = k = K_CLOSURE (GFD tetrahedral closure)\n"
+        "- Coefficient: 4 = k = K_CLOSURE (GFM tetrahedral closure)\n"
         "- Exponent: 2 = d - 1 = len(TIME_FACES)\n"
         "- Together: S = k * pi * r^{d-1}\n\n"
-        "GFD OBSERVATION: The sphere area formula can be written as "
+        "GFM OBSERVATION: The sphere area formula can be written as "
         "S = K_CLOSURE * pi * r^{len(TIME_FACES)}. Both structural "
-        "numbers of the formula map to GFD constants. This is documented "
+        "numbers of the formula map to GFM constants. This is documented "
         "as a pattern, not claimed as a derivation."
     )
 
@@ -463,11 +463,11 @@ class GaussLawSurfaceAreaDecomposition(Test):
             .equation("S_{d-1} = 2 * pi^(d/2) / Gamma(d/2)")
             .step("For d=3: S_2 = 2*pi^(3/2) / Gamma(3/2) = 4*pi")
             .step("The exponent 2 = d - 1 (surface is codimension-1 in d-space).")
-            .step("GFD DECOMPOSITION:")
+            .step("GFM DECOMPOSITION:")
             .equation("S = k * pi * r^(d-1)")
             .step("where k = K_CLOSURE = 4 and d - 1 = len(TIME_FACES) = 2")
             .conclude("Both the coefficient (4=k) and exponent (2=d-1) in "
-                      "S = 4*pi*r^2 correspond to GFD structural numbers.")
+                      "S = 4*pi*r^2 correspond to GFM structural numbers.")
         )
 
     def model(self) -> Model:
@@ -480,7 +480,7 @@ class GaussLawSurfaceAreaDecomposition(Test):
         # Exponent
         exponent = d - 1  # Should be 2
 
-        # GFD matches
+        # GFM matches
         k = K_CLOSURE  # 4
         n_time = len(TIME_FACES)  # 2
 
@@ -496,7 +496,7 @@ class GaussLawSurfaceAreaDecomposition(Test):
             .add("Sphere area exponent (d-1)", float(exponent))
             .add("TIME_FACES count", float(n_time))
             .add("Exponent equals TIME_FACES", exp_match)
-            .add("Both match GFD numbers", both_match)
+            .add("Both match GFM numbers", both_match)
         )
 
     def observations(self) -> Observed:
@@ -508,7 +508,7 @@ class GaussLawSurfaceAreaDecomposition(Test):
             .add("Sphere area exponent (d-1)", 2.0)
             .add("TIME_FACES count", 2.0)
             .add("Exponent equals TIME_FACES", 1.0)
-            .add("Both match GFD numbers", 1.0)
+            .add("Both match GFM numbers", 1.0)
         )
 
 
@@ -522,7 +522,7 @@ class FineStructureAlphaFourPi(Test):
 
     HONESTY: alpha = e^2/(4*pi*epsilon_0*hbar*c) is the STANDARD definition
     in SI units. The 4*pi comes from the Coulomb constant 1/(4*pi*epsilon_0).
-    GFD notes 4*pi = k*pi. This is the SAME geometric factor as in Coulomb's
+    GFM notes 4*pi = k*pi. This is the SAME geometric factor as in Coulomb's
     law — not an independent observation.
     """
     audit_score = 85
@@ -547,14 +547,14 @@ class FineStructureAlphaFourPi(Test):
         "TOTAL: 45/100 - Incremental. Important as a propagation check."
     )
     future_questions = (
-        "Q1: Is there a GFD expression for alpha itself (not just the 4*pi)? "
-        "Alpha ~ 1/137 — does 137 decompose into GFD numbers? "
+        "Q1: Is there a GFM expression for alpha itself (not just the 4*pi)? "
+        "Alpha ~ 1/137 — does 137 decompose into GFM numbers? "
         "(Answering would improve Discovery by +10: fundamental constant link) "
         "Q2: In Gaussian units, alpha = e^2/(hbar*c) without the 4*pi. "
         "Does this mean the geometric factor is a unit artifact? "
         "(Answering would improve Commentary by +5: unit independence check) "
         "Q3: The running of alpha with energy scale — does the beta function "
-        "coefficient involve GFD numbers? "
+        "coefficient involve GFM numbers? "
         "(Answering would improve Falsifiability by +5: energy-dependent test)"
     )
     name = "Fine Structure Constant: 4*pi = k*pi in alpha"
@@ -582,10 +582,10 @@ class FineStructureAlphaFourPi(Test):
         "- Atomic energy levels (Bohr model: E_n proportional to alpha^2)\n"
         "- Lamb shift, anomalous magnetic moment\n"
         "- QED perturbation series convergence\n\n"
-        "GFD OBSERVATION: alpha = e^2 / (k*pi*epsilon_0*hbar*c) where k = "
+        "GFM OBSERVATION: alpha = e^2 / (k*pi*epsilon_0*hbar*c) where k = "
         "K_CLOSURE. This is NOT a new observation — it is the same geometric "
         "4*pi propagating from Coulomb's law into the coupling constant. "
-        "The value alpha ~ 1/137 is NOT explained by GFD."
+        "The value alpha ~ 1/137 is NOT explained by GFM."
     )
 
     def derivation(self) -> Derivation:
@@ -600,7 +600,7 @@ class FineStructureAlphaFourPi(Test):
             .equation("alpha = (1.602e-19)^2 / (4*pi * 8.854e-12 * 1.055e-34 * 3e8)")
             .step("alpha = 0.0072973525643 (CODATA 2022)")
             .step("1/alpha = 137.036...")
-            .step("GFD REWRITING: alpha = e^2 / (k*pi*epsilon_0*hbar*c) "
+            .step("GFM REWRITING: alpha = e^2 / (k*pi*epsilon_0*hbar*c) "
                   "where k = K_CLOSURE = 4")
             .conclude("The geometric factor 4*pi = k*pi from Coulomb's law "
                       "directly enters the fine structure constant.")
@@ -652,7 +652,7 @@ class FineStructureAlphaFourPi(Test):
 class ElectrostaticCoefficientCatalog(Test):
     """
     Catalog ALL numerical coefficients in electrostatics and check
-    whether they decompose into the GFD basis set {2, 3, 4}.
+    whether they decompose into the GFM basis set {2, 3, 4}.
 
     HONESTY: This is an EXPLORATORY pattern search. The coefficients
     are all from standard electrostatics. Whether they "decompose" into
@@ -673,7 +673,7 @@ class ElectrostaticCoefficientCatalog(Test):
     contribution_score = 48
     contribution_notes = (
         "Discovery: 18/40 - Systematic catalog of EM coefficients and their "
-        "decomposition into GFD basis. Somewhat novel as a collection. "
+        "decomposition into GFM basis. Somewhat novel as a collection. "
         "Precision: 10/20 - Decompositions are exact, but the 'basis' choice "
         "is subjective and small-integer-biased. "
         "Cross-Domain: 12/20 - Connects to BH coefficient catalog (Test 5 in BH group). "
@@ -698,7 +698,7 @@ class ElectrostaticCoefficientCatalog(Test):
         "Electrostatic formulas contain specific numerical coefficients: "
         "4*pi in Coulomb's law, 2 as the inverse-square exponent, "
         "4*pi*r^2 in surface area, 2*pi in capacitance formulas. "
-        "Can ALL of these be built from the GFD basis set {2, 3, 4} = "
+        "Can ALL of these be built from the GFM basis set {2, 3, 4} = "
         "{TIME_FACES, d, k}? Or does this work only because small "
         "integers are trivially expressible from any small basis?"
     )
@@ -724,7 +724,7 @@ class ElectrostaticCoefficientCatalog(Test):
         "decomposition has physical meaning (e.g., 4 = k is always the solid "
         "angle coefficient, 2 is always the force exponent).\n\n"
         "SMALL-INTEGER BIAS: Integers 1-10 are easy to build from {2, 3, 4}. "
-        "The real question is whether the SAME GFD number appears for the "
+        "The real question is whether the SAME GFM number appears for the "
         "SAME physical reason across different formulas."
     )
 
@@ -748,10 +748,10 @@ class ElectrostaticCoefficientCatalog(Test):
         )
 
     def model(self) -> Model:
-        # GFD basis set
-        gfd_basis = {2, 3, 4}  # {TIME_FACES_count, d, k}
+        # GFM basis set
+        GFM_basis = {2, 3, 4}  # {TIME_FACES_count, d, k}
 
-        # Catalog of EM coefficients and their GFD decompositions
+        # Catalog of EM coefficients and their GFM decompositions
         # Format: (name, value, uses_only_basis)
         catalog = [
             ("Coulomb 4*pi coefficient", 4, True),    # 4 = k
@@ -816,9 +816,9 @@ def run_all() -> bool:
         title="Coulomb 4*pi Factor: Geometric Origin in d=3",
         summary=(
             "STANDARD PHYSICS: All results are from standard electrostatics.\n"
-            "GFD OBSERVATIONS: Numerical correspondences documented, not derived.\n\n"
+            "GFM OBSERVATIONS: Numerical correspondences documented, not derived.\n\n"
             "The factor 4*pi in Coulomb's law equals the surface area of the\n"
-            "unit sphere in d=3 spatial dimensions. In GFD notation:\n"
+            "unit sphere in d=3 spatial dimensions. In GFM notation:\n"
             "  4*pi = K_CLOSURE * pi = k * pi\n"
             "The inverse-square exponent 2 = d - 1 = len(TIME_FACES).\n\n"
             "CENTERPIECE FINDING: The Coulomb prefactor 4*pi is literally\n"

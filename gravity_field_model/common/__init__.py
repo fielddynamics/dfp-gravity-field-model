@@ -1,9 +1,9 @@
 """
-GFD Common Constants and Utilities
+GFM Common Constants and Utilities
 ==================================
 
 Shared physics constants, geometry definitions, and helper functions
-used across all GFD test modules.
+used across all GFM test modules.
 
 This module is imported by test files via:
     from gravity_field_model.common import K, VERTICES, TET_A, ...
@@ -66,7 +66,7 @@ from .constants_codata import (
 )
 
 # =============================================================================
-# GFD MODEL CONSTANTS
+# GFM MODEL CONSTANTS
 # =============================================================================
 
 K = 4                    # Coupling constant (tetrahedral vertices)
@@ -457,7 +457,7 @@ __all__ = [
     "AMU", "ATOMIC_MASS_UNIT",
     "EV", "ELECTRON_VOLT",
     "EV_TO_KG", "J_TO_MEV",
-    # GFD constants
+    # GFM constants
     "K", "K_CLOSURE",
     "A_MOND",
     # Geometry
@@ -468,7 +468,7 @@ __all__ = [
     # Pi digits
     "PI_BASE16_DIGITS",
     "pi_base_8", "pi_base_16", "get_pi_base8", "get_pi_digit_base8",
-    # Traversal and GFD functions
+    # Traversal and GFM functions
     "traverse_pi_base8", "calculate_settlement_frequency",
     "calculate_bits_per_orbit", "calculate_bits_per_electron",
     "vortex_eye_size",

@@ -1,5 +1,5 @@
 """
-GFD Model Test Framework
+GFM Model Test Framework
 ========================
 
 A clean, scientific test framework with dependency injection.
@@ -51,7 +51,7 @@ Usage:
 
 from __future__ import annotations
 """
-GFD Model Test Framework
+GFM Model Test Framework
 ========================
 
 A clean, scientific test framework with dependency injection.

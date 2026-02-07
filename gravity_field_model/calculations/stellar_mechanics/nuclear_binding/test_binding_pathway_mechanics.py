@@ -2,16 +2,16 @@
 Binding Pathway Mechanics: Standard Nuclear Physics
 ====================================================
 
-GFD Model V2
+GFM Model V2
 
 HONESTY STATEMENT:
-This module verifies STANDARD NUCLEAR PHYSICS data against GFD terminology.
-These tests do NOT derive nuclear physics from GFD geometry. They verify
+This module verifies STANDARD NUCLEAR PHYSICS data against GFM terminology.
+These tests do NOT derive nuclear physics from GFM geometry. They verify
 that measured nuclear data (binding energies, mass defects, fusion thresholds)
-is correctly referenced and that GFD terminology maps consistently to
+is correctly referenced and that GFM terminology maps consistently to
 established physics.
 
-WHAT GFD CLAIMS (to be tested elsewhere):
+WHAT GFM CLAIMS (to be tested elsewhere):
 - The stellated octahedron geometry (Field Chamber) constrains nuclear structure
 - k=4 is geometrically necessary (simplex theorem)
 - Binding involves compression shift through the Field Origin
@@ -103,7 +103,7 @@ class ProtonRestMass(Test):
     Verify proton rest mass energy.
 
     HONESTY: This test verifies that we reference the correct CODATA value.
-    GFD does not derive the proton mass. The claim that m_p/m_e = 6*pi^5
+    GFM does not derive the proton mass. The claim that m_p/m_e = 6*pi^5
     is a numerical coincidence (accuracy ~0.01%), not a derivation.
     """
     audit_score = 78
@@ -131,7 +131,7 @@ class ProtonRestMass(Test):
         "The proton rest mass (938.27 MeV) is a measured fundamental constant. "
         "The mass ratio m_p/m_e = 1836.15 is empirically determined. The numerical "
         "coincidence that 6*pi^5 = 1836.12 is noted but does NOT constitute a "
-        "derivation. GFD adopts this value; it does not predict it."
+        "derivation. GFM adopts this value; it does not predict it."
     )
 
     def derivation(self) -> Derivation:
@@ -142,7 +142,7 @@ class ProtonRestMass(Test):
             .equation("E = m_p * c^2 = 1.503e-10 J = 938.27 MeV")
             .step("Mass ratio to electron: 938.27 / 0.511 = 1836.15.")
             .step("NOTE: The numerical coincidence 6*pi^5 = 1836.12 (0.002% match) "
-                  "is observed but unexplained. This is NOT a GFD derivation.")
+                  "is observed but unexplained. This is NOT a GFM derivation.")
             .conclude("Proton rest mass = 938.27 MeV (measured).")
         )
 
@@ -185,7 +185,7 @@ class HydrogenIonization(Test):
     Verify hydrogen ionization energy.
 
     HONESTY: This is standard atomic physics (Bohr model / QM).
-    GFD terminology ("vortex capture") is a relabeling, not a derivation.
+    GFM terminology ("vortex capture") is a relabeling, not a derivation.
     """
     audit_score = 80
     audit_notes = None
@@ -212,7 +212,7 @@ class HydrogenIonization(Test):
         "The hydrogen ionization energy (13.6 eV) is derived from QM/Bohr model. "
         "It is 7 orders of magnitude smaller than nuclear binding (~MeV). This "
         "scale separation reflects the different physics of electromagnetic vs "
-        "strong force binding. GFD relabels this as 'vortex capture' but does "
+        "strong force binding. GFM relabels this as 'vortex capture' but does "
         "not derive it."
     )
 
@@ -259,7 +259,7 @@ class Helium4Binding(Test):
 
     HONESTY: The exceptional stability of He-4 is well-known in nuclear physics.
     It is explained by the nuclear shell model (doubly magic: Z=N=2).
-    GFD notes that 4 = k, but this does NOT explain the stability.
+    GFM notes that 4 = k, but this does NOT explain the stability.
     """
     audit_score = 85
     audit_notes = None
@@ -284,7 +284,7 @@ class Helium4Binding(Test):
     commentary = (
         "He-4 (alpha particle) has BE/A = 7.07 MeV, much higher than neighbors "
         "(He-3: 2.57, Li-6: 5.33). Standard explanation: He-4 is doubly magic "
-        "(closed proton and neutron shells at Z=N=2). GFD notes 4 = k (tetrahedral "
+        "(closed proton and neutron shells at Z=N=2). GFM notes 4 = k (tetrahedral "
         "number), but this observation does not constitute a derivation of WHY "
         "He-4 is stable. The shell model provides the mechanistic explanation."
     )
@@ -300,7 +300,7 @@ class Helium4Binding(Test):
             .step("  Li-6: BE/A = 5.33 MeV")
             .equation("Jump He-3 -> He-4: 7.07 - 2.57 = 4.50 MeV")
             .step("STANDARD EXPLANATION: He-4 is doubly magic (shell closure).")
-            .step("GFD OBSERVATION: A=4 equals k. This is noted but not explanatory.")
+            .step("GFM OBSERVATION: A=4 equals k. This is noted but not explanatory.")
             .conclude("He-4 BE/A = 7.07 MeV; stability from shell closure.")
         )
 
@@ -341,7 +341,7 @@ class MassDefectVerification(Test):
     Verify E=mc^2 for nuclear mass defect.
 
     HONESTY: This is standard physics (Einstein 1905).
-    GFD terminology does not change the physics.
+    GFM terminology does not change the physics.
     """
     audit_score = 88
     audit_notes = None
@@ -367,7 +367,7 @@ class MassDefectVerification(Test):
     commentary = (
         "The mass defect (constituent mass minus nuclear mass) times c^2 equals "
         "the binding energy. For He-4: mass defect = 0.75%, yielding 28.3 MeV. "
-        "This is standard physics, universally accepted. GFD adopts E=mc^2; "
+        "This is standard physics, universally accepted. GFM adopts E=mc^2; "
         "it does not provide an alternative."
     )
 
@@ -425,7 +425,7 @@ class FusionTemperatureChain(Test):
     Verify stellar fusion temperature progression.
 
     HONESTY: These are measured/modeled astrophysical values.
-    GFD terminology ("bigger bowling balls") is metaphor, not derivation.
+    GFM terminology ("bigger bowling balls") is metaphor, not derivation.
     """
     audit_score = 82
     audit_notes = None
@@ -452,7 +452,7 @@ class FusionTemperatureChain(Test):
         "Fusion of heavier elements requires higher temperatures because: "
         "(1) Higher Coulomb barriers from more protons, "
         "(2) Gamow peak shifts to higher energies. "
-        "This is standard nuclear astrophysics. GFD's metaphor of 'bigger "
+        "This is standard nuclear astrophysics. GFM's metaphor of 'bigger "
         "bowling balls needing bigger hammers' captures the intuition but "
         "does not derive the temperatures."
     )
@@ -599,7 +599,7 @@ class NeutronExcessScaling(Test):
     Verify N/Z ratio increases with atomic number.
 
     HONESTY: This follows from Coulomb repulsion scaling as Z^2.
-    Standard nuclear physics, not a GFD prediction.
+    Standard nuclear physics, not a GFM prediction.
     """
     audit_score = 81
     audit_notes = None
@@ -626,7 +626,7 @@ class NeutronExcessScaling(Test):
         "N > Z because Coulomb repulsion between protons grows as Z^2 while "
         "nuclear binding grows roughly as A. Extra neutrons dilute the Coulomb "
         "energy without adding repulsion. This is standard nuclear physics "
-        "(liquid drop model, SEMF). GFD does not derive this."
+        "(liquid drop model, SEMF). GFM does not derive this."
     )
 
     def derivation(self) -> Derivation:
@@ -691,7 +691,7 @@ class Beryllium8Instability(Test):
     Verify Be-8 is unstable despite high binding energy per nucleon.
 
     HONESTY: Be-8 instability is explained by the nuclear shell model and
-    the Q-value for alpha decay. Not a GFD prediction.
+    the Q-value for alpha decay. Not a GFM prediction.
     """
     audit_score = 87
     audit_notes = None
@@ -785,9 +785,9 @@ def run_all() -> bool:
     return run_tests(
         title="Binding Pathway Mechanics",
         summary=(
-            "These tests verify STANDARD NUCLEAR PHYSICS data against GFD terminology. "
+            "These tests verify STANDARD NUCLEAR PHYSICS data against GFM terminology. "
             "They confirm that measured values (binding energies, mass defects, fusion "
-            "temperatures) are correctly referenced. These tests do NOT claim that GFD "
+            "temperatures) are correctly referenced. These tests do NOT claim that GFM "
             "derives nuclear physics.\n\n"
             "KEY VERIFICATIONS:\n"
             "1. Proton mass = 938.27 MeV (measured, 6*pi^5 coincidence noted)\n"

@@ -2,7 +2,7 @@
 Lattice Fundamentals Tests
 ==========================
 
-This module tests foundational physical relationships within the GFD lattice model.
+This module tests foundational physical relationships within the GFM lattice model.
 Tests examine the speed of light, energy-mass equivalence, electron structure
 parameters, and wave-particle properties. Each test documents correspondences
 between model quantities and established physical values.
@@ -176,7 +176,7 @@ class SpeedOfLightIsMaximum(Test):
         )
     
     def model(self) -> Model:
-        # In GFD, c is axiomatically the lattice update rate
+        # In GFM, c is axiomatically the lattice update rate
         is_maximum = 1  # Axiomatic
         return Model().add("c is maximum (1=yes)", is_maximum)
     
@@ -277,7 +277,7 @@ class EnergyMassEquivalence(Test):
             .step("Given: electron mass m_e = 9.1093837e-31 kg, c = 299792458 m/s.")
             .step("Apply E = mc^2: E = (9.1093837e-31 kg) * (299792458 m/s)^2 = 8.187e-14 J.")
             .step("Convert to MeV: E / (1.602176634e-13 J/MeV) = 0.511 MeV.")
-            .conclude("The GFD model interprets this energy as the stable vortex configuration within the Field Chamber lattice.")
+            .conclude("The GFM model interprets this energy as the stable vortex configuration within the Field Chamber lattice.")
         )
     
     def model(self) -> Model:
@@ -618,7 +618,7 @@ class MONDNoVelocityTerm(Test):
     future_questions = (
         "Q1: In everyday experience, moving objects feel different forces (air resistance, friction). Why would gravity NOT care about velocity? "
         "Q2: If MOND depended on velocity, how would that change galaxy rotation curves? "
-        "Q3: What would it mean for the GFD model if gravity settlement depended on how fast a field was moving? "
+        "Q3: What would it mean for the GFM model if gravity settlement depended on how fast a field was moving? "
         "FUTURE: Addressing these could add ~5 points."
     )
     
@@ -632,11 +632,11 @@ class MONDNoVelocityTerm(Test):
             .step("THE SURPRISE: Many modified gravity theories add velocity-dependent terms (like viscosity in fluids). "
                   "MOND does not. Its interpolating function mu(x) = x/(1+x), where x = a/a_0, depends ONLY on "
                   "acceleration magnitude. This is deeply unusual and constrains possible underlying mechanisms.")
-            .step("GFD CONNECTION: In the GFD lattice, gravity fields 'settle' based on position-dependent gradients. "
+            .step("GFM CONNECTION: In the GFM lattice, gravity fields 'settle' based on position-dependent gradients. "
                   "Settlement is determined by local field configurations, not by how fast those configurations "
                   "are changing. This is the same static character as MOND: the physics at each point depends on "
                   "WHERE the mass is, not on how fast it got there.")
-            .conclude("Both MOND and GFD share velocity-independence. If GFD's discrete settlement mechanism "
+            .conclude("Both MOND and GFM share velocity-independence. If GFM's discrete settlement mechanism "
                       "is correct, MOND's static formulation is not arbitrary; it reflects the fundamental "
                       "position-dependent nature of gravity field interactions.")
         )
@@ -666,8 +666,8 @@ class MONDNoVelocityTerm(Test):
         "configuration, not on dynamics. "
         "WHY IT MATTERS: If gravity modifications arose from friction-like or inertia-like effects, "
         "we would expect velocity terms. Their absence constrains the underlying mechanism to be "
-        "fundamentally position-based, consistent with GFD's settlement picture. "
-        "WHAT WE CAN TRUST: The correspondence between MOND's static formulation and GFD's "
+        "fundamentally position-based, consistent with GFM's settlement picture. "
+        "WHAT WE CAN TRUST: The correspondence between MOND's static formulation and GFM's "
         "position-dependent settlement is not coincidental. It suggests both are manifestations "
         "of the same underlying physics: gravity that knows WHERE you are, not how fast you are moving."
     )
@@ -710,7 +710,7 @@ class CausalityFromLattice(Test):
                   "delta_t = delta_x / c. No signal, no information, no causal influence can travel faster. "
                   "This creates a 'light cone': all events that CAN causally affect you lie in your past cone; "
                   "all events you CAN causally affect lie in your future cone.")
-            .conclude("The GFD lattice inherits this structure. Coupling Ports separated by distance d "
+            .conclude("The GFM lattice inherits this structure. Coupling Ports separated by distance d "
                       "require time t >= d/c for any influence to propagate. The lattice geometry enforces "
                       "causality automatically because c is finite and universal.")
         )
@@ -738,7 +738,7 @@ class CausalityFromLattice(Test):
     commentary = (
         "WHAT WE LEARNED: The finite speed of light is not merely a speed limit; it is the "
         "foundation of causal structure itself. Without it, 'before' and 'after' lose meaning. "
-        "WHY IT MATTERS: The GFD lattice automatically inherits relativistic causality because "
+        "WHY IT MATTERS: The GFM lattice automatically inherits relativistic causality because "
         "adjacent cells communicate at bounded rates. This means the model cannot produce "
         "paradoxes where effects precede causes, matching the deepest requirement of physical law. "
         "WHAT WE CAN TRUST: Any dynamics computed on this lattice will respect causality. "
@@ -765,7 +765,7 @@ class TimeDilationInterpretation(Test):
     future_questions = (
         "Q1: If you could remove an electron's mass, would it suddenly jump to light speed? What would happen to its other properties? "
         "Q2: Why does adding energy to an electron make it faster but adding energy to a photon just makes it more energetic (higher frequency)? "
-        "Q3: In the GFD model, what property of 'stable vortices' creates the mass that slows propagation? "
+        "Q3: In the GFM model, what property of 'stable vortices' creates the mass that slows propagation? "
         "FUTURE: Addressing these could add ~5 points."
     )
     
@@ -783,7 +783,7 @@ class TimeDilationInterpretation(Test):
             .step("MATHEMATICAL CONSTRAINT: From E^2 = (pc)^2 + (mc^2)^2, we derive v = pc^2/E. For "
                   "massless particles (m=0), all energy is kinetic: E = pc, giving v = c exactly. For "
                   "massive particles, rest mass energy (mc^2) acts as a 'floor', forcing v < c always.")
-            .conclude("In the GFD lattice, photon-like configurations propagate at the lattice update "
+            .conclude("In the GFM lattice, photon-like configurations propagate at the lattice update "
                       "rate (c) because they have no internal structure to 'drag' them. Electron-like "
                       "configurations (stable vortices with mass) have internal dynamics that prevent "
                       "reaching c. Mass is the brake pedal that is always partly engaged.")
@@ -810,7 +810,7 @@ class TimeDilationInterpretation(Test):
     commentary = (
         "WHAT WE LEARNED: The universe enforces a strict dichotomy: travel at c with no mass, or "
         "travel below c with mass. There is no option for 'slow light' or 'light-speed electrons'. "
-        "WHY IT MATTERS: In the GFD model, this dichotomy maps to lattice propagation modes. "
+        "WHY IT MATTERS: In the GFM model, this dichotomy maps to lattice propagation modes. "
         "Configurations without internal structure (photons) propagate at the update rate. "
         "Configurations with stable internal dynamics (electrons) have that structure act as drag. "
         "WHAT WE CAN TRUST: The model correctly captures this fundamental relativistic constraint. "
@@ -826,10 +826,10 @@ class FourForcesOnSameLattice(Test):
     """
     name = "Four Forces On Same Lattice"
     question = (
-        "Can the GFD lattice framework accommodate all four fundamental forces "
+        "Can the GFM lattice framework accommodate all four fundamental forces "
         "(gravity, electromagnetism, strong, weak) within a single geometric structure?"
     )
-    reference = "GFD interpretation"
+    reference = "GFM interpretation"
     tolerance = 0.001
     level = Standard
     

@@ -232,10 +232,10 @@ interactions. For a century, physicists have questioned whether this
 precise value is fundamental or emergent. Standard physics treats it as
 a measured constant with no geometric origin.
 
-GFD proposes that fundamental constants may emerge from geometric
+GFM proposes that fundamental constants may emerge from geometric
 structures. This test investigates whether alpha corresponds to any
 natural ratio in a stellated octahedron (two interlocking tetrahedra),
-a shape central to GFD field geometry.
+a shape central to GFM field geometry.
 
 We ask: does the ratio r_inner/r_outer equal alpha? If so, this would
 suggest alpha has geometric rather than arbitrary origins.
@@ -262,7 +262,7 @@ The correspondence between the geometric ratio and alpha is striking.
 However, we must be epistemically clear: this is an OBSERVATION of
 numerical correspondence, NOT a derivation from first principles.
 
-GFD does not claim to derive alpha mathematically from geometry.
+GFM does not claim to derive alpha mathematically from geometry.
 Rather, we note that if field interactions occur on stellated octahedral
 structures, the characteristic ratio of that structure equals alpha.
 
@@ -271,14 +271,14 @@ found for other constants (see related tests in particle_physics/).
 
 5. LIMITATIONS & HONESTY STATEMENT
 This test does NOT prove alpha has geometric origin. The match could
-be coincidental. GFD has not been validated as a physical theory.
+be coincidental. GFM has not been validated as a physical theory.
 Alternative geometric ratios might also approximate alpha.
 Further independent verification is needed.
 
 6. CONCLUSION
 We document a precise numerical correspondence between the stellated
 octahedron inner/outer radius ratio and the fine structure constant.
-This merits inclusion as part of the broader pattern of GFD-constant
+This merits inclusion as part of the broader pattern of GFM-constant
 correspondences, while acknowledging its status as observation only.
     """.strip()
 

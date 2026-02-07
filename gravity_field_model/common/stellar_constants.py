@@ -2,7 +2,7 @@
 Stellar Constants and Functions
 ===============================
 
-Constants and helper functions for stellar physics calculations in the GFD framework.
+Constants and helper functions for stellar physics calculations in the GFM framework.
 
 Includes:
 - Stellar temperature thresholds for fusion stages
@@ -28,7 +28,7 @@ from .constants_codata import (
     M_P_OVER_M_E,
 )
 
-# GFD model constants
+# GFM model constants
 K = 4                    # Coupling constant
 K_CLOSURE = 4            # Field closure constant
 

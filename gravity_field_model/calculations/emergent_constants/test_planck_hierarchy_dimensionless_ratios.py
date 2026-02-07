@@ -1,14 +1,14 @@
 """
-SANDBOX: Planck Units -- Dimensional Ratios and GFD Numbers
+SANDBOX: Planck Units -- Dimensional Ratios and GFM Numbers
 ===========================================================
 
 STATUS: Work in progress.
 
 EXPLORING:
 - Do the dimensionless ratios formed from Planck units and particle masses
-  decompose into combinations of GFD structural numbers?
+  decompose into combinations of GFM structural numbers?
 - Does the hierarchy problem (why gravity is so weak) have any geometric signature?
-- Which ratios match GFD numbers and which do NOT?
+- Which ratios match GFM numbers and which do NOT?
 
 GRADUATION CHECKLIST:
 [x] File name is descriptive
@@ -19,14 +19,14 @@ GRADUATION CHECKLIST:
 [x] Rename to test_planck_hierarchy_dimensionless_ratios.py
 [ ] Delete this sandbox file
 
-GFD Model V2
+GFM Model V2
 
 HONESTY STATEMENT:
 This module verifies STANDARD DIMENSIONAL ANALYSIS of Planck units and
 probes whether the resulting dimensionless ratios have any connection to
-GFD structural numbers. Planck units are well-established physics
+GFM structural numbers. Planck units are well-established physics
 (Planck 1899). The hierarchy problem is an OPEN problem in physics.
-GFD does NOT solve the hierarchy problem. Any GFD number appearances
+GFM does NOT solve the hierarchy problem. Any GFM number appearances
 are documented as OBSERVATIONS, not explanations.
 
 WHAT IS VERIFIED (standard physics):
@@ -35,10 +35,10 @@ WHAT IS VERIFIED (standard physics):
 - Planck mass to proton mass ratio M_Pl/m_p ~ 1.3e19
 - Planck length to electron radius ratio R_e/L_P ~ 1.7e20
 
-GFD OBSERVATIONS (patterns noted, not derived):
+GFM OBSERVATIONS (patterns noted, not derived):
 - The 4*pi in Coulomb's law contains the factor 4 = k = K_CLOSURE
 - log10(alpha/alpha_G) ~ 36.09, near 36 = SPATIAL_FACES^2 = k*d^2
-- log10(M_Pl/m_p) ~ 19.11 does NOT match any clean GFD combination
+- log10(M_Pl/m_p) ~ 19.11 does NOT match any clean GFM combination
 - log10(R_e/L_P) ~ 20.24, near 20 = k*(k+1), but not precise
 
 TARGET DOMAIN FOLDER: calculations/emergent_constants/
@@ -59,7 +59,7 @@ from gravity_field_model.common import (
 # CONSTANTS (document sources)
 # =============================================================================
 
-# Spatial dimensions (standard physics, not GFD-specific)
+# Spatial dimensions (standard physics, not GFM-specific)
 D_SPATIAL = 3
 
 
@@ -98,10 +98,10 @@ class FineStructureConstantKPi(Test):
 
     HONESTY: The fine structure constant is one of the most precisely
     measured constants in physics. Its value alpha ~ 1/137 is NOT derived
-    by GFD. The observation here is narrow: the factor 4*pi that appears
+    by GFM. The observation here is narrow: the factor 4*pi that appears
     in Coulomb's law (and hence in alpha's definition) contains 4 = k =
     K_CLOSURE. This is a notational observation about the SI system's
-    use of rationalized units, not a GFD derivation of alpha.
+    use of rationalized units, not a GFM derivation of alpha.
     """
     audit_score = 82
     audit_notes = (
@@ -130,7 +130,7 @@ class FineStructureConstantKPi(Test):
         "physics is in alpha itself, not the Coulomb factor? "
         "(Answering would improve Discovery by +5: unit-independence test) "
         "Q2: The running of alpha with energy (alpha(M_Z) ~ 1/128) changes "
-        "1/alpha from 137 to 128. Is 128 = 2^7 = 2^(k+d) a GFD number? "
+        "1/alpha from 137 to 128. Is 128 = 2^7 = 2^(k+d) a GFM number? "
         "(Answering would improve Cross-Domain by +5: energy scale connection) "
         "Q3: Why is 1/alpha ~ 137 specifically? Is 137 decomposable as "
         "k^3 + d*k - d = 64 + 12 - 3 = 73? No, that does not work. "
@@ -140,7 +140,7 @@ class FineStructureConstantKPi(Test):
     question = (
         "The fine structure constant alpha = e^2/(4*pi*epsilon_0*hbar*c) ~ 1/137 "
         "contains the factor 4*pi from Coulomb's law in SI units. The factor "
-        "4 = k = K_CLOSURE in GFD. Is this a meaningful observation or merely "
+        "4 = k = K_CLOSURE in GFM. Is this a meaningful observation or merely "
         "an artifact of the SI convention for rationalizing Maxwell's equations? "
         "We verify alpha's computation and document the k*pi observation honestly."
     )
@@ -155,10 +155,10 @@ class FineStructureConstantKPi(Test):
         "UNIT DEPENDENCE: In SI units, Coulomb's law is F = e^2/(4*pi*epsilon_0*r^2), "
         "so alpha = e^2/(4*pi*epsilon_0*hbar*c). In Gaussian units, alpha = e^2/(hbar*c) "
         "with no 4*pi factor. The 4*pi is a CONVENTION choice.\n\n"
-        "GFD OBSERVATION: The factor 4 in 4*pi equals k = K_CLOSURE. However, since "
+        "GFM OBSERVATION: The factor 4 in 4*pi equals k = K_CLOSURE. However, since "
         "this factor is unit-system-dependent, this observation has limited physical "
         "significance. The physically meaningful quantity is alpha itself (~1/137), "
-        "and GFD does NOT derive this value.\n\n"
+        "and GFM does NOT derive this value.\n\n"
         "WHAT IS REAL: The verification that e^2/(4*pi*epsilon_0*hbar*c) reproduces "
         "the CODATA value of alpha to better than 10^-11 confirms internal consistency "
         "of the CODATA constant set."
@@ -175,7 +175,7 @@ class FineStructureConstantKPi(Test):
             .step("In Gaussian units: alpha = e^2 / (hbar * c), no 4*pi factor.")
             .step("COMPUTATION: Using CODATA 2022 values for e, epsilon_0, hbar, c:")
             .equation("alpha = (1.602e-19)^2 / (4*pi * 8.854e-12 * 1.055e-34 * 2.998e8)")
-            .step("GFD OBSERVATION (limited): The factor 4 in 4*pi equals k = K_CLOSURE.")
+            .step("GFM OBSERVATION (limited): The factor 4 in 4*pi equals k = K_CLOSURE.")
             .step("CAVEAT: This is unit-dependent. The Gaussian expression has no 4.")
             .conclude("Alpha verified to high precision. The k*pi observation is noted "
                       "but flagged as unit-system-dependent.")
@@ -222,7 +222,7 @@ class FineStructureConstantKPi(Test):
 
 class GravitationalCouplingRatio(Test):
     """
-    Compute alpha_G and the ratio alpha/alpha_G, probing for GFD structure.
+    Compute alpha_G and the ratio alpha/alpha_G, probing for GFM structure.
 
     HONESTY: The gravitational coupling constant alpha_G = G*m_p^2/(hbar*c)
     is a standard dimensionless measure of gravitational strength. The ratio
@@ -257,14 +257,14 @@ class GravitationalCouplingRatio(Test):
     future_questions = (
         "Q1: The ratio alpha/alpha_G depends on using the PROTON mass. If we "
         "used the electron mass instead, alpha_G(m_e) = G*m_e^2/(hbar*c) and "
-        "alpha/alpha_G(m_e) ~ 10^42.5. Does 42 or 43 decompose into GFD? "
+        "alpha/alpha_G(m_e) ~ 10^42.5. Does 42 or 43 decompose into GFM? "
         "(Answering would improve Discovery by +5: mass-dependence of hierarchy) "
         "Q2: Is there a PHYSICAL reason to expect log10(alpha/alpha_G) = 36 "
-        "exactly? In GFD, 36 = 6^2 = SPATIAL_FACES^2. What would it mean "
+        "exactly? In GFM, 36 = 6^2 = SPATIAL_FACES^2. What would it mean "
         "for the force hierarchy to scale as the SQUARE of spatial faces? "
         "(Answering would improve Falsifiability by +8: mechanism needed) "
         "Q3: The deviation 0.09 in log10 corresponds to a factor of ~1.23. "
-        "Is 1.23 close to any GFD number? It is not. "
+        "Is 1.23 close to any GFM number? It is not. "
         "(Answering would improve Precision by +3: residual analysis)"
     )
     name = "Gravitational Coupling: alpha/alpha_G and the Hierarchy"
@@ -272,7 +272,7 @@ class GravitationalCouplingRatio(Test):
         "The gravitational coupling constant alpha_G = G*m_p^2/(hbar*c) ~ 5.9e-39 "
         "is approximately 10^36 times weaker than alpha. This is the hierarchy "
         "problem: WHY is gravity so weak? We compute log10(alpha/alpha_G) and check "
-        "whether 36 has a GFD decomposition. Finding: 36 = SPATIAL_FACES^2 = k*d^2, "
+        "whether 36 has a GFM decomposition. Finding: 36 = SPATIAL_FACES^2 = k*d^2, "
         "but the actual value is 36.09, not exactly 36."
     )
     reference = "Dirac (1937); Barrow & Tipler (1986); CODATA 2022"
@@ -285,11 +285,11 @@ class GravitationalCouplingRatio(Test):
         "No accepted theory explains WHY this ratio is so large.\n\n"
         "COMPUTATION: alpha_G = G*m_p^2/(hbar*c) = 5.906e-39 (CODATA 2022). "
         "alpha/alpha_G = 1.236e36. log10(alpha/alpha_G) = 36.09.\n\n"
-        "GFD OBSERVATION (near-miss): The nearest integer 36 has decompositions:\n"
+        "GFM OBSERVATION (near-miss): The nearest integer 36 has decompositions:\n"
         "- 36 = 6^2 = SPATIAL_FACES^2\n"
         "- 36 = 4 * 9 = k * d^2\n"
         "However, the actual value is 36.09, not 36.00. The deviation of 0.09 "
-        "in log10 corresponds to a factor of 1.23, which is NOT a clean GFD "
+        "in log10 corresponds to a factor of 1.23, which is NOT a clean GFM "
         "number. This is documented as a NEAR-MISS, not a match.\n\n"
         "CAUTION: The hierarchy problem is mass-dependent. Using the electron "
         "mass gives alpha/alpha_G(m_e) ~ 10^42.5, a different number entirely. "
@@ -309,9 +309,9 @@ class GravitationalCouplingRatio(Test):
             .step("THE RATIO:")
             .equation("alpha / alpha_G = 7.297e-3 / 5.906e-39 = 1.236e36")
             .equation("log10(alpha / alpha_G) = 36.09")
-            .step("GFD OBSERVATION: 36 = 6^2 = SPATIAL_FACES^2 = k * d^2.")
+            .step("GFM OBSERVATION: 36 = 6^2 = SPATIAL_FACES^2 = k * d^2.")
             .step("But the actual value is 36.09, NOT exactly 36.")
-            .step("Deviation: 0.09 in log10 = factor of 1.23. Not a GFD number.")
+            .step("Deviation: 0.09 in log10 = factor of 1.23. Not a GFM number.")
             .conclude("Near-miss: log10(alpha/alpha_G) is close to 36 = 6^2 but "
                       "the 0.09 deviation prevents a clean match.")
         )
@@ -330,11 +330,11 @@ class GravitationalCouplingRatio(Test):
         # Deviation from nearest integer
         deviation = log10_ratio - nearest_int
 
-        # GFD decomposition of 36
+        # GFM decomposition of 36
         spatial_faces_sq = len(SPATIAL_FACES) ** 2  # 6^2 = 36
         k_times_d_sq = K_CLOSURE * D_SPATIAL**2     # 4*9 = 36
 
-        # Check if nearest integer matches a GFD decomposition
+        # Check if nearest integer matches a GFM decomposition
         match_spatial_sq = 1.0 if nearest_int == spatial_faces_sq else 0.0
 
         return (
@@ -374,8 +374,8 @@ class PlanckMassHierarchy(Test):
 
     HONESTY: The Planck mass M_Pl = sqrt(hbar*c/G) ~ 2.18e-8 kg is about
     1.3e19 times the proton mass. The number 19 is PRIME and does NOT
-    decompose cleanly into GFD structural numbers. This is a NULL RESULT
-    for GFD correspondence. We document it honestly.
+    decompose cleanly into GFM structural numbers. This is a NULL RESULT
+    for GFM correspondence. We document it honestly.
     """
     audit_score = 80
     audit_notes = (
@@ -390,11 +390,11 @@ class PlanckMassHierarchy(Test):
     )
     contribution_score = 30
     contribution_notes = (
-        "Discovery: 8/40 - Null result: 19 is prime, no GFD decomposition. "
+        "Discovery: 8/40 - Null result: 19 is prime, no GFM decomposition. "
         "This IS valuable as honest documentation of what does NOT work. "
         "Precision: 12/20 - Computation is exact from CODATA. "
         "Cross-Domain: 5/20 - Connects to hierarchy problem broadly. "
-        "Falsifiability: 5/20 - A null result constrains GFD claims. "
+        "Falsifiability: 5/20 - A null result constrains GFM claims. "
         "TOTAL: 30/100 - Routine but honest. Null results matter."
     )
     future_questions = (
@@ -412,7 +412,7 @@ class PlanckMassHierarchy(Test):
     name = "Planck Mass Hierarchy: M_Pl/m_p and log10 ~ 19"
     question = (
         "The Planck mass is approximately 1.3e19 times the proton mass. "
-        "log10(M_Pl/m_p) ~ 19.11. Does the number 19 have a GFD decomposition? "
+        "log10(M_Pl/m_p) ~ 19.11. Does the number 19 have a GFM decomposition? "
         "Finding: 19 is PRIME and does NOT decompose into k, d, or the face "
         "counts. This is an honest NULL RESULT."
     )
@@ -424,15 +424,15 @@ class PlanckMassHierarchy(Test):
         "scale at which quantum gravity effects become significant. It is about "
         "10^19 times the proton mass, reflecting the extreme weakness of gravity.\n\n"
         "THE RATIO: M_Pl/m_p = 1.301e19. log10 = 19.114.\n\n"
-        "GFD ANALYSIS:\n"
+        "GFM ANALYSIS:\n"
         "- The nearest integer 19 is PRIME.\n"
         "- Attempted decompositions: 19 = 4*5 - 1 = k*(k+1) - 1? Forced.\n"
         "  19 = 3*6 + 1 = d*SPATIAL_FACES + 1? Also forced.\n"
         "  19 = 2*8 + 3 = TIME_FACES*VERTICES + d? Also forced.\n"
-        "- No clean GFD decomposition exists.\n\n"
+        "- No clean GFM decomposition exists.\n\n"
         "NULL RESULT: The Planck-to-proton mass ratio does NOT appear to "
-        "encode GFD structural numbers in any natural way. This is documented "
-        "as an honest negative finding. Not everything connects to GFD, and "
+        "encode GFM structural numbers in any natural way. This is documented "
+        "as an honest negative finding. Not everything connects to GFM, and "
         "documenting failures is as important as documenting successes."
     )
 
@@ -446,14 +446,14 @@ class PlanckMassHierarchy(Test):
             .step("THE RATIO:")
             .equation("M_Pl / m_p = 2.176e-8 / 1.673e-27 = 1.301e19")
             .equation("log10(M_Pl / m_p) = 19.11")
-            .step("GFD DECOMPOSITION ATTEMPTS for 19:")
+            .step("GFM DECOMPOSITION ATTEMPTS for 19:")
             .step("19 is prime. It is NOT k*d (=12), NOT k+d (=7), "
                   "NOT k*d+k (=16), NOT SPATIAL_FACES*d (=18), "
                   "NOT VERTICES*d-k-1 (=19)... ")
             .step("The last attempt 8*3-4-1=19 is forced arithmetic, "
                   "not a meaningful decomposition.")
             .conclude("NULL RESULT: log10(M_Pl/m_p) ~ 19 has no clean "
-                      "GFD decomposition. The hierarchy problem remains unexplained.")
+                      "GFM decomposition. The hierarchy problem remains unexplained.")
         )
 
     def model(self) -> Model:
@@ -466,9 +466,9 @@ class PlanckMassHierarchy(Test):
         ratio_electron = M_PLANCK / M_E
         log10_electron = math.log10(ratio_electron)
 
-        # Is the nearest integer expressible as a simple GFD combination?
+        # Is the nearest integer expressible as a simple GFM combination?
         # 19 is prime -- check against simple combinations
-        gfd_combinations = {
+        GFM_combinations = {
             'k*d': K_CLOSURE * D_SPATIAL,            # 12
             'k+d': K_CLOSURE + D_SPATIAL,             # 7
             'SPATIAL_FACES*d': len(SPATIAL_FACES) * D_SPATIAL,  # 18
@@ -485,7 +485,7 @@ class PlanckMassHierarchy(Test):
             .add("Nearest integer", nearest_int)
             .add("M_Planck / m_electron", ratio_electron)
             .add("log10(M_Pl/m_e)", round(log10_electron, 4))
-            .add("Clean GFD match found", has_clean_match)
+            .add("Clean GFM match found", has_clean_match)
         )
 
     def observations(self) -> Observed:
@@ -502,7 +502,7 @@ class PlanckMassHierarchy(Test):
             .add("Nearest integer", 19)
             .add("M_Planck / m_electron", ratio_e_ref)
             .add("log10(M_Pl/m_e)", round(log10_e_ref, 4))
-            .add("Clean GFD match found", 0.0)
+            .add("Clean GFM match found", 0.0)
         )
 
 
@@ -548,7 +548,7 @@ class PlanckLengthParticleScales(Test):
         "Q2: The proton radius R_p ~ 8.41e-16 m. R_p/L_P ~ 5.2e19. "
         "log10 ~ 19.72. The nearest integer 20 = k*(k+1). Deviation 0.28. "
         "(Answering would improve Cross-Domain by +3: nuclear scale) "
-        "Q3: Is there a LENGTH ratio that EXACTLY matches a GFD number? "
+        "Q3: Is there a LENGTH ratio that EXACTLY matches a GFM number? "
         "We should catalog all standard particle physics lengths and check. "
         "(Answering would improve Discovery by +5: systematic search)"
     )
@@ -556,7 +556,7 @@ class PlanckLengthParticleScales(Test):
     question = (
         "The classical electron radius is about 10^20 Planck lengths. "
         "log10(R_e/L_P) ~ 20.24. The number 20 = k*(k+1) = 4*5 in terms "
-        "of GFD's closure constant. But the deviation of 0.24 in log10 "
+        "of GFM's closure constant. But the deviation of 0.24 in log10 "
         "is a factor of 1.74, which prevents a clean match. How do other "
         "particle length scales compare?"
     )
@@ -571,11 +571,11 @@ class PlanckLengthParticleScales(Test):
         "THE RATIOS:\n"
         "- R_e / L_P = 1.743e20, log10 = 20.24\n"
         "- R_proton / L_P = 5.20e19, log10 = 19.72\n\n"
-        "GFD OBSERVATIONS (weak):\n"
+        "GFM OBSERVATIONS (weak):\n"
         "- log10(R_e/L_P) ~ 20 and 20 = k*(k+1) = 4*5, but deviation is 0.24\n"
         "- log10(R_p/L_P) ~ 20 with deviation 0.28 (even worse)\n"
         "- Neither is a convincing match\n\n"
-        "ASSESSMENT: The length-scale ratios do NOT provide strong GFD "
+        "ASSESSMENT: The length-scale ratios do NOT provide strong GFM "
         "correspondences. The near-integer behavior is expected for any "
         "ratio of the form 10^(19-21) and finding k*(k+1) = 20 in that "
         "range has probability ~1/3. Not significant."
@@ -596,10 +596,10 @@ class PlanckLengthParticleScales(Test):
             .equation("log10(R_e / L_P) = 20.24")
             .step("PROTON RADIUS comparison:")
             .equation("R_p / L_P = 5.20e19, log10 = 19.72")
-            .step("GFD OBSERVATION (weak): 20 = k*(k+1) = 4*5.")
+            .step("GFM OBSERVATION (weak): 20 = k*(k+1) = 4*5.")
             .step("But actual value is 20.24, deviation 0.24. Not convincing.")
             .conclude("Length-scale ratios show near-integer logs but no "
-                      "clean GFD correspondences. Weak observation.")
+                      "clean GFM correspondences. Weak observation.")
         )
 
     def model(self) -> Model:
@@ -611,7 +611,7 @@ class PlanckLengthParticleScales(Test):
         rp_over_lp = R_PROTON / L_PLANCK
         log10_rp = math.log10(rp_over_lp)
 
-        # GFD decomposition of 20
+        # GFM decomposition of 20
         k_times_k1 = K_CLOSURE * (K_CLOSURE + 1)  # 4*5 = 20
 
         # Deviation from 20
@@ -653,11 +653,11 @@ class PlanckLengthParticleScales(Test):
 class HierarchyDimensionlessCatalog(Test):
     """
     Catalog key dimensionless ratios from Planck units and score
-    GFD correspondence for each.
+    GFM correspondence for each.
 
     HONESTY: This is an exploratory catalog. Most ratios do NOT match
-    GFD numbers. The hierarchy problem is UNSOLVED in standard physics
-    and UNSOLVED in GFD. This test documents what we find, including
+    GFM numbers. The hierarchy problem is UNSOLVED in standard physics
+    and UNSOLVED in GFM. This test documents what we find, including
     null results.
     """
     audit_score = 76
@@ -674,8 +674,8 @@ class HierarchyDimensionlessCatalog(Test):
     contribution_score = 38
     contribution_notes = (
         "Discovery: 15/40 - Systematic catalog identifies which ratios are "
-        "close to GFD numbers and which are not. The honest null results "
-        "for the Planck mass ratio are valuable for constraining GFD claims. "
+        "close to GFM numbers and which are not. The honest null results "
+        "for the Planck mass ratio are valuable for constraining GFM claims. "
         "Precision: 8/20 - Near-miss observations have too-large deviations. "
         "Cross-Domain: 10/20 - Connects Planck, QED, and nuclear scales. "
         "Falsifiability: 5/20 - The catalog itself is observational. "
@@ -683,7 +683,7 @@ class HierarchyDimensionlessCatalog(Test):
     )
     future_questions = (
         "Q1: Are there dimensionless ratios from Planck units that match "
-        "GFD numbers EXACTLY (to integer precision)? The only exact match "
+        "GFM numbers EXACTLY (to integer precision)? The only exact match "
         "in this catalog is 4*pi = k*pi, which is unit-dependent. "
         "(Answering would improve Discovery by +10: finding exact matches) "
         "Q2: The Dirac Large Number Hypothesis (1937) relates ~10^40 "
@@ -691,15 +691,15 @@ class HierarchyDimensionlessCatalog(Test):
         "Or 40 = VERTICES * (k+1) = 8*5? These are forced decompositions. "
         "(Answering would improve Cross-Domain by +5: cosmological connection) "
         "Q3: If we catalog ALL dimensionless numbers in physics that are "
-        "simple integers and check against GFD, what fraction match by chance? "
+        "simple integers and check against GFM, what fraction match by chance? "
         "This is the base rate needed for any statistical significance claim. "
         "(Answering would improve Precision by +8: base rate calibration)"
     )
     name = "Hierarchy Problem: Dimensionless Ratio Catalog"
     question = (
         "We catalog the key dimensionless ratios formed from Planck units "
-        "and particle masses, scoring each for GFD correspondence. How many "
-        "of these fundamental numbers encode GFD structural constants? "
+        "and particle masses, scoring each for GFM correspondence. How many "
+        "of these fundamental numbers encode GFM structural constants? "
         "Finding: very few. Most are null results."
     )
     reference = "Planck (1899); Dirac (1937); Barrow & Tipler (1986); CODATA 2022"
@@ -712,16 +712,16 @@ class HierarchyDimensionlessCatalog(Test):
         "NEAR-MISS (suggestive but not exact):\n"
         "- log10(alpha/alpha_G) = 36.09, near 36 = 6^2 (deviation 0.09)\n"
         "- log10(R_e/L_P) = 20.24, near 20 = k*(k+1) (deviation 0.24)\n\n"
-        "NULL RESULTS (no GFD correspondence):\n"
+        "NULL RESULTS (no GFM correspondence):\n"
         "- log10(M_Pl/m_p) = 19.11, 19 is prime\n"
-        "- log10(M_Pl/m_e) = 22.38, 22 = 2*11, no GFD decomposition\n"
+        "- log10(M_Pl/m_e) = 22.38, 22 = 2*11, no GFM decomposition\n"
         "- log10(alpha_G) = -38.23, 38 = 2*19, involves prime 19\n\n"
-        "ASSESSMENT: The hierarchy problem does NOT yield clean GFD "
+        "ASSESSMENT: The hierarchy problem does NOT yield clean GFM "
         "correspondences. The one near-miss (36 ~ 6^2) is interesting "
         "but not exact. The honest conclusion is that Planck unit "
-        "hierarchies are NOT a strong domain for GFD observations.\n\n"
+        "hierarchies are NOT a strong domain for GFM observations.\n\n"
         "This contrasts with black hole physics, where the coefficients "
-        "{2,3,4,6,8} are exact integers that exactly match GFD numbers. "
+        "{2,3,4,6,8} are exact integers that exactly match GFM numbers. "
         "The difference is that BH coefficients are INTEGER by construction "
         "(from geodesic equations), while hierarchy numbers involve "
         "transcendental constants of nature like alpha."
@@ -731,15 +731,15 @@ class HierarchyDimensionlessCatalog(Test):
         return (
             Derivation()
             .step("APPROACH: Catalog dimensionless ratios and check each "
-                  "against GFD structural numbers.")
-            .step("GFD structural numbers in play: 2, 3, 4, 5, 6, 8.")
+                  "against GFM structural numbers.")
+            .step("GFM structural numbers in play: 2, 3, 4, 5, 6, 8.")
             .step("RATIO 1: alpha/alpha_G ~ 10^36.09. Near 36 = 6^2. NEAR-MISS.")
             .step("RATIO 2: M_Pl/m_p ~ 10^19.11. 19 is prime. NULL.")
             .step("RATIO 3: M_Pl/m_e ~ 10^22.38. 22 = 2*11. NULL.")
             .step("RATIO 4: R_e/L_P ~ 10^20.24. Near 20 = 4*5. NEAR-MISS.")
             .step("RATIO 5: alpha_G ~ 10^{-38.23}. 38 = 2*19. NULL.")
             .step("SCORING: 0 exact matches, 2 near-misses, 3 null results.")
-            .conclude("The hierarchy problem is NOT a strong domain for GFD "
+            .conclude("The hierarchy problem is NOT a strong domain for GFM "
                       "number correspondences. Honest null results documented.")
         )
 
@@ -761,8 +761,8 @@ class HierarchyDimensionlessCatalog(Test):
         log_alpha_G = math.log10(alpha_G)
 
         # Count results
-        # Near-miss: within 0.25 of a recognized GFD combination
-        gfd_targets = {
+        # Near-miss: within 0.25 of a recognized GFM combination
+        GFM_targets = {
             36: 'SPATIAL_FACES^2',   # 6^2
             20: 'k*(k+1)',           # 4*5
         }
@@ -773,7 +773,7 @@ class HierarchyDimensionlessCatalog(Test):
                                 (log_mass_e, 'mass_e'), (log_re, 're'),
                                 (abs(log_alpha_G), 'alpha_G')]:
             nearest = round(log_val)
-            if nearest in gfd_targets and abs(log_val - nearest) < 0.25:
+            if nearest in GFM_targets and abs(log_val - nearest) < 0.25:
                 near_misses += 1
             else:
                 null_results += 1
@@ -784,10 +784,10 @@ class HierarchyDimensionlessCatalog(Test):
         return (
             Model()
             .add("Total ratios examined", total_ratios)
-            .add("Exact GFD matches", exact_matches)
+            .add("Exact GFM matches", exact_matches)
             .add("Near-misses (within 0.25)", near_misses)
             .add("Null results", null_results)
-            .add("GFD match fraction", round(exact_matches / total_ratios, 4))
+            .add("GFM match fraction", round(exact_matches / total_ratios, 4))
         )
 
     def observations(self) -> Observed:
@@ -795,10 +795,10 @@ class HierarchyDimensionlessCatalog(Test):
         return (
             Observed()
             .add("Total ratios examined", 5)
-            .add("Exact GFD matches", 0)
+            .add("Exact GFM matches", 0)
             .add("Near-misses (within 0.25)", 2)
             .add("Null results", 3)
-            .add("GFD match fraction", 0.0)
+            .add("GFM match fraction", 0.0)
         )
 
 
@@ -822,13 +822,13 @@ def run_all() -> bool:
         summary=(
             "STATUS: Work in progress\n\n"
             "EXPLORING:\n"
-            "- Dimensionless ratios from Planck units vs GFD structural numbers\n"
+            "- Dimensionless ratios from Planck units vs GFM structural numbers\n"
             "- The hierarchy problem: does gravity's weakness encode geometry?\n"
             "- Honest documentation of matches, near-misses, and null results\n\n"
             "FINDINGS:\n"
-            "- 0 exact GFD matches (4*pi is unit-dependent)\n"
+            "- 0 exact GFM matches (4*pi is unit-dependent)\n"
             "- 2 near-misses (36 ~ 6^2, 20 ~ k*(k+1))\n"
-            "- 3 null results (19, 22, 38 have no GFD decomposition)\n\n"
+            "- 3 null results (19, 22, 38 have no GFM decomposition)\n\n"
             "5 tests: 1 CRITICAL, 3 STANDARD, 1 EXPLORATORY"
         ),
         test_classes=ALL_TESTS,

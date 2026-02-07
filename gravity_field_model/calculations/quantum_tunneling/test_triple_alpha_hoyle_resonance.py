@@ -15,7 +15,7 @@ which is unstable with a lifetime of only 8.19e-17 seconds, creating a
 severe bottleneck. The Hoyle state resonance rescues carbon production
 by enhancing the Be-8 + He-4 capture rate at stellar temperatures.
 
-GFD OBSERVATION: Be-8 (A=2*k) is unstable; C-12 (A=3*k) achieves stable closure.
+GFM OBSERVATION: Be-8 (A=2*k) is unstable; C-12 (A=3*k) achieves stable closure.
 
 This is an OBSERVATION, not a derivation.
 """
@@ -46,7 +46,7 @@ class TripleAlphaHoyleResonance(Test):
     nuclear physics. Fowler received the 1983 Nobel Prize in part for
     this work.
 
-    GFD OBSERVATION:
+    GFM OBSERVATION:
     Be-8 has A=8 = 2*k, representing two complete tetrahedra that cannot
     nest into a stable configuration (lifetime 8.19e-17 s). C-12 has
     A=12 = 3*k, representing three tetrahedra in a triangular arrangement
@@ -111,7 +111,7 @@ class TripleAlphaHoyleResonance(Test):
     # Audit scoring
     audit_score = 82
     audit_notes = (
-        "Question: 13/15 (strong mystery hook with specific numbers like 8.19e-17 s lifetime and 0.04% branching ratio, but tries to ask two separate questions in one, the standard physics validation and the geometric significance, which dilutes the central tension slightly). Derivation: 12/15 (good sequential structure walking through all three steps of the triple alpha process, Salpeter equilibrium is well motivated, but jumps into the Breit Wigner formula without building intuition for why a resonance enhances the rate, missing the analogy of a resonance as a doorway that swings open at exactly the right energy). Commentary: 11/15 (accurately summarizes results and is epistemically honest, but lacks an aha moment or analogy that makes the reader feel the significance, does not convey the drama that without the Hoyle state there would be no carbon based life, restates numbers more than it delivers insight). Model: 6/10 (22 output values is too many, mixes computed quantities like Gamow energy with pass through constants like Hoyle state excitation energy that are identical to observations, the nucleon count entries are trivially k*n and add clutter without computational content, would benefit from reducing to 8 to 12 key computed quantities). Observations: 9/10 (values are well sourced from nuclear data tables and the reference list is excellent with six authoritative citations, minor gap is that the Gamow peak observed value of 73 keV and the Gamow energy of 244 keV lack explicit source attribution in the observations method itself). Constants: 8/10 (major constants C, HBAR, K_B, ALPHA, M_P, E_CHARGE, EPSILON_0, K imported correctly from common, but 1.602176634e-19 appears as a hardcoded conversion factor four times in the model method instead of importing EV from common, and several nuclear data values like Q_Be8_keV and tau_Be8 are hardcoded inline without comment noting their source). Accessibility: 13/15 (the derivation builds well from simple Coulomb barrier through Gamow peak to resonance capture, an undergraduate with nuclear physics background can follow, but the Breit Wigner step and Salpeter equilibrium equation assume graduate level familiarity, no everyday analogy is offered for what a nuclear resonance feels like). Header: 10/10 (module docstring is comprehensive with clear physical context, specific numbers, GFD observation clearly labeled, epistemic status explicit, scope well defined, all three sections present and substantive)."
+        "Question: 13/15 (strong mystery hook with specific numbers like 8.19e-17 s lifetime and 0.04% branching ratio, but tries to ask two separate questions in one, the standard physics validation and the geometric significance, which dilutes the central tension slightly). Derivation: 12/15 (good sequential structure walking through all three steps of the triple alpha process, Salpeter equilibrium is well motivated, but jumps into the Breit Wigner formula without building intuition for why a resonance enhances the rate, missing the analogy of a resonance as a doorway that swings open at exactly the right energy). Commentary: 11/15 (accurately summarizes results and is epistemically honest, but lacks an aha moment or analogy that makes the reader feel the significance, does not convey the drama that without the Hoyle state there would be no carbon based life, restates numbers more than it delivers insight). Model: 6/10 (22 output values is too many, mixes computed quantities like Gamow energy with pass through constants like Hoyle state excitation energy that are identical to observations, the nucleon count entries are trivially k*n and add clutter without computational content, would benefit from reducing to 8 to 12 key computed quantities). Observations: 9/10 (values are well sourced from nuclear data tables and the reference list is excellent with six authoritative citations, minor gap is that the Gamow peak observed value of 73 keV and the Gamow energy of 244 keV lack explicit source attribution in the observations method itself). Constants: 8/10 (major constants C, HBAR, K_B, ALPHA, M_P, E_CHARGE, EPSILON_0, K imported correctly from common, but 1.602176634e-19 appears as a hardcoded conversion factor four times in the model method instead of importing EV from common, and several nuclear data values like Q_Be8_keV and tau_Be8 are hardcoded inline without comment noting their source). Accessibility: 13/15 (the derivation builds well from simple Coulomb barrier through Gamow peak to resonance capture, an undergraduate with nuclear physics background can follow, but the Breit Wigner step and Salpeter equilibrium equation assume graduate level familiarity, no everyday analogy is offered for what a nuclear resonance feels like). Header: 10/10 (module docstring is comprehensive with clear physical context, specific numbers, GFM observation clearly labeled, epistemic status explicit, scope well defined, all three sections present and substantive)."
     )
 
     academic_paper = """\
@@ -193,7 +193,7 @@ TITLE Triple Alpha Process and Hoyle State Resonance: Gamow Tunneling Validation
                 "the NACRE rate formula."
             )
             .step(
-                "GFD OBSERVATION: The nucleon counts in the triple alpha "
+                "GFM OBSERVATION: The nucleon counts in the triple alpha "
                 "sequence follow multiples of k=4. He-4 (A=4=k) is the most "
                 "tightly bound light nucleus, a complete tetrahedral closure. "
                 "Be-8 (A=8=2k) represents two complete tetrahedra that lack a "

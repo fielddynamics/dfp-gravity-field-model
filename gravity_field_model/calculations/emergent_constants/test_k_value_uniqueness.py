@@ -8,7 +8,7 @@ k=5, k=6, k=8) could produce valid gravitational constants. This is critical
 because the G derivation formula G = (k^2+1)/(kd+1) * alpha^(1+k+k^2) *
 (hbar*c/m_e^2) uses k as an input parameter.
 
-GFD OBSERVATION: k=4 produces G within 0.13% of measured value.
+GFM OBSERVATION: k=4 produces G within 0.13% of measured value.
 
 This is an OBSERVATION, not a derivation.
 """
@@ -25,12 +25,12 @@ class KValueUniquenessTest(Test):
     PHYSICAL CONTEXT:
     The gravitational constant G = 6.674e-11 m^3/(kg*s^2) is measured
     experimentally but not derived from first principles in standard physics.
-    The GFD framework claims G emerges from geometric coupling with k=4 as the
+    The GFM framework claims G emerges from geometric coupling with k=4 as the
     tetrahedral closure constant (minimum vertices to enclose 3D volume).
     However, k=4 is currently an INPUT to the theory, not a derived quantity.
     If k were adjustable, the entire G derivation would reduce to curve-fitting.
 
-    GFD OBSERVATION:
+    GFM OBSERVATION:
     Testing k=3,4,5,6,8 in the formula G(k) = (k^2+1)/(3k+1) * alpha^(1+k+k^2)
     * (hbar*c/m_e^2) shows that only k=4 produces G within two orders of
     magnitude of the measured value. Other k values produce physically absurd
@@ -55,7 +55,7 @@ class KValueUniquenessTest(Test):
         "post-hoc selection?"
     )
 
-    reference = "CODATA 2018 (G measured); GFD Framework (k=4 claim)"
+    reference = "CODATA 2018 (G measured); GFM Framework (k=4 claim)"
 
     tolerance = 0.10
 
@@ -63,7 +63,7 @@ class KValueUniquenessTest(Test):
 
     commentary = (
         "Standard physics does not derive G from geometry, treating it as a "
-        "fundamental constant determined by experiment. GFD claims k=4 (tetrahedral "
+        "fundamental constant determined by experiment. GFM claims k=4 (tetrahedral "
         "vertices) determines G through coupling channel counting. Testing k=3,5,6,8 "
         "systematically shows that these values produce G estimates wildly inconsistent "
         "with observation: k=3 gives negative exponents (unphysical), k=5 gives G "
@@ -82,7 +82,7 @@ class KValueUniquenessTest(Test):
         return (
             Derivation()
             .step("STANDARD PHYSICS: G is a measured fundamental constant, not derived.")
-            .step("GFD CLAIM: G emerges from k=4 field closure via Merkaba coupling.")
+            .step("GFM CLAIM: G emerges from k=4 field closure via Merkaba coupling.")
             .step("TEST PROCEDURE: Calculate G(k) for k=3,4,5,6,8 using the formula.")
             .equation("G(k) = (k^2+1)/(3k+1) * alpha^(1+k+k^2) * (hbar*c/m_e^2)")
             .step("For k=3: exponent = 1+3+9 = 13, ratio = 10/10 = 1.00")

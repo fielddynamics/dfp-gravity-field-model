@@ -2,22 +2,22 @@
 Probing Vortex Transit: Geometric Length Scales in Nuclear Physics
 ==================================================================
 
-GFD Model V2
+GFM Model V2
 
 INVESTIGATION STATEMENT:
-The GFD model defines a "vortex eye" (Field Origin) at the center of the
+The GFM model defines a "vortex eye" (Field Origin) at the center of the
 stellated octahedron with characteristic size r_e/4. These tests PROBE
-whether GFD-derived length scales appear naturally in nuclear physics:
+whether GFM-derived length scales appear naturally in nuclear physics:
 
 1. Is the vortex eye size (r_e/4 ≈ 0.705 fm) related to the proton radius?
 2. Can the p-p Coulomb barrier be reconstructed from r_e and α?
 3. What is the energy density at the vortex eye, and how does it compare
    to nuclear matter?
 
-These are hypothesis-generating tests that look for GFD signatures in
+These are hypothesis-generating tests that look for GFM signatures in
 measured nuclear quantities.
 
-Audience: Graduate nuclear/particle physics students, GFD model developers.
+Audience: Graduate nuclear/particle physics students, GFM model developers.
 """
 
 import math
@@ -39,7 +39,7 @@ PI = math.pi
 
 class VortexEyeProtonRadiusRatio(Test):
     """
-    The GFD vortex eye has size r_e/4 ≈ 0.705 fm. The measured proton
+    The GFM vortex eye has size r_e/4 ≈ 0.705 fm. The measured proton
     charge radius is 0.841 fm (muonic hydrogen, 2019). The ratio is:
 
         r_eye / r_proton ≈ 0.705 / 0.841 ≈ 0.838
@@ -70,13 +70,13 @@ class VortexEyeProtonRadiusRatio(Test):
     )
     name = "Vortex Eye vs Proton Charge Radius"
     question = (
-        "The GFD vortex eye (r_e/4 ≈ 0.705 fm) and the proton charge radius "
+        "The GFM vortex eye (r_e/4 ≈ 0.705 fm) and the proton charge radius "
         "(0.841 fm) are both sub-femtometer nuclear length scales. Their ratio "
         "is ~0.84. Is this close to any fundamental constant, geometric ratio, "
         "or power of α? Or is it just two unrelated length scales that happen "
         "to be in the same ballpark?"
     )
-    reference = "GFD model; Proton radius (muonic hydrogen, Pohl 2019)"
+    reference = "GFM model; Proton radius (muonic hydrogen, Pohl 2019)"
     tolerance = 0.15
     level = Level.STANDARD
     commentary = (
@@ -90,7 +90,7 @@ class VortexEyeProtonRadiusRatio(Test):
     def derivation(self) -> Derivation:
         return (
             Derivation()
-            .step("VORTEX EYE: r_eye = r_e / 4 (GFD model definition)")
+            .step("VORTEX EYE: r_eye = r_e / 4 (GFM model definition)")
             .equation("r_eye = 2.818 fm / 4 = 0.705 fm")
             .step("PROTON RADIUS: r_p = 0.841 fm (muonic hydrogen, Pohl 2019)")
             .equation("Ratio = r_eye / r_p = 0.705 / 0.841 = 0.838")
@@ -158,12 +158,12 @@ class CoulombBarrierFromGeometry(Test):
 
     Using R = 2 × r_e/4 (twice the vortex eye size):
 
-        V_C(GFD) ≈ 1.02 MeV
+        V_C(GFM) ≈ 1.02 MeV
 
-    This test compares both calculations to see whether the GFD length
+    This test compares both calculations to see whether the GFM length
     scale produces a better or worse estimate of the p-p barrier.
 
-    HONESTY: This is a COMPARISON, not a claim that GFD derives the barrier.
+    HONESTY: This is a COMPARISON, not a claim that GFM derives the barrier.
     """
     audit_score = 84
     audit_notes = None
@@ -175,12 +175,12 @@ class CoulombBarrierFromGeometry(Test):
         "This is too small. What does the 'correct' distance tell us? "
         "(Answering would improve Commentary by +3 points) "
         "Q3: Can the full Coulomb + nuclear potential shape be reconstructed "
-        "from GFD parameters (r_e, k, α)? "
+        "from GFM parameters (r_e, k, α)? "
         "(Answering would improve Question by +3 points)"
     )
     name = "p-p Coulomb Barrier from Geometric Length Scales"
     question = (
-        "Can the proton-proton Coulomb barrier be estimated using the GFD "
+        "Can the proton-proton Coulomb barrier be estimated using the GFM "
         "vortex eye size (r_e/4) as the approach distance? Compare: "
         "V_C(r_proton) vs V_C(r_e/4). Which geometric length scale "
         "gives a better estimate of the ~0.5-1 MeV Coulomb barrier?"
@@ -191,7 +191,7 @@ class CoulombBarrierFromGeometry(Test):
     commentary = (
         "The Coulomb barrier for p-p fusion depends on the distance where the "
         "nuclear strong force takes over from electromagnetic repulsion. Using "
-        "the proton radius (~0.84 fm) or the GFD vortex eye (~0.71 fm) gives "
+        "the proton radius (~0.84 fm) or the GFM vortex eye (~0.71 fm) gives "
         "barriers in the 0.8-1.0 MeV range. Both are reasonable estimates. "
         "The comparison tests whether r_e/4 is a physically relevant length "
         "scale for nuclear interactions."
@@ -372,11 +372,11 @@ def run_all() -> bool:
     return run_tests(
         title="Probing Vortex Transit",
         summary=(
-            "These tests probe GFD geometric length scales against nuclear physics:\n"
+            "These tests probe GFM geometric length scales against nuclear physics:\n"
             "1. Vortex eye vs proton radius: How close is r_e/4 to r_proton?\n"
             "2. Coulomb barrier: Can r_e/4 predict the p-p barrier height?\n"
             "3. Energy density: Is the vortex eye at nuclear energy scales?\n\n"
-            "METHODOLOGY: Compare GFD-derived quantities to measured nuclear data.\n"
+            "METHODOLOGY: Compare GFM-derived quantities to measured nuclear data.\n"
             "HONESTY: r_e/4 is a model definition. Matches are observations, not proofs."
         ),
         test_classes=ALL_TESTS,

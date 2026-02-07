@@ -67,7 +67,7 @@ class OriginEquidistantFromVertices(Test):
         "This equidistance property makes (0,0,0) the natural center of the "
         "Field Chamber, where no vertex is geometrically privileged."
     )
-    reference = "GFD Textbook Ch.9 Sec.9.5: Equidistance property of Field Origin"
+    reference = "GFM Textbook Ch.9 Sec.9.5: Equidistance property of Field Origin"
     tolerance = 0.01
     commentary = (
         "Every vertex at (+/-1, +/-1, +/-1) is at distance sqrt(3) from the origin, "
@@ -127,7 +127,7 @@ class AllBodyDiagonalsIntersectAtOrigin(Test):
         "This reveals the origin as the unique common point of all antipodal "
         "paths, making it the topological center of the cube."
     )
-    reference = "GFD Textbook Ch.9 Sec.9.5: Body diagonals through Field Origin"
+    reference = "GFM Textbook Ch.9 Sec.9.5: Body diagonals through Field Origin"
     tolerance = 0.01
     commentary = (
         "Antipodal vertices have coordinates that are negatives of each other. "
@@ -182,7 +182,7 @@ class OriginMinimizesGraphEccentricity(Test):
         "cube graph? Adding the origin as a hub node makes it the optimal "
         "routing center, reachable from any vertex in just one hop."
     )
-    reference = "Graph theory; GFD Textbook Ch.9: Field Origin as graph center"
+    reference = "Graph theory; GFM Textbook Ch.9: Field Origin as graph center"
     tolerance = 0.01
     commentary = (
         "With the origin connected to all 8 vertices, its eccentricity is 1 "
@@ -240,7 +240,7 @@ class OriginImprovesConnectivity(Test):
         "This shows how the origin acts as a routing shortcut, connecting "
         "antipodal vertices that would otherwise require three edge hops."
     )
-    reference = "Graph theory; GFD Textbook Ch.9: Origin as connectivity hub"
+    reference = "Graph theory; GFM Textbook Ch.9: Origin as connectivity hub"
     tolerance = 0.01
     commentary = (
         "The cube graph has diameter 3 (e.g., vertex 0 to vertex 7 requires "
@@ -299,7 +299,7 @@ class CrossTetrahedralPaths(Test):
         "opposite chambers? This shows how the Field Origin mediates all direct "
         "bimetric coupling between Chamber A and Chamber B."
     )
-    reference = "GFD Textbook Ch.9 Sec.9.3: Bimetric coupling through Field Origin"
+    reference = "GFM Textbook Ch.9 Sec.9.3: Bimetric coupling through Field Origin"
     tolerance = 0.01
     commentary = (
         "Body diagonals connect antipodal vertices, which have opposite parities "
@@ -366,7 +366,7 @@ class SymmetryPreservation(Test):
         "This establishes (0,0,0) as the invariant center, preserved under every "
         "rotation and reflection of the Oh symmetry group."
     )
-    reference = "Oh symmetry group; GFD Textbook Ch.9: Symmetry of Field Origin"
+    reference = "Oh symmetry group; GFM Textbook Ch.9: Symmetry of Field Origin"
     tolerance = 0.01
     commentary = (
         "The Oh group (48 symmetries) includes all rotations and reflections of "

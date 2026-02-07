@@ -2,7 +2,7 @@
 Probing Cross-Checks: SEMF Residuals, Pairing, and Asymmetry
 ==============================================================
 
-GFD Model V2
+GFM Model V2
 
 INVESTIGATION STATEMENT:
 The semi-empirical mass formula (SEMF) captures the bulk of nuclear binding.
@@ -318,7 +318,7 @@ class AsymmetryTermFromIsobars(Test):
         "stability boundary? "
         "(Answering would improve Commentary by +3 points) "
         "Q3: The asymmetry term coefficient a_A ≈ 23 MeV comes from isospin "
-        "symmetry. How does isospin relate to the GFD model's tetrahedron "
+        "symmetry. How does isospin relate to the GFM model's tetrahedron "
         "parity (TET_A vs TET_B)? "
         "(Answering would improve Question by +3 points)"
     )

@@ -2,7 +2,7 @@
 Historical Systems: Geometric Foundations (Renamed from original misleading name)
 
 This folder originally contained "historical systems" tests, some of which made
-pseudoscientific claims about ancient cultures encoding GFD constants. Those tests
+pseudoscientific claims about ancient cultures encoding GFM constants. Those tests
 have been removed. What remains is legitimate geometry.
 
 Current contents:

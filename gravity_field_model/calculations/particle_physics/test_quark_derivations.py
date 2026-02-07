@@ -6,7 +6,7 @@ STATUS: NUMERICAL CORRESPONDENCES (not derivations)
 MOTIVATION:
 Why is the fundamental charge quantum 1/3 and not 1/2 or 1/5? The Standard Model
 derives fractional charges from gauge anomaly cancellation, but accepts 1/3 as
-an input. GFD offers a geometric origin: the Port Ratio 1/d = 1/(k-1) = 1/3 emerges
+an input. GFM offers a geometric origin: the Port Ratio 1/d = 1/(k-1) = 1/3 emerges
 from tetrahedral Field Closure.
 
 KEY CORRESPONDENCES:
@@ -16,7 +16,7 @@ KEY CORRESPONDENCES:
 
 CRITICAL HONESTY NOTE:
 These are CORRESPONDENCES, not DERIVATIONS. The Standard Model derives charges
-from SU(3) x SU(2) x U(1) gauge theory. GFD provides a geometric picture that
+from SU(3) x SU(2) x U(1) gauge theory. GFM provides a geometric picture that
 produces the same numbers. Whether this indicates deeper structure or coincidence
 is for the reader to evaluate.
 
@@ -36,7 +36,7 @@ D = K_CLOSURE - 1  # d = k - 1 = 3 (SPATIAL dimensions from Field Closure)
 N_STELLATED_VERTICES = 2 * K_CLOSURE  # 8 vertices in stellated octahedron
 CORNERS_PER_FACE = D  # 3 corners per triangular Coupling Port face
 
-# The key GFD correspondence (textbook Section 7.7)
+# The key GFM correspondence (textbook Section 7.7)
 PORT_RATIO = 1 / D  # 1/3 (charge quantum from geometry)
 
 # Standard Model values (for comparison, PDG 2024)
@@ -80,7 +80,7 @@ class ChargeQuantumCorrespondence(Test):
     Why is the fundamental charge quantum exactly 1/3?
     
     The Standard Model accepts e/3 from gauge theory, but does not explain why
-    triangular-based 1/3 rather than some other fraction. GFD offers a geometric
+    triangular-based 1/3 rather than some other fraction. GFM offers a geometric
     answer: Field Closure requires k = 4 faces, giving d = k - 1 = 3 SPATIAL
     dimensions. The Port Ratio 1/d = 1/3 then sets the charge granularity.
     
@@ -131,7 +131,7 @@ class ThreeColorsCorrespondence(Test):
     Why does QCD have exactly 3 color charges?
     
     The Standard Model chooses SU(3) for the strong force, giving 3 colors by
-    definition. But why SU(3) and not SU(2) or SU(4)? GFD suggests the answer
+    definition. But why SU(3) and not SU(2) or SU(4)? GFM suggests the answer
     lies in geometry: each Coupling Port face is triangular with d = 3 vertices.
     If each vertex position represents one color state, then triangular geometry
     forces exactly 3 colors.
@@ -202,7 +202,7 @@ class ThreeQuarksCorrespondence(Test):
     
     commentary = (
         "The requirement for 3 quarks per baryon corresponds to the 3 vertices of a "
-        "triangular face. In the GFD picture, a baryon represents complete occupation "
+        "triangular face. In the GFM picture, a baryon represents complete occupation "
         "of all vertex positions on a SPATIAL face, achieving color neutrality through "
         "R+G+B combination. This is a structural correspondence, not a derivation of "
         "confinement physics."
@@ -365,14 +365,14 @@ class ThreeDimensions(Test):
     """
     Why does space have exactly 3 dimensions?
     
-    Physics typically accepts d = 3 as given. GFD derives it: Field Closure
+    Physics typically accepts d = 3 as given. GFM derives it: Field Closure
     requires the minimum closed 3D shape, a tetrahedron with k = 4 faces.
     One face handles TIME, leaving d = k - 1 = 3 for SPATIAL dimensions.
     
     audit_score = 86
     audit_notes = None
     future_questions = (
-        "Q1: Why do string theories require extra dimensions while GFD predicts exactly 3? "
+        "Q1: Why do string theories require extra dimensions while GFM predicts exactly 3? "
         "(Answering would improve Question by +3 points: contrasts with other theories) "
         "Q2: How does the TIME face differ geometrically from SPATIAL faces? "
         "(Answering would improve Derivation by +2 points: clarifies time-space distinction) "
@@ -398,7 +398,7 @@ class ThreeDimensions(Test):
         )
     
     commentary = (
-        "Most theories accept d = 3 as an unexplained fact. GFD proposes it emerges from "
+        "Most theories accept d = 3 as an unexplained fact. GFM proposes it emerges from "
         "Field Closure: consistency requires k = 4 coupling channels (tetrahedral), and "
         "reserving one for TIME leaves d = 3 for space. This links spatial dimensionality "
         "to the requirements of gravitational consistency, not to arbitrary choice."
@@ -436,7 +436,7 @@ class ProtonChargeConsistency(Test):
     commentary = (
         "The proton charge calculation verifies CONSISTENCY of the charge assignments "
         "with the 1/3 quantum. Note that u = +2/3 and d = -1/3 are ASSIGNED based on "
-        "the Standard Model values, not derived from geometry. GFD provides a picture "
+        "the Standard Model values, not derived from geometry. GFM provides a picture "
         "(vertex activations) consistent with these assignments, but does not derive them."
     )
     
@@ -491,7 +491,7 @@ class NeutronChargeConsistency(Test):
 class ThreeGenerationsCorrespondence(Test):
     """
     The Standard Model has 3 fermion generations.
-    GFD has d = 3 SPATIAL dimensions.
+    GFM has d = 3 SPATIAL dimensions.
     This numerical correspondence is noted as SPECULATIVE.
     """
     name = "Three Generations Correspondence"
@@ -513,7 +513,7 @@ class ThreeGenerationsCorrespondence(Test):
     commentary = (
         "SPECULATIVE: The numerical match between d = 3 SPATIAL dimensions and 3 fermion "
         "generations is intriguing but lacks a proposed mechanism. The Standard Model does "
-        "not explain WHY there are 3 generations; GFD's d = 3 provides a number that matches "
+        "not explain WHY there are 3 generations; GFM's d = 3 provides a number that matches "
         "but not an explanation. This should be regarded as an open question."
     )
     
@@ -555,7 +555,7 @@ def run_all():
             "correspondence is Port Ratio = 1/d = 1/3, matching the quark charge quantum. "
             "\n\n"
             "IMPORTANT: These are correspondences, not derivations. The Standard Model "
-            "derives fractional charges from gauge theory. GFD observes that tetrahedral "
+            "derives fractional charges from gauge theory. GFM observes that tetrahedral "
             "geometry produces the same numbers. Whether this indicates deeper structure "
             "or coincidence is left for the reader to evaluate."
         ),

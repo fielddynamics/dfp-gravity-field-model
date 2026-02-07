@@ -2,12 +2,12 @@
 Stellar Power Output: Standard Astrophysics Verification
 =========================================================
 
-GFD Model V2
+GFM Model V2
 
 HONESTY STATEMENT:
 This module verifies STANDARD ASTROPHYSICS data about stellar energy production.
 The physics (E=mc^2, pp-chain, solar luminosity) is well established and does
-NOT derive from GFD.
+NOT derive from GFM.
 
 WHAT IS VERIFIED:
 - pp-chain releases 26.7 MeV per He-4 (standard nuclear physics)
@@ -19,12 +19,12 @@ WHAT IS VERIFIED:
 THE "P = BE x f_closure" FORMULA:
 The formula Power = BindingEnergy x (c/lambda_C) expresses binding energy
 in power units by multiplying by a frequency. This frequency f = c/lambda_C
-is DEFINED as the "field closure frequency" in GFD. However:
+is DEFINED as the "field closure frequency" in GFM. However:
 - This does NOT derive stellar power output
 - It is a way of expressing binding energy, not a prediction
 - The formula is dimensional analysis, not physics derivation
 
-GFD terminology (Field Closure, bowling ball, squish ball) provides metaphors
+GFM terminology (Field Closure, bowling ball, squish ball) provides metaphors
 for standard physics but does not derive new results.
 
 TEST GROUP GOALS:
@@ -85,7 +85,7 @@ def get_binding_energy(A):
 
 def power_per_field(A):
     """
-    Calculate power per gravity field (W) using GFD formula.
+    Calculate power per gravity field (W) using GFM formula.
 
     HONESTY: This multiplies binding energy by a defined frequency.
     It does NOT derive power output. It expresses BE in different units.
@@ -111,7 +111,7 @@ _ELEMENT_BY_SYMBOL = {sym: a for sym, _, _, a in ELEMENTS}
         "HONESTY NOTE:\n"
         "This formula does NOT derive stellar power output. It expresses the\n"
         "binding energy per nucleon in power units (Watts) by multiplying by\n"
-        "f_closure = c/lambda_C, a frequency defined in the GFD model.\n\n"
+        "f_closure = c/lambda_C, a frequency defined in the GFM model.\n\n"
         "The physical content is the binding energy BE(A), which comes from\n"
         "nuclear physics (AME2020 data). The 'power' is a unit conversion,\n"
         "not a prediction."
@@ -171,7 +171,7 @@ class BindingEnergyRelease(Test):
     commentary = (
         "The pp-chain reaction 4p -> He-4 + 2e+ + 2nu releases 26.7 MeV. This is "
         "standard nuclear physics. The energy comes from the mass defect: the "
-        "He-4 nucleus is 0.7% lighter than 4 separate protons. GFD does not "
+        "He-4 nucleus is 0.7% lighter than 4 separate protons. GFM does not "
         "derive this value. It adopts it from nuclear data."
     )
 
@@ -215,7 +215,7 @@ class MassDefectCalculation(Test):
     """
     Verify E=mc^2 for mass defect.
 
-    HONESTY: Einstein 1905. Standard physics. GFD does not improve on this.
+    HONESTY: Einstein 1905. Standard physics. GFM does not improve on this.
     """
     audit_score = 86
     audit_notes = None
@@ -240,7 +240,7 @@ class MassDefectCalculation(Test):
     commentary = (
         "E=mc^2 relates mass defect to energy release. For pp-chain: "
         "dm x c^2 = 26.7 MeV. This is standard physics, verified countless "
-        "times. GFD adopts E=mc^2 without modification."
+        "times. GFM adopts E=mc^2 without modification."
     )
 
     def derivation(self) -> Derivation:
@@ -311,7 +311,7 @@ class SolarFieldBindingRate(Test):
     commentary = (
         "Fusion rate = L_solar / E_per_reaction. With L = 3.828e26 W and "
         "E = 26.7 MeV = 4.28e-12 J, we get ~9e37 reactions/second. This is "
-        "standard astrophysics, not a GFD derivation."
+        "standard astrophysics, not a GFM derivation."
     )
 
     def derivation(self) -> Derivation:
@@ -508,7 +508,7 @@ class BindingEnergyPeak(Test):
     level = Level.CRITICAL
     commentary = (
         "Fe-56 (and Ni-62) have the highest binding energy per nucleon at "
-        "~8.79 MeV. This is measured nuclear data, not a GFD prediction. "
+        "~8.79 MeV. This is measured nuclear data, not a GFM prediction. "
         "The semi-empirical mass formula explains WHY the peak is at Fe-56."
     )
 
@@ -702,7 +702,7 @@ def run_all() -> bool:
             "4. Mass loss rate = L/c^2\n"
             "5. Stefan-Boltzmann law for surface luminosity\n"
             "6. Fe-56 is binding energy peak (measured)\n\n"
-            "CLARIFICATION: The 'P = BE x f_closure' formula in the original GFD\n"
+            "CLARIFICATION: The 'P = BE x f_closure' formula in the original GFM\n"
             "tests is not a physics derivation. It expresses binding energy in\n"
             "power units by multiplying by a defined frequency. The physical\n"
             "content is the binding energy, which comes from nuclear data."

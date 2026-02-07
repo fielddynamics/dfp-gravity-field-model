@@ -10,7 +10,7 @@ geometric origin: the surface area of a unit sphere in d=3 spatial
 dimensions. If so, this would establish that the 4*pi is not specific to
 electromagnetism but universal to all inverse-square laws in 3D space.
 
-GFD OBSERVATION: Both forces have 4*pi = k*pi where k = K_CLOSURE = 4.
+GFM OBSERVATION: Both forces have 4*pi = k*pi where k = K_CLOSURE = 4.
 
 This is an OBSERVATION, not a derivation.
 """
@@ -38,7 +38,7 @@ class GravityElectrostaticsUnifiedGeometry(Test):
     is whether BOTH 4*pi factors (electromagnetic and gravitational) arise
     from the same geometric fact: the surface area of a sphere in d=3 space.
 
-    GFD OBSERVATION:
+    GFM OBSERVATION:
     Both the Coulomb 4*pi and the gravitational 4*pi equal k*pi where
     k = K_CLOSURE = 4. This suggests a unified geometric origin: all
     inverse-square laws in d=3 dimensions necessarily contain the solid angle
@@ -47,8 +47,8 @@ class GravityElectrostaticsUnifiedGeometry(Test):
 
     EPISTEMIC STATUS:
     This is a verification of standard physics (Gauss's law for both forces)
-    combined with a GFD OBSERVATION that both 4*pi factors match K_CLOSURE*pi.
-    The geometric origin of 4*pi is established physics. The GFD pattern is
+    combined with a GFM OBSERVATION that both 4*pi factors match K_CLOSURE*pi.
+    The geometric origin of 4*pi is established physics. The GFM pattern is
     an observation, not a derivation.
     """
 
@@ -80,7 +80,7 @@ class GravityElectrostaticsUnifiedGeometry(Test):
         "integral g*dA = -4*pi*G*M (note the explicit 4*pi in gravitational "
         "Gauss's law). When applied to a spherical surface, both yield "
         "inverse-square field laws. The 4*pi appears because the surface area "
-        "of a sphere is 4*pi*r^2 in d=3 dimensions. GFD OBSERVATION: Both "
+        "of a sphere is 4*pi*r^2 in d=3 dimensions. GFM OBSERVATION: Both "
         "4*pi factors equal k*pi where k = K_CLOSURE = 4. This is not a "
         "derivation but a recognition that the same geometric constant "
         "(solid angle in 3D) governs both fundamental forces. The reason k=4 "
@@ -90,7 +90,7 @@ class GravityElectrostaticsUnifiedGeometry(Test):
     # Audit scoring (self-assessed)
     audit_score = 84
     audit_notes = (
-        "Question: 14/15 (excellent mystery hook asking if both forces share same geometric origin, clear stakes about universal vs force-specific, could slightly sharpen by stating what would change if they differ). Derivation: 13/15 (good progression through both Gauss's laws, builds intuition before math, minor confusion in gravity section where 4*pi cancels then reappears in Gaussian units discussion). Commentary: 13/15 (clearly separates standard physics from GFD observation, explains significance of unified origin, could add implication about what this predicts for other inverse-square laws). Model: 10/10 (clean summary with binary verdicts, 9 key values, ratio check included, easy to interpret). Observations: 10/10 (all values from exact mathematical identities, Gamma function formula cited, sources traceable to standard references). Constants: 8/10 (imports K_CLOSURE from common, but hardcodes d=3 and several 4.0*math.pi values that could be derived once and reused). Accessibility: 10/15 (requires understanding of Gauss's law for both forces, graduate level physics, minimal scaffolding for undergrads, jargon like Gaussian units not explained). Header: 6/10 (module docstring states domain and question, epistemic status clear, missing target audience level and could better frame what's novel vs textbook)."
+        "Question: 14/15 (excellent mystery hook asking if both forces share same geometric origin, clear stakes about universal vs force-specific, could slightly sharpen by stating what would change if they differ). Derivation: 13/15 (good progression through both Gauss's laws, builds intuition before math, minor confusion in gravity section where 4*pi cancels then reappears in Gaussian units discussion). Commentary: 13/15 (clearly separates standard physics from GFM observation, explains significance of unified origin, could add implication about what this predicts for other inverse-square laws). Model: 10/10 (clean summary with binary verdicts, 9 key values, ratio check included, easy to interpret). Observations: 10/10 (all values from exact mathematical identities, Gamma function formula cited, sources traceable to standard references). Constants: 8/10 (imports K_CLOSURE from common, but hardcodes d=3 and several 4.0*math.pi values that could be derived once and reused). Accessibility: 10/15 (requires understanding of Gauss's law for both forces, graduate level physics, minimal scaffolding for undergrads, jargon like Gaussian units not explained). Header: 6/10 (module docstring states domain and question, epistemic status clear, missing target audience level and could better frame what's novel vs textbook)."
     )
 
     academic_paper = """\
@@ -98,7 +98,7 @@ TITLE
 Unified Geometric Origin of 4*pi in Gravitational and Electromagnetic Force Laws
 
 ABSTRACT
-Both Coulomb's law and Newton's gravitational field equation contain the factor 4*pi. This investigation examines whether both factors arise from the same geometric origin: the surface area of a unit sphere in d=3 spatial dimensions. The model verifies exact correspondence. This is documented as an OBSERVATION of standard physics, with GFD noting that 4 = K_CLOSURE.
+Both Coulomb's law and Newton's gravitational field equation contain the factor 4*pi. This investigation examines whether both factors arise from the same geometric origin: the surface area of a unit sphere in d=3 spatial dimensions. The model verifies exact correspondence. This is documented as an OBSERVATION of standard physics, with GFM noting that 4 = K_CLOSURE.
 
 1. INTRODUCTION: THE SCIENTIFIC QUESTION
 
@@ -106,7 +106,7 @@ Two fundamental forces govern classical physics: electromagnetism and gravity. C
 
 Standard physics explains each 4*pi independently through Gauss's law applied to spherical surfaces. The surface area of a sphere is 4*pi*r^2 in three dimensional space. However, the question remains: do BOTH forces derive their 4*pi from the SAME geometric fact, or are these independent occurrences?
 
-GFD observes that 4*pi = k*pi where k = K_CLOSURE = 4, the number of vertices per tetrahedron. The factor 4 appears specifically because d=3, as the unit sphere surface area S_{d-1} = 2*pi^(d/2)/Gamma(d/2) evaluates to 4*pi only when d=3.
+GFM observes that 4*pi = k*pi where k = K_CLOSURE = 4, the number of vertices per tetrahedron. The factor 4 appears specifically because d=3, as the unit sphere surface area S_{d-1} = 2*pi^(d/2)/Gamma(d/2) evaluates to 4*pi only when d=3.
 
 This test investigates whether the electromagnetic and gravitational 4*pi factors are mathematically identical, establishing a unified geometric origin for both inverse-square laws.
 
@@ -131,25 +131,25 @@ Model output values:
 
 Observational data: All values are exact mathematical identities. The unit sphere surface area formula is derived from integration in spherical coordinates. The gamma function evaluation Gamma(3/2) = sqrt(pi)/2 is exact.
 
-Pattern observed: Both electromagnetic and gravitational 4*pi factors are numerically identical and equal the geometric solid angle of three dimensional space. The coefficient 4 equals K_CLOSURE in GFD geometry.
+Pattern observed: Both electromagnetic and gravitational 4*pi factors are numerically identical and equal the geometric solid angle of three dimensional space. The coefficient 4 equals K_CLOSURE in GFM geometry.
 
 4. DISCUSSION
 
 The results confirm that both force laws contain the same 4*pi factor arising from identical geometric origins. In d=3 spatial dimensions, any inverse-square law derived from Gauss's law must contain 4*pi as the total solid angle.
 
-EPISTEMIC STATUS: This is verification of STANDARD PHYSICS combined with a GFD OBSERVATION. The geometric origin of 4*pi in both force laws is established textbook physics. GFD's contribution is noting that 4 = K_CLOSURE, the closure constant appearing throughout the framework.
+EPISTEMIC STATUS: This is verification of STANDARD PHYSICS combined with a GFM OBSERVATION. The geometric origin of 4*pi in both force laws is established textbook physics. GFM's contribution is noting that 4 = K_CLOSURE, the closure constant appearing throughout the framework.
 
-Significance: This establishes that 4*pi is not force-specific but dimension-specific. All inverse-square laws in d=3 necessarily contain this factor. The universality strengthens the GFD claim that fundamental constants encode geometric information.
+Significance: This establishes that 4*pi is not force-specific but dimension-specific. All inverse-square laws in d=3 necessarily contain this factor. The universality strengthens the GFM claim that fundamental constants encode geometric information.
 
 Relation to other tests: This complements the Coulomb 4*pi test by extending the pattern to gravity, demonstrating cross-domain consistency.
 
 5. LIMITATIONS & HONESTY STATEMENT
 
-This does NOT prove GFD derives fundamental forces. The 4*pi geometric origin is standard physics, not a GFD discovery. The correspondence between 4 and K_CLOSURE is an observation that could be coincidental. We assume d=3 without deriving it. The pattern gains significance only through multiple independent correspondences across physics domains. Further work is needed to establish whether K_CLOSURE has predictive power beyond pattern matching.
+This does NOT prove GFM derives fundamental forces. The 4*pi geometric origin is standard physics, not a GFM discovery. The correspondence between 4 and K_CLOSURE is an observation that could be coincidental. We assume d=3 without deriving it. The pattern gains significance only through multiple independent correspondences across physics domains. Further work is needed to establish whether K_CLOSURE has predictive power beyond pattern matching.
 
 6. CONCLUSION
 
-We document exact correspondence between electromagnetic and gravitational 4*pi factors, both arising from unit sphere geometry in d=3. GFD observes that 4 = K_CLOSURE. This merits inclusion as evidence that inverse-square laws universally encode spatial dimensionality through geometric constants.
+We document exact correspondence between electromagnetic and gravitational 4*pi factors, both arising from unit sphere geometry in d=3. GFM observes that 4 = K_CLOSURE. This merits inclusion as evidence that inverse-square laws universally encode spatial dimensionality through geometric constants.
     """
 
 
@@ -172,7 +172,7 @@ We document exact correspondence between electromagnetic and gravitational 4*pi 
                   "the 4*pi into the gravitational constant definition (Gaussian units).")
             .step("THE KEY: Both formulations involve 4*pi = surface area of "
                   "unit sphere in d=3.")
-            .step("GFD OBSERVATION: 4*pi = k*pi where k = K_CLOSURE = 4.")
+            .step("GFM OBSERVATION: 4*pi = k*pi where k = K_CLOSURE = 4.")
             .step("The unit sphere surface area formula: S_{d-1} = 2*pi^(d/2)/Gamma(d/2)")
             .step("For d=3: S_2 = 2*pi^(3/2)/Gamma(3/2) = 2*pi^(3/2)/(sqrt(pi)/2) = 4*pi")
             .conclude("Both electromagnetic and gravitational 4*pi factors arise "
@@ -188,7 +188,7 @@ We document exact correspondence between electromagnetic and gravitational 4*pi 
         # Extract the coefficient (should be 4)
         coefficient = S_unit_sphere / math.pi
         
-        # GFD constant
+        # GFM constant
         k = float(K_CLOSURE)
         
         # The 4*pi in Coulomb's law

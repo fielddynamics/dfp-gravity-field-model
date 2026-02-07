@@ -11,7 +11,7 @@ to their original state. Under a 360-degree rotation:
 Under 720 degrees:
     psi -> +psi (original state)
 
-THE GFD CONNECTION:
+THE GFM CONNECTION:
 In the Merkaba traversal:
 - 1 orbit = 360 degrees = cumsum increases by 8
 - 2 orbits = 720 degrees = spinor returns to original phase

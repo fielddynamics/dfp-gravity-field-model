@@ -2,12 +2,12 @@
 Emergent Constants (Extended): Geometric Relationships
 ======================================================
 
-This module examines geometric relationships relevant to the GFD framework.
+This module examines geometric relationships relevant to the GFM framework.
 
 WHAT BELONGS HERE:
-1. Genuine geometric derivations from GFD principles
+1. Genuine geometric derivations from GFM principles
 2. Mathematical identities used in the framework
-3. Connections to established physics that GFD interprets
+3. Connections to established physics that GFM interprets
 
 WHAT WAS REMOVED:
 - Pi digit numerology (coincidences, not derivations)
@@ -20,7 +20,7 @@ THE KEY RESULT IN THIS FILE:
 - Coupling constants from hexagonal geometry
 
 References:
-- GFD Research Documents
+- GFM Research Documents
 - Standard geometry and physics references
 """
 
@@ -55,14 +55,14 @@ class SpinHalfFromGeometry(Test):
     """
     THE SPIN-1/2 DERIVATION: The most important emergent constant.
     
-    This is arguably the cleanest derivation in the GFD framework because:
+    This is arguably the cleanest derivation in the GFM framework because:
     1. The face count (8) is fixed by the Merkaba structure
     2. The TIME face count (2) is determined by apex topology
     3. The spin formula follows from angular momentum sampling
     
     WHY THIS IS A GENUINE DERIVATION:
     Standard QM ASSUMES spin-1/2 (Pauli) or finds it as a consequence of
-    relativistic invariance (Dirac). GFD DERIVES it from counting faces.
+    relativistic invariance (Dirac). GFM DERIVES it from counting faces.
     
     THE DERIVATION:
     - Merkaba has 8 faces total (4 per tetrahedron)
@@ -76,7 +76,7 @@ class SpinHalfFromGeometry(Test):
         "Why does electron spin equal exactly hbar/2? The Merkaba has 2 TIME faces "
         "out of 8 total, and a spinor cycle carries 2*hbar, so spin = (2/8) * 2*hbar = hbar/2."
     )
-    reference = "GFD Textbook Chapter 10"
+    reference = "GFM Textbook Chapter 10"
     tolerance = 0.0
     level = Level.CRITICAL
     audit_score = 92
@@ -96,7 +96,7 @@ class SpinHalfFromGeometry(Test):
         "Pauli (1927) postulated it. Dirac (1928) derived it from requiring\n"
         "relativistic invariance, but this pushes the question to: why does\n"
         "relativistic invariance produce half-integer spin?\n\n"
-        "THE GFD ANSWER:\n"
+        "THE GFM ANSWER:\n"
         "Spin is the fraction of angular momentum flowing through TIME faces.\n\n"
         "Step 1: The Merkaba has 8 faces (2 tetrahedra x 4 faces each).\n"
         "Step 2: Each tetrahedron has 1 TIME face (opposite the apex) and 3 SPATIAL.\n"
@@ -114,7 +114,7 @@ class SpinHalfFromGeometry(Test):
         return (
             Derivation()
             .step("SPIN-1/2 FROM MERKABA TOPOLOGY:")
-            .step("The Merkaba (stellated octahedron) is the GFD Field Chamber.")
+            .step("The Merkaba (stellated octahedron) is the GFM Field Chamber.")
             .step("It consists of 2 interpenetrating tetrahedra.")
             .step("Each tetrahedron has k = 4 faces.")
             .step("Total faces: 2 * k = 2 * 4 = 8 faces.")
@@ -176,17 +176,17 @@ class MONDFromHorizonThermodynamics(Test):
     """
     The MOND acceleration scale a_0 = cH/(2*pi) from horizon thermodynamics.
     
-    THIS IS ESTABLISHED PHYSICS, NOT A GFD INVENTION:
+    THIS IS ESTABLISHED PHYSICS, NOT A GFM INVENTION:
     The relation a_0 ~ cH comes from combining:
     - Gibbons-Hawking temperature of de Sitter horizon: T_GH = hbar*H/(2*pi*k_B)
     - Unruh temperature-acceleration relation: T = hbar*a/(2*pi*k_B*c)
     
-    GFD INTERPRETATION:
-    GFD interprets this as showing a_0 is cosmologically determined,
+    GFM INTERPRETATION:
+    GFM interprets this as showing a_0 is cosmologically determined,
     not arbitrary. The MOND scale connects to the Hubble horizon.
     
     HONESTY NOTE:
-    GFD did not derive this relation. It uses established physics to
+    GFM did not derive this relation. It uses established physics to
     give meaning to the MOND scale within the framework.
     """
     name = "MOND Scale a_0 = cH/(2*pi)"
@@ -210,12 +210,12 @@ class MONDFromHorizonThermodynamics(Test):
     
     commentary = (
         "THE HORIZON THERMODYNAMICS CONNECTION:\n\n"
-        "This is ESTABLISHED PHYSICS, not unique to GFD:\n"
+        "This is ESTABLISHED PHYSICS, not unique to GFM:\n"
         "1. The de Sitter horizon has a temperature T_GH = hbar*H/(2*pi*k_B)\n"
         "2. The Unruh effect relates acceleration to temperature: a = 2*pi*k_B*T*c/hbar\n"
         "3. Combining: a_0 = cH/(2*pi)\n\n"
-        "GFD's contribution is INTERPRETATION, not derivation:\n"
-        "GFD interprets a_0 as the scale where field closure effects dominate,\n"
+        "GFM's contribution is INTERPRETATION, not derivation:\n"
+        "GFM interprets a_0 as the scale where field closure effects dominate,\n"
         "connecting micro (tiles) to macro (horizon) through the same mechanism.\n\n"
         "The ~10% discrepancy between cH/(2*pi) ~ 1.08e-10 and the MOND\n"
         "phenomenological value ~1.2e-10 may reflect geometry corrections."
@@ -288,7 +288,7 @@ class HexagonalPackingConstant(Test):
         "Why is the denominator in mu(x) = x/(1+x) exactly 1? Hexagonal packing gives "
         "6 neighbors, each coupling 1/3 (vesica piscis), shared by 2 cells: 6 * (1/3) * (1/2) = 1."
     )
-    reference = "GFD Framework, Hexagonal Packing Geometry"
+    reference = "GFM Framework, Hexagonal Packing Geometry"
     tolerance = 0.0
     level = Level.CRITICAL
     audit_score = 94
@@ -477,7 +477,7 @@ class SupplementaryDihedralAngles(Test):
     - Octahedron dihedral angle: arccos(-1/3) = 109.47 degrees
     - Sum: 180 degrees exactly
     
-    GFD INTERPRETATION:
+    GFM INTERPRETATION:
     The tetrahedron and octahedron are complementary geometries in the
     Merkaba structure. Their angles summing to 180 degrees reflects their
     dual nature.
@@ -493,7 +493,7 @@ class SupplementaryDihedralAngles(Test):
     audit_score = 82
     audit_notes = None
     future_questions = (
-        "Q1: Why do the tetrahedron and octahedron appear as complementary geometries in GFD? "
+        "Q1: Why do the tetrahedron and octahedron appear as complementary geometries in GFM? "
         "(Answering would improve Commentary by +3 points: explaining the duality significance) "
         "Q2: Does the 180-degree supplementarity relate to the Merkaba's central octahedral void? "
         "(Answering would improve Derivation by +2 points: connecting to field chamber structure) "
@@ -507,7 +507,7 @@ class SupplementaryDihedralAngles(Test):
         "The tetrahedron dihedral angle is arccos(1/3) ~ 70.53 degrees.\n"
         "The octahedron dihedral angle is arccos(-1/3) ~ 109.47 degrees.\n"
         "Their sum is exactly 180 degrees.\n\n"
-        "GFD SIGNIFICANCE:\n"
+        "GFM SIGNIFICANCE:\n"
         "The Merkaba's central void is an octahedron. The complementary angles\n"
         "suggest the tetrahedra and central octahedron form a complete system.\n"
         "What one geometry 'lacks', the other 'provides'."
@@ -576,7 +576,7 @@ def run_all() -> bool:
     return run_tests(
         title="Emergent Constants (Extended): Geometric Relationships",
         summary=(
-            "This module examines geometric relationships in the GFD framework.\n\n"
+            "This module examines geometric relationships in the GFM framework.\n\n"
             "KEY RESULTS:\n\n"
             "1. SPIN = 1/2 FROM MERKABA TOPOLOGY (Most Important)\n"
             "   S = (N_time/N_total) * L = (2/8) * 2*hbar = hbar/2\n"
@@ -586,7 +586,7 @@ def run_all() -> bool:
             "   This DERIVES the '1' in mu(x) = x/(1+x).\n\n"
             "3. MOND SCALE FROM HORIZON THERMODYNAMICS\n"
             "   a_0 = cH/(2*pi) ~ 1.1e-10 m/s^2\n"
-            "   This is ESTABLISHED PHYSICS that GFD interprets.\n\n"
+            "   This is ESTABLISHED PHYSICS that GFM interprets.\n\n"
             "4. CONTINUOUS COUPLING AVERAGE = 1/pi\n"
             "   Mathematical result for cosmological suppression.\n\n"
             "5. DIHEDRAL ANGLE COMPLEMENTARITY\n"

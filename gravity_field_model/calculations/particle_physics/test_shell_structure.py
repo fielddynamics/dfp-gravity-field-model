@@ -5,17 +5,17 @@ STATUS: ALTERNATIVE FRAMING (not derivation)
 
 MOTIVATION:
 Why do electron shells hold 2, 8, 18, 32 electrons? Quantum mechanics derives
-this from the Schrodinger equation: C(n) = 2n^2. But why this formula? GFD
+this from the Schrodinger equation: C(n) = 2n^2. But why this formula? GFM
 offers a geometric interpretation: the factor of 2 corresponds to the 2 TIME
 faces (one per tetrahedron), providing a visual picture for spin degeneracy.
 
 CRITICAL HONESTY NOTE:
-GFD does NOT derive shell capacities. Quantum mechanics derives them rigorously:
+GFM does NOT derive shell capacities. Quantum mechanics derives them rigorously:
     1. Schrodinger equation -> n^2 spatial orbitals per shell
     2. Spin-1/2 doubling -> factor of 2
     3. Result: C(n) = 2n^2 = 2, 8, 18, 32
 
-GFD observes that:
+GFM observes that:
     - k = 4 (Field Closure constant)
     - K shell = k/2 = 2
     - L shell = 2k = 8
@@ -74,9 +74,9 @@ def shell_capacity_qm(n):
     return 2 * n * n
 
 
-def shell_capacity_gfd(n):
+def shell_capacity_GFM(n):
     """
-    GFD geometric interpretation: C(n) = n^2 orbital cells x 2 spin states
+    GFM geometric interpretation: C(n) = n^2 orbital cells x 2 spin states
     
     NOTE: This produces the SAME result as 2n^2 but factored differently.
     This is not a derivation; it's a re-expression with geometric meaning.
@@ -96,7 +96,7 @@ class ShellCapacitiesQM(Test):
     
     Quantum mechanics answers this definitively via C(n) = 2n^2. The Schrodinger
     equation gives n^2 spatial orbitals per shell, and spin-1/2 doubles each
-    orbital's capacity. This is the established baseline against which GFD's
+    orbital's capacity. This is the established baseline against which GFM's
     geometric interpretation is compared.
     
     audit_score = 84
@@ -104,7 +104,7 @@ class ShellCapacitiesQM(Test):
     future_questions = (
         "Q1: Why does the Schrodinger equation produce n^2 orbitals per shell? "
         "(Answering would improve Derivation by +3 points: connects QM math to geometry) "
-        "Q2: Could GFD provide an independent derivation of the 2n^2 formula? "
+        "Q2: Could GFM provide an independent derivation of the 2n^2 formula? "
         "(Answering would improve Question by +2 points: tests predictive vs descriptive) "
         "Q3: How do relativistic corrections modify shell capacities? "
         "(Answering would improve Commentary by +2 points: addresses Dirac vs Schrodinger)"
@@ -129,7 +129,7 @@ class ShellCapacitiesQM(Test):
     
     commentary = (
         "The factor of 2 in 2n^2 comes from spin degeneracy: each spatial orbital can "
-        "host one spin-up and one spin-down electron. GFD interprets this factor as "
+        "host one spin-up and one spin-down electron. GFM interprets this factor as "
         "reflecting the 2 TIME faces of the stellated octahedron, giving a geometric "
         "picture for why spin doubles orbital capacity."
     )
@@ -153,9 +153,9 @@ class ShellCapacitiesQM(Test):
         )
 
 
-class GFDShellReframing(Test):
+class GFMShellReframing(Test):
     """
-    GFD reframes 2n^2 as (n^2 orbital cells) x (2 spin states).
+    GFM reframes 2n^2 as (n^2 orbital cells) x (2 spin states).
     
     The factor of 2 is associated with TIME faces.
     The n^2 factor is associated with orbital geometry.
@@ -163,9 +163,9 @@ class GFDShellReframing(Test):
     This produces identical results to 2n^2 because it IS 2n^2,
     just factored differently. It is not a derivation.
     """
-    name = "GFD Shell Reframing"
-    question = "Does the GFD geometric reframing produce the same shell capacities as 2n^2?"
-    reference = "GFD: C(n) = n^2 x TIME_faces"
+    name = "GFM Shell Reframing"
+    question = "Does the GFM geometric reframing produce the same shell capacities as 2n^2?"
+    reference = "GFM: C(n) = n^2 x TIME_faces"
     level = Level.STANDARD
     tolerance = 0.01
     
@@ -173,36 +173,36 @@ class GFDShellReframing(Test):
         return (
             Derivation()
             .step("ALTERNATIVE FACTORIZATION (not derivation).")
-            .step("PREMISE: GFD refactors 2n^2 as: (orbital cells) x (spin factor).")
+            .step("PREMISE: GFM refactors 2n^2 as: (orbital cells) x (spin factor).")
             .step("STEP 1: Orbital cells = n^2 (spatial configurations).")
             .step("STEP 2: Spin factor = TIME_faces = 2 (dual tetrahedra).")
             .step("STEP 3: C(n) = n^2 x 2 = 2n^2 (same formula, different interpretation).")
-            .conclude("OUTPUT: GFD produces 2, 8, 18, 32 (matches QM because it IS 2n^2).")
+            .conclude("OUTPUT: GFM produces 2, 8, 18, 32 (matches QM because it IS 2n^2).")
         )
     
     commentary = (
-        "GFD associates the spin factor of 2 with the dual tetrahedra (one TIME face "
+        "GFM associates the spin factor of 2 with the dual tetrahedra (one TIME face "
         "per tetrahedron). This is a geometric interpretation of spin doubling, not "
         "a derivation. The n^2 factor for orbital cells lacks a clear geometric "
-        "origin in GFD. This reframing matches QM because it is algebraically identical."
+        "origin in GFM. This reframing matches QM because it is algebraically identical."
     )
     
     def model(self):
         return (
             Model()
-            .add("K shell (GFD)", shell_capacity_gfd(1))
-            .add("L shell (GFD)", shell_capacity_gfd(2))
-            .add("M shell (GFD)", shell_capacity_gfd(3))
-            .add("N shell (GFD)", shell_capacity_gfd(4))
+            .add("K shell (GFM)", shell_capacity_GFM(1))
+            .add("L shell (GFM)", shell_capacity_GFM(2))
+            .add("M shell (GFM)", shell_capacity_GFM(3))
+            .add("N shell (GFM)", shell_capacity_GFM(4))
         )
     
     def observations(self):
         return (
             Observed()
-            .add("K shell (GFD)", shell_capacity_qm(1))
-            .add("L shell (GFD)", shell_capacity_qm(2))
-            .add("M shell (GFD)", shell_capacity_qm(3))
-            .add("N shell (GFD)", shell_capacity_qm(4))
+            .add("K shell (GFM)", shell_capacity_qm(1))
+            .add("L shell (GFM)", shell_capacity_qm(2))
+            .add("M shell (GFM)", shell_capacity_qm(3))
+            .add("N shell (GFM)", shell_capacity_qm(4))
         )
 
 
@@ -211,7 +211,7 @@ class SpinFactorFromTimeFaces(Test):
     Why does spin contribute a factor of exactly 2 to shell capacity?
     
     Spin-1/2 gives 2s+1 = 2 states (up and down), doubling each orbital's
-    electron capacity. GFD interprets this factor as the 2 TIME faces of the
+    electron capacity. GFM interprets this factor as the 2 TIME faces of the
     stellated octahedron: one electron per TIME face per orbital.
     
     audit_score = 84
@@ -271,7 +271,7 @@ class PauliExclusionInterpretation(Test):
     Why can at most 2 electrons occupy the same orbital?
     
     Pauli exclusion forbids identical fermions in the same quantum state. With
-    2 spin states per orbital, the maximum is 2 electrons. GFD visualizes this
+    2 spin states per orbital, the maximum is 2 electrons. GFM visualizes this
     geometrically: one electron per tetrahedron, and there are exactly 2 tetrahedra.
     
     This is a PICTURE, not a derivation. Pauli exclusion comes from wavefunction
@@ -282,7 +282,7 @@ class PauliExclusionInterpretation(Test):
     future_questions = (
         "Q1: Why do bosons not obey Pauli exclusion while fermions do? "
         "(Answering would improve Question by +3 points: connects spin-statistics to geometry) "
-        "Q2: Does wavefunction antisymmetry have a geometric interpretation in GFD? "
+        "Q2: Does wavefunction antisymmetry have a geometric interpretation in GFM? "
         "(Answering would improve Derivation by +2 points: bridges QM formalism to geometry) "
         "Q3: How does Pauli exclusion lead to electron degeneracy pressure in stars? "
         "(Answering would improve Audience Accessibility by +2 points: astrophysical application)"
@@ -307,7 +307,7 @@ class PauliExclusionInterpretation(Test):
     
     commentary = (
         "Pauli exclusion limits orbital occupancy, but QM does not explain why the limit "
-        "is specifically 2. GFD offers a visual answer: the stellated octahedron has 2 "
+        "is specifically 2. GFM offers a visual answer: the stellated octahedron has 2 "
         "tetrahedra, and each can host one electron per orbital. This makes the factor 2 "
         "feel natural rather than arbitrary, even though the underlying physics is wavefunction "
         "antisymmetry."
@@ -439,7 +439,7 @@ class NobleGasSequencePattern(Test):
     Noble gas differences: 8, 8, 18, 18, 32.
     
     The pattern shows each capacity appearing twice (Aufbau filling order).
-    This is standard chemistry, not GFD content.
+    This is standard chemistry, not GFM content.
     """
     name = "Noble Gas Differences"
     question = "What pattern do noble gas electron count differences follow?"
@@ -455,13 +455,13 @@ class NobleGasSequencePattern(Test):
             .step("STEP 1: He(2), Ne(10), Ar(18), Kr(36), Xe(54), Rn(86).")
             .step("STEP 2: Differences: 8, 8, 18, 18, 32 (each capacity appears twice).")
             .step("STEP 3: Pattern from orbital filling order (s, p, d, f subshells).")
-            .conclude("OUTPUT: Differences 8, 8, 18, 18, 32 (from Aufbau, not GFD).")
+            .conclude("OUTPUT: Differences 8, 8, 18, 18, 32 (from Aufbau, not GFM).")
         )
     
     commentary = (
         "The noble gas sequence reflects orbital filling order (Aufbau principle). "
         "Each shell capacity appears twice because of how s, p, d, f subshells fill "
-        "across periods. This is standard chemistry. GFD can note that 8 = 2k, but "
+        "across periods. This is standard chemistry. GFM can note that 8 = 2k, but "
         "the doubling pattern comes from Aufbau, not geometry."
     )
     
@@ -495,7 +495,7 @@ class NobleGasSequencePattern(Test):
 ALL_TESTS = [
     # Baseline and reframing
     ShellCapacitiesQM,
-    GFDShellReframing,
+    GFMShellReframing,
     
     # Spin interpretation
     SpinFactorFromTimeFaces,
@@ -513,13 +513,13 @@ def run_all():
     return run_tests(
         title="Electron Shell Structure: A Geometric Interpretation",
         summary=(
-            "These tests examine electron shell capacities through GFD geometry.\n\n"
+            "These tests examine electron shell capacities through GFM geometry.\n\n"
             "IMPORTANT: Shell capacities (2, 8, 18, 32) are DERIVED by quantum mechanics "
-            "from the Schrodinger equation and Pauli exclusion. GFD does NOT derive these "
+            "from the Schrodinger equation and Pauli exclusion. GFM does NOT derive these "
             "values; it provides an alternative GEOMETRIC PICTURE that produces the same "
             "numbers.\n\n"
             "The spin factor of 2 is associated with TIME faces (one per tetrahedron). "
-            "The n^2 orbital factor lacks clear geometric origin in GFD.\n\n"
+            "The n^2 orbital factor lacks clear geometric origin in GFM.\n\n"
             "Numerical observations (k/2=2, 2k=8) are noted as correspondences, not "
             "predictions. The reader should evaluate whether this geometric reframing "
             "provides insight or merely retrofits k=4 to known values."

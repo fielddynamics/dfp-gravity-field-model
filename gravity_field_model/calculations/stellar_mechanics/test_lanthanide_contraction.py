@@ -9,7 +9,7 @@ shield nuclear charge poorly. This causes hafnium (Z=72) to have nearly identica
 radius to zirconium (Z=40), profoundly affecting period 6 chemistry. We measure
 the contraction by comparing non-relativistic predictions to measured atomic radii.
 
-GFD OBSERVATION: The 4f subshell has l=3, approaching the GFD limit k=4. This is
+GFM OBSERVATION: The 4f subshell has l=3, approaching the GFM limit k=4. This is
 an observation, not a derivation.
 """
 
@@ -82,8 +82,8 @@ class LanthanideContractionQuantification(Test):
     causing hafnium (Z=72) to have the same radius as zirconium (Z=40), a full
     period lighter.
 
-    GFD OBSERVATION:
-    The 4f orbital has angular momentum quantum number l=3, one below the GFD
+    GFM OBSERVATION:
+    The 4f orbital has angular momentum quantum number l=3, one below the GFM
     closure constant k=4. The fact that l=3 orbitals exhibit anomalous shielding
     failure precisely at the boundary of practical shell structure (n=4, l=3 is
     the highest occupied f-orbital) suggests that k=4 may mark where orbital
@@ -93,7 +93,7 @@ class LanthanideContractionQuantification(Test):
     EPISTEMIC STATUS:
     This test measures the contraction deficit: predicted radius minus measured
     radius for each lanthanide. We compare non-relativistic Slater-rule predictions
-    to experimental data. The GFD pattern (l_max = k-1 = 3) is noted as an
+    to experimental data. The GFM pattern (l_max = k-1 = 3) is noted as an
     observation of where shell structure ends, not claimed as a geometric derivation
     of quantum mechanics.
     """
@@ -119,11 +119,11 @@ class LanthanideContractionQuantification(Test):
         "Standard relativistic quantum chemistry fully explains the lanthanide "
         "contraction through Dirac equation solutions: 4f orbitals have diffuse "
         "radial wavefunctions with poor nuclear penetration, so they shield weakly. "
-        "GFD observes that this shielding failure occurs at l=3, where l_max = k-1 "
+        "GFM observes that this shielding failure occurs at l=3, where l_max = k-1 "
         "for the closure constant k=4. The 4f subshell is the last well-defined "
         "angular momentum state in the periodic table (5f is partially filled only "
         "in actinides, and 5g is never occupied). This is an observation that the "
-        "periodic table's practical limit coincides with k=4, not a claim that GFD "
+        "periodic table's practical limit coincides with k=4, not a claim that GFM "
         "geometry derives quantum mechanics. The measured contraction deficit across "
         "14 lanthanides totals approximately 20-25 picometers relative to non-relativistic "
         "predictions, confirming that f-orbital physics dominates period 6 chemistry."
@@ -142,7 +142,7 @@ class LanthanideContractionQuantification(Test):
             .step("PREDICTION: Compute r_NR for each Z = 57 to 71")
             .step("MEASUREMENT: Compare to tabulated atomic radii")
             .equation("Contraction deficit = r_NR - r_measured")
-            .step("GFD OBSERVATION: 4f has l=3, where l_max = k-1 = 3 for k=4")
+            .step("GFM OBSERVATION: 4f has l=3, where l_max = k-1 = 3 for k=4")
             .step("The lanthanide contraction marks the boundary where shell structure")
             .step("becomes unstable due to poor shielding at maximum angular momentum.")
             .step("RELATIVISTIC CORRECTION: Full treatment requires Dirac equation,")
@@ -188,7 +188,7 @@ class LanthanideContractionQuantification(Test):
             .add("Maximum single-element deficit (pm)", round(max_deficit, 2))
             .add("Total La-to-Lu shrinkage (pm)", round(total_shrinkage, 2))
             .add("f-orbital l value", l_max_f_orbital)
-            .add("k - 1 (GFD)", k_minus_one)
+            .add("k - 1 (GFM)", k_minus_one)
             .add("l_max matches k-1", 1.0 if abs(l_max_f_orbital - k_minus_one) < 0.01 else 0.0)
         )
 
@@ -200,7 +200,7 @@ class LanthanideContractionQuantification(Test):
             .add("Maximum single-element deficit (pm)", 12.0)
             .add("Total La-to-Lu shrinkage (pm)", 20.0)
             .add("f-orbital l value", 3.0)
-            .add("k - 1 (GFD)", 3.0)
+            .add("k - 1 (GFM)", 3.0)
             .add("l_max matches k-1", 1.0)
         )
 

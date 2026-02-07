@@ -1,9 +1,9 @@
 """
-Emergent Constants: Gravitational Constant from GFD Geometry
+Emergent Constants: Gravitational Constant from GFM Geometry
 ============================================================
 
 This module tests whether the gravitational constant G can be derived from
-the GFD geometric framework, specifically from the Merkaba (stellated octahedron)
+the GFM geometric framework, specifically from the Merkaba (stellated octahedron)
 coupling structure.
 
 WHAT "EMERGENT" MEANS:
@@ -11,7 +11,7 @@ An emergent constant is one DERIVED from more fundamental principles, not
 one that is OBSERVED and then claimed to "emerge." The distinction matters.
 
 THE G DERIVATION:
-GFD claims G emerges from how two gravitational fields couple through their
+GFM claims G emerges from how two gravitational fields couple through their
 Merkaba structures. The formula:
 
     G = (k^2 + 1)/(kd + 1) * alpha^21 * (hbar*c/m_e^2)
@@ -34,7 +34,7 @@ this derivation for scrutiny.
 
 References:
 - CODATA 2018 Recommended Values
-- GFD Research Documents
+- GFM Research Documents
 """
 
 import sys
@@ -49,7 +49,7 @@ from gravity_field_model.common import (
 # FUNDAMENTAL CONSTANTS
 # =============================================================================
 
-# GFD Parameters (these are INPUTS to the theory, not derived)
+# GFM Parameters (these are INPUTS to the theory, not derived)
 K_CLOSURE = K           # Tetrahedral vertices: minimum faces to enclose 3D volume
 D_SPATIAL = 3           # Spatial dimensions
 
@@ -84,7 +84,7 @@ class GravitationalConstantFromGeometry(Test):
         "Why does G have its specific value? Merkaba coupling gives 17 channels over 13 edges, "
         "and the alpha^21 hierarchy connects gravity to EM: G = (17/13) * alpha^21 * (hbar*c/m_e^2)."
     )
-    reference = "CODATA 2018, GFD Framework"
+    reference = "CODATA 2018, GFM Framework"
     tolerance = 0.002  # 0.2% tolerance
     level = Level.CRITICAL
     audit_score = 90
@@ -208,7 +208,7 @@ class HierarchyProblemExplained(Test):
         "Why is gravity 10^42 times weaker than electromagnetism? If EM uses alpha^1 while "
         "gravity uses alpha^21, the ratio alpha^-20 ~ (137)^20 ~ 10^42 explains the hierarchy."
     )
-    reference = "GFD Framework, Hierarchy Problem Literature"
+    reference = "GFM Framework, Hierarchy Problem Literature"
     tolerance = 0.10
     level = Level.STANDARD
     audit_score = 88
@@ -225,7 +225,7 @@ class HierarchyProblemExplained(Test):
     commentary = (
         "THE HIERARCHY PROBLEM:\n"
         "Why is gravity so incredibly weak compared to electromagnetism?\n\n"
-        "THE GFD ANSWER:\n"
+        "THE GFM ANSWER:\n"
         "If gravity requires alpha^21 coupling while EM requires alpha^1, then:\n"
         "   alpha_G/alpha_EM ~ alpha^20 ~ (1/137)^20 ~ 10^-42\n\n"
         "This would mean the hierarchy is not fine-tuning but GEOMETRY.\n\n"
@@ -241,10 +241,10 @@ class HierarchyProblemExplained(Test):
             .step("Define EM coupling: alpha = e^2/(4*pi*epsilon_0*hbar*c) ~ 1/137")
             .step("Define gravitational coupling: alpha_G = G*m_e^2/(hbar*c) ~ 1.75e-45")
             .step("Calculate observed ratio: alpha/alpha_G = 7.3e-3 / 1.75e-45 = 4.2e42")
-            .step("GFD prediction: ratio = (d/k) * alpha^-20")
+            .step("GFM prediction: ratio = (d/k) * alpha^-20")
             .step("Calculate: (3/4) * (137)^20 = 0.75 * 5.6e42 = 4.2e42")
             .step("The factor (d/k) = 3/4 provides a small geometric correction.")
-            .conclude("The hierarchy is alpha^-20 ~ 10^42, a geometric necessity if GFD is correct.")
+            .conclude("The hierarchy is alpha^-20 ~ 10^42, a geometric necessity if GFM is correct.")
         )
     
     def model(self) -> Model:
@@ -260,7 +260,7 @@ class HierarchyProblemExplained(Test):
         # Observed hierarchy
         hierarchy_observed = alpha_em / alpha_g
         
-        # GFD prediction: (d/k) * alpha^-20
+        # GFM prediction: (d/k) * alpha^-20
         hierarchy_predicted = (d / k) * (1 / ALPHA_FINE) ** 20
         
         error = abs(hierarchy_predicted - hierarchy_observed) / hierarchy_observed * 100
@@ -293,7 +293,7 @@ class PlanckMassFromGeometry(Test):
         "Why does the Planck mass relate to electron mass by alpha^-10.5? From the G derivation, "
         "m_P = sqrt(hbar*c/G) yields m_P ~ sqrt(d/k) * alpha^-10.5 * m_e, half the G exponent."
     )
-    reference = "CODATA 2018, GFD Framework"
+    reference = "CODATA 2018, GFM Framework"
     tolerance = 0.10
     level = Level.STANDARD
     audit_score = 85
@@ -303,7 +303,7 @@ class PlanckMassFromGeometry(Test):
         "(Answering would improve Derivation by +2 points: making the algebra pedagogically clear) "
         "Q2: What is the physical significance of sqrt(13/17) ~ sqrt(d/k) in the Planck mass formula? "
         "(Answering would improve Commentary by +3 points: interpreting the geometric prefactor) "
-        "Q3: Does the Planck mass have a direct role in GFD field closure physics? "
+        "Q3: Does the Planck mass have a direct role in GFM field closure physics? "
         "(Answering would improve Question by +2 points: connecting to the framework's core concepts)"
     )
     
@@ -341,7 +341,7 @@ class PlanckMassFromGeometry(Test):
         # Measured Planck mass
         m_p_measured = math.sqrt(HBAR * C / G_MEASURED)
         
-        # GFD prediction: sqrt(d/k) * alpha^(-21/2) * m_e
+        # GFM prediction: sqrt(d/k) * alpha^(-21/2) * m_e
         prefactor = math.sqrt(d / k)
         alpha_power = (1 / ALPHA_FINE) ** 10.5
         m_p_predicted = prefactor * alpha_power * M_E
@@ -376,9 +376,9 @@ ALL_TESTS = [
 def run_all() -> bool:
     """Execute all emergent constant tests."""
     return run_tests(
-        title="Emergent Constants: Gravitational Constant from GFD Geometry",
+        title="Emergent Constants: Gravitational Constant from GFM Geometry",
         summary=(
-            "This module tests the central claim of GFD emergent constants:\n"
+            "This module tests the central claim of GFM emergent constants:\n"
             "that the gravitational constant G can be derived from Merkaba geometry.\n\n"
             "THE FORMULA:\n"
             "G = (k^2 + 1)/(kd + 1) * alpha^21 * (hbar*c/m_e^2) = 17/13 * alpha^21 * (hbar*c/m_e^2)\n\n"

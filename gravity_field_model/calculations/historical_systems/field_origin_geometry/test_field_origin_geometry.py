@@ -68,7 +68,7 @@ class FieldOriginAtCenter(Test):
         "symmetric cancellation of cube vertex coordinates uniquely determines "
         "the center of the dual Field Chamber."
     )
-    reference = "GFD Textbook Ch.7 Sec.7.3: Field Origin as centroid"
+    reference = "GFM Textbook Ch.7 Sec.7.3: Field Origin as centroid"
     tolerance = 0.01
     commentary = (
         "The Field Origin at (0,0,0) is the unique point where all 8 vertex "
@@ -105,7 +105,7 @@ class EquidistantFromVertices(Test):
     audit_score = 94
     audit_notes = None
     future_questions = (
-        "Q1: Does the sqrt(3) distance have physical units in the GFD framework? "
+        "Q1: Does the sqrt(3) distance have physical units in the GFM framework? "
         "(Answering would improve Question by +2 points: dimensional analysis) "
         "Q2: How does equidistance relate to the isotropy of gravitational coupling? "
         "(Answering would improve Commentary by +2 points: physical interpretation) "
@@ -117,7 +117,7 @@ class EquidistantFromVertices(Test):
         "equidistance property defines the origin as a point of perfect geometric "
         "symmetry, where no vertex is privileged over another."
     )
-    reference = "GFD Textbook Ch.7 Sec.7.3: Equidistance property of Field Origin"
+    reference = "GFM Textbook Ch.7 Sec.7.3: Equidistance property of Field Origin"
     tolerance = 0.01
     commentary = (
         "Every vertex at (+/-1, +/-1, +/-1) is at distance sqrt(3) from the origin, "
@@ -175,7 +175,7 @@ class CompressionVectorsCancel(Test):
         "the Field Origin? This cancellation reveals the origin as a null point "
         "where directional influences from all vertices balance perfectly."
     )
-    reference = "GFD Textbook Ch.9 Sec.9.5: Vector cancellation at null point"
+    reference = "GFM Textbook Ch.9 Sec.9.5: Vector cancellation at null point"
     tolerance = 0.01
     commentary = (
         "The 8 vertices form 4 antipodal pairs, each contributing opposite vectors "
@@ -229,7 +229,7 @@ class BimetricBalance(Test):
         "This bimetric balance ensures neither tetrahedron dominates, preserving "
         "the symmetry required for gravitational isotropy."
     )
-    reference = "GFD Textbook Ch.9 Sec.9.3: Bimetric balance and isotropy"
+    reference = "GFM Textbook Ch.9 Sec.9.3: Bimetric balance and isotropy"
     tolerance = 0.01
     commentary = (
         "Each vertex in Tet A has an antipodal partner in Tet B (via XOR with 7). "
@@ -290,7 +290,7 @@ class InnerOctahedronVertices(Test):
         "Field Origin? This intermediate scale (between 0 and sqrt(3)) marks the "
         "intersection region where the two tetrahedra couple."
     )
-    reference = "GFD Textbook Ch.9 Sec.9.5: Central octahedron as Field Origin"
+    reference = "GFM Textbook Ch.9 Sec.9.5: Central octahedron as Field Origin"
     tolerance = 0.01
     commentary = (
         "The inner octahedron (6 cube face centers at +/-1 along each axis) is "
@@ -346,7 +346,7 @@ class TetAContribution(Test):
         "the combined sum)? Each tetrahedron individually achieves internal "
         "balance due to its centrosymmetric vertex arrangement."
     )
-    reference = "GFD Textbook Ch.9: Internal balance of each chamber"
+    reference = "GFM Textbook Ch.9: Internal balance of each chamber"
     tolerance = 0.01
     commentary = (
         "Chamber A (vertices 1,2,4,7) has its own internal symmetry: the vectors "
@@ -405,7 +405,7 @@ class TetBContribution(Test):
         "Chamber A, Chamber B has centrosymmetric vertices, demonstrating that "
         "bimetric balance operates at both the individual and combined levels."
     )
-    reference = "GFD Textbook Ch.9: Dual chamber symmetry"
+    reference = "GFM Textbook Ch.9: Dual chamber symmetry"
     tolerance = 0.01
     commentary = (
         "Chamber B (vertices 0,3,5,6) mirrors Chamber A's internal symmetry. "

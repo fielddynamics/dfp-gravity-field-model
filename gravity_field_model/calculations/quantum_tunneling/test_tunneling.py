@@ -1,16 +1,16 @@
 """
-Quantum Tunneling: GFD Interpretation (Speculative)
+Quantum Tunneling: GFM Interpretation (Speculative)
 ====================================================
 
 HONEST ASSESSMENT:
 ------------------
-GFD does NOT derive quantum tunneling from first principles.
+GFM does NOT derive quantum tunneling from first principles.
 
 Quantum tunneling is well understood through standard quantum mechanics:
 the WKB approximation, Gamow theory, and related formalisms provide
 complete, experimentally verified descriptions.
 
-These tests explore whether GFD concepts (Field Closure, k=4, stellated
+These tests explore whether GFM concepts (Field Closure, k=4, stellated
 octahedron geometry) might offer an alternative INTERPRETATION of tunneling.
 This is SPECULATIVE: no derivation shows that Field Closure produces the
 WKB exponential. The commentary below suggests possible connections, but
@@ -19,19 +19,19 @@ these remain unproven hypotheses, not derived predictions.
 WHAT WE ACTUALLY DO HERE:
 -------------------------
 1. REFERENCE tests: Verify standard QM formulas work (sanity checks)
-2. EXPLORATORY tests: Propose speculative GFD interpretations
+2. EXPLORATORY tests: Propose speculative GFM interpretations
 
-Feynman's test: "Does GFD make a prediction about tunneling that differs
+Feynman's test: "Does GFM make a prediction about tunneling that differs
 from standard QM and can be tested?" Currently: NO.
 
-Until GFD can derive T = exp(-2*kappa*L) from Field Closure dynamics,
+Until GFM can derive T = exp(-2*kappa*L) from Field Closure dynamics,
 these remain interpretive suggestions, not scientific predictions.
 
 TEST GROUP GOALS:
 -----------------
 - Validate that our framework computes known tunneling physics correctly
 - Explore whether Field Closure cycle rates correlate with tunneling times
-- Identify what derivations GFD would need to contribute to tunneling physics
+- Identify what derivations GFM would need to contribute to tunneling physics
 - Maintain intellectual honesty about speculation vs. established science
 
 audit_score: 87
@@ -72,7 +72,7 @@ class WKBFormulaReference(Test):
         "approaches barrier width? "
         "(Answering would improve Derivation by +3 points: clarify validity limits of semiclassical approximation) "
         "Q2: Could the Schrodinger equation itself emerge from Field Closure dynamics in the continuum limit? "
-        "(Answering would improve Commentary by +3 points: connect QM formalism to GFD interpretation) "
+        "(Answering would improve Commentary by +3 points: connect QM formalism to GFM interpretation) "
         "Q3: What experimental precision exists for verifying the exp(-2*kappa*L) formula in controlled settings? "
         "(Answering would improve Observation Quality by +2 points: cite precision tunneling measurements)"
     )
@@ -92,7 +92,7 @@ class WKBFormulaReference(Test):
         "The decay constant kappa depends on the square root of (V-E), meaning "
         "doubling the barrier overshoot only increases kappa by sqrt(2), not 2x. "
         "This sublinear scaling is why tunneling remains possible even for "
-        "significant barriers. GFD does not derive this formula but might offer "
+        "significant barriers. GFM does not derive this formula but might offer "
         "an interpretation of WHY wavefunctions extend into forbidden regions "
         "through Field Closure sampling of geometric configurations."
     )
@@ -127,8 +127,8 @@ class WKBFormulaReference(Test):
             )
             .equation("T = exp(-2 * 3.62e9 * 1e-9) = exp(-7.24) = 7.2e-4")
             .conclude(
-                "About 1 in 1400 attempts succeeds. This is standard QM, not GFD. "
-                "GFD would need to derive WHY the wavefunction penetrates barriers "
+                "About 1 in 1400 attempts succeeds. This is standard QM, not GFM. "
+                "GFM would need to derive WHY the wavefunction penetrates barriers "
                 "from Field Closure dynamics to contribute here."
             )
         )
@@ -184,8 +184,8 @@ class STMSensitivityReference(Test):
         "(Answering would improve Observation Quality by +3 points: material-specific tunneling physics) "
         "Q2: How does the STM tip apex geometry affect the tunneling current distribution and resolution? "
         "(Answering would improve Commentary by +2 points: real-world deviations from 1D model) "
-        "Q3: Could GFD geometry predict the observed orbital shapes in STM images of molecular orbitals? "
-        "(Answering would improve Question by +3 points: connect GFD to observable phenomena)"
+        "Q3: Could GFM geometry predict the observed orbital shapes in STM images of molecular orbitals? "
+        "(Answering would improve Question by +3 points: connect GFM to observable phenomena)"
     )
     question = (
         "Why is the Scanning Tunneling Microscope so extraordinarily sensitive "
@@ -202,7 +202,7 @@ class STMSensitivityReference(Test):
         "produces an exponential change in I. With typical metal work functions "
         "(~4.5 eV), kappa ~ 10^10 m^-1, meaning each 0.1 nm adds another factor "
         "of ~10 to the decay. This extreme sensitivity is what allows STM to "
-        "image individual atoms. GFD offers no alternative calculation, but the "
+        "image individual atoms. GFM offers no alternative calculation, but the "
         "textbook suggests tunneling probability corresponds to the probability "
         "that READ samples an overlapping configuration during Field Closure."
     )
@@ -270,7 +270,7 @@ class STMSensitivityReference(Test):
 
 
 # =============================================================================
-# EXPLORATORY: Speculative GFD Interpretations
+# EXPLORATORY: Speculative GFM Interpretations
 # =============================================================================
 
 class FieldClosureInterpretation(Test):
@@ -286,7 +286,7 @@ class FieldClosureInterpretation(Test):
     audit_score = 84
     audit_notes = None
     future_questions = (
-        "Q1: What mathematical object describes 'overlapping configurations' in GFD geometry, and how would one compute their probability? "
+        "Q1: What mathematical object describes 'overlapping configurations' in GFM geometry, and how would one compute their probability? "
         "(Answering would improve Derivation by +4 points: formalize the vague notion of configuration overlap) "
         "Q2: If each Field Closure cycle is an independent sampling event, why does the probability not follow Poisson statistics? "
         "(Answering would improve Commentary by +3 points: reconcile cycle counting with continuous QM) "
@@ -300,7 +300,7 @@ class FieldClosureInterpretation(Test):
         "represent an independent 'attempt' to find an overlapping configuration, "
         "producing the exponential accumulation seen in tunneling?"
     )
-    reference = "GFD Textbook Sec 16.2: Tunneling as Probabilistic Closure (speculative)"
+    reference = "GFM Textbook Sec 16.2: Tunneling as Probabilistic Closure (speculative)"
     commentary = (
         "EXPLORATORY SPECULATION building on textbook section 16.2. "
         "The textbook proposes that 'tunneling probability = probability that "
@@ -348,7 +348,7 @@ class FieldClosureInterpretation(Test):
             )
             .conclude(
                 "SPECULATION STATUS: The numbers are interesting but insufficient. "
-                "To elevate this from numerology to physics, GFD would need to "
+                "To elevate this from numerology to physics, GFM would need to "
                 "derive the per-cycle overlap probability from Field Closure dynamics."
             )
         )
@@ -389,7 +389,7 @@ class FieldClosureInterpretation(Test):
 
 class GeometricScaleComparison(Test):
     """
-    SPECULATIVE: How do GFD length scales compare to tunneling barriers?
+    SPECULATIVE: How do GFM length scales compare to tunneling barriers?
 
     Explores whether the classical electron radius provides a meaningful
     discretization scale for understanding barrier penetration.
@@ -401,18 +401,18 @@ class GeometricScaleComparison(Test):
     future_questions = (
         "Q1: Why is r_e the fundamental scale rather than the Compton wavelength or Bohr radius? "
         "(Answering would improve Question by +3 points: justify scale selection from first principles) "
-        "Q2: In lattice QFT, discretization effects scale as (a/L)^n for lattice spacing a. Does GFD predict similar scaling? "
+        "Q2: In lattice QFT, discretization effects scale as (a/L)^n for lattice spacing a. Does GFM predict similar scaling? "
         "(Answering would improve Derivation by +3 points: connect to established discretization physics) "
         "Q3: Could precision tunneling experiments constrain the existence of a fundamental length scale? "
         "(Answering would improve Observation Quality by +3 points: experimental falsifiability)"
     )
     question = (
         "SPECULATIVE: The classical electron radius r_e ~ 2.8 fm is the "
-        "fundamental length scale in GFD geometry. A typical tunneling "
+        "fundamental length scale in GFM geometry. A typical tunneling "
         "barrier is ~1 nm. How many 'geometric tiles' of size r_e span "
         "a barrier, and could this discrete count play a role in tunneling?"
     )
-    reference = "GFD Textbook Ch 3: Classical electron radius as fundamental tile size"
+    reference = "GFM Textbook Ch 3: Classical electron radius as fundamental tile size"
     commentary = (
         "EXPLORATORY SCALE ANALYSIS. "
         "The ratio L/r_e ~ 3.5e5 tells us that a 1 nm barrier spans "
@@ -423,7 +423,7 @@ class GeometricScaleComparison(Test):
         "appears continuous even if the underlying mechanism is discrete. "
         "CAUTION: This is speculation. We have no derivation connecting r_e "
         "tiles to tunneling attenuation. The ratio is just a number until "
-        "GFD provides a physical mechanism."
+        "GFM provides a physical mechanism."
     )
 
     def derivation(self):
@@ -485,9 +485,9 @@ class GeometricScaleComparison(Test):
 
 class DiscreteVsContinuousQuestion(Test):
     """
-    THE KEY QUESTION: What would GFD need to make a testable prediction?
+    THE KEY QUESTION: What would GFM need to make a testable prediction?
 
-    This test articulates the scientific gap between GFD interpretation
+    This test articulates the scientific gap between GFM interpretation
     and genuine prediction, following Feynman's criterion for theories.
     """
     name = "The Missing Derivation (Critical Question)"
@@ -495,35 +495,35 @@ class DiscreteVsContinuousQuestion(Test):
     audit_score = 88
     audit_notes = None
     future_questions = (
-        "Q1: What form of correction term (polynomial, logarithmic, oscillatory) would be most physically motivated from GFD geometry? "
+        "Q1: What form of correction term (polynomial, logarithmic, oscillatory) would be most physically motivated from GFM geometry? "
         "(Answering would improve Derivation by +3 points: constrain the space of possible predictions) "
         "Q2: At what barrier width would a 1% deviation from WKB become experimentally detectable with current technology? "
         "(Answering would improve Observation Quality by +3 points: set concrete experimental targets) "
         "Q3: Have other discrete spacetime theories (loop quantum gravity, causal sets) predicted corrections to tunneling? "
-        "(Answering would improve Commentary by +2 points: situate GFD in broader theoretical landscape)"
+        "(Answering would improve Commentary by +2 points: situate GFM in broader theoretical landscape)"
     )
     question = (
-        "What SPECIFIC derivation would GFD need to make a genuine "
+        "What SPECIFIC derivation would GFM need to make a genuine "
         "contribution to tunneling physics? The standard WKB gives "
-        "T = exp(-2*kappa*L). Can GFD either (1) derive this from "
+        "T = exp(-2*kappa*L). Can GFM either (1) derive this from "
         "Field Closure dynamics, or (2) predict a correction term "
         "that deviates from WKB and can be experimentally tested?"
     )
     reference = "Feynman's criterion: 'What prediction does it make that can be tested?'"
     commentary = (
-        "THE HONEST ASSESSMENT of GFD's status in tunneling. "
+        "THE HONEST ASSESSMENT of GFM's status in tunneling. "
         "Standard QM derives T = exp(-2*kappa*L) from the Schrodinger equation. "
-        "For GFD to contribute, it must do ONE of two things: "
+        "For GFM to contribute, it must do ONE of two things: "
         "(1) DERIVE this formula from Field Closure dynamics without invoking QM. "
         "This would be elegant but adds nothing testable since it reproduces known results. "
-        "(2) PREDICT a correction, e.g., T_GFD = exp(-2*kappa*L) * [1 + epsilon(...)], "
+        "(2) PREDICT a correction, e.g., T_GFM = exp(-2*kappa*L) * [1 + epsilon(...)], "
         "where epsilon encodes discrete Field Closure effects. This WOULD be valuable "
         "because it makes a testable prediction. "
-        "CURRENT STATUS: GFD offers interpretive language (Field Closure cycles, "
+        "CURRENT STATUS: GFM offers interpretive language (Field Closure cycles, "
         "configuration sampling) but no derivation. The textbook (Sec 16.2) "
         "suggests 'tunneling probability = probability that READ samples an "
         "overlapping configuration,' but does not derive this correspondence. "
-        "Until that derivation exists, GFD makes no tunneling prediction."
+        "Until that derivation exists, GFM makes no tunneling prediction."
     )
 
     def derivation(self):
@@ -544,23 +544,23 @@ class DiscreteVsContinuousQuestion(Test):
             .step(
                 "OPTION 2 (Predict): Propose that Field Closure discreteness "
                 "introduces corrections at scales comparable to r_e. For "
-                "example: T_GFD = exp(-2*kappa*L) * [1 + A*(r_e/L)^n] for "
+                "example: T_GFM = exp(-2*kappa*L) * [1 + A*(r_e/L)^n] for "
                 "some constants A, n. This would predict measurable deviations "
                 "from WKB at small barrier widths."
             )
             .step(
                 "WHY OPTION 2 IS SCIENTIFICALLY VALUABLE: Even if the "
                 "correction is tiny, it provides a falsifiable prediction. "
-                "If experiments rule it out, GFD interpretation is falsified. "
-                "If confirmed, GFD makes a genuine contribution."
+                "If experiments rule it out, GFM interpretation is falsified. "
+                "If confirmed, GFM makes a genuine contribution."
             )
             .step(
-                "CURRENT GFD STATUS: The textbook offers interpretation "
+                "CURRENT GFM STATUS: The textbook offers interpretation "
                 "without derivation. It says tunneling is 'probabilistic "
                 "closure' but does not show this produces exp(-2*kappa*L)."
             )
             .conclude(
-                "For scientific credibility, GFD needs either a derivation "
+                "For scientific credibility, GFM needs either a derivation "
                 "or a testable prediction. Currently it has neither for tunneling."
             )
         )
@@ -576,7 +576,7 @@ class DiscreteVsContinuousQuestion(Test):
         kappa = math.sqrt(2 * M_E * (V - E)) / H_BAR
         T_wkb = math.exp(-2 * kappa * L)
 
-        # Hypothetical GFD correction (SPECULATIVE, not derived)
+        # Hypothetical GFM correction (SPECULATIVE, not derived)
         # This is what a correction MIGHT look like
         r_e_over_L = R_E / L
         hypothetical_correction = 1 + r_e_over_L  # ~1.000003
@@ -586,12 +586,12 @@ class DiscreteVsContinuousQuestion(Test):
             .add("WKB tunneling probability", T_wkb, fmt=".3e")
             .add("r_e / L ratio", r_e_over_L, fmt=".2e")
             .add("Hypothetical correction factor (1 + r_e/L)", hypothetical_correction, fmt=".6f")
-            .add("GFD derivation exists?", 0)  # Honest: no derivation
+            .add("GFM derivation exists?", 0)  # Honest: no derivation
             .add("Testable prediction exists?", 0)  # Honest: no prediction
         )
 
     def observations(self):
-        # No observations: this is a meta-question about GFD status
+        # No observations: this is a meta-question about GFM status
         return None
 
 
@@ -608,7 +608,7 @@ class GamowFactorConnection(Test):
     audit_score = 85
     audit_notes = None
     future_questions = (
-        "Q1: Why does the Sommerfeld parameter eta involve the fine structure constant alpha, and how does this connect to GFD's k=4 geometry? "
+        "Q1: Why does the Sommerfeld parameter eta involve the fine structure constant alpha, and how does this connect to GFM's k=4 geometry? "
         "(Answering would improve Question by +3 points: link fundamental constants to geometric structure) "
         "Q2: The Gamow peak energy formula involves a cube root. Does this have any geometric significance in 3D k=4 space? "
         "(Answering would improve Derivation by +3 points: seek geometric meaning in functional forms) "
@@ -622,7 +622,7 @@ class GamowFactorConnection(Test):
         "overlapping configuration.' Can we quantify what this means "
         "in terms of Field Closure geometry?"
     )
-    reference = "GFD Textbook Sec 16.2; Gamow, Z. Phys. 51, 204 (1928)"
+    reference = "GFM Textbook Sec 16.2; Gamow, Z. Phys. 51, 204 (1928)"
     commentary = (
         "EXPLORATORY CONNECTION to nuclear physics. "
         "The Gamow factor includes the Sommerfeld parameter eta = Z1*Z2*e^2 / "
@@ -657,7 +657,7 @@ class GamowFactorConnection(Test):
                 "Only 1 in ~100 million collisions tunnels through."
             )
             .step(
-                "GFD INTERPRETATION (Textbook Sec 16.2): This probability "
+                "GFM INTERPRETATION (Textbook Sec 16.2): This probability "
                 "represents 'the probability that READ samples an overlapping "
                 "configuration.' In k=4 geometry, overlapping means the "
                 "two Field Origins can share a common stellated octahedron."
@@ -712,7 +712,7 @@ ALL_TESTS = [
     # Reference tests: standard QM (framework validation)
     WKBFormulaReference,
     STMSensitivityReference,
-    # Exploratory: speculative GFD interpretations
+    # Exploratory: speculative GFM interpretations
     FieldClosureInterpretation,
     GeometricScaleComparison,
     DiscreteVsContinuousQuestion,
@@ -725,11 +725,11 @@ def run_all():
     return run_tests(
         title="Quantum Tunneling: Honest Assessment",
         summary=(
-            "IMPORTANT: GFD does NOT derive quantum tunneling. "
+            "IMPORTANT: GFM does NOT derive quantum tunneling. "
             "The tests below include: (1) Reference tests verifying "
             "standard QM formulas work, and (2) Exploratory tests "
-            "articulating speculative GFD interpretations. "
-            "Until GFD can derive T = exp(-2*kappa*L) from Field Closure "
+            "articulating speculative GFM interpretations. "
+            "Until GFM can derive T = exp(-2*kappa*L) from Field Closure "
             "dynamics or predict a testable deviation from standard QM, "
             "these remain interpretations, not scientific predictions."
         ),

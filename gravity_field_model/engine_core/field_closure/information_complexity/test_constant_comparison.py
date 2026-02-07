@@ -16,9 +16,9 @@ calculator works correctly.
 
 Similarly, we test our traversal algorithm with e and sqrt(2) to confirm 
 the algorithm itself is correct. This does NOT mean e or sqrt(2) could 
-replace pi in the GFD model.
+replace pi in the GFM model.
 
-WHY PI IS IRREPLACEABLE IN GFD
+WHY PI IS IRREPLACEABLE IN GFM
 ------------------------------
 
 Pi is not an arbitrary choice. It is THE circle constant, and field closure
@@ -68,7 +68,7 @@ Does this mean red, blue, and green balls are interchangeable? NO.
 
 It means your sorting machine works correctly for any ball color.
 
-For GFD, pi is the "correct color" because field closure is about circles.
+For GFM, pi is the "correct color" because field closure is about circles.
 We test with e and sqrt(2) to verify the machine (algorithm) works, not to
 suggest we could use different balls (constants).
 
@@ -282,7 +282,7 @@ class DigitDistributionComparison(Test):
     
     This test verifies that our base-8 conversion and digit extraction work 
     correctly for any normal number. It does NOT suggest these constants are
-    interchangeable for field closure. Pi is required for GFD because it 
+    interchangeable for field closure. Pi is required for GFM because it 
     encodes circular geometry; this test only validates algorithm correctness.
     """
     name = "Algorithm Validation: Digit Uniformity"
@@ -327,7 +327,7 @@ class DigitDistributionComparison(Test):
         "3+3=6, and 7+7=14 all work, your calculator is correct. It doesn't mean "
         "3 and 7 are substitutes for 2. Similarly, we test our algorithm with e and "
         "sqrt(2) to confirm the code works, not to suggest alternatives to pi. "
-        "Pi remains essential for GFD because field closure is about circular orbits, "
+        "Pi remains essential for GFM because field closure is about circular orbits, "
         "and pi is THE circle constant. No other constant has this geometric meaning."
     )
     
@@ -399,7 +399,7 @@ class TraversalPropertyComparison(Test):
     WHAT THIS TESTS: The algorithm (cumsum mod 8) is mathematically sound.
     WHAT THIS DOES NOT TEST: Whether e or sqrt(2) could replace pi.
     
-    Pi is REQUIRED for GFD because:
+    Pi is REQUIRED for GFM because:
     - Field closure = orbital completion around origin = circles = pi
     - Base-8 encoding corresponds to 8 vertices of the stellated octahedron
     - Pi's integer part (3 in base-8) initializes the (3+1) spacetime structure
@@ -451,7 +451,7 @@ class TraversalPropertyComparison(Test):
         "Imagine a machine that sorts balls into bins. You test it with red, blue, "
         "and green balls. All get sorted correctly. This proves the machine works, "
         "not that ball colors are interchangeable for your specific purpose. "
-        "For GFD, pi is the 'correct color' because field closure is fundamentally "
+        "For GFM, pi is the 'correct color' because field closure is fundamentally "
         "about CIRCLES and ORBITS. Pi is the circle constant. e is about exponential "
         "growth. sqrt(2) is about square diagonals. Only pi has geometric meaning "
         "for orbital field closure. We test with e and sqrt(2) to prove our math "
@@ -573,7 +573,7 @@ def run_all():
             "like testing a calculator with different numbers. All three produce good "
             "statistics (uniform digits, high entropy, balanced chambers), confirming "
             "our cumsum mod 8 algorithm is mathematically sound. "
-            "HOWEVER: Pi remains REQUIRED for GFD. Field closure is about circular "
+            "HOWEVER: Pi remains REQUIRED for GFM. Field closure is about circular "
             "orbits around the origin, and pi is THE circle constant. Using e or sqrt(2) "
             "would be like measuring a circle's circumference with a square's diagonal. "
             "The algorithm would run, but the physical meaning would be lost."

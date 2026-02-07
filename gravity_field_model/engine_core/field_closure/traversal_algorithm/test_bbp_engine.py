@@ -3,7 +3,7 @@ BBP Formula and Field Closure Structure
 =======================================
 
 This module examines correspondences between the Bailey-Borwein-Plouffe formula
-for pi and the k=4 tetrahedral topology used in the GFD model. The BBP formula
+for pi and the k=4 tetrahedral topology used in the GFM model. The BBP formula
 denominators (8k+1, 8k+4, 8k+5, 8k+6) map to positions in the dual Field Chamber
 structure, with coefficients +4, -2, -1, -1 that sum to zero.
 

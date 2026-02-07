@@ -2,10 +2,10 @@
 Probing Field Geometry: Length Scale Hierarchies and Volume Ratios
 ==================================================================
 
-GFD Model V2
+GFM Model V2
 
 INVESTIGATION STATEMENT:
-The GFD model is built on the stellated octahedron geometry. These tests
+The GFM model is built on the stellated octahedron geometry. These tests
 PROBE the geometric structure for physically meaningful relationships:
 
 1. The alpha-connected length scale chain from Planck to atomic scales.
@@ -52,8 +52,8 @@ class AlphaLengthScaleChain(Test):
     hierarchy. This test verifies each link in the chain and computes
     the exact ratios, asking whether the hierarchy contains any surprises.
 
-    HONESTY: These are standard QED relationships, not GFD predictions.
-    GFD OBSERVES that this hierarchy spans 20 orders of magnitude in
+    HONESTY: These are standard QED relationships, not GFM predictions.
+    GFM OBSERVES that this hierarchy spans 20 orders of magnitude in
     exactly the pattern required for field closure at k=4.
     """
     audit_score = 92
@@ -84,7 +84,7 @@ class AlphaLengthScaleChain(Test):
         "The α-connected hierarchy is one of the deepest patterns in physics. "
         "From the Planck length (quantum gravity) to the Bohr radius (chemistry), "
         "each scale is related to the next by factors of α, m_e/m_P, or 2π. "
-        "GFD observes that this hierarchy is exactly what you need for a "
+        "GFM observes that this hierarchy is exactly what you need for a "
         "self-consistent field closure: the geometry operates at r_e, but "
         "its consequences propagate to atomic scales via these α-connected steps."
     )
@@ -163,7 +163,7 @@ class StellatedOctahedronVolumeRatios(Test):
 
     Each has a specific volume. The RATIOS between these volumes are
     dimensionless geometric constants. This test computes them and asks
-    whether they relate to k=4 or other GFD-relevant numbers.
+    whether they relate to k=4 or other GFM-relevant numbers.
 
     HONESTY: These are geometric facts, not physics predictions.
     """
@@ -171,7 +171,7 @@ class StellatedOctahedronVolumeRatios(Test):
     audit_notes = None
     future_questions = (
         "Q1: The inner octahedron volume is 1/3 of each tetrahedron's volume. "
-        "Is there a physics interpretation of this 1:3 ratio in the GFD model? "
+        "Is there a physics interpretation of this 1:3 ratio in the GFM model? "
         "(Answering would improve Commentary by +4 points) "
         "Q2: If the stellated octahedron is scaled to have edge length = r_e, "
         "what physical volume does the inner octahedron represent? "
@@ -185,7 +185,7 @@ class StellatedOctahedronVolumeRatios(Test):
         "What are the volume ratios between the bounding cube, each tetrahedron, "
         "and the inner octahedron in the stellated octahedron? These are pure "
         "geometric constants. Do any of them equal 1/k, 1/2k, or other "
-        "GFD-relevant fractions? And what physics might these ratios encode?"
+        "GFM-relevant fractions? And what physics might these ratios encode?"
     )
     reference = "Euclidean geometry; Polyhedral volumes"
     tolerance = 0.02
@@ -196,7 +196,7 @@ class StellatedOctahedronVolumeRatios(Test):
         "regular octahedron). The ratios: V_tet/V_cube = 1/3, "
         "V_oct/V_cube = 1/3, V_oct/V_tet = 1. These are exact geometric "
         "results. The 1/3 ratio is the same as the spatial dimension "
-        "fraction (3 spatial / (3+1) total), which GFD notes."
+        "fraction (3 spatial / (3+1) total), which GFM notes."
     )
 
     def derivation(self) -> Derivation:
@@ -276,7 +276,7 @@ class StellatedOctahedronVolumeRatios(Test):
 
 class TimeSpatialFaceAreaPartitioning(Test):
     """
-    The stellated octahedron has 8 triangular faces. GFD classifies them as:
+    The stellated octahedron has 8 triangular faces. GFM classifies them as:
     - 2 TIME faces (FACE_A7 and FACE_B0) — the "polar" faces
     - 6 SPATIAL faces — the remaining faces
 
@@ -309,7 +309,7 @@ class TimeSpatialFaceAreaPartitioning(Test):
         "dimensionality. Is this coincidence preserved in the AREA ratio, or "
         "do the faces have different sizes that modify the partition?"
     )
-    reference = "GFD geometry; Spacetime structure"
+    reference = "GFM geometry; Spacetime structure"
     tolerance = 0.02
     level = Level.STANDARD
     commentary = (
@@ -317,7 +317,7 @@ class TimeSpatialFaceAreaPartitioning(Test):
         "(same size and shape). Therefore the area ratio is exactly 2:6 = 1:3, "
         "identical to the face count ratio. This means 25% of the surface area "
         "is 'TIME' and 75% is 'SPATIAL' — precisely the 1:3 split of spacetime "
-        "dimensions. GFD interprets this as: the field geometry inherently encodes "
+        "dimensions. GFM interprets this as: the field geometry inherently encodes "
         "the dimensionality of spacetime."
     )
 

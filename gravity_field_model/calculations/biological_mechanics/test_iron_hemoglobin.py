@@ -7,13 +7,13 @@ Every atom of iron in your blood, every steel beam in a building, was forged
 in a stellar core that could go no further. Why iron? Why not nickel, or cobalt?
 
 This file documents a curious observation: the most stable nucleus in nature
-(Fe-56) has a mass number that equals both 14 x 4 (a multiple of the GFD
+(Fe-56) has a mass number that equals both 14 x 4 (a multiple of the GFM
 constant k=4) AND the 6th tetrahedral number (T_6 = 56). Coincidence? Perhaps.
 But when the universe's most stable configuration happens to align with a
 geometric constant, it warrants careful documentation.
 
 IMPORTANT DISCLAIMER:
-These tests note OBSERVATIONS, not derivations. The GFD model did not PREDICT
+These tests note OBSERVATIONS, not derivations. The GFM model did not PREDICT
 that the most stable nucleus would be at mass 56 before examining the data.
 Rather, the observation that 56 = 14 x 4 = T_6 (the 6th tetrahedral number)
 was noted AFTER the fact.
@@ -58,7 +58,7 @@ def tetrahedral_number(n):
     Why tetrahedral? A tetrahedron is the simplest 3D solid (4 vertices,
     4 faces). If nature builds stable structures by stacking identical
     units in the most efficient 3D pattern, tetrahedral packing emerges
-    naturally. The GFD model's k=4 comes from the 4 vertices of a tetrahedron.
+    naturally. The GFM model's k=4 comes from the 4 vertices of a tetrahedron.
     """
     return n * (n + 1) * (n + 2) // 6
 
@@ -74,11 +74,11 @@ TETRAHEDRAL_NUMBERS = {n: tetrahedral_number(n) for n in range(1, 12)}
 
 class Fe56CoincidenceNote(Test):
     """
-    Documents the numerical coincidence between Fe-56 and GFD constants.
+    Documents the numerical coincidence between Fe-56 and GFM constants.
     
     This test explores WHY iron sits at the peak of nuclear stability, and
     documents the curious alignment between iron's mass number (56) and the
-    GFD model's geometric constants. This is NOT a derivation or prediction.
+    GFM model's geometric constants. This is NOT a derivation or prediction.
     We are recording an observation that iron's special status in physics
     happens to align with the model's tetrahedral geometry.
     
@@ -138,13 +138,13 @@ class Fe56CoincidenceNote(Test):
                   "commonly cited as the 'peak' due to its cosmic abundance and "
                   "role in stellar evolution.")
             .step("OBSERVATION 2: The mass number 56 = 14 x 4 = 14k, where k=4 is "
-                  "the GFD Field Closure constant (derived from tetrahedral face count).")
+                  "the GFM Field Closure constant (derived from tetrahedral face count).")
             .step("OBSERVATION 3: 56 is also T_6, the 6th tetrahedral number: "
                   "T_6 = 6 x 7 x 8 / 6 = 56. This means 56 spheres can be perfectly "
                   "stacked in a tetrahedral arrangement.")
             # HONEST CAVEAT
             .step("CAVEAT: These observations were noted AFTER examining the data. "
-                  "The GFD model did not predict Fe-56's special status beforehand. "
+                  "The GFM model did not predict Fe-56's special status beforehand. "
                   "Without a prior prediction, this remains a documented coincidence.")
             .conclude("STATUS: Documented coincidence warranting further study. "
                       "The alignment of nuclear stability peak with tetrahedral "
@@ -227,7 +227,7 @@ class TetrahedralStabilityStatistic(Test):
         "Why do some nuclei hold together better than others? If you plot binding "
         "energy per nucleon against mass number, you see a smooth curve with a "
         "peak near iron. But are there special points along this curve? If tetrahedral "
-        "geometry influences nuclear stability (as the GFD model suggests with k=4), "
+        "geometry influences nuclear stability (as the GFM model suggests with k=4), "
         "then mass numbers that are tetrahedral numbers (4, 10, 20, 35, 56, 84, 120...) "
         "should be local 'sweet spots' where binding is enhanced. Is this true, or does "
         "the smooth curve show no special structure at these points? This is a test that "
@@ -267,7 +267,7 @@ class TetrahedralStabilityStatistic(Test):
                   "a small perturbation on top of this smooth trend. We are looking for "
                   "subtle 'bumps' at tetrahedral numbers, not dramatic peaks.")
             # NOW THE METHOD
-            .step("HYPOTHESIS: If the GFD tetrahedral geometry influences nuclear "
+            .step("HYPOTHESIS: If the GFM tetrahedral geometry influences nuclear "
                   "stability, tetrahedral-number nuclei should be local maxima "
                   "or show enhanced binding energy relative to immediate neighbors.")
             .step("METHOD: For each tetrahedral number T_n with available data, compare "
@@ -291,7 +291,7 @@ class TetrahedralStabilityStatistic(Test):
         "is smooth, so most nuclei near the iron peak have similar binding energies. "
         "Finding 40% local maxima (vs 33% expected) is suggestive but not conclusive. "
         "A p-value calculation would help quantify significance. A stronger test would "
-        "require a physical mechanism connecting GFD's k=4 geometry to nuclear forces, "
+        "require a physical mechanism connecting GFM's k=4 geometry to nuclear forces, "
         "not just numerological correlation. Still, documenting what we observe, with "
         "honest statistical analysis, is the first step toward understanding whether "
         "the pattern is meaningful or coincidental."

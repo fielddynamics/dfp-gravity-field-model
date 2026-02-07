@@ -41,7 +41,7 @@ DEPENDENCIES:
 - gravity_field_model.common.geometry_constants (FACES, TIME_FACES, etc.)
 - gravity_field_model.common.traverse_pi_base8
 
-Reference: gfd_concepts.py (Coupling Port mechanics)
+Reference: GFM_concepts.py (Coupling Port mechanics)
 """
 
 import math

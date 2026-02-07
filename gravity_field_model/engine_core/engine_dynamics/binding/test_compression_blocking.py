@@ -2,7 +2,7 @@
 Compression Blocking Mechanism Tests
 ====================================
 
-GFD Model V2: Why atoms can't pass through field origins as whole units
+GFM Model V2: Why atoms can't pass through field origins as whole units
 
 CORE QUESTION:
 If atoms have outward compression (bidirectional shift), does this create

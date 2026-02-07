@@ -2,7 +2,7 @@
 Probing Atomic Properties: Relativistic Effects and Periodic Patterns
 ======================================================================
 
-GFD Model V2
+GFM Model V2
 
 INVESTIGATION STATEMENT:
 The periodic table encodes deep physics: electron shell structure, relativistic
@@ -280,13 +280,13 @@ class IonizationEnergyPeriodicity(Test):
 
     PROBING: The sequence 2, 8, 8, 18, 18, 32, 32 can be written as
     2×(1², 2², 2², 3², 3², 4², 4²). Does the appearance of 4² = 16
-    have geometric significance in the GFD framework?
+    have geometric significance in the GFM framework?
     """
     audit_score = 84
     audit_notes = None
     future_questions = (
         "Q1: Why does each shell capacity appear TWICE (e.g., 8 and 8, 18 and 18)? "
-        "This is because l goes from 0 to n-1. Does GFD offer a geometric "
+        "This is because l goes from 0 to n-1. Does GFM offer a geometric "
         "interpretation of this doubling? "
         "(Answering would improve Derivation by +4 points) "
         "Q2: The shell capacities 2n² give 2, 8, 18, 32. Do these relate to "
@@ -311,7 +311,7 @@ class IonizationEnergyPeriodicity(Test):
         "The noble gas pattern is one of the great triumphs of quantum mechanics. "
         "Each shell holds 2n² electrons (2, 8, 18, 32 for n=1,2,3,4). The fact "
         "that the maximum practical shell is n=4 (holding 32 electrons) means "
-        "the periodic table effectively has 4 shell types. GFD notes that 4 = k "
+        "the periodic table effectively has 4 shell types. GFM notes that 4 = k "
         "but does not claim to derive shell structure from geometry."
     )
 

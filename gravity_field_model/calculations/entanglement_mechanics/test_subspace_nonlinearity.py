@@ -1,10 +1,10 @@
 """
-GFD Tet_B Non-Linearity Assumption
+GFM Tet_B Non-Linearity Assumption
 ==================================
 
 TEST GROUP GOALS
 ----------------
-Why does GFD assume Tetrahedron B operates 'non-linearly' (instantaneously)
+Why does GFM assume Tetrahedron B operates 'non-linearly' (instantaneously)
 while Tetrahedron A respects causality? This module examines this core
 assumption and tests its internal consistency and observational compatibility.
 
@@ -44,12 +44,12 @@ CLOSURE_PERIOD = 1 / CLOSURE_FREQUENCY  # approx 8e-21 s
 
 
 # =============================================================================
-# GFD ASSUMPTIONS (Not derivations)
+# GFM ASSUMPTIONS (Not derivations)
 # =============================================================================
 
 class TetBNonLinearityAssumption(Test):
     """
-    Why does GFD need to ASSUME (not derive) that Tet_B operates non-locally,
+    Why does GFM need to ASSUME (not derive) that Tet_B operates non-locally,
     and what are the epistemological implications of this assumption?
     
     This test is about intellectual honesty: distinguishing what geometry
@@ -62,7 +62,7 @@ class TetBNonLinearityAssumption(Test):
     future_questions = (
         "Q1: Could there be a deeper principle that DERIVES the Tet_A/Tet_B role assignment rather than assuming it? "
         "(Answering would improve Question by +3 points: explore whether role assignment could follow from information theory) "
-        "Q2: What would change in GFD if we swapped the labels, making Tet_B causal and Tet_A non-local? "
+        "Q2: What would change in GFM if we swapped the labels, making Tet_B causal and Tet_A non-local? "
         "(Answering would improve Commentary by +2 points: clarify whether the labeling is arbitrary or physically meaningful) "
         "Q3: Are there any asymmetries between Tet_A and Tet_B in the stellated octahedron that might justify the role assignment? "
         "(Answering would improve Derivation by +2 points: examine whether geometry hints at asymmetric roles)"
@@ -84,7 +84,7 @@ class TetBNonLinearityAssumption(Test):
         "DOES NOT PROVIDE: Which tetrahedron is 'causal' and which is 'non-local.' "
         "This assignment is a POSTULATE, chosen for compatibility with QM. This is "
         "legitimate (axioms are always chosen), but should be stated clearly. "
-        "GFD's power is geometric vocabulary; its limitation is that the vocabulary "
+        "GFM's power is geometric vocabulary; its limitation is that the vocabulary "
         "requires role assignments not derived from the geometry itself."
     )
     
@@ -124,10 +124,10 @@ class TetBNonLinearityAssumption(Test):
 
 class CausalityPreservationCheck(Test):
     """
-    Why is it important that GFD's role assignment preserves causality, and
+    Why is it important that GFM's role assignment preserves causality, and
     why is 'consistency by design' different from 'prediction'?
     
-    This test examines whether GFD's assumptions are internally consistent.
+    This test examines whether GFM's assumptions are internally consistent.
     Consistency is necessary but not sufficient for a good model.
     
 """
@@ -135,15 +135,15 @@ class CausalityPreservationCheck(Test):
     audit_score = 88
     audit_notes = None
     future_questions = (
-        "Q1: What would a genuine GFD prediction about causality look like, as opposed to designed consistency? "
+        "Q1: What would a genuine GFM prediction about causality look like, as opposed to designed consistency? "
         "(Answering would improve Question by +3 points: distinguish testable predictions from compatibility checks) "
-        "Q2: Are there any scenarios where GFD's role assignment might conflict with special relativity, even subtly? "
+        "Q2: Are there any scenarios where GFM's role assignment might conflict with special relativity, even subtly? "
         "(Answering would improve Commentary by +2 points: stress-test the consistency claim) "
         "Q3: How do other interpretations of QM (Bohmian, many-worlds) handle the tension between non-locality and causality? "
-        "(Answering would improve Derivation by +2 points: compare GFD vocabulary to other interpretive frameworks)"
+        "(Answering would improve Derivation by +2 points: compare GFM vocabulary to other interpretive frameworks)"
     )
     question = (
-        "Why must GFD's Tet_A/Tet_B role assignment preserve causality, and "
+        "Why must GFM's Tet_A/Tet_B role assignment preserve causality, and "
         "what is the difference between 'designed for consistency' and "
         "'predicting consistency'?"
     )
@@ -153,21 +153,21 @@ class CausalityPreservationCheck(Test):
     
     commentary = (
         "INTUITION FIRST: If you design a boat to float, it is not surprising "
-        "when it floats. Designed consistency is not prediction. GFD assigned "
+        "when it floats. Designed consistency is not prediction. GFM assigned "
         "roles (Tet_A causal, Tet_B correlational) specifically to match no-signaling. "
         "The consistency check passes because it was designed to pass. This is "
         "not a flaw (all models start with assumptions tuned for consistency), "
         "but we should be clear: this is a CONSISTENCY CHECK, not a PREDICTION. "
         "A genuine prediction would be: 'From pure geometry, we derive that "
-        "no-signaling must hold.' GFD does not do this."
+        "no-signaling must hold.' GFM does not do this."
     )
     
     def derivation(self):
         return (
             Derivation()
             .step("INTUITION: Designed consistency is different from derived consistency.")
-            .step("GFD ASSUMPTION: Tet_A channels propagate at speed <= c.")
-            .step("GFD ASSUMPTION: Tet_B correlations are random (uncontrollable).")
+            .step("GFM ASSUMPTION: Tet_A channels propagate at speed <= c.")
+            .step("GFM ASSUMPTION: Tet_B correlations are random (uncontrollable).")
             .step("LOGICAL CONSEQUENCE: Information travels via Tet_A (limited by c).")
             .step("LOGICAL CONSEQUENCE: Tet_B correlations cannot carry chosen signals.")
             .step("RESULT: No-signaling is respected.")
@@ -229,7 +229,7 @@ class TetBContributionFraction(Test):
         "INTUITION FIRST: A stellated octahedron is two equal tetrahedra. Each "
         "has k=4 faces, so total is 2k=8. By symmetry, each tetrahedron is 50%. "
         "GEOMETRIC DERIVATION: Tet_B fraction = k/(2k) = 0.5 exactly. No assumptions "
-        "needed. PHYSICAL INTERPRETATION: GFD proposes that 50% corresponds to "
+        "needed. PHYSICAL INTERPRETATION: GFM proposes that 50% corresponds to "
         "'hidden' or 'non-local' quantum information. But this is an ANALOGY, "
         "not a derivation. The geometry says '50%'; it does not say 'this 50% "
         "carries non-local correlations.' That assignment is vocabulary, not proof."
@@ -244,7 +244,7 @@ class TetBContributionFraction(Test):
             .step("Tet_B has k = 4 faces.")
             .step("Tet_B fraction = k/(2k) = 4/8 = 0.5 = 50%.")
             .step("This 50% is a GEOMETRIC FACT, derived from structure.")
-            .step("GFD INTERPRETATION: '50% of structure handles non-local aspects.'")
+            .step("GFM INTERPRETATION: '50% of structure handles non-local aspects.'")
             .step("But geometry alone does not tell us what the faces 'do.'")
             .conclude("50% is geometric. 'Non-local information' is interpretation.")
         )
@@ -292,9 +292,9 @@ class CompatibilityWithCoherenceTimes(Test):
         "Q1: Why do superconducting qubits achieve 100 microsecond coherence while trapped ions can reach seconds? "
         "(Answering would improve Observation Quality by +3 points: compare decoherence mechanisms across platforms) "
         "Q2: If Field Closure happens at 10^20 Hz, what mechanism preserves phase information across 10^16 cycles? "
-        "(Answering would improve Derivation by +2 points: propose how GFD closure could be phase-preserving) "
-        "Q3: Could measuring coherence times at different Field Closure frequencies test the GFD model? "
-        "(Answering would improve Question by +2 points: propose experimental tests distinguishing GFD from standard QM)"
+        "(Answering would improve Derivation by +2 points: propose how GFM closure could be phase-preserving) "
+        "Q3: Could measuring coherence times at different Field Closure frequencies test the GFM model? "
+        "(Answering would improve Question by +2 points: propose experimental tests distinguishing GFM from standard QM)"
     )
     question = (
         "Why do superconducting qubits maintain coherence for 10^16 Field "
@@ -308,11 +308,11 @@ class CompatibilityWithCoherenceTimes(Test):
     commentary = (
         "INTUITION FIRST: If each closure cycle scrambled quantum phase, coherence "
         "would be destroyed in one cycle (10^-20 s). But qubits stay coherent for "
-        "100 us = 10^16 cycles. This is a huge number. GFD INTERPRETATION: Tet_B "
+        "100 us = 10^16 cycles. This is a huge number. GFM INTERPRETATION: Tet_B "
         "'preserves phase' across closures. The closure process reconciles field "
         "configurations without destroying coherent superposition. This is compatible "
         "with observations. LIMITATION: Standard QM also predicts long coherence; "
-        "this compatibility does not uniquely support GFD over QM."
+        "this compatibility does not uniquely support GFM over QM."
     )
     
     def derivation(self):
@@ -321,13 +321,13 @@ class CompatibilityWithCoherenceTimes(Test):
             .step("INTUITION: Coherence survives 10^16 cycles, so closures don't "
                   "destroy phase. This is a strong constraint on any model.")
             .step("OBSERVATION: Best superconducting qubit coherence ~ 100 us.")
-            .step("GFD: Field Closure frequency f = c/lambda_C ~ 1.24e20 Hz.")
+            .step("GFM: Field Closure frequency f = c/lambda_C ~ 1.24e20 Hz.")
             .step("Closure period T = 1/f ~ 8e-21 s.")
             .step("Number of closure cycles during coherence:")
             .step("  N = (100e-6 s) / (8e-21 s) ~ 1.25e16 cycles.")
             .step("Coherence survives >> 1 cycle, so closures preserve phase.")
-            .step("GFD VOCABULARY: 'Tet_B configuration persists across closures.'")
-            .conclude("Coherence of 10^16 cycles is compatible with GFD phase preservation.")
+            .step("GFM VOCABULARY: 'Tet_B configuration persists across closures.'")
+            .conclude("Coherence of 10^16 cycles is compatible with GFM phase preservation.")
         )
     
     def model(self):
@@ -355,7 +355,7 @@ class CompatibilityWithCoherenceTimes(Test):
 class CompatibilityWithDistanceIndependentBell(Test):
     """
     Why do Bell violations persist unchanged whether particles are meters
-    or 1200 kilometers apart, and how does this constrain GFD?
+    or 1200 kilometers apart, and how does this constrain GFM?
     
     The satellite is 10^6 times farther than lab setups, yet violations persist.
     This is a powerful constraint on any model of non-locality.
@@ -365,8 +365,8 @@ class CompatibilityWithDistanceIndependentBell(Test):
     audit_score = 89
     audit_notes = None
     future_questions = (
-        "Q1: At what distance scale might we expect GFD's 'non-spatial Tet_B' to show deviations, if ever? "
-        "(Answering would improve Question by +3 points: explore whether GFD predicts any distance dependence at extreme scales) "
+        "Q1: At what distance scale might we expect GFM's 'non-spatial Tet_B' to show deviations, if ever? "
+        "(Answering would improve Question by +3 points: explore whether GFM predicts any distance dependence at extreme scales) "
         "Q2: How do cosmological distances (billions of light-years) affect entanglement, and has this been tested? "
         "(Answering would improve Observation Quality by +2 points: discuss limits of current experimental tests) "
         "Q3: Why does photon loss in the Tet_A channel not 'inform' the Tet_B correlation about the attempted measurement? "
@@ -386,10 +386,10 @@ class CompatibilityWithDistanceIndependentBell(Test):
         "weaken over 1200 km. They do not. The reduction in satellite experiments "
         "(S ~ 2.37 vs. lab S ~ 2.7) is due to photon losses (Tet_A channel "
         "degradation), not correlation decay (Tet_B would be unaffected by "
-        "distance if truly non-spatial). GFD COMPATIBILITY: If Tet_B exists "
+        "distance if truly non-spatial). GFM COMPATIBILITY: If Tet_B exists "
         "'outside' Tet_A's spatial dimensions, distance in Tet_A is irrelevant "
         "to Tet_B correlations. This matches observations. LIMITATION: Standard "
-        "QM also predicts distance independence; this does not distinguish GFD."
+        "QM also predicts distance independence; this does not distinguish GFM."
     )
     
     def derivation(self):
@@ -401,9 +401,9 @@ class CompatibilityWithDistanceIndependentBell(Test):
             .step("SATELLITE EXPERIMENT: S ~ 2.37 at 1200 km.")
             .step("Both exceed classical limit 2.0 by significant margins.")
             .step("Satellite reduction is due to photon losses, not correlation decay.")
-            .step("GFD INTERPRETATION: Tet_B is non-spatial; distance in Tet_A irrelevant.")
+            .step("GFM INTERPRETATION: Tet_B is non-spatial; distance in Tet_A irrelevant.")
             .step("COMPATIBILITY: Observations match 'Tet_B distance-independent.'")
-            .step("LIMITATION: QM also predicts this; GFD is compatible, not unique.")
+            .step("LIMITATION: QM also predicts this; GFM is compatible, not unique.")
             .conclude("Bell violations at all tested distances. Compatible with non-spatial Tet_B.")
         )
     
@@ -438,7 +438,7 @@ class HonestAssessmentOfSubspaceModel(Test):
     Why does intellectual honesty require clearly stating the epistemological
     status of the Tet_B non-linearity claim?
     
-    META-TEST: This test summarizes what GFD derives vs. assumes about
+    META-TEST: This test summarizes what GFM derives vs. assumes about
     non-locality, helping readers understand the framework's actual scope.
     
 """
@@ -448,15 +448,15 @@ class HonestAssessmentOfSubspaceModel(Test):
     future_questions = (
         "Q1: What criteria distinguish a 'useful vocabulary' from a 'misleading analogy' in theoretical physics? "
         "(Answering would improve Question by +2 points: establish epistemological standards for evaluating frameworks) "
-        "Q2: Has GFD's vocabulary ever led to a novel insight that was later confirmed by standard QM calculations? "
+        "Q2: Has GFM's vocabulary ever led to a novel insight that was later confirmed by standard QM calculations? "
         "(Answering would improve Commentary by +2 points: document any cases where vocabulary guided discovery) "
-        "Q3: What would falsify the GFD vocabulary as a useful framework, even if it cannot be falsified as a theory? "
+        "Q3: What would falsify the GFM vocabulary as a useful framework, even if it cannot be falsified as a theory? "
         "(Answering would improve Derivation by +2 points: clarify the difference between falsifying theory vs. vocabulary)"
     )
     question = (
         "Why is it important to clearly distinguish between 'derived from "
         "geometry' and 'assumed for QM compatibility'? What exactly is the "
-        "epistemological status of GFD's Tet_B non-linearity claim?"
+        "epistemological status of GFM's Tet_B non-linearity claim?"
     )
     reference = "Gravity_Field_Dynamics_Textbook (epistemological framing)"
     tolerance = 0.01
@@ -465,7 +465,7 @@ class HonestAssessmentOfSubspaceModel(Test):
     commentary = (
         "SCIENTIFIC INTEGRITY: Every theoretical framework has derivations "
         "(things that follow from premises) and assumptions (premises chosen "
-        "for compatibility). Conflating these misleads readers. GFD STATUS: "
+        "for compatibility). Conflating these misleads readers. GFM STATUS: "
         "(1) Two tetrahedra: DERIVED from requiring isotropy + chirality + spinor. "
         "(2) Tet_A is causal: ASSUMED to match special relativity. "
         "(3) Tet_B is non-local: ASSUMED to match quantum non-locality. "
@@ -477,7 +477,7 @@ class HonestAssessmentOfSubspaceModel(Test):
     def derivation(self):
         return (
             Derivation()
-            .step("EPISTEMOLOGICAL QUESTION: What does GFD derive vs. assume?")
+            .step("EPISTEMOLOGICAL QUESTION: What does GFM derive vs. assume?")
             .step("DERIVED: Stellated octahedron has two interlocking tetrahedra.")
             .step("DERIVED: They satisfy isotropy, chirality, 720-degree spinor property.")
             .step("DERIVED: 50% of faces belong to each tetrahedron.")
@@ -485,7 +485,7 @@ class HonestAssessmentOfSubspaceModel(Test):
             .step("ASSUMED: Tet_A respects speed of light (causal channel).")
             .step("ASSUMED: Tet_B provides non-local correlation (subspace).")
             .step("RATIONALE: Assumptions chosen for QM/SR compatibility.")
-            .step("HONEST STATUS: GFD provides vocabulary, not derivation of non-locality.")
+            .step("HONEST STATUS: GFM provides vocabulary, not derivation of non-locality.")
             .conclude("Geometry: derived. Role assignment: assumed. Compatibility: achieved.")
         )
     
@@ -515,7 +515,7 @@ class HonestAssessmentOfSubspaceModel(Test):
 # =============================================================================
 
 ALL_TESTS = [
-    # GFD assumptions (not derivations)
+    # GFM assumptions (not derivations)
     TetBNonLinearityAssumption,
     CausalityPreservationCheck,
     TetBContributionFraction,
@@ -530,9 +530,9 @@ ALL_TESTS = [
 def run_all():
     """Run Tet_B non-linearity assumption tests."""
     return run_tests(
-        title="GFD Tet_B Non-Linearity Assumption",
+        title="GFM Tet_B Non-Linearity Assumption",
         summary=(
-            "Why does GFD assume Tet_B operates non-locally? This module examines "
+            "Why does GFM assume Tet_B operates non-locally? This module examines "
             "the epistemological status of this core assumption: (1) Geometry "
             "gives us two tetrahedra (derived), (2) Labeling one 'causal' and one "
             "'non-local' is a postulate (assumed), (3) This assumption is designed "

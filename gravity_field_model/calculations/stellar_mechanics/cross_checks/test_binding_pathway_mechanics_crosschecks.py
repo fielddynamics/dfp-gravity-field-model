@@ -2,7 +2,7 @@
 Binding Pathway Cross-Checks: Validating Standard Nuclear Data
 ===============================================================
 
-GFD Model V2
+GFM Model V2
 
 HONESTY STATEMENT:
 This module provides CROSS-CHECKS of nuclear physics data for internal

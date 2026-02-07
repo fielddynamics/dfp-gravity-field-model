@@ -3,7 +3,7 @@ Triad Dynamics
 ==============
 
 This module validates the sub-face (triad) level dynamics that implement
-the phase-locking mechanism described in gfd_concepts.py.
+the phase-locking mechanism described in GFM_concepts.py.
 
 VALIDATION CATEGORIES:
 
@@ -23,7 +23,7 @@ cutting a pizza into 4 slices. The triads are the "alignment pins" that
 phase-lock flux between adjacent fields. Do all pins engage properly?
 
 WHY THIS MATTERS:
-According to gfd_concepts.py, triads "convert linear flux to angular momentum."
+According to GFM_concepts.py, triads "convert linear flux to angular momentum."
 If some triads never activate, that's like having broken alignment pins.
 The field would have "dead zones" where phase-locking fails. We test whether
 the traversal engages all 32 triads (8 faces x 4 triads).
@@ -43,7 +43,7 @@ DEPENDENCIES:
 - gravity_field_model.common.geometry_constants (FACES, get_vertex_coords)
 - gravity_field_model.common.traverse_pi_base8
 
-Reference: gfd_concepts.py (Triad mechanics, phase-locking)
+Reference: GFM_concepts.py (Triad mechanics, phase-locking)
 """
 
 import math
@@ -497,7 +497,7 @@ class TriadPhaseAlignment(Test):
         "If triads activate at random times, the coupling port cannot maintain "
         "coherent flux. Is there evidence of coordination?"
     )
-    reference = "gfd_concepts.py (phase-locking mechanism)"
+    reference = "GFM_concepts.py (phase-locking mechanism)"
     level = Standard
     tolerance = 0.25
 

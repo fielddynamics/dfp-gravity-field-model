@@ -2,7 +2,7 @@
 Probing Stellar Power Output: Luminosity Limits and Efficiency
 ===============================================================
 
-GFD Model V2
+GFM Model V2
 
 INVESTIGATION STATEMENT:
 Stars convert nuclear binding energy into radiation. These tests probe
@@ -264,7 +264,7 @@ class MassLuminosityExponent(Test):
         "Q2: Can the exponent be measured from binary star data, and what is the "
         "current observational uncertainty? "
         "(Answering would improve Observation Quality by +3 points) "
-        "Q3: Does the mass-luminosity relation have any analog in the GFD framework "
+        "Q3: Does the mass-luminosity relation have any analog in the GFM framework "
         "through field closure scaling? "
         "(Answering would improve Question by +2 points)"
     )

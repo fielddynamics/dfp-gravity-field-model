@@ -2,21 +2,21 @@
 Probing Synthesis: Cross-Domain Patterns and Unified Ratios
 ============================================================
 
-GFD Model V2
+GFM Model V2
 
 INVESTIGATION STATEMENT:
 These synthesis tests COMBINE data from multiple domains (nuclear physics,
-stellar evolution, atomic structure, GFD geometry) to look for cross-cutting
+stellar evolution, atomic structure, GFM geometry) to look for cross-cutting
 patterns:
 
 1. Group all nuclei by A mod k. Is there a binding energy difference?
 2. Does the fusion chain H→He→C→O→Si→Fe follow a tetrahedral mass progression?
-3. Catalog all dimensionless ratios in stellar mechanics and look for GFD values.
+3. Catalog all dimensionless ratios in stellar mechanics and look for GFM values.
 
 Synthesis tests are the most speculative: they hunt for patterns that
 cross domain boundaries. Negative results are as valuable as positive ones.
 
-Audience: Advanced researchers, GFD model developers, interdisciplinary physicists.
+Audience: Advanced researchers, GFM model developers, interdisciplinary physicists.
 """
 
 import math
@@ -283,26 +283,26 @@ class DimensionlessRatiosCatalog(Test):
     """
     Physics is characterized by dimensionless ratios. This test catalogs
     the key dimensionless ratios that appear in stellar mechanics and checks
-    whether any of them equal GFD-predicted values.
+    whether any of them equal GFM-predicted values.
 
-    GFD-relevant values: k=4, 2k=8, k²=16, 1/α≈137, 6π⁵≈1836.
+    GFM-relevant values: k=4, 2k=8, k²=16, 1/α≈137, 6π⁵≈1836.
 
     We compute ratios like:
     - T_He/T_H (fusion temperature ratio)
     - L_sun/(G M²/R) (luminosity/gravitational power)
     - M_P/(M_E × α) (mass hierarchy)
-    and check each against the GFD catalog.
+    and check each against the GFM catalog.
     """
     audit_score = 83
     audit_notes = None
     future_questions = (
-        "Q1: If a dimensionless ratio matches a GFD value to <1%, is this "
+        "Q1: If a dimensionless ratio matches a GFM value to <1%, is this "
         "evidence or coincidence? What statistical test could distinguish? "
         "(Answering would improve Derivation by +4 points) "
         "Q2: The fine structure constant α appears in atomic, nuclear, and "
         "gravitational physics. Is its ubiquity evidence for a geometric origin? "
         "(Answering would improve Commentary by +3 points) "
-        "Q3: What dimensionless ratios CHANGE in the GFD model if k were "
+        "Q3: What dimensionless ratios CHANGE in the GFM model if k were "
         "different (e.g., k=3 in 2+1 dimensions)? "
         "(Answering would improve Question by +3 points)"
     )
@@ -310,18 +310,18 @@ class DimensionlessRatiosCatalog(Test):
     question = (
         "What dimensionless ratios characterize stellar mechanics? We compute "
         "key ratios from CODATA constants and stellar data, then check each "
-        "against a catalog of GFD-relevant numbers (k, 2k, k², 1/α, 6π⁵). "
-        "How many ratios match GFD values, and is this more than expected "
+        "against a catalog of GFM-relevant numbers (k, 2k, k², 1/α, 6π⁵). "
+        "How many ratios match GFM values, and is this more than expected "
         "by chance from a pool of ~20 candidate values?"
     )
-    reference = "CODATA 2022; Stellar physics; GFD Textbook"
+    reference = "CODATA 2022; Stellar physics; GFM Textbook"
     tolerance = 0.30
     level = Level.EXPLORATORY
     commentary = (
-        "Dimensionless ratios are the 'DNA' of physics. If GFD is correct, "
+        "Dimensionless ratios are the 'DNA' of physics. If GFM is correct, "
         "certain ratios should appear naturally in stellar mechanics. This "
         "catalog test is exploratory: it computes many ratios and flags those "
-        "that match GFD predictions. Even if many matches are coincidental, "
+        "that match GFM predictions. Even if many matches are coincidental, "
         "the catalog serves as a map of the dimensional structure of stellar "
         "physics."
     )
@@ -337,8 +337,8 @@ class DimensionlessRatiosCatalog(Test):
             .step("5. (G M_sun m_p) / (k_B T_core R_sun) = virial ratio")
             .step("6. m_p/m_e = proton-electron mass ratio")
             .step("7. Fe-56 BE/A / He-4 BE/A = peak-to-alpha binding ratio")
-            .step("CHECK each against GFD catalog: k, 2k, k², 1/α, 6π⁵, etc.")
-            .conclude("Catalog all dimensionless ratios and flag GFD matches.")
+            .step("CHECK each against GFM catalog: k, 2k, k², 1/α, 6π⁵, etc.")
+            .conclude("Catalog all dimensionless ratios and flag GFM matches.")
         )
 
     def model(self) -> Model:
@@ -369,8 +369,8 @@ class DimensionlessRatiosCatalog(Test):
         sb_predicted = 4 * PI * R_SOLAR ** 2 * SIGMA_SB * T_SOLAR_SURFACE ** 4
         ratios["L_sun / L_SB"] = L_SOLAR / sb_predicted
 
-        # GFD catalog
-        gfd_values = {
+        # GFM catalog
+        GFM_values = {
             "k": K_CLOSURE,
             "2k": 2 * K_CLOSURE,
             "k^2": K_CLOSURE ** 2,
@@ -381,7 +381,7 @@ class DimensionlessRatiosCatalog(Test):
         # Check for matches
         matches = 0
         for rname, rval in ratios.items():
-            for gname, gval in gfd_values.items():
+            for gname, gval in GFM_values.items():
                 if gval > 0 and rval > 0:
                     frac_diff = abs(rval - gval) / gval
                     if frac_diff < 0.05:
@@ -389,16 +389,16 @@ class DimensionlessRatiosCatalog(Test):
 
         m = Model()
         m.add("Ratios computed", len(ratios))
-        m.add("GFD matches (<5%)", matches)
+        m.add("GFM matches (<5%)", matches)
         m.add("m_p / m_e", round(ratios["m_p / m_e"], 1))
         m.add("T_He / T_H", round(ratios["T_He / T_H"], 2))
         m.add("L_sun / L_SB", round(ratios["L_sun / L_SB"], 3))
         m.add("Virial ratio", round(virial_ratio, 2))
 
-        headers = ["Ratio", "Value", "Nearest GFD"]
+        headers = ["Ratio", "Value", "Nearest GFM"]
         rows = []
         for rname, rval in sorted(ratios.items()):
-            nearest = min(gfd_values.items(), key=lambda x: abs(x[1] - rval) if x[1] > 0 else float('inf'))
+            nearest = min(GFM_values.items(), key=lambda x: abs(x[1] - rval) if x[1] > 0 else float('inf'))
             rows.append([rname, f"{rval:.4g}", f"{nearest[0]}={nearest[1]:.4g}"])
         m.add_table(title="Dimensionless Ratios", headers=headers, rows=rows)
 
@@ -408,7 +408,7 @@ class DimensionlessRatiosCatalog(Test):
         return (
             Observed()
             .add("Ratios computed", 8)
-            .add("GFD matches (<5%)", 1)
+            .add("GFM matches (<5%)", 1)
             .add("m_p / m_e", 1836.2)
             .add("T_He / T_H", 6.67)
             .add("L_sun / L_SB", 1.0)
@@ -435,7 +435,7 @@ def run_all() -> bool:
             "These synthesis tests combine data from multiple domains:\n"
             "1. k-modulo groups: Is A mod 4 = 0 special for nuclear binding?\n"
             "2. Fusion chain: Do mass numbers follow a tetrahedral pattern?\n"
-            "3. Dimensionless ratios: Do GFD values appear in stellar physics?\n\n"
+            "3. Dimensionless ratios: Do GFM values appear in stellar physics?\n\n"
             "METHODOLOGY: Cross-domain statistical analysis.\n"
             "No fitting. These tests hunt for patterns that cross boundaries.\n"
             "HONESTY: Null results constrain the model as much as positive ones."

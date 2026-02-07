@@ -7,7 +7,7 @@ and its role in beta decay stability. The difference equals approximately
 2.5 electron masses, determining why free neutrons decay while bound neutrons
 in stable nuclei do not.
 
-GFD OBSERVATION: The ratio (m_n - m_p) / m_e ~ 2.53 is close to 5/2.
+GFM OBSERVATION: The ratio (m_n - m_p) / m_e ~ 2.53 is close to 5/2.
 
 This is an OBSERVATION, not a derivation. The Standard Model explains this
 difference through QCD plus electromagnetic corrections (d quark is heavier
@@ -95,7 +95,7 @@ class NeutronProtonMassDifference(Test):
     ~0.76 MeV more electromagnetic mass, partially compensating the QCD
     difference. The net result is delta_m ~ 1.29 MeV.
     
-    GFD OBSERVATION:
+    GFM OBSERVATION:
     The ratio (m_n - m_p) / m_e = 2.531 is close to 5/2 = 2.5 (error 1.2%).
     This near-integer ratio connects hadronic and leptonic mass scales in
     the one process (beta decay) where they directly interact.
@@ -109,7 +109,7 @@ class NeutronProtonMassDifference(Test):
     EPISTEMIC STATUS:
     This test is an OBSERVATION of the measured mass difference and its
     ratio to the electron mass, not a derivation from first principles.
-    GFD notes the numerical coincidence with 5/2 but does not explain it.
+    GFM notes the numerical coincidence with 5/2 but does not explain it.
     """
     
     name = "Neutron-Proton Mass Difference: 2.5 Electron Masses"
@@ -134,7 +134,7 @@ class NeutronProtonMassDifference(Test):
         "unstable matter. The Standard Model explains this through QCD "
         "(down quark heavier than up quark by ~3 MeV) and electromagnetic "
         "corrections (proton's charge adds ~0.76 MeV). The net difference "
-        "of 1.29 MeV happens to equal 2.53 electron masses. GFD observes "
+        "of 1.29 MeV happens to equal 2.53 electron masses. GFM observes "
         "that 2.53 is close to 5/2 with 1.2% error, a potential geometric "
         "pattern, but this is an observation, not a derivation. The anthropic "
         "significance is immediate: this value must lie between 0 (or hydrogen "
@@ -145,7 +145,7 @@ class NeutronProtonMassDifference(Test):
     audit_score = 92
     audit_notes = (
         "Question: 14/15 (clear mystery, specific numbers, anthropic context). "
-        "Derivation: 14/15 (standard physics explained, GFD observation noted). "
+        "Derivation: 14/15 (standard physics explained, GFM observation noted). "
         "Commentary: 14/15 (comprehensive, honest, connects scales). "
         "Model: 10/10 (all relevant quantities computed). "
         "Observations: 10/10 (measured values documented). "
@@ -161,7 +161,7 @@ class NeutronProtonMassDifference(Test):
         "Q2: What is the exact electromagnetic contribution to the mass difference, "
         "and how is it separated from QCD effects? "
         "(Answering would improve Commentary by +3 points: decomposition details) "
-        "Q3: Does the 5/2 ratio connect to any GFD geometric structure, such as "
+        "Q3: Does the 5/2 ratio connect to any GFM geometric structure, such as "
         "the 5-dimensional closure or pentagonal symmetries? "
         "(Answering would improve Question by +4 points: geometric interpretation)"
     )
@@ -189,7 +189,7 @@ class NeutronProtonMassDifference(Test):
             .step("This energy is shared by electron and antineutrino.")
             .step("Neutron lifetime: tau_n = 879.4 seconds")
             .step("")
-            .step("GFD OBSERVATION: Ratio close to 5/2")
+            .step("GFM OBSERVATION: Ratio close to 5/2")
             .step("Predicted ratio: 5/2 = 2.500")
             .step(f"Observed ratio: 2.531")
             .step(f"Relative error: {error:.2f}%")
@@ -226,7 +226,7 @@ class NeutronProtonMassDifference(Test):
             .add("Error (%)", error_percent, fmt=".2f")
             .add("Neutron lifetime (s)", NEUTRON_LIFETIME, fmt=".1f")
             .add("Q-value (MeV)", Q_VALUE_BETA, fmt=".6f")
-            .add("K (GFD closure)", K)
+            .add("K (GFM closure)", K)
         )
     
     def observations(self) -> Observed:
@@ -253,7 +253,7 @@ if __name__ == "__main__":
             "This test examines the neutron-proton mass difference of 1.293 MeV, "
             "which equals 2.53 electron masses. This ratio is close to 5/2, "
             "connecting hadronic and leptonic mass scales. The Standard Model "
-            "explains this through QCD and electromagnetic corrections. GFD "
+            "explains this through QCD and electromagnetic corrections. GFM "
             "observes the numerical coincidence with 5/2 but does not derive it."
         ),
         test_classes=[NeutronProtonMassDifference],

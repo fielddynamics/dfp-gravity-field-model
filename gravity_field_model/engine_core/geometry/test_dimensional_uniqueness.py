@@ -15,7 +15,7 @@ equates the number of vertices in two tetrahedra (2K = 2(d+1) = 8) with the
 number of vertices in a d dimensional cube (2^d = 8), meaning the stellated
 octahedron can be inscribed in a cube only in three dimensions.
 
-GFD OBSERVATION: 2(d+1) = 2^d is satisfied uniquely at d=3, linking K=4 to 2^d=8.
+GFM OBSERVATION: 2(d+1) = 2^d is satisfied uniquely at d=3, linking K=4 to 2^d=8.
 
 This is an OBSERVATION, not a derivation.
 """
@@ -38,7 +38,7 @@ class DimensionalUniqueness(Test):
     is necessary for a universe with complex structure, but offers no
     mechanism that selects d=3 from all possible integers.
 
-    GFD OBSERVATION:
+    GFM OBSERVATION:
     The GFM stellated octahedron has 2K = 2(d+1) vertices from its two
     tetrahedra and sits inside a cube with 2^d vertices. The identity
     2(d+1) = 2^d is satisfied only at d=3. No other positive integer

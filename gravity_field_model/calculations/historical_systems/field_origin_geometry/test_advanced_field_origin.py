@@ -63,7 +63,7 @@ class OriginSphericalSymmetry(Test):
         "Field Origin? This reveals why (0,0,0) is the unique equilibrium point "
         "of the stellated octahedron, where all directional biases vanish."
     )
-    reference = "GFD Textbook Ch.9 Sec.9.5: Vector cancellation at Field Origin"
+    reference = "GFM Textbook Ch.9 Sec.9.5: Vector cancellation at Field Origin"
     tolerance = 0.01
     commentary = (
         "The 8 vertices form 4 antipodal pairs, each contributing opposite vectors "
@@ -116,7 +116,7 @@ class DimensionalHierarchy(Test):
         "from 0D to 3D? This reveals how field closure spans all geometric dimensions, "
         "with the Field Origin as the 0D anchor of the entire structure."
     )
-    reference = "GFD Textbook Ch.7 Sec.7.3: Dimensional structure of Field Chamber"
+    reference = "GFM Textbook Ch.7 Sec.7.3: Dimensional structure of Field Chamber"
     tolerance = 0.01
     commentary = (
         "The structure has: 1 central point (0D), 12 edges (1D), 8 triangular "
@@ -180,7 +180,7 @@ class OriginMinimizesDistanceSquaredSum(Test):
         "to all vertices? This establishes (0,0,0) as the optimal center point, "
         "analogous to a center of mass in mechanics."
     )
-    reference = "GFD Textbook Ch.7 Sec.7.3: Centroid as Field Origin"
+    reference = "GFM Textbook Ch.7 Sec.7.3: Centroid as Field Origin"
     tolerance = 0.01
     commentary = (
         "The centroid minimizes sum of squared distances for any point set. Since "
@@ -256,7 +256,7 @@ class InformationEntropyAtOrigin(Test):
         "the spatial dimension d=3? This suggests the cube encodes exactly d bits "
         "of positional information, connecting geometry to information theory."
     )
-    reference = "Shannon (1948); GFD Textbook Ch.9: Information structure of cube"
+    reference = "Shannon (1948); GFM Textbook Ch.9: Information structure of cube"
     tolerance = 0.01
     commentary = (
         "For N = 2^d vertices, the maximum entropy is log_2(N) = d bits. This is "
@@ -317,7 +317,7 @@ class InnerOctahedronStructure(Test):
         "vertices at unit distance from the Field Origin? This dual structure "
         "establishes an intermediate geometric scale between origin and vertices."
     )
-    reference = "GFD Textbook Ch.9 Sec.9.5: Central octahedron as Field Origin"
+    reference = "GFM Textbook Ch.9 Sec.9.5: Central octahedron as Field Origin"
     tolerance = 0.01
     commentary = (
         "The 6 face centers at (+/-1,0,0), (0,+/-1,0), (0,0,+/-1) form a regular "
@@ -372,7 +372,7 @@ class PhaseSpaceCorrespondence(Test):
         "the dimension of classical phase space? This correspondence suggests "
         "a possible geometric encoding of position-momentum structure."
     )
-    reference = "Hamiltonian mechanics; GFD Textbook exploratory appendix"
+    reference = "Hamiltonian mechanics; GFM Textbook exploratory appendix"
     tolerance = 0.01
     commentary = (
         "The numerical match 2d = 6 = octahedron vertices is documented as a "

@@ -2,10 +2,10 @@
 Vortex Eye Transit: Model Definitions
 ======================================
 
-GFD Model V2
+GFM Model V2
 
 HONESTY STATEMENT:
-This module defines GFD model concepts about the "vortex eye" (Field Origin)
+This module defines GFM model concepts about the "vortex eye" (Field Origin)
 and verifies internal consistency of those definitions. These are MODEL
 DEFINITIONS, not physics derivations or predictions.
 
@@ -26,15 +26,15 @@ WHAT THIS MODULE DOES NOT DO:
 - Provide new physics beyond standard models
 
 The "transit barrier" of ~8 MeV is ADOPTED from measured nuclear binding
-energies, not derived from GFD geometry.
+energies, not derived from GFM geometry.
 
 TEST GROUP GOALS:
 This module introduces the concept of the Field Origin (vortex eye) and its
-role in the GFD model. Students learn to distinguish model definitions from
+role in the GFM model. Students learn to distinguish model definitions from
 physics predictions, understanding that the ~8 MeV barrier is adopted from
 nuclear data rather than derived from geometry.
 
-Audience: Undergraduate physics students familiar with the GFD model basics.
+Audience: Undergraduate physics students familiar with the GFM model basics.
 """
 
 import math
@@ -107,7 +107,7 @@ class TransitEnergyBarrier(Test):
     State the adopted transit barrier.
 
     HONESTY: ~8 MeV is adopted from nuclear binding energies.
-    It is NOT derived from GFD geometry.
+    It is NOT derived from GFM geometry.
     """
     audit_score = 76
     audit_notes = None
@@ -117,13 +117,13 @@ class TransitEnergyBarrier(Test):
         "(Answering would improve Derivation by +3 points: parameter choice justification) "
         "Q2: How would the model predictions change if the barrier were 5 MeV or 12 MeV? "
         "(Answering would improve Model Output by +3 points: sensitivity analysis) "
-        "Q3: What physical mechanism does the 'transit barrier' represent in GFD language "
+        "Q3: What physical mechanism does the 'transit barrier' represent in GFM language "
         "versus standard nuclear physics? "
         "(Answering would improve Commentary by +2 points: terminology mapping)"
     )
     name = "Transit Energy Barrier"
     question = (
-        "Why does GFD adopt ~8 MeV as the transit barrier energy, and why is "
+        "Why does GFM adopt ~8 MeV as the transit barrier energy, and why is "
         "this value taken from nuclear binding data rather than derived from "
         "the model's geometry?"
     )
@@ -132,7 +132,7 @@ class TransitEnergyBarrier(Test):
     level = Level.STANDARD
     commentary = (
         "The transit barrier of ~8 MeV is ADOPTED from measured nuclear "
-        "binding energies (average BE/nucleon near Fe-56). GFD does not "
+        "binding energies (average BE/nucleon near Fe-56). GFM does not "
         "derive this value. It is a model parameter taken from nuclear data."
     )
 
@@ -141,9 +141,9 @@ class TransitEnergyBarrier(Test):
             Derivation()
             .step("MODEL PARAMETER: Transit barrier adopted from nuclear data.")
             .step("Nuclear binding energies peak at ~8.8 MeV/nucleon (Fe-56).")
-            .step("GFD adopts ~8 MeV as representative barrier energy.")
+            .step("GFM adopts ~8 MeV as representative barrier energy.")
             .equation("Barrier = 8.0 MeV = 1.28e-12 J")
-            .step("This is NOT derived from GFD. It is taken from measurements.")
+            .step("This is NOT derived from GFM. It is taken from measurements.")
             .conclude("Transit barrier = 8 MeV (adopted).")
         )
 
@@ -182,7 +182,7 @@ class StellatedOctahedronSymmetry(Test):
         "Q1: Why is the stellated octahedron (star tetrahedron, Merkaba) chosen as the "
         "fundamental geometry rather than other polyhedra? "
         "(Answering would improve Question by +4 points: motivates geometry choice) "
-        "Q2: What is the physical interpretation of Tet A versus Tet B in the GFD model? "
+        "Q2: What is the physical interpretation of Tet A versus Tet B in the GFM model? "
         "(Answering would improve Commentary by +3 points: model meaning) "
         "Q3: How does the point group symmetry of the stellated octahedron relate to "
         "nuclear symmetries? "
@@ -268,7 +268,7 @@ class VortexEyeSize(Test):
     tolerance = 0.05
     level = Level.STANDARD
     commentary = (
-        "The vortex eye size is defined as r_e/4 in the GFD model. This is "
+        "The vortex eye size is defined as r_e/4 in the GFM model. This is "
         "a MODEL DEFINITION, not a derivation. The factor 1/4 is chosen, "
         "not derived from first principles."
     )
@@ -278,7 +278,7 @@ class VortexEyeSize(Test):
             Derivation()
             .step("MODEL DEFINITION: Vortex eye size.")
             .step("r_e = 2.818 fm (classical electron radius).")
-            .step("GFD DEFINES eye radius = r_e / 4.")
+            .step("GFM DEFINES eye radius = r_e / 4.")
             .equation("Eye radius = 2.818 / 4 = 0.705 fm")
             .step("This is a model parameter, not derived.")
             .conclude("Vortex eye = r_e/4 by definition.")
@@ -387,7 +387,7 @@ class FieldOriginStability(Test):
     """
     Verify Field Origin is at center: the "eye of the hurricane."
     
-    GFD TEXTBOOK CONNECTION (Chapter 7, Section 9.5):
+    GFM TEXTBOOK CONNECTION (Chapter 7, Section 9.5):
     The Field Origin is not an arbitrary choice. From Section 7.4:
     "At the exact center of the Field Chamber, all four coupling directions balance.
     This point is the Field Origin, the location where the field object 'sits.'"
@@ -425,13 +425,13 @@ class FieldOriginStability(Test):
     name = "Field Origin: The Eye of the Hurricane"
     question = (
         "Why must the Field Origin be at the exact center where all coupling directions "
-        "balance? The GFD Textbook (Section 9.5) describes three essential functions: "
+        "balance? The GFM Textbook (Section 9.5) describes three essential functions: "
         "(1) Neutral point where Tet A and Tet B compressions cancel, "
         "(2) Coupling zone where information from both Field Chambers meets, and "
         "(3) Processing center where field closure 'solves' the field equations. "
         "Without this central positioning, none of these functions would work."
     )
-    reference = "GFD Textbook Sections 7.4, 9.5; Chapter 15"
+    reference = "GFM Textbook Sections 7.4, 9.5; Chapter 15"
     tolerance = 0.01
     level = Level.STANDARD
     commentary = (
@@ -511,7 +511,7 @@ def run_all() -> bool:
     return run_tests(
         title="Vortex Eye Transit",
         summary=(
-            "These tests define GFD model parameters and verify internal consistency.\n\n"
+            "These tests define GFM model parameters and verify internal consistency.\n\n"
             "MODEL DEFINITIONS (not derivations):\n"
             "- Transit barrier = 8 MeV (adopted from nuclear data)\n"
             "- Vortex eye size = r_e/4 (defined, not derived)\n"
@@ -522,7 +522,7 @@ def run_all() -> bool:
             "MODEL BEHAVIOR:\n"
             "- Transit rate increases with temperature (qualitative)\n\n"
             "CLARIFICATION: This module defines model parameters. The ~8 MeV\n"
-            "barrier is taken from nuclear physics, not derived from GFD.\n"
+            "barrier is taken from nuclear physics, not derived from GFM.\n"
             "The geometric relationships follow from the stellated octahedron\n"
             "construction, not from physics principles."
         ),

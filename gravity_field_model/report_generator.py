@@ -1,8 +1,8 @@
 """
-GFD Report Generator
+GFM Report Generator
 ====================
 
-Generates NASA/CERN-style validation reports from GFDTest results.
+Generates NASA/CERN-style validation reports from GFMTest results.
 
 Reports:
   1. Pre-Flight Check (PFC) — All ENGINE categories → GO/NO-GO decision
@@ -21,8 +21,8 @@ Usage:
     result = generate_flight_reports(output_dir="my_reports")
 
 Output:
-    reports/GFD-PFC-{YYYYMMDD}-{HHMMSS}.md  — Pre-Flight Check
-    reports/GFD-ATR-{YYYYMMDD}-{HHMMSS}.md  — Advanced Timing Report
+    reports/GFM-PFC-{YYYYMMDD}-{HHMMSS}.md  — Pre-Flight Check
+    reports/GFM-ATR-{YYYYMMDD}-{HHMMSS}.md  — Advanced Timing Report
 
 The ATR always cross-references its PFC by document ID.
 """
@@ -38,7 +38,7 @@ from contextlib import redirect_stdout, redirect_stderr
 # Add paths for imports
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from base import GFDTest, TestResult, GroupResult
+from base import GFMTest, TestResult, GroupResult
 
 
 # =============================================================================
@@ -264,9 +264,9 @@ def _header_block(title, doc_id):
     lines.append(f"  Document: {doc_id}")
     lines.append("=" * 70)
     lines.append("")
-    lines.append(f"  CLASSIFICATION:  Internal — GFD Model Validation")
+    lines.append(f"  CLASSIFICATION:  Internal — GFM Model Validation")
     lines.append(f"  GENERATED:       {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}")
-    lines.append(f"  FRAMEWORK:       GFD Model V2")
+    lines.append(f"  FRAMEWORK:       GFM Model V2")
     lines.append(f"  PYTHON:          {platform.python_version()}")
     lines.append(f"  PLATFORM:        {platform.system()} {platform.release()}")
     lines.append("")
@@ -402,7 +402,7 @@ def _build_preflight_report(results, timestamp):
     Returns:
         tuple: (report_text, doc_id, is_go)
     """
-    doc_id = f"GFD-PFC-{timestamp}"
+    doc_id = f"GFM-PFC-{timestamp}"
 
     total_tests = sum(c['total_tests'] for c in results.values())
     total_passed = sum(c['total_passed'] for c in results.values())
@@ -422,7 +422,7 @@ def _build_preflight_report(results, timestamp):
     sections = []
 
     # Header
-    sections.append(_header_block("GFD ENGINE PRE-FLIGHT CHECK", doc_id))
+    sections.append(_header_block("GFM ENGINE PRE-FLIGHT CHECK", doc_id))
     sections.append(_separator())
 
     # Executive Summary
@@ -465,7 +465,7 @@ def _build_preflight_report(results, timestamp):
     sections.append("  CERTIFICATION")
     sections.append("  " + _separator())
     sections.append("")
-    sections.append("  This report was generated automatically by the GFD Engine")
+    sections.append("  This report was generated automatically by the GFM Engine")
     sections.append("  Pre-Flight Check system. All tests executed against the current")
     sections.append("  codebase with no manual intervention.")
     sections.append("")
@@ -501,7 +501,7 @@ def _build_advanced_report(results, preflight_doc_id, preflight_is_go, timestamp
     Returns:
         tuple: (report_text, doc_id)
     """
-    doc_id = f"GFD-ATR-{timestamp}"
+    doc_id = f"GFM-ATR-{timestamp}"
 
     total_tests = sum(c['total_tests'] for c in results.values())
     total_passed = sum(c['total_passed'] for c in results.values())
@@ -511,7 +511,7 @@ def _build_advanced_report(results, preflight_doc_id, preflight_is_go, timestamp
     sections = []
 
     # Header
-    sections.append(_header_block("GFD ADVANCED TIMING ANALYSIS REPORT", doc_id))
+    sections.append(_header_block("GFM ADVANCED TIMING ANALYSIS REPORT", doc_id))
     sections.append(_separator())
 
     # Executive Summary
@@ -564,7 +564,7 @@ def _build_advanced_report(results, preflight_doc_id, preflight_is_go, timestamp
     sections.append("  CERTIFICATION")
     sections.append("  " + _separator())
     sections.append("")
-    sections.append("  This report was generated automatically by the GFD Advanced")
+    sections.append("  This report was generated automatically by the GFM Advanced")
     sections.append("  Timing Analysis system.")
     sections.append("")
     sections.append(f"  Generated:   {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}")
@@ -701,7 +701,7 @@ if __name__ == "__main__":
         print(f"  [{phase}] {message}")
 
     print()
-    print("  GFD Report Generator")
+    print("  GFM Report Generator")
     print("  " + "=" * 50)
     print()
 

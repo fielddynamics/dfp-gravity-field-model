@@ -2,7 +2,7 @@
 Closure Geometry Tests
 ======================
 
-GFD Model V2: Testing why k=4 in ONE Tet B matters
+GFM Model V2: Testing why k=4 in ONE Tet B matters
 
 CORE QUESTION:
 Why is He-4 (k=4 in one Tet B) stable, but 2 hydrogen atoms (k=2 equivalent)

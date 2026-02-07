@@ -21,7 +21,7 @@ The existing binary encoding tests validate the combinatorial properties
 test bridges that gap: verifying that all 8 vertices, across both
 tetrahedra, lie at identical Euclidean distance sqrt(3) from the origin.
 
-GFD OBSERVATION: The Field Origin at (0,0,0) is equidistant from all 2^d = 8
+GFM OBSERVATION: The Field Origin at (0,0,0) is equidistant from all 2^d = 8
 vertices at distance sqrt(d) = sqrt(3), a metric consequence of the cube
 geometry that underlies the bimetric coupling symmetry.
 
@@ -50,7 +50,7 @@ class FieldOriginEquidistance(Test):
     regardless of which tetrahedron a vertex belongs to, establishing the
     center as a point of full octahedral symmetry.
 
-    GFD OBSERVATION:
+    GFM OBSERVATION:
     GFM identifies this geometric center as the Field Origin, the coupling
     interface between Chamber A (Tet A) and Chamber B (Tet B). The equal
     distance sqrt(d) = sqrt(3) from all 2^d = 8 vertices means the Field
@@ -80,7 +80,7 @@ class FieldOriginEquidistance(Test):
 
     reference = (
         "Coxeter, Regular Polytopes (1973); "
-        "GFD Textbook Ch.9 Sec.9.5: Field Origin and body diagonals"
+        "GFM Textbook Ch.9 Sec.9.5: Field Origin and body diagonals"
     )
 
     tolerance = 0.01
@@ -103,7 +103,7 @@ class FieldOriginEquidistance(Test):
     # Audit scoring
     audit_score = 83
     audit_notes = (
-        "Question: 11/15 (asks why but partially answers itself within the question text, reducing mystery; the final sentence about bimetric balance is the real hook but arrives late). Derivation: 12/15 (clear logical progression, good use of equation step, but the physical setup lacks a tension or puzzle stage; it proceeds directly to an obvious geometric fact without first establishing why equidistance matters or what would go wrong without it). Commentary: 12/15 (solid interpretation, correctly labels observation vs derivation, connects metric to combinatorial level nicely, but lacks an analogy for accessibility and does not state broader implications for other GFM results that depend on the Field Origin). Model: 9/10 (clean summary statistics with 5 well chosen values; variance as a zero check is smart; per tetrahedron breakdown adds meaningful structure). Observations: 7/10 (values are mathematically exact and correct, Coxeter citation is given, but the observed values are computed from math.sqrt(3.0) rather than referenced from an external authoritative table; the variance comparison at 0.0 may cause floating point issues with tolerance checking). Constants: 9/10 (K, VERTICES, TET_A, TET_B properly imported from common; d=3 used as literal consistent with project rules; minor note that K is imported but never used in computation). Accessibility: 13/15 (undergrad can follow the geometry, docstring explains coordinates clearly, epistemic status section is excellent, but assumes familiarity with terms like bimetric balance and coupling interface without defining them for newcomers). Header: 10/10 (comprehensive module docstring covers physical domain, what is verified, epistemic status clearly labeled as observation, references both standard geometry and GFD textbook, scope and limitations stated)."
+        "Question: 11/15 (asks why but partially answers itself within the question text, reducing mystery; the final sentence about bimetric balance is the real hook but arrives late). Derivation: 12/15 (clear logical progression, good use of equation step, but the physical setup lacks a tension or puzzle stage; it proceeds directly to an obvious geometric fact without first establishing why equidistance matters or what would go wrong without it). Commentary: 12/15 (solid interpretation, correctly labels observation vs derivation, connects metric to combinatorial level nicely, but lacks an analogy for accessibility and does not state broader implications for other GFM results that depend on the Field Origin). Model: 9/10 (clean summary statistics with 5 well chosen values; variance as a zero check is smart; per tetrahedron breakdown adds meaningful structure). Observations: 7/10 (values are mathematically exact and correct, Coxeter citation is given, but the observed values are computed from math.sqrt(3.0) rather than referenced from an external authoritative table; the variance comparison at 0.0 may cause floating point issues with tolerance checking). Constants: 9/10 (K, VERTICES, TET_A, TET_B properly imported from common; d=3 used as literal consistent with project rules; minor note that K is imported but never used in computation). Accessibility: 13/15 (undergrad can follow the geometry, docstring explains coordinates clearly, epistemic status section is excellent, but assumes familiarity with terms like bimetric balance and coupling interface without defining them for newcomers). Header: 10/10 (comprehensive module docstring covers physical domain, what is verified, epistemic status clearly labeled as observation, references both standard geometry and GFM textbook, scope and limitations stated)."
     )
 
     academic_paper = """\

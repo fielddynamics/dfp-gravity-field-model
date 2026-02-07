@@ -2,10 +2,10 @@
 Field Origin Geometry: Model Definitions and Internal Consistency
 ==================================================================
 
-GFD Model V2
+GFM Model V2
 
 HONESTY STATEMENT:
-This module defines GFD model geometry and verifies internal consistency.
+This module defines GFM model geometry and verifies internal consistency.
 These are MODEL DEFINITIONS, not physics derivations. The geometry is
 chosen to have certain properties, then we verify those properties hold.
 
@@ -24,10 +24,10 @@ WHAT THIS MODULE DOES NOT DO:
 - It does not derive the classical electron radius
 - It does not explain WHY k=4 should relate to nuclear stability
 - The observation that A mod 4 = 0 for some stable nuclei is pattern
-  matching, not a GFD prediction
+  matching, not a GFM prediction
 
 TEST GROUP GOALS:
-This module establishes the geometric foundation of the GFD model. The stellated
+This module establishes the geometric foundation of the GFM model. The stellated
 octahedron geometry is introduced as a framework for organizing nuclear structure.
 Students learn that r_e and k=4 are adopted constants, not derived predictions,
 establishing honesty about what the model assumes vs what it explains.
@@ -66,7 +66,7 @@ class FieldEnvelopeSize(Test):
     """
     Verify the Field Envelope size equals classical electron radius.
 
-    HONESTY: r_e is the classical electron radius from CODATA. GFD ADOPTS
+    HONESTY: r_e is the classical electron radius from CODATA. GFM ADOPTS
     this value as the "Field Envelope" size. This is a model definition,
     not a derivation.
     """
@@ -78,13 +78,13 @@ class FieldEnvelopeSize(Test):
         "(Answering would improve Question by +4 points: addresses apparent paradox) "
         "Q2: How does r_e emerge from equating electrostatic self-energy to rest mass energy? "
         "(Answering would improve Derivation by +3 points: shows historical derivation) "
-        "Q3: Why might GFD choose r_e as the fundamental length scale rather than Compton "
+        "Q3: Why might GFM choose r_e as the fundamental length scale rather than Compton "
         "wavelength or Bohr radius? "
         "(Answering would improve Commentary by +2 points: model motivation)"
     )
     name = "Field Envelope r_e"
     question = (
-        "Why does GFD adopt the classical electron radius (2.818 fm) as its "
+        "Why does GFM adopt the classical electron radius (2.818 fm) as its "
         "fundamental length scale? What physical significance does r_e have, "
         "and what does it mean to 'adopt' rather than 'derive' a constant?"
     )
@@ -92,15 +92,15 @@ class FieldEnvelopeSize(Test):
     tolerance = 0.01
     level = Level.CRITICAL
     commentary = (
-        "The classical electron radius r_e = 2.818 fm is a measured constant. GFD "
+        "The classical electron radius r_e = 2.818 fm is a measured constant. GFM "
         "adopts this value as the 'Field Envelope' size. This is a definition that "
-        "sets the model's length scale. GFD does not derive r_e from first principles."
+        "sets the model's length scale. GFM does not derive r_e from first principles."
     )
 
     def derivation(self) -> Derivation:
         return (
             Derivation()
-            .step("DEFINITION: GFD adopts the classical electron radius as Field Envelope size.")
+            .step("DEFINITION: GFM adopts the classical electron radius as Field Envelope size.")
             .equation("r_e = e^2 / (4*pi*epsilon_0*m_e*c^2) = 2.818 fm (CODATA)")
             .step("This is the model's fundamental length scale by definition.")
             .conclude("Field Envelope r_e = 2.818e-15 m (adopted from CODATA).")
@@ -122,7 +122,7 @@ class TetrahedralClosureConstant(Test):
     Verify k=4 follows from simplex theorem.
 
     HONESTY: The simplex theorem states d+1 points are needed to enclose
-    d-dimensional space. For d=3, this gives k=4. GFD DEFINES k=4 as the
+    d-dimensional space. For d=3, this gives k=4. GFM DEFINES k=4 as the
     "Field Closure constant." This is a geometric fact, not a physics derivation.
     """
     audit_score = 82
@@ -148,7 +148,7 @@ class TetrahedralClosureConstant(Test):
     level = Level.CRITICAL
     commentary = (
         "The simplex theorem is pure geometry: to minimally enclose 3D space, you "
-        "need 4 points (a tetrahedron). GFD adopts k=4 as a fundamental constant. "
+        "need 4 points (a tetrahedron). GFM adopts k=4 as a fundamental constant. "
         "This is a definition inspired by geometry, not a derivation that k=4 has "
         "physical significance for nuclear stability."
     )
@@ -159,7 +159,7 @@ class TetrahedralClosureConstant(Test):
             .step("GEOMETRY: Simplex theorem states d+1 points minimally enclose d dimensions.")
             .equation("For d=3: k = d + 1 = 4")
             .step("k=4 = tetrahedron vertices = tetrahedron faces.")
-            .step("GFD ADOPTS this as the Field Closure constant.")
+            .step("GFM ADOPTS this as the Field Closure constant.")
             .step("NOTE: This does not EXPLAIN why He-4 is stable. Shell model does.")
             .conclude("k = 4 by geometric definition from simplex theorem.")
         )
@@ -219,7 +219,7 @@ class FieldOriginAtCenter(Test):
     level = Level.CRITICAL
     commentary = (
         "The stellated octahedron vertices are at (+/-1, +/-1, +/-1). By symmetry, "
-        "the centroid is at (0,0,0). GFD calls this the 'Field Origin'. This is "
+        "the centroid is at (0,0,0). GFM calls this the 'Field Origin'. This is "
         "a model definition, not a physics prediction."
     )
 
@@ -228,7 +228,7 @@ class FieldOriginAtCenter(Test):
             Derivation()
             .step("GEOMETRY: Stellated octahedron with vertices at (+/-1, +/-1, +/-1).")
             .step("Centroid = average of all vertices = (0, 0, 0).")
-            .step("GFD defines this as the 'Field Origin'.")
+            .step("GFM defines this as the 'Field Origin'.")
             .conclude("Field Origin = (0, 0, 0) by construction.")
         )
 
@@ -333,7 +333,7 @@ class BimetricBalance(Test):
     audit_score = 76
     audit_notes = None
     future_questions = (
-        "Q1: What physical meaning do Tet A and Tet B have in the GFD model, and why are "
+        "Q1: What physical meaning do Tet A and Tet B have in the GFM model, and why are "
         "two tetrahedra needed rather than one? "
         "(Answering would improve Question by +4 points: model interpretation) "
         "Q2: How does the interpenetrating geometry relate to matter-antimatter or "
@@ -404,7 +404,7 @@ class InnerOctahedronBoundary(Test):
     audit_score = 73
     audit_notes = None
     future_questions = (
-        "Q1: What role does the inner octahedron play in the GFD model geometry, and how "
+        "Q1: What role does the inner octahedron play in the GFM model geometry, and how "
         "does it differ from the outer stellated structure? "
         "(Answering would improve Question by +3 points: clarifies model structure) "
         "Q2: Why are the inner octahedron vertices at axis-aligned positions while the "
@@ -470,7 +470,7 @@ class ScaleComparison(Test):
     Compare r_e to proton radius.
 
     HONESTY: This is an observation. r_e > r_proton is a measured fact.
-    GFD does not explain WHY this is so.
+    GFM does not explain WHY this is so.
     """
     audit_score = 78
     audit_notes = None
@@ -496,7 +496,7 @@ class ScaleComparison(Test):
     commentary = (
         "r_e = 2.818 fm (classical electron radius) is ~3.2x larger than "
         "r_proton = 0.87 fm (proton charge radius). This is an observation. "
-        "GFD does not derive either value."
+        "GFM does not derive either value."
     )
 
     def derivation(self) -> Derivation:
@@ -506,7 +506,7 @@ class ScaleComparison(Test):
             .step("MEASUREMENT: r_proton = 0.87 fm (electron scattering).")
             .equation("Ratio = 2.818 / 0.87 = 3.24")
             .step("OBSERVATION: Field Envelope > proton radius.")
-            .step("GFD does not explain this ratio. It is adopted as given.")
+            .step("GFM does not explain this ratio. It is adopted as given.")
             .conclude("r_e/r_proton = 3.24 (measured ratio).")
         )
 
@@ -537,7 +537,7 @@ class ComptonWavelengthRatio(Test):
     Calculate ratio of Compton wavelength to r_e.
 
     HONESTY: lambda_C / r_e = 2*pi/alpha ~ 861 is a known result from QED.
-    GFD does not derive this. It observes and adopts it.
+    GFM does not derive this. It observes and adopts it.
     """
     audit_score = 81
     audit_notes = None
@@ -564,7 +564,7 @@ class ComptonWavelengthRatio(Test):
     commentary = (
         "lambda_C / r_e = 2*pi/alpha = 861. This is a standard QED result. "
         "The classical electron radius r_e = alpha * lambda_C / (2*pi), so "
-        "lambda_C / r_e = 2*pi / alpha. GFD observes this ratio but does not "
+        "lambda_C / r_e = 2*pi / alpha. GFM observes this ratio but does not "
         "derive it."
     )
 
@@ -576,7 +576,7 @@ class ComptonWavelengthRatio(Test):
             .step("lambda_bar_C = lambda_C / (2*pi) (reduced Compton wavelength).")
             .equation("r_e = alpha * lambda_C / (2*pi)")
             .equation("lambda_C / r_e = 2*pi / alpha = 861")
-            .step("GFD OBSERVES this ratio. It does not derive it.")
+            .step("GFM OBSERVES this ratio. It does not derive it.")
             .conclude("lambda_C / r_e = 861 (standard QED).")
         )
 
@@ -620,18 +620,18 @@ def run_all() -> bool:
     return run_tests(
         title="Field Origin Geometry",
         summary=(
-            "These tests verify GFD MODEL DEFINITIONS and internal consistency:\n"
+            "These tests verify GFM MODEL DEFINITIONS and internal consistency:\n"
             "1. r_e = 2.818 fm (adopted from CODATA, not derived)\n"
             "2. k = 4 from simplex theorem (geometric definition)\n"
             "3. Field Origin at (0,0,0) by construction\n"
             "4. Stellated octahedron symmetry properties\n\n"
             "CLARIFICATION: These are model definitions and geometry checks.\n"
-            "GFD does not DERIVE the classical electron radius, proton radius,\n"
+            "GFM does not DERIVE the classical electron radius, proton radius,\n"
             "or Compton wavelength. It adopts measured values and defines\n"
             "internal geometric relationships.\n\n"
             "REMOVED: Tests claiming k-alignment 'explains' nuclear stability.\n"
             "The observation that some stable nuclei have A mod 4 = 0 is\n"
-            "pattern matching, not a GFD prediction."
+            "pattern matching, not a GFM prediction."
         ),
         test_classes=ALL_TESTS,
     )

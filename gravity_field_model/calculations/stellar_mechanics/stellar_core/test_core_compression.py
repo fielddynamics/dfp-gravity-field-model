@@ -2,11 +2,11 @@
 Stellar Core Compression Tests: Standard Astrophysics
 ======================================================
 
-GFD Model V2
+GFM Model V2
 
 HONESTY STATEMENT:
 This module examines STANDARD ASTROPHYSICS data about stellar cores and
-fusion conditions. The physics is well established. GFD provides a
+fusion conditions. The physics is well established. GFM provides a
 conceptual framework (bowling ball / squish ball metaphors) but does
 NOT derive these values.
 
@@ -16,14 +16,14 @@ STANDARD PHYSICS VERIFIED:
 - Chandrasekhar limit from quantum mechanics
 - Temperature scaling with fusion products
 
-GFD METAPHORS USED (not derivations):
+GFM METAPHORS USED (not derivations):
 - "Bowling ball" = bound atom (stable configuration)
 - "Squish ball" = unbound state (during fusion reaction)
 - "Compression blocking" = Coulomb barrier (standard physics)
 - The k=4, k=12, etc. labeling does not EXPLAIN fusion, it annotates it
 
 The tests in this module verify standard astrophysics data is correctly
-referenced, with GFD terminology as interpretive commentary.
+referenced, with GFM terminology as interpretive commentary.
 
 TEST GROUP GOALS:
 This module explores the extreme conditions inside stellar cores where fusion
@@ -91,7 +91,7 @@ class CorePressureGradient(Test):
     Verify solar core pressure from Standard Solar Model.
 
     HONESTY: This is measured/modeled data from helioseismology and
-    standard solar models. GFD does not derive it.
+    standard solar models. GFM does not derive it.
     """
     audit_score = 79
     audit_notes = None
@@ -161,7 +161,7 @@ class TemperatureDensityRelationship(Test):
     """
     Verify temperature and density gradients in the Sun.
 
-    HONESTY: Standard solar model data. GFD does not derive these values.
+    HONESTY: Standard solar model data. GFM does not derive these values.
     """
     audit_score = 78
     audit_notes = None
@@ -227,7 +227,7 @@ class HydrogenFusionThreshold(Test):
     Verify hydrogen fusion temperature threshold.
 
     HONESTY: The threshold is from nuclear physics (Gamow peak calculation).
-    The pp-chain releases 26.7 MeV. Standard physics, not a GFD prediction.
+    The pp-chain releases 26.7 MeV. Standard physics, not a GFM prediction.
     """
     audit_score = 84
     audit_notes = None
@@ -253,7 +253,7 @@ class HydrogenFusionThreshold(Test):
         "Hydrogen fusion (pp-chain) requires T > 1.5e7 K. The solar core at "
         "1.57e7 K exceeds this threshold. At this temperature, quantum tunneling "
         "through the Coulomb barrier enables proton fusion. The threshold is "
-        "determined by the Gamow peak, not GFD geometry."
+        "determined by the Gamow peak, not GFM geometry."
     )
 
     def derivation(self) -> Derivation:
@@ -523,7 +523,7 @@ class ChandrasekharMassLimit(Test):
         "The Chandrasekhar limit (~1.4 solar masses) is the maximum mass "
         "a white dwarf can support via electron degeneracy pressure. Above "
         "this limit, gravity overcomes degeneracy and collapse ensues. "
-        "This is derived from relativistic quantum mechanics, not GFD."
+        "This is derived from relativistic quantum mechanics, not GFM."
     )
 
     def derivation(self) -> Derivation:
@@ -731,10 +731,10 @@ def run_all() -> bool:
             "3. Temperature progression H -> He -> C -> Si burning\n"
             "4. Chandrasekhar limit from electron degeneracy\n"
             "5. Fe-56 as fusion endpoint (maximum BE/nucleon)\n\n"
-            "CLARIFICATION: The 'bowling ball' metaphor in original GFD commentary\n"
+            "CLARIFICATION: The 'bowling ball' metaphor in original GFM commentary\n"
             "describes standard physics in different language. Coulomb barrier =\n"
             "'compression blocking', quantum tunneling = how fusion overcomes it.\n"
-            "GFD does NOT derive these temperatures or the physics behind them."
+            "GFM does NOT derive these temperatures or the physics behind them."
         ),
         test_classes=ALL_TESTS,
     )

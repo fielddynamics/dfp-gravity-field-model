@@ -3,12 +3,12 @@ Cross-Checks: Structural Validations for the Stellated Octahedron Geometry
 
 WHY THIS MODULE EXISTS:
 -----------------------
-The GFD model claims that gravity's self-consistency requirements force a specific
+The GFM model claims that gravity's self-consistency requirements force a specific
 geometric structure: k=4 coupling channels arranged as two interlocking tetrahedra.
 But claims are cheap. This module asks: are these geometric definitions internally
 consistent? Do they have the mathematical properties the model says they have?
 
-Without these validations, the entire GFD framework could be built on definitions
+Without these validations, the entire GFM framework could be built on definitions
 that contradict each other or fail basic mathematical requirements.
 
 WHAT IS A GENUINE CROSS-CHECK?
@@ -39,7 +39,7 @@ of independent physical derivations. We are honest about what each test does.
 PEDAGOGICAL GOALS:
 ------------------
 Each test should help an undergraduate understand:
-1. WHY the property matters for the GFD model (motivation before verification)
+1. WHY the property matters for the GFM model (motivation before verification)
 2. HOW to check it independently (building mathematical intuition)
 3. WHAT the result means physically (insight, not just numbers)
 """
@@ -57,7 +57,7 @@ from gravity_field_model.common import (
 # =============================================================================
 # PARTITION VALIDATIONS
 # =============================================================================
-# The GFD model claims the stellated octahedron consists of two interlocking
+# The GFM model claims the stellated octahedron consists of two interlocking
 # tetrahedra (TET_A and TET_B) that PARTITION the 8 vertices. A partition means:
 #   1. No overlap (disjoint sets)
 #   2. Complete coverage (union = all vertices)
@@ -88,11 +88,11 @@ class TetrahedraPartitionDisjoint(Test):
     The set intersection TET_A & TET_B must be empty.
     
     TEXTBOOK REFERENCE:
-    Chapter 9 of the GFD Textbook establishes that the stellated octahedron
+    Chapter 9 of the GFM Textbook establishes that the stellated octahedron
     (Merkaba) is the unique solution satisfying stability, isotropy, chirality,
     and bimetric requirements. The partition property ensures each vertex serves
     exactly one Field Chamber, preserving the dual-metric independence that
-    underlies all GFD predictions about galaxy rotation and gravitational waves.
+    underlies all GFM predictions about galaxy rotation and gravitational waves.
     """
     
     audit_score = 88
@@ -119,16 +119,16 @@ class TetrahedraPartitionDisjoint(Test):
         "TET_B overlapped, a Coupling Port would feed both chambers at once, "
         "destroying the dual-metric independence. Does TET_A intersect TET_B = empty?"
     )
-    reference = "GFD Textbook Ch. 9: Stellated octahedron geometry requires disjoint tetrahedra for bimetric coupling"
+    reference = "GFM Textbook Ch. 9: Stellated octahedron geometry requires disjoint tetrahedra for bimetric coupling"
     tolerance = 0.01
     level = Level.STANDARD
     commentary = (
-        "The GFD model's bimetric structure requires TET_A and TET_B to operate as "
+        "The GFM model's bimetric structure requires TET_A and TET_B to operate as "
         "independent geometric entities that couple only through their complementary pairs, "
         "not through shared vertices. An overlap would be like having a single wire carry "
         "two independent signals without crosstalk, which is impossible. The empty intersection "
         "confirms each vertex belongs to exactly one Field Chamber, preserving the dual-metric "
-        "independence that underlies all GFD predictions."
+        "independence that underlies all GFM predictions."
     )
     
     def derivation(self) -> Derivation:
@@ -200,7 +200,7 @@ class TetrahedraPartitionExhaustive(Test):
         "TET_B together missed any vertex, that Coupling Port would be an orphan "
         "with no chamber to process its field contribution. Does union = {0..7}?"
     )
-    reference = "GFD Textbook Ch. 9: Complete vertex coverage ensures all Coupling Ports participate in field closure"
+    reference = "GFM Textbook Ch. 9: Complete vertex coverage ensures all Coupling Ports participate in field closure"
     tolerance = 0.01
     level = Level.STANDARD
     commentary = (
@@ -262,7 +262,7 @@ class TetrahedraPartitionExhaustive(Test):
 class ParityDeterminesTetrahedron(Test):
     """
     WHY THIS TEST:
-    The GFD model uses parity to assign vertices to chambers, but WHY parity?
+    The GFM model uses parity to assign vertices to chambers, but WHY parity?
     Because parity is preserved under XOR operations, and the complementary pair
     relationship (v XOR 7) flips parity. This means algebraic operations on
     vertices automatically respect and connect the chamber structure.
@@ -309,11 +309,11 @@ class ParityDeterminesTetrahedron(Test):
         "determine membership, algebraic traversal would not track geometry. "
         "Does TET_A = all odd-parity vertices, TET_B = all even-parity?"
     )
-    reference = "GFD Textbook Ch. 9: Binary parity determines tetrahedron membership via cube corner labeling"
+    reference = "GFM Textbook Ch. 9: Binary parity determines tetrahedron membership via cube corner labeling"
     tolerance = 0.01
     level = Level.STANDARD
     commentary = (
-        "This test reveals a deep connection: the GFD chamber structure is not arbitrary "
+        "This test reveals a deep connection: the GFM chamber structure is not arbitrary "
         "but emerges from the binary representation of cube corners. Parity (popcount mod 2) "
         "is an intrinsic property of each vertex's binary encoding. The test confirms that "
         "this algebraic property EXACTLY determines the geometric assignment. This is why "
@@ -384,7 +384,7 @@ class ComplementaryPairsCrossTetrahedra(Test):
     inter-chamber coupling.
     
     PHYSICAL CONSEQUENCE:
-    The GFD model claims field closure operates through complementary pairs that
+    The GFM model claims field closure operates through complementary pairs that
     link opposite chambers. This is how Chamber A "learns" about Chamber B's state
     and vice versa. If pairs were intra-chamber, the two metrics would evolve
     independently with no communication, violating bimetric coupling requirements.
@@ -414,7 +414,7 @@ class ComplementaryPairsCrossTetrahedra(Test):
         "is not coincidental but determined by the same k=4 structure) "
         "Q3: Is cross-tetrahedra pairing equivalent to the 'symmetric vielbein' "
         "condition in Hassan-Rosen bimetric gravity? "
-        "(Answering would improve Observation Quality by +2 points: connects GFD "
+        "(Answering would improve Observation Quality by +2 points: connects GFM "
         "to established theoretical physics literature)"
     )
     
@@ -426,7 +426,7 @@ class ComplementaryPairsCrossTetrahedra(Test):
         "wiring, not inter-chamber communication. Does every pair have one vertex "
         "in TET_A and one in TET_B?"
     )
-    reference = "GFD Textbook Ch. 9: Complementary pairs provide inter-chamber coupling through inversion symmetry"
+    reference = "GFM Textbook Ch. 9: Complementary pairs provide inter-chamber coupling through inversion symmetry"
     tolerance = 0.01
     level = Level.STANDARD
     commentary = (
@@ -473,11 +473,11 @@ class ComplementaryPairsCrossTetrahedra(Test):
 # TOPOLOGICAL CONSISTENCY
 # =============================================================================
 # Euler's formula V - E + F = 2 must hold for any valid closed polyhedron.
-# The GFD model claims a tetrahedron has k=4 vertices and k=4 faces.
+# The GFM model claims a tetrahedron has k=4 vertices and k=4 faces.
 # We verify this is topologically consistent.
 #
 # WHY EULER'S FORMULA MATTERS:
-# This is a fundamental topological constraint. If the GFD tetrahedron violated
+# This is a fundamental topological constraint. If the GFM tetrahedron violated
 # Euler's formula, it would not be a valid 3D polyhedron. The entire geometric
 # framework would be built on an impossible shape.
 # =============================================================================
@@ -485,17 +485,17 @@ class ComplementaryPairsCrossTetrahedra(Test):
 class TetrahedronTopologyValid(Test):
     """
     WHY THIS TEST:
-    Before trusting any GFD calculation involving tetrahedra, we should verify
+    Before trusting any GFM calculation involving tetrahedra, we should verify
     the tetrahedron is a valid 3D shape. Euler's formula V - E + F = 2 is a
     fundamental topological requirement for closed convex polyhedra. A shape
     that violates it cannot exist in 3D Euclidean space.
     
-    The GFD model claims k=4 vertices and k=4 faces. If these numbers were
+    The GFM model claims k=4 vertices and k=4 faces. If these numbers were
     inconsistent with Euler's formula, the Field Chamber would be an impossible
     geometric object, and all derivations using it would be meaningless.
     
     PHYSICAL CONSEQUENCE:
-    The k=4 structure is central to GFD: 4 coupling channels, 4 faces per chamber,
+    The k=4 structure is central to GFM: 4 coupling channels, 4 faces per chamber,
     4 vertices per tetrahedron. If this structure failed basic topology, the model
     would be building on mathematical quicksand.
     
@@ -503,7 +503,7 @@ class TetrahedronTopologyValid(Test):
     For a tetrahedron: V=4, E=6, F=4. Does 4 - 6 + 4 = 2?
     
     TEXTBOOK REFERENCE:
-    Worked Example 7.8 in the GFD Textbook verifies Euler's formula for the
+    Worked Example 7.8 in the GFM Textbook verifies Euler's formula for the
     tetrahedron. This test ensures the k=4 geometry passes a fundamental
     topological sanity check before we rely on it for physical predictions.
     """
@@ -529,10 +529,10 @@ class TetrahedronTopologyValid(Test):
     question = (
         "Why must we verify the tetrahedron satisfies Euler's formula? "
         "A shape that violates V - E + F = 2 cannot exist as a closed polyhedron. "
-        "The GFD model builds on tetrahedral geometry with k=4 vertices and faces. "
+        "The GFM model builds on tetrahedral geometry with k=4 vertices and faces. "
         "Is this geometry topologically valid?"
     )
-    reference = "Euler's polyhedron formula (Euler, 1758); GFD Textbook Worked Example 7.8"
+    reference = "Euler's polyhedron formula (Euler, 1758); GFM Textbook Worked Example 7.8"
     tolerance = 0.01
     level = Level.STANDARD
     commentary = (
@@ -541,7 +541,7 @@ class TetrahedronTopologyValid(Test):
         "tetrahedra but a universal constraint. The tetrahedron with V=4 vertices has "
         "E = C(4,2) = 6 edges (every pair connected) and F=4 triangular faces. "
         "Computing 4 - 6 + 4 = 2 confirms this is a valid polyhedron. The k=4 geometry "
-        "underlying GFD passes this fundamental consistency check."
+        "underlying GFM passes this fundamental consistency check."
     )
     
     def derivation(self) -> Derivation:
@@ -552,7 +552,7 @@ class TetrahedronTopologyValid(Test):
             .step("This is not obvious but profoundly true: cube, octahedron, icosahedron, all satisfy it.")
             .step("")
             .step("FOR THE TETRAHEDRON:")
-            .step("Vertices: V = k = 4 (the GFD coupling constant)")
+            .step("Vertices: V = k = 4 (the GFM coupling constant)")
             .step("Edges: E = C(4,2) = 4*3/2 = 6 (each pair of vertices is connected)")
             .step("Faces: F = k = 4 (each face is a triangle opposite one vertex)")
             .step("")
@@ -563,9 +563,9 @@ class TetrahedronTopologyValid(Test):
         )
     
     def model(self) -> Model:
-        V = K  # 4 vertices (from GFD model constant)
+        V = K  # 4 vertices (from GFM model constant)
         E = V * (V - 1) // 2  # 6 edges (combinatorics: C(4,2))
-        F = K  # 4 faces (from GFD model constant)
+        F = K  # 4 faces (from GFM model constant)
         euler = V - E + F
         return Model().add("V - E + F", euler)
     
@@ -580,7 +580,7 @@ class TetrahedronTopologyValid(Test):
 # For 3-bit numbers (0-7), these are equivalent. We verify this.
 #
 # WHY THIS EQUIVALENCE MATTERS:
-# The GFD model uses both notations interchangeably. If they differed, formulas
+# The GFM model uses both notations interchangeably. If they differed, formulas
 # using (7-v) would compute different complements than code using (v^7). This
 # would create subtle bugs where mathematical derivations don't match implementations.
 # =============================================================================
@@ -588,7 +588,7 @@ class TetrahedronTopologyValid(Test):
 class InversionEqualsXOR(Test):
     """
     WHY THIS TEST:
-    The GFD model's documentation uses (7-v) to describe complementary vertices,
+    The GFM model's documentation uses (7-v) to describe complementary vertices,
     while efficient code implementations use (v XOR 7). If these were not equivalent,
     we would have a dangerous disconnect between theory and implementation where
     the same concept (vertex complement) has different values depending on notation.
@@ -601,7 +601,7 @@ class InversionEqualsXOR(Test):
     
     PHYSICAL CONSEQUENCE:
     The complementary pair structure is central to bimetric coupling. If the two
-    notations diverged, half the GFD codebase would compute wrong complements,
+    notations diverged, half the GFM codebase would compute wrong complements,
     breaking the inter-chamber communication it depends on.
     
     WHAT WE CHECK:
@@ -623,14 +623,14 @@ class InversionEqualsXOR(Test):
         "theorem relating ones-complement to subtraction from 2^n-1) "
         "Q3: How does this relate to the concept of 'ones complement' vs 'twos "
         "complement' in computer arithmetic? "
-        "(Answering would improve Commentary by +3 points: connects GFD structure "
+        "(Answering would improve Commentary by +3 points: connects GFM structure "
         "to foundational computer science concepts)"
     )
     
     name = "Inversion Equals XOR"
     question = (
         "Why must arithmetic inversion (7-v) equal bitwise XOR (v^7)? "
-        "The GFD model uses both notations to describe the same concept. If they "
+        "The GFM model uses both notations to describe the same concept. If they "
         "differed for any vertex, theory and implementation would diverge on which "
         "vertex is the 'complement.' Does this equivalence hold for all 8 vertices?"
     )
@@ -643,7 +643,7 @@ class InversionEqualsXOR(Test):
         "the ones-complement equals 7 minus the original value. This allows efficient "
         "implementation (XOR is a single CPU instruction) while maintaining mathematical "
         "clarity (7-v is easier to reason about). The equivalence ensures both approaches "
-        "identify the same complementary pairs, preserving the GFD coupling structure."
+        "identify the same complementary pairs, preserving the GFM coupling structure."
     )
     
     def derivation(self) -> Derivation:
@@ -677,22 +677,22 @@ class InversionEqualsXOR(Test):
 # =============================================================================
 # PHYSICS CONSTANTS SANITY CHECK
 # =============================================================================
-# This is NOT a GFD cross-check. It verifies that the physical constants
+# This is NOT a GFM cross-check. It verifies that the physical constants
 # used in the model are consistent with known QED relationships.
 #
 # WHY SANITY CHECK CONSTANTS:
-# The GFD model imports physical constants from CODATA and uses them in formulas.
+# The GFM model imports physical constants from CODATA and uses them in formulas.
 # If these constants were mutually inconsistent (didn't satisfy known physics
-# relationships), any GFD calculation using them would inherit that inconsistency.
+# relationships), any GFM calculation using them would inherit that inconsistency.
 # =============================================================================
 
 class AlphaFromLengthScales(Test):
     """
     WHY THIS TEST:
-    The GFD model uses alpha (fine structure constant), r_e (classical electron radius),
+    The GFM model uses alpha (fine structure constant), r_e (classical electron radius),
     and lambda_C (Compton wavelength) in various formulas. QED tells us these constants
     are related: alpha = r_e / lambda_bar_C. If our imported CODATA values violated this
-    relationship, every GFD formula mixing these constants would produce inconsistent results.
+    relationship, every GFM formula mixing these constants would produce inconsistent results.
     
     PHYSICAL BACKGROUND:
     The fine structure constant alpha approximately equals 1/137 and characterizes the
@@ -701,8 +701,8 @@ class AlphaFromLengthScales(Test):
       r_e = e^2 / (4*pi*epsilon_0*m_e*c^2): the classical electron radius
       lambda_bar_C = hbar / (m_e*c): the reduced Compton wavelength
     
-    This is a KNOWN QED identity, not a GFD prediction. We verify the constants
-    used in GFD calculations satisfy it.
+    This is a KNOWN QED identity, not a GFM prediction. We verify the constants
+    used in GFM calculations satisfy it.
     
     WHAT WE CHECK:
     Does alpha (from CODATA) approximately equal r_e / lambda_bar_C (computed from CODATA)?
@@ -724,16 +724,16 @@ class AlphaFromLengthScales(Test):
         "identity, given experimental uncertainties? "
         "(Answering would improve Observation Quality by +3 points: would cite specific "
         "CODATA uncertainty values and propagate them through the calculation) "
-        "Q3: How does this QED identity connect to the GFD traversal frequency "
+        "Q3: How does this QED identity connect to the GFM traversal frequency "
         "f = c / (k * r_e)? "
-        "(Answering would improve Commentary by +2 points: shows how GFD predictions "
+        "(Answering would improve Commentary by +2 points: shows how GFM predictions "
         "depend on the same constants being internally consistent)"
     )
     
     name = "Alpha from Length Scales (QED Consistency)"
     question = (
         "Why verify alpha = r_e / lambda_bar_C? "
-        "The GFD model uses these three constants in calculations. QED requires "
+        "The GFM model uses these three constants in calculations. QED requires "
         "them to satisfy this identity. If our CODATA imports were inconsistent, "
         "every mixed calculation would be wrong. Does the identity hold?"
     )
@@ -741,12 +741,12 @@ class AlphaFromLengthScales(Test):
     tolerance = 0.01
     level = Level.STANDARD
     commentary = (
-        "This is a consistency check on physical constants, not a GFD derivation. The fine "
+        "This is a consistency check on physical constants, not a GFM derivation. The fine "
         "structure constant alpha relates two fundamental length scales: r_e (where classical "
         "EM field energy equals electron rest mass) and lambda_bar_C (quantum uncertainty scale "
         "for localizing an electron). Their ratio, r_e / lambda_bar_C = alpha, links the classical "
         "and quantum descriptions. Verifying this confirms our CODATA constants are mutually "
-        "consistent, so GFD formulas mixing them will be internally coherent."
+        "consistent, so GFM formulas mixing them will be internally coherent."
     )
     
     def derivation(self) -> Derivation:
@@ -799,7 +799,7 @@ ALL_TESTS = [
     # Topological and algebraic consistency
     TetrahedronTopologyValid,
     InversionEqualsXOR,
-    # Physics sanity check (not a GFD derivation)
+    # Physics sanity check (not a GFM derivation)
     AlphaFromLengthScales,
 ]
 
@@ -809,7 +809,7 @@ def run_all() -> bool:
     return run_tests(
         title="Structural Validations and Consistency Checks",
         summary=(
-            "These tests verify the GFD model's geometric definitions are internally "
+            "These tests verify the GFM model's geometric definitions are internally "
             "consistent. We validate the partition property (TET_A and TET_B truly "
             "partition the 8 vertices), the parity correspondence, complementary pair "
             "structure, and topological validity. We also include a QED sanity check "

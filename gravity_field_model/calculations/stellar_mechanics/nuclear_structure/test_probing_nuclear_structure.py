@@ -2,7 +2,7 @@
 Probing Nuclear Structure: SEMF Decomposition and Shell Effects
 ================================================================
 
-GFD Model V2
+GFM Model V2
 
 INVESTIGATION STATEMENT:
 The semi-empirical mass formula (SEMF / Bethe-Weizsacker formula) decomposes

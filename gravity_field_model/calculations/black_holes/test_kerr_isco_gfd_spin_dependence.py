@@ -1,20 +1,20 @@
-# FILENAME: test_kerr_isco_gfd_spin_dependence.py
+# FILENAME: test_kerr_isco_GFM_spin_dependence.py
 
 """
-Kerr Black Hole ISCO Spin Dependence and GFD Structural Numbers
+Kerr Black Hole ISCO Spin Dependence and GFM Structural Numbers
 ================================================================
 
 The innermost stable circular orbit (ISCO) of a Kerr (spinning) black hole
 depends on the dimensionless spin parameter a* = Jc/(GM^2), ranging from
 0 (Schwarzschild) to 1 (extremal Kerr). For a Schwarzschild BH, the prograde
-ISCO sits at r = 6 GM/c^2, matching SPATIAL_FACES in GFD. For extremal Kerr,
+ISCO sits at r = 6 GM/c^2, matching SPATIAL_FACES in GFM. For extremal Kerr,
 the prograde ISCO drops to r = 1 GM/c^2 and the retrograde ISCO rises to
 r = 9 GM/c^2. This test asks: as spin varies continuously, does the ISCO
-coefficient pass through other GFD structural numbers at physically meaningful
+coefficient pass through other GFM structural numbers at physically meaningful
 spin values? Standard physics fully determines the ISCO via the Kerr metric
-(Bardeen, Press, Teukolsky 1972). GFD offers no derivation of these results.
+(Bardeen, Press, Teukolsky 1972). GFM offers no derivation of these results.
 
-GFD OBSERVATION: The ISCO coefficient equals SPATIAL_FACES (6) at a*=0, K_CLOSURE (4) near a*=0.4719, and d (3) near a*=0.6667.
+GFM OBSERVATION: The ISCO coefficient equals SPATIAL_FACES (6) at a*=0, K_CLOSURE (4) near a*=0.4719, and d (3) near a*=0.6667.
 
 This is an OBSERVATION, not a derivation.
 """
@@ -93,7 +93,7 @@ def _find_spin_for_isco_coeff(target_coeff: float, tol: float = 1e-10) -> float:
 
 
 # =============================================================================
-# Precompute the spin values where ISCO hits GFD numbers
+# Precompute the spin values where ISCO hits GFM numbers
 # =============================================================================
 
 # At a*=0, ISCO coeff = 6 = SPATIAL_FACES (already established)
@@ -105,9 +105,9 @@ SPIN_FOR_ISCO_3 = _find_spin_for_isco_coeff(3.0)
 SPIN_FOR_ISCO_2 = _find_spin_for_isco_coeff(2.0)
 
 
-class KerrISCOSpinGFDNumbers(Test):
+class KerrISCOSpinGFMNumbers(Test):
     """
-    Investigate whether the Kerr ISCO coefficient passes through GFD structural
+    Investigate whether the Kerr ISCO coefficient passes through GFM structural
     numbers at physically notable spin values as spin increases from 0 to 1.
 
     PHYSICAL CONTEXT:
@@ -118,7 +118,7 @@ class KerrISCOSpinGFDNumbers(Test):
     to a single real number. The function is exact, derived from the Kerr
     metric with no approximations.
 
-    GFD OBSERVATION:
+    GFM OBSERVATION:
     The Schwarzschild ISCO coefficient 6 matches SPATIAL_FACES. As spin
     increases, the ISCO coefficient passes through 4 (K_CLOSURE) near
     a*=0.472 and through 3 (d, spatial dimensions) near a*=0.667. It
@@ -129,17 +129,17 @@ class KerrISCOSpinGFDNumbers(Test):
 
     EPISTEMIC STATUS:
     Pure observation. The Kerr ISCO formula is standard GR. The coincidence
-    of GFD numbers appearing at specific spins is documented, not derived.
+    of GFM numbers appearing at specific spins is documented, not derived.
     The rational value a*=2/3 for ISCO=3 is a verifiable mathematical fact
     about the BPT equation, but its significance (if any) is unknown.
     """
 
-    name = "Kerr ISCO Spin Dependence: GFD Numbers in the Spin Trajectory"
+    name = "Kerr ISCO Spin Dependence: GFM Numbers in the Spin Trajectory"
 
     question = (
         "As a Kerr black hole spin increases from 0 to 1, the prograde ISCO "
         "coefficient drops continuously from 6 to 1. At what spin values does "
-        "it pass through the GFD structural numbers 4, 3, and 2? The coefficient "
+        "it pass through the GFM structural numbers 4, 3, and 2? The coefficient "
         "6 at a*=0 already matches SPATIAL_FACES. If the spins where ISCO equals "
         "K_CLOSURE (4) or d (3) turn out to be notable values (simple fractions, "
         "or physically meaningful thresholds), this would strengthen the case that "
@@ -164,23 +164,23 @@ class KerrISCOSpinGFDNumbers(Test):
         "BPT formula. The coefficient equals 4 near a* = 0.4719, which is not an "
         "obvious rational number. The coefficient equals 2 near a* = 0.8333, which "
         "is suggestively close to 5/6, another ratio of small integers. "
-        "GFD OBSERVATION: Of the three GFD crossing points, the most striking is "
+        "GFM OBSERVATION: Of the three GFM crossing points, the most striking is "
         "ISCO = d = 3 at a* = 2/3 exactly, because 2/3 is itself d minus 1 over d. "
         "This is an observation, not a derivation. The physical significance of "
         "a* = 2/3 is unclear: it does not correspond to a known astrophysical "
         "threshold, though it lies between typical measured spins of stellar mass "
         "BHs (a* = 0.1 to 0.9). The Thorne spin equilibrium limit a* = 0.998 does "
-        "not appear to be a GFD number."
+        "not appear to be a GFM number."
     )
 
     # Audit scoring (self-assessed)
     audit_score = 88
     audit_notes = (
-        "Question: 14/15 (Strong mystery hook with clear falsifiability framing: if spins are notable the pattern strengthens, if not it weakens. Could sharpen by leading with the a*=2/3 surprise before the general setup). Derivation: 13/15 (Good progression from Kerr metric through BPT equations to numerical solving to the key a*=2/3 verification. The Z1 evaluation step at a*=2/3 is left as a numerical claim rather than showing the algebra closing to exactly 3, which is a minor logic gap). Commentary: 13/15 (Delivers genuine insight about a*=2/3 being rational and equal to 2/3 = TIME_FACES_count/d. Honest that a*=0.4719 is NOT a clean number, which strengthens credibility. Could add an analogy or implication about what this means for astrophysical spin measurements). Model: 9/10 (Ten well chosen summary values covering all four GFD crossing points plus extremal limits and the 5/6 deviation check. The deviation metric is a nice touch. Slightly heavy at 10 values but each earns its place). Observations: 8/10 (All values traceable to BPT 1972 Eq. 2.21. The spin values like 0.471895 and 0.833603 are computed from the exact formula rather than pulled from a published table, which is appropriate but means they are self referencing. The 0.000270 deviation is self computed, not independently verified). Constants: 9/10 (G, C, M_SOLAR, K_CLOSURE, SPATIAL_FACES all imported from common. D_SPATIAL=3 is defined as a module level constant rather than imported, which is a minor deviation though justified since it is a physics constant not specific to GFD). Accessibility: 13/15 (ISCO concept is explained clearly, spin parameter defined, monotonic decrease stated. An undergrad with GR background can follow. The BPT auxiliary functions Z1 and Z2 are presented without much intuition for why they take that form, which is acceptable since the derivation is standard but slightly opaque). Header: 9/10 (Module docstring covers the physical domain, states the question clearly, identifies the GFD observation in a single line, and explicitly labels it as observation not derivation. Includes spin range and key references. Could add target audience statement)."
+        "Question: 14/15 (Strong mystery hook with clear falsifiability framing: if spins are notable the pattern strengthens, if not it weakens. Could sharpen by leading with the a*=2/3 surprise before the general setup). Derivation: 13/15 (Good progression from Kerr metric through BPT equations to numerical solving to the key a*=2/3 verification. The Z1 evaluation step at a*=2/3 is left as a numerical claim rather than showing the algebra closing to exactly 3, which is a minor logic gap). Commentary: 13/15 (Delivers genuine insight about a*=2/3 being rational and equal to 2/3 = TIME_FACES_count/d. Honest that a*=0.4719 is NOT a clean number, which strengthens credibility. Could add an analogy or implication about what this means for astrophysical spin measurements). Model: 9/10 (Ten well chosen summary values covering all four GFM crossing points plus extremal limits and the 5/6 deviation check. The deviation metric is a nice touch. Slightly heavy at 10 values but each earns its place). Observations: 8/10 (All values traceable to BPT 1972 Eq. 2.21. The spin values like 0.471895 and 0.833603 are computed from the exact formula rather than pulled from a published table, which is appropriate but means they are self referencing. The 0.000270 deviation is self computed, not independently verified). Constants: 9/10 (G, C, M_SOLAR, K_CLOSURE, SPATIAL_FACES all imported from common. D_SPATIAL=3 is defined as a module level constant rather than imported, which is a minor deviation though justified since it is a physics constant not specific to GFM). Accessibility: 13/15 (ISCO concept is explained clearly, spin parameter defined, monotonic decrease stated. An undergrad with GR background can follow. The BPT auxiliary functions Z1 and Z2 are presented without much intuition for why they take that form, which is acceptable since the derivation is standard but slightly opaque). Header: 9/10 (Module docstring covers the physical domain, states the question clearly, identifies the GFM observation in a single line, and explicitly labels it as observation not derivation. Includes spin range and key references. Could add target audience statement)."
     )
 
     academic_paper = """\
-TITLE Kerr ISCO Spin Dependence and GFD Structural Numbers: Tracking Integer Crossings in the Spin Trajectory ABSTRACT We investigate the spin values at which the Kerr prograde ISCO coefficient passes through GFD structural numbers 4, 3, and 2. The most striking finding is that ISCO equals 3 at spin a* = 2/3 exactly, a simple rational value that is itself a ratio of GFD numbers. This is documented as an OBSERVATION. 1. INTRODUCTION: THE SCIENTIFIC QUESTION A previous GFD investigation established that the four Schwarzschild characteristic radii have coefficients {2, 3, 4, 6}, matching the GFD structural numbers {TIME_FACES, d, K_CLOSURE, SPATIAL_FACES}. This observation is compelling but static: it applies only to nonrotating black holes. Astrophysical black holes spin. The natural falsifiability test asks what happens to these coefficients as spin increases. Standard physics answers this completely. Bardeen, Press, and Teukolsky (1972) derived the exact ISCO radius for the Kerr metric. The prograde ISCO coefficient r_ISCO/(GM/c^2) decreases monotonically from 6 at a* = 0 to 1 at a* = 1. Because the function is continuous, it must pass through every integer from 5 down to 1. The question is whether the spin values at which it crosses GFD numbers (4, 3, 2) are themselves notable: simple rational numbers, or values with independent physical meaning. GFD proposes no derivation of the Kerr metric or its orbital structure. This test documents whether the spin trajectory exhibits numerical patterns consistent with GFD geometry. The investigation is motivated by the Pioneering Question: if the static (a* = 0) pattern is real, it should leave traces in the spin dependent case. 2. METHODOLOGY We implement the full BPT formula for the Kerr prograde ISCO, using auxiliary functions Z1 and Z2 as defined in Eq. 2.21 of Bardeen, Press, Teukolsky (1972). We use bisection search (200 iterations, tolerance 1e-10) to find spin values where the ISCO coefficient equals exactly 4, 3, and 2. We verify each crossing by direct substitution. We also evaluate the ISCO at the exact rational spin a* = 2/3 to test whether the crossing at ISCO = 3 is precisely rational. Agreement criterion: model and observation within 0.1%. 3. RESULTS The model produces the following values: ISCO coefficient at a* = 0: 6.000000 (matches SPATIAL_FACES = 6). Spin where ISCO = 4: a* = 0.471895 (not an obvious rational number). Spin where ISCO = 3: a* = 0.666667 (consistent with exactly 2/3). ISCO at a* = 2/3 by direct substitution: 3.000000 (exact to numerical precision). Spin where ISCO = 2: a* = 0.833603 (deviates from 5/6 by only 0.000270). Extremal prograde ISCO: 1.0000. Extremal retrograde ISCO: 9.0000. The crossing at ISCO = 3 occurs at a* = 2/3, which equals TIME_FACES_count divided by d in GFD notation. The crossing at ISCO = 2 falls within 0.03% of 5/6, another ratio of small integers, though this near miss is not exact. 4. DISCUSSION The central result is that the BPT equation, despite involving nested cube roots and square roots, yields ISCO = 3 at the simple rational spin a* = 2/3. This is a verifiable mathematical property of the Kerr solution, independent of GFD. What GFD adds is the observation that both the ISCO value (3 = d) and the spin value (2/3 = TIME_FACES_count / d) are expressible as GFD structural ratios. EPISTEMIC STATUS: OBSERVATION. The Kerr ISCO formula is standard GR. The rationality of a* = 2/3 is a mathematical fact about the BPT equation. The correspondence with GFD ratios is a pattern we document, not derive. The crossing at ISCO = 4 yields a* = 0.4719, which does not appear to be a GFD number, partially weakening the overall pattern. This test connects to the static radii sequence test by extending it into spin parameter space. It provides a partial falsification framework: the pattern holds strongly at one crossing, weakly at another, and fails at a third. 5. LIMITATIONS AND HONESTY STATEMENT This does NOT prove that GFD geometry governs Kerr orbital mechanics. The rationality of a* = 2/3 for ISCO = 3 may be an algebraic coincidence inherent to the BPT formula structure. We assume the Kerr metric is exact. The crossing at ISCO = 4 does not yield
+TITLE Kerr ISCO Spin Dependence and GFM Structural Numbers: Tracking Integer Crossings in the Spin Trajectory ABSTRACT We investigate the spin values at which the Kerr prograde ISCO coefficient passes through GFM structural numbers 4, 3, and 2. The most striking finding is that ISCO equals 3 at spin a* = 2/3 exactly, a simple rational value that is itself a ratio of GFM numbers. This is documented as an OBSERVATION. 1. INTRODUCTION: THE SCIENTIFIC QUESTION A previous GFM investigation established that the four Schwarzschild characteristic radii have coefficients {2, 3, 4, 6}, matching the GFM structural numbers {TIME_FACES, d, K_CLOSURE, SPATIAL_FACES}. This observation is compelling but static: it applies only to nonrotating black holes. Astrophysical black holes spin. The natural falsifiability test asks what happens to these coefficients as spin increases. Standard physics answers this completely. Bardeen, Press, and Teukolsky (1972) derived the exact ISCO radius for the Kerr metric. The prograde ISCO coefficient r_ISCO/(GM/c^2) decreases monotonically from 6 at a* = 0 to 1 at a* = 1. Because the function is continuous, it must pass through every integer from 5 down to 1. The question is whether the spin values at which it crosses GFM numbers (4, 3, 2) are themselves notable: simple rational numbers, or values with independent physical meaning. GFM proposes no derivation of the Kerr metric or its orbital structure. This test documents whether the spin trajectory exhibits numerical patterns consistent with GFM geometry. The investigation is motivated by the Pioneering Question: if the static (a* = 0) pattern is real, it should leave traces in the spin dependent case. 2. METHODOLOGY We implement the full BPT formula for the Kerr prograde ISCO, using auxiliary functions Z1 and Z2 as defined in Eq. 2.21 of Bardeen, Press, Teukolsky (1972). We use bisection search (200 iterations, tolerance 1e-10) to find spin values where the ISCO coefficient equals exactly 4, 3, and 2. We verify each crossing by direct substitution. We also evaluate the ISCO at the exact rational spin a* = 2/3 to test whether the crossing at ISCO = 3 is precisely rational. Agreement criterion: model and observation within 0.1%. 3. RESULTS The model produces the following values: ISCO coefficient at a* = 0: 6.000000 (matches SPATIAL_FACES = 6). Spin where ISCO = 4: a* = 0.471895 (not an obvious rational number). Spin where ISCO = 3: a* = 0.666667 (consistent with exactly 2/3). ISCO at a* = 2/3 by direct substitution: 3.000000 (exact to numerical precision). Spin where ISCO = 2: a* = 0.833603 (deviates from 5/6 by only 0.000270). Extremal prograde ISCO: 1.0000. Extremal retrograde ISCO: 9.0000. The crossing at ISCO = 3 occurs at a* = 2/3, which equals TIME_FACES_count divided by d in GFM notation. The crossing at ISCO = 2 falls within 0.03% of 5/6, another ratio of small integers, though this near miss is not exact. 4. DISCUSSION The central result is that the BPT equation, despite involving nested cube roots and square roots, yields ISCO = 3 at the simple rational spin a* = 2/3. This is a verifiable mathematical property of the Kerr solution, independent of GFM. What GFM adds is the observation that both the ISCO value (3 = d) and the spin value (2/3 = TIME_FACES_count / d) are expressible as GFM structural ratios. EPISTEMIC STATUS: OBSERVATION. The Kerr ISCO formula is standard GR. The rationality of a* = 2/3 is a mathematical fact about the BPT equation. The correspondence with GFM ratios is a pattern we document, not derive. The crossing at ISCO = 4 yields a* = 0.4719, which does not appear to be a GFM number, partially weakening the overall pattern. This test connects to the static radii sequence test by extending it into spin parameter space. It provides a partial falsification framework: the pattern holds strongly at one crossing, weakly at another, and fails at a third. 5. LIMITATIONS AND HONESTY STATEMENT This does NOT prove that GFM geometry governs Kerr orbital mechanics. The rationality of a* = 2/3 for ISCO = 3 may be an algebraic coincidence inherent to the BPT formula structure. We assume the Kerr metric is exact. The crossing at ISCO = 4 does not yield
     """
 
 
@@ -198,16 +198,16 @@ TITLE Kerr ISCO Spin Dependence and GFD Structural Numbers: Tracking Integer Cro
             .step("At a* = 0: Z1 = 3, Z2 = 3, r_ISCO = 6 GM/c^2. This recovers "
                   "the Schwarzschild result.")
             .step("We numerically solve for a* values where r_ISCO/(GM/c^2) equals "
-                  "each GFD structural number: 4 (K_CLOSURE), 3 (d), and 2 (TIME_FACES).")
+                  "each GFM structural number: 4 (K_CLOSURE), 3 (d), and 2 (TIME_FACES).")
             .step("VERIFICATION: For ISCO = 3, substitute a* = 2/3 into the BPT formula "
                   "and confirm the result is exactly 3.")
             .equation("a* = 2/3: Z1 = 1 + (5/9)^(1/3) * [(5/3)^(1/3) + (1/3)^(1/3)]")
             .step("Numerical evaluation confirms r_ISCO/(GM/c^2) = 3.000 at a* = 2/3.")
-            .step("GFD OBSERVATION: The ISCO trajectory passes through three GFD numbers "
+            .step("GFM OBSERVATION: The ISCO trajectory passes through three GFM numbers "
                   "(4, 3, 2) at specific spins. The most notable is ISCO = d at a* = 2/3, "
-                  "a simple rational value that is itself a ratio of GFD numbers (2/3 = "
+                  "a simple rational value that is itself a ratio of GFM numbers (2/3 = "
                   "TIME_FACES_count / d).")
-            .conclude("The Kerr ISCO function traces a path through GFD structural numbers "
+            .conclude("The Kerr ISCO function traces a path through GFM structural numbers "
                       "as spin varies. The a* = 2/3 crossing point is exact and rational, "
                       "which is a nontrivial property of the BPT equation. Whether this "
                       "pattern has deeper meaning remains an open question.")
@@ -279,7 +279,7 @@ TITLE Kerr ISCO Spin Dependence and GFD Structural Numbers: Tracking Integer Cro
 if __name__ == "__main__":
     from gravity_field_model.framework import run_tests
     run_tests(
-        title="Kerr ISCO Spin Dependence and GFD Structural Numbers",
-        summary="Track the Kerr prograde ISCO coefficient through GFD numbers as spin varies from 0 to 1",
-        test_classes=[KerrISCOSpinGFDNumbers],
+        title="Kerr ISCO Spin Dependence and GFM Structural Numbers",
+        summary="Track the Kerr prograde ISCO coefficient through GFM numbers as spin varies from 0 to 1",
+        test_classes=[KerrISCOSpinGFMNumbers],
     )

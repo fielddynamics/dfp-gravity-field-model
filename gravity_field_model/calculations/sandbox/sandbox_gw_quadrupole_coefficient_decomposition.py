@@ -8,7 +8,7 @@ EXPLORING:
 - Can ALL numerical exponents in GW quadrupole radiation be expressed
   using only d=3, k=4, and k+1=5?
 - Does the coefficient 32 in the quadrupole power formula admit two
-  independent GFD decompositions (2^(k+1) and k*2^d)?
+  independent GFM decompositions (2^(k+1) and k*2^d)?
 - Is there a systematic pattern or is this small-integer coincidence?
 
 GRADUATION CHECKLIST:
@@ -20,13 +20,13 @@ GRADUATION CHECKLIST:
 [x] Rename to test_gw_quadrupole_coefficient_decomposition.py
 [ ] Delete this sandbox file
 
-GFD Model V2
+GFM Model V2
 
 HONESTY STATEMENT:
 This module verifies STANDARD GRAVITATIONAL WAVE PHYSICS and explores
-potential GFD correspondences. The GW quadrupole formula, chirp mass,
+potential GFM correspondences. The GW quadrupole formula, chirp mass,
 strain amplitude, and frequency evolution are all derived from General
-Relativity. GFD provides a geometric interpretation framework but does
+Relativity. GFM provides a geometric interpretation framework but does
 NOT derive these values from first principles.
 
 WHAT IS VERIFIED (standard physics):
@@ -35,7 +35,7 @@ WHAT IS VERIFIED (standard physics):
 - Strain amplitude exponent 5/3 from quadrupole source + Kepler
 - Coalescence time-frequency relation exponent -8/3
 
-GFD OBSERVATIONS (patterns noted, not derived):
+GFM OBSERVATIONS (patterns noted, not derived):
 - 32 = 2^(k+1) = k * 2^d (dual decomposition)
 - 3/5 = d/(k+1), 5/3 = (k+1)/d (reciprocal pair)
 - 8/3 = 2^d/d (coalescence time exponent)
@@ -59,7 +59,7 @@ from gravity_field_model.common import (
 # Spatial dimensions (standard physics)
 D_SPATIAL = 3
 
-# GFD derived quantities
+# GFM derived quantities
 K = K_CLOSURE           # 4 (tetrahedral closure)
 K_PLUS_1 = K + 1        # 5
 TWO_TO_D = 2**D_SPATIAL  # 8 (cube/Merkaba vertices)
@@ -102,25 +102,25 @@ def coalescence_time(f: float, Mc: float) -> float:
 
 
 # =============================================================================
-# TEST 1: THE 32/5 COEFFICIENT — DUAL GFD DECOMPOSITION (CRITICAL)
+# TEST 1: THE 32/5 COEFFICIENT — DUAL GFM DECOMPOSITION (CRITICAL)
 # =============================================================================
 
 class QuadrupoleCoefficientDualDecomposition(Test):
     """
     Probe the coefficient 32/5 in the GW quadrupole power formula,
-    focusing on the DUAL GFD decomposition of the numerator 32.
+    focusing on the DUAL GFM decomposition of the numerator 32.
 
     HONESTY: The coefficient 32/5 arises from GR's quadrupole approximation
     via angular averaging of the third time derivative of the mass quadrupole
     tensor. The two decompositions 32 = 2^(k+1) = k*2^d are mathematical
-    identities. GFD OBSERVES that these identities involve its structural
+    identities. GFM OBSERVES that these identities involve its structural
     constants. No mechanism is proposed.
     """
     audit_score = 88
     audit_notes = (
         "Question: 14/15 - Strong 'why 32/5 specifically' hook with dual decomposition. "
         "Derivation: 14/15 - Excellent step-by-step from quadrupole to coefficient, "
-        "clearly separates GR derivation from GFD observation. "
+        "clearly separates GR derivation from GFM observation. "
         "Commentary: 13/15 - Good context on angular averaging origin, honest about "
         "coincidence possibility. Notes statistical significance of dual decomposition. "
         "Model: 10/10 - Clean output with both decomposition checks and ratio verification. "
@@ -131,7 +131,7 @@ class QuadrupoleCoefficientDualDecomposition(Test):
     )
     contribution_score = 76
     contribution_notes = (
-        "Discovery: 30/40 - Documentation that 32 admits TWO independent GFD decompositions "
+        "Discovery: 30/40 - Documentation that 32 admits TWO independent GFM decompositions "
         "(2^(k+1) AND k*2^d) is striking. A single decomposition could be coincidence; "
         "two independent paths to the same number from the same structural constants is "
         "much harder to dismiss. Novel systematic documentation. "
@@ -140,7 +140,7 @@ class QuadrupoleCoefficientDualDecomposition(Test):
         "Cross-Domain: 15/20 - Factor 32 should be checked in EM multipole radiation. "
         "Connects to BH coefficient catalog (8 = 2^d in Hawking temperature). "
         "Falsifiability: 15/20 - Predicts octupole and higher multipole coefficients "
-        "should also decompose into GFD numbers. Straightforwardly testable. "
+        "should also decompose into GFM numbers. Straightforwardly testable. "
         "TOTAL: 76/100 - Significant. Dual decomposition is the strongest single finding."
     )
     future_questions = (
@@ -149,16 +149,16 @@ class QuadrupoleCoefficientDualDecomposition(Test):
         "32 might emerge FROM k through the averaging process. "
         "(Answering would improve Discovery by +5: mechanism, not just pattern) "
         "Q2: The EM quadrupole radiation coefficient is 1/20 = 1/(k*(k+1)). "
-        "Does this suggest a unified multipole-GFD connection? "
+        "Does this suggest a unified multipole-GFM connection? "
         "(Answering would improve Cross-Domain by +5: EM-GW unification) "
         "Q3: For the gravitational octupole, the coefficient changes. Does it "
-        "still decompose into GFD numbers? "
+        "still decompose into GFM numbers? "
         "(Answering would improve Falsifiability by +5: testable extension)"
     )
     name = "GW Quadrupole: Dual Decomposition of 32/5"
     question = (
         "The GW power formula P = (32/5)*G^4/c^5*... has coefficient 32/5. "
-        "The numerator 32 admits TWO independent GFD decompositions: "
+        "The numerator 32 admits TWO independent GFM decompositions: "
         "32 = 2^(k+1) = 2^5 AND 32 = k*2^d = 4*8. "
         "The denominator 5 = k+1. A single coincidence is dismissible; "
         "but when the SAME number decomposes two different ways using the "
@@ -174,10 +174,10 @@ class QuadrupoleCoefficientDualDecomposition(Test):
         "mass quadrupole moment and performing the angular average yields the "
         "factor 32 in the numerator. The 5 comes from the 1/(5c^5) prefactor "
         "in the general quadrupole formula.\n\n"
-        "GFD OBSERVATION (dual decomposition of 32):\n"
+        "GFM OBSERVATION (dual decomposition of 32):\n"
         "  Path 1: 32 = 2^5 = 2^(k+1), interpreting 5 as k+1\n"
-        "  Path 2: 32 = 4 * 8 = k * 2^d, a product of two GFD numbers\n"
-        "Both paths use only GFD structural constants (k=4, d=3). The probability "
+        "  Path 2: 32 = 4 * 8 = k * 2^d, a product of two GFM numbers\n"
+        "Both paths use only GFM structural constants (k=4, d=3). The probability "
         "that a random integer in [1,100] has two independent decompositions into "
         "the same small set of constants is low, though hard to quantify precisely.\n\n"
         "COMBINED RATIO: 32/5 = 2^(k+1)/(k+1) = k*2^d/(k+1). Both forms "
@@ -195,13 +195,13 @@ class QuadrupoleCoefficientDualDecomposition(Test):
             .step("THE QUESTION: Why does 32 appear in the numerator?")
             .step("In GR: 32 comes from evaluating the tensor contraction of the "
                   "third time derivative of the quadrupole moment for circular orbits.")
-            .step("GFD OBSERVATION — Decomposition Path 1:")
+            .step("GFM OBSERVATION — Decomposition Path 1:")
             .equation("32 = 2^5 = 2^(k+1) where k=4, k+1=5")
-            .step("GFD OBSERVATION — Decomposition Path 2:")
+            .step("GFM OBSERVATION — Decomposition Path 2:")
             .equation("32 = 4 * 8 = k * 2^d where k=4, d=3")
             .step("The denominator 5 = k+1, giving:")
             .equation("32/5 = 2^(k+1)/(k+1) = k*2^d/(k+1)")
-            .conclude("Coefficient 32 has dual GFD decomposition. Both forms "
+            .conclude("Coefficient 32 has dual GFM decomposition. Both forms "
                       "yield 32/5 when divided by k+1. This is documented as "
                       "an observation, not a derivation.")
         )
@@ -212,7 +212,7 @@ class QuadrupoleCoefficientDualDecomposition(Test):
         coeff_denominator = 5
         coeff_ratio = coeff_numerator / coeff_denominator
 
-        # GFD structural constants
+        # GFM structural constants
         k = K_CLOSURE          # 4
         d = D_SPATIAL           # 3
         k_plus_1 = k + 1       # 5
@@ -271,16 +271,16 @@ class QuadrupoleCoefficientDualDecomposition(Test):
 
 class ChirpMassExponentDecomposition(Test):
     """
-    Probe the chirp mass exponent 3/5 as a ratio of GFD structural numbers.
+    Probe the chirp mass exponent 3/5 as a ratio of GFM structural numbers.
 
     HONESTY: The chirp mass M_c = (m1*m2)^(3/5)/(m1+m2)^(1/5) comes from
     GR orbital dynamics. The exponent 3/5 = d/(k+1) is a numerical identity.
-    GFD notes this correspondence but does not derive it.
+    GFM notes this correspondence but does not derive it.
     """
     audit_score = 85
     audit_notes = (
         "Question: 13/15 - Good 'why 3/5 specifically' with d/(k+1) connection. "
-        "Derivation: 13/15 - Clear GR origin, then GFD decomposition of both "
+        "Derivation: 13/15 - Clear GR origin, then GFM decomposition of both "
         "numerator and denominator. "
         "Commentary: 12/15 - Good context on chirp mass as GW observable. "
         "Model: 10/10 - Clean pattern verification with reciprocal check. "
@@ -295,27 +295,27 @@ class ChirpMassExponentDecomposition(Test):
         "reciprocal 5/3 = (k+1)/d (Test 3), showing systematic structure. "
         "Precision: 15/20 - Mathematical identity, exact. "
         "Cross-Domain: 15/20 - Chirp mass appears in every GW detection. Pattern "
-        "connects GW observables to GFD geometry. Links to BH radii catalog. "
+        "connects GW observables to GFM geometry. Links to BH radii catalog. "
         "Falsifiability: 10/20 - Predicts other GW mass combinations should also "
         "involve d/(k+1). Partially testable in post-Newtonian expansions. "
         "TOTAL: 65/100 - Valuable as part of systematic GW exponent decomposition."
     )
     future_questions = (
         "Q1: The chirp mass also appears as M_c^(-5/8) in frequency evolution. "
-        "Is -5/8 = -(k+1)/2^d another systematic GFD ratio? "
+        "Is -5/8 = -(k+1)/2^d another systematic GFM ratio? "
         "(Answering would improve Discovery by +5: extends pattern) "
         "Q2: In post-Newtonian corrections, do higher-order chirp mass "
         "exponents also decompose into d, k, k+1? "
         "(Answering would improve Falsifiability by +5: testable prediction) "
         "Q3: The symmetric mass ratio eta = m1*m2/(m1+m2)^2 appears with "
-        "exponent 1 in the chirp mass. Does this have GFD significance? "
+        "exponent 1 in the chirp mass. Does this have GFM significance? "
         "(Answering would improve Commentary by +3: complete picture)"
     )
     name = "Chirp Mass Exponent: 3/5 = d/(k+1)"
     question = (
         "The chirp mass M_c = (m1*m2)^(3/5)/(m1+m2)^(1/5) determines how "
         "a GW signal evolves. The exponent 3/5 combines spatial dimension "
-        "d=3 and the GFD quantity k+1=5: exactly 3/5 = d/(k+1). "
+        "d=3 and the GFM quantity k+1=5: exactly 3/5 = d/(k+1). "
         "Is this a deep connection between GW observables and discrete geometry, "
         "or a coincidence of small integers?"
     )
@@ -328,7 +328,7 @@ class ChirpMassExponentDecomposition(Test):
         "In the quadrupole approximation, df/dt depends on masses only through "
         "M_c = (m1*m2)^(3/5)/(m1+m2)^(1/5). The exponents 3/5 and 1/5 arise "
         "from combining Kepler's third law with the energy loss rate.\n\n"
-        "GFD OBSERVATION: The exponent 3/5 = d/(k+1) where d=3 (spatial "
+        "GFM OBSERVATION: The exponent 3/5 = d/(k+1) where d=3 (spatial "
         "dimensions) and k+1=5. Its reciprocal 5/3 = (k+1)/d appears as the "
         "strain amplitude exponent (Test 3). This reciprocal pair suggests "
         "that GW exponents are systematically built from d and k+1.\n\n"
@@ -347,7 +347,7 @@ class ChirpMassExponentDecomposition(Test):
             .step("GR ORIGIN: From dE/dt ~ (m1*m2)^2*(m1+m2)/a^5 and "
                   "Kepler f ~ (m1+m2)^(1/2)/a^(3/2), eliminating a gives "
                   "a mass combination with exponent 3/5 on the product.")
-            .step("GFD OBSERVATION:")
+            .step("GFM OBSERVATION:")
             .equation("3/5 = d/(k+1) where d=3, k+1=5")
             .step("Complementary exponent: 1/5 = 1/(k+1)")
             .step("Sum: 3/5 + 1/5 = 4/5 = k/(k+1)")
@@ -360,19 +360,19 @@ class ChirpMassExponentDecomposition(Test):
         # The chirp mass exponent from GR
         chirp_exp = 3.0 / 5.0  # 0.6
 
-        # GFD decomposition
+        # GFM decomposition
         d = D_SPATIAL            # 3
         k = K_CLOSURE            # 4
         k_plus_1 = k + 1        # 5
 
-        gfd_ratio = d / k_plus_1  # 3/5
+        GFM_ratio = d / k_plus_1  # 3/5
 
         # Pattern verification
-        match = 1.0 if abs(chirp_exp - gfd_ratio) < 1e-10 else 0.0
+        match = 1.0 if abs(chirp_exp - GFM_ratio) < 1e-10 else 0.0
 
         # Complementary exponent
         comp_exp = 1.0 / 5.0     # 1/5
-        comp_gfd = 1.0 / k_plus_1
+        comp_GFM = 1.0 / k_plus_1
 
         # Sum of exponents
         exp_sum = chirp_exp + comp_exp  # 4/5
@@ -385,10 +385,10 @@ class ChirpMassExponentDecomposition(Test):
         return (
             Model()
             .add("Chirp mass exponent 3/5", chirp_exp)
-            .add("d/(k+1)", gfd_ratio)
+            .add("d/(k+1)", GFM_ratio)
             .add("3/5 = d/(k+1)?", match)
             .add("Complement 1/5", comp_exp)
-            .add("1/(k+1)", comp_gfd)
+            .add("1/(k+1)", comp_GFM)
             .add("Sum 3/5 + 1/5", exp_sum)
             .add("k/(k+1)", k_over_kp1)
             .add("Reciprocal 5/3", round(reciprocal, 6))
@@ -420,7 +420,7 @@ class StrainAmplitudeExponentDecomposition(Test):
     Probe the strain amplitude exponent 5/3 in h ~ M_c^(5/3).
 
     HONESTY: The exponent 5/3 arises from GR quadrupole radiation combined
-    with Kepler's law. GFD notes 5/3 = (k+1)/d. This is an OBSERVATION.
+    with Kepler's law. GFM notes 5/3 = (k+1)/d. This is an OBSERVATION.
     """
     audit_score = 84
     audit_notes = (
@@ -443,7 +443,7 @@ class StrainAmplitudeExponentDecomposition(Test):
         "Cross-Domain: 14/20 - Strain exponent appears in every GW detection. "
         "Links to chirp mass (reciprocal) and BH radii catalog. "
         "Falsifiability: 10/20 - Higher PN order corrections to strain involve "
-        "additional exponents; could check for GFD structure. "
+        "additional exponents; could check for GFM structure. "
         "TOTAL: 62/100 - Valuable as reciprocal partner to chirp mass test."
     )
     future_questions = (
@@ -451,7 +451,7 @@ class StrainAmplitudeExponentDecomposition(Test):
         "where 2 = len(TIME_FACES)? "
         "(Answering would improve Discovery by +3: frequency exponent pattern) "
         "Q2: In the post-Newtonian expansion, the 1PN correction to strain "
-        "involves additional powers. Do they decompose into GFD numbers? "
+        "involves additional powers. Do they decompose into GFM numbers? "
         "(Answering would improve Falsifiability by +5: testable prediction) "
         "Q3: How precisely does LIGO measure the M_c^(5/3) dependence? "
         "Could precision tests reveal small deviations? "
@@ -461,7 +461,7 @@ class StrainAmplitudeExponentDecomposition(Test):
     question = (
         "GW strain amplitude scales as h ~ (GM_c/c^2)^(5/3) * (pi*f)^(2/3) / D. "
         "The exponent 5/3 is the reciprocal of the chirp mass exponent 3/5. "
-        "In GFD terms, 5/3 = (k+1)/d. That the same two structural numbers "
+        "In GFM terms, 5/3 = (k+1)/d. That the same two structural numbers "
         "(d=3 and k+1=5) appear as both a ratio and its inverse across different "
         "GW quantities is suggestive. But is it meaningful?"
     )
@@ -475,7 +475,7 @@ class StrainAmplitudeExponentDecomposition(Test):
         "The exponent 5/3 on M_c comes from combining the quadrupole source "
         "(which gives M_c^1) with the frequency-mass relation (which gives an "
         "additional M_c^(2/3) factor through Kepler's law).\n\n"
-        "GFD OBSERVATION: 5/3 = (k+1)/d is the reciprocal of the chirp mass "
+        "GFM OBSERVATION: 5/3 = (k+1)/d is the reciprocal of the chirp mass "
         "exponent d/(k+1). The frequency exponent 2/3 = 2/d involves d alone. "
         "That the strain decomposes cleanly into (k+1)/d and 2/d suggests "
         "that d and k+1 are the 'building blocks' of GW exponents.\n\n"
@@ -495,7 +495,7 @@ class StrainAmplitudeExponentDecomposition(Test):
             .step("For a binary: d^2Q/dt^2 ~ mu * a^2 * omega^2")
             .step("Using Kepler (omega^2 ~ M_total/a^3) and eliminating a in "
                   "favor of frequency gives M_c^(5/3) dependence.")
-            .step("GFD OBSERVATION:")
+            .step("GFM OBSERVATION:")
             .equation("5/3 = (k+1)/d where k+1=5, d=3")
             .step("This is the reciprocal of 3/5 = d/(k+1) (chirp mass exponent).")
             .step("The frequency exponent 2/3 = 2/d, also built from d.")
@@ -507,13 +507,13 @@ class StrainAmplitudeExponentDecomposition(Test):
         # The strain exponent from GR
         strain_exp = 5.0 / 3.0
 
-        # GFD decomposition
+        # GFM decomposition
         d = D_SPATIAL
         k_plus_1 = K_CLOSURE + 1
-        gfd_ratio = k_plus_1 / d
+        GFM_ratio = k_plus_1 / d
 
         # Pattern verification
-        match = 1.0 if abs(strain_exp - gfd_ratio) < 1e-10 else 0.0
+        match = 1.0 if abs(strain_exp - GFM_ratio) < 1e-10 else 0.0
 
         # Frequency exponent: 2/3 = 2/d
         freq_exp = 2.0 / 3.0
@@ -527,7 +527,7 @@ class StrainAmplitudeExponentDecomposition(Test):
         return (
             Model()
             .add("Strain exponent 5/3", round(strain_exp, 6))
-            .add("(k+1)/d", round(gfd_ratio, 6))
+            .add("(k+1)/d", round(GFM_ratio, 6))
             .add("5/3 = (k+1)/d?", match)
             .add("Frequency exponent 2/3", round(freq_exp, 6))
             .add("2/d", round(two_over_d, 6))
@@ -560,7 +560,7 @@ class CoalescenceTimeExponentDecomposition(Test):
     Probe the exponent -8/3 in the coalescence time-frequency relation.
 
     HONESTY: The time to coalescence scales as t_c - t ~ f^(-8/3).
-    The exponent 8/3 = 2^d/d where d=3. GFD notes this as an OBSERVATION.
+    The exponent 8/3 = 2^d/d where d=3. GFM notes this as an OBSERVATION.
     The exponent arises from integrating df/dt ~ f^(11/3) in GR.
     """
     audit_score = 83
@@ -583,7 +583,7 @@ class CoalescenceTimeExponentDecomposition(Test):
         "The 2^d/d pattern connects to 3/8 = d/2^d (reciprocal) in frequency "
         "evolution. "
         "Falsifiability: 10/20 - Higher PN corrections add terms with additional "
-        "frequency powers; could check for GFD structure. "
+        "frequency powers; could check for GFM structure. "
         "TOTAL: 60/100 - Valuable contribution to the GW exponent catalog."
     )
     future_questions = (
@@ -592,7 +592,7 @@ class CoalescenceTimeExponentDecomposition(Test):
         "exponents involve d in the denominator. Is d a universal denominator? "
         "(Answering would improve Discovery by +5: unifying observation) "
         "Q2: At what frequency do post-Newtonian corrections to the -8/3 "
-        "exponent become significant? Do the corrections involve GFD numbers? "
+        "exponent become significant? Do the corrections involve GFM numbers? "
         "(Answering would improve Falsifiability by +5: precision test) "
         "Q3: The reciprocal 3/8 = d/2^d appears in f(t). Does this reciprocal "
         "pair have a deeper meaning (time-frequency duality)? "
@@ -603,7 +603,7 @@ class CoalescenceTimeExponentDecomposition(Test):
         "The time remaining before a binary merges scales as "
         "t_c - t = (5/256) * (pi*f)^(-8/3) * (G*M_c/c^3)^(-5/3). "
         "The frequency exponent -8/3 determines how quickly the countdown "
-        "to merger accelerates. GFD notes 8/3 = 2^d/d where d=3 and 2^d=8. "
+        "to merger accelerates. GFM notes 8/3 = 2^d/d where d=3 and 2^d=8. "
         "This is the same 2^d that appears as VERTICES count. "
         "Is the merger countdown rate set by discrete geometry?"
     )
@@ -616,12 +616,12 @@ class CoalescenceTimeExponentDecomposition(Test):
         "Inverting f(t) gives t(f), with the dominant frequency dependence being "
         "f^(-8/3). This determines how long a signal spends in the LIGO band: "
         "a binary at 40 Hz has ~25 seconds to merger, while at 100 Hz only ~2 seconds.\n\n"
-        "GFD OBSERVATION: 8/3 = 2^d/d where:\n"
+        "GFM OBSERVATION: 8/3 = 2^d/d where:\n"
         "  - Numerator 8 = 2^d = 2^3 = number of VERTICES in the Merkaba\n"
         "  - Denominator 3 = d = spatial dimensions\n"
         "The reciprocal 3/8 = d/2^d appears in the time-domain frequency "
         "evolution f ~ (t_c - t)^(-3/8). Both the exponent and its reciprocal "
-        "decompose into the same GFD building blocks."
+        "decompose into the same GFM building blocks."
     )
 
     def derivation(self) -> Derivation:
@@ -635,7 +635,7 @@ class CoalescenceTimeExponentDecomposition(Test):
             .step("THE QUESTION: Why does coalescence time scale as f^(-8/3)?")
             .step("GR ORIGIN: The exponent comes from integrating f^(11/3): "
                   "integral(f^(-11/3) df) gives f^(-8/3), since -11/3 + 1 = -8/3.")
-            .step("GFD OBSERVATION:")
+            .step("GFM OBSERVATION:")
             .equation("8/3 = 2^d / d  where d=3, 2^d=8")
             .step("Numerator 8 = 2^3 = number of VERTICES (cube corners)")
             .step("Denominator 3 = d = spatial dimension count")
@@ -648,13 +648,13 @@ class CoalescenceTimeExponentDecomposition(Test):
         # The coalescence time frequency exponent from GR
         coal_exp = 8.0 / 3.0
 
-        # GFD decomposition
+        # GFM decomposition
         d = D_SPATIAL             # 3
         two_to_d = 2**d           # 8
-        gfd_ratio = two_to_d / d  # 8/3
+        GFM_ratio = two_to_d / d  # 8/3
 
         # Pattern verification
-        match = 1.0 if abs(coal_exp - gfd_ratio) < 1e-10 else 0.0
+        match = 1.0 if abs(coal_exp - GFM_ratio) < 1e-10 else 0.0
 
         # Component checks
         num_is_2d = 1.0 if 8 == two_to_d else 0.0
@@ -668,7 +668,7 @@ class CoalescenceTimeExponentDecomposition(Test):
         return (
             Model()
             .add("Coalescence exponent 8/3", round(coal_exp, 6))
-            .add("2^d/d", round(gfd_ratio, 6))
+            .add("2^d/d", round(GFM_ratio, 6))
             .add("8/3 = 2^d/d?", match)
             .add("8 = 2^d?", num_is_2d)
             .add("8 = VERTICES?", num_is_vertices)
@@ -723,7 +723,7 @@ class GWExponentCatalogDecomposition(Test):
         "decompose into {d, k, k+1}. Individual patterns were noted before; the "
         "systematic completeness is the novel contribution. "
         "Precision: 14/20 - All decompositions are exact mathematical identities. "
-        "Cross-Domain: 16/20 - Connects GW physics comprehensively to GFD. "
+        "Cross-Domain: 16/20 - Connects GW physics comprehensively to GFM. "
         "Should extend to BH coefficients and EM radiation exponents. "
         "Falsifiability: 12/20 - Predicts that post-Newtonian correction exponents "
         "should also decompose into d, k, k+1. Testable. Also predicts higher "
@@ -734,7 +734,7 @@ class GWExponentCatalogDecomposition(Test):
     future_questions = (
         "Q1: Post-Newtonian corrections add terms like v^2, v^4, etc. to the "
         "GW phasing. Do the PN coefficients (e.g., 743/336 at 1PN) decompose "
-        "into GFD numbers? "
+        "into GFM numbers? "
         "(Answering would improve Falsifiability by +5: extends the catalog) "
         "Q2: Electromagnetic multipole radiation has its own set of exponents. "
         "Do EM radiation exponents also decompose into d, k, k+1? "
@@ -768,12 +768,12 @@ class GWExponentCatalogDecomposition(Test):
         "  5/8 = (k+1)/2^d     chirp mass-frequency coupling exponent\n\n"
         "BUILDING BLOCKS: Only three numbers needed: d=3, k=4, k+1=5.\n"
         "The number 2 also appears (in 2/d and 2^d), but 2 = len(TIME_FACES) "
-        "is itself a GFD structural number.\n\n"
+        "is itself a GFM structural number.\n\n"
         "STATISTICAL NOTE: With building blocks {2, 3, 4, 5, 8}, one can form "
         "many ratios. But not ALL simple ratios of small integers decompose "
         "this way. The exponents 4/7, 5/7, 3/7, etc. do NOT appear in GW "
         "physics. The physics selects exactly those ratios that decompose into "
-        "GFD numbers.\n\n"
+        "GFM numbers.\n\n"
         "CAVEAT: These are all fractions of small integers. The set {d, k, k+1} "
         "covers much of {1..5}, so some matches are expected. The strength of "
         "the observation lies in COMPLETENESS: no GW exponent is left out."
@@ -795,7 +795,7 @@ class GWExponentCatalogDecomposition(Test):
             .step("Count: 7 exponents, 7 decompositions, 0 exceptions.")
             .step("All use only {d, k+1, 2^d, 2} as building blocks.")
             .conclude("Complete catalog: every major GW exponent decomposes "
-                      "into GFD structural numbers. No exceptions found.")
+                      "into GFM structural numbers. No exceptions found.")
         )
 
     def model(self) -> Model:
@@ -804,7 +804,7 @@ class GWExponentCatalogDecomposition(Test):
         k_plus_1 = k + 1
         two_to_d = 2**d
 
-        # Define the catalog: (name, GR_value, GFD_expression_value)
+        # Define the catalog: (name, GR_value, GFM_expression_value)
         catalog = [
             ("3/5 = d/(k+1)", 3.0/5.0, d/k_plus_1),
             ("1/5 = 1/(k+1)", 1.0/5.0, 1.0/k_plus_1),
@@ -816,7 +816,7 @@ class GWExponentCatalogDecomposition(Test):
         ]
 
         # Count matches
-        matches = sum(1 for _, gr, gfd in catalog if abs(gr - gfd) < 1e-10)
+        matches = sum(1 for _, gr, GFM in catalog if abs(gr - GFM) < 1e-10)
         total = len(catalog)
         all_match = 1.0 if matches == total else 0.0
 
@@ -866,9 +866,9 @@ def run_all() -> bool:
             "- Dual decomposition of 32 in quadrupole power formula\n"
             "- Systematic decomposition of ALL GW exponents into d, k, k+1\n\n"
             "STANDARD PHYSICS: All GW formulas from General Relativity.\n"
-            "GFD OBSERVATIONS: Numerical correspondences documented, not derived.\n\n"
+            "GFM OBSERVATIONS: Numerical correspondences documented, not derived.\n\n"
             "CENTERPIECE FINDING: The coefficient 32 admits two independent\n"
-            "GFD decompositions: 32 = 2^(k+1) = k*2^d. All seven major GW\n"
+            "GFM decompositions: 32 = 2^(k+1) = k*2^d. All seven major GW\n"
             "exponents decompose into {d, k+1, 2^d}.\n\n"
             "5 tests: 1 CRITICAL, 3 STANDARD, 1 EXPLORATORY\n\n"
             "WHEN READY:\n"

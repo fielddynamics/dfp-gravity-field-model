@@ -1,12 +1,12 @@
 """
-GFD Model V2 - Test Framework Base
+GFM Model V2 - Test Framework Base
 ===================================
 
-All tests inherit from GFDTest and return structured data.
+All tests inherit from GFMTest and return structured data.
 The Renderer handles all display.
 
 Usage:
-    class MyTest(GFDTest):
+    class MyTest(GFMTest):
         name = "Test Name"
         question = "What are we testing?"
         reference_source = "Source (or None)"
@@ -29,7 +29,7 @@ Validated Function Export:
         ...
 
 Dependency Injection:
-    class MyDownstreamTest(GFDTest):
+    class MyDownstreamTest(GFMTest):
         depends_on = ["power_per_field"]
         
         def model(self):
@@ -241,9 +241,9 @@ class GroupResult:
 # TEST BASE CLASS
 # =============================================================================
 
-class GFDTest(ABC):
+class GFMTest(ABC):
     """
-    Base class for GFD validation tests.
+    Base class for GFM validation tests.
     
     Subclasses define:
         - name: Test name
@@ -262,7 +262,7 @@ class GFDTest(ABC):
     Dependency Injection:
         If depends_on is set, use self.fn to access validated functions:
         
-        class MyTest(GFDTest):
+        class MyTest(GFMTest):
             depends_on = ["power_per_field"]
             
             def model(self):
@@ -547,8 +547,8 @@ class Renderer:
             print(_c(C.DIM, "    None"))
         print()
         
-        # GFD Model
-        print(_c(C.CYAN, "  GFD Model"))
+        # GFM Model
+        print(_c(C.CYAN, "  GFM Model"))
         
         # Table (if present) - shows detailed model predictions
         if result.table:
@@ -570,7 +570,7 @@ class Renderer:
         # Comparison
         if result.reference_source:
             print(_c(C.CYAN, "  Comparison"))
-            # Output JSON table for GFDM parser
+            # Output JSON table for GFMM parser
             import json
             table_data = {
                 "headers": ["Item", "Model", "Observed", "Error", "Status"],
@@ -623,7 +623,7 @@ def run_test_group(title: str, summary: str, test_classes: List[type]) -> bool:
     Args:
         title: Group title
         summary: Group description
-        test_classes: List of GFDTest subclasses
+        test_classes: List of GFMTest subclasses
     
     Returns:
         True if all tests passed

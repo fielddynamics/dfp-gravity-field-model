@@ -42,7 +42,7 @@ DEPENDENCIES:
 - numpy for vector calculations
 
 Reference:
-- gfd_concepts.py (Coupling Port mechanics, Triad angular conversion)
+- GFM_concepts.py (Coupling Port mechanics, Triad angular conversion)
 - VORTEX_COSMOLOGY_AND_INFORMATION_DOMAINS.md (vortex field model)
 """
 

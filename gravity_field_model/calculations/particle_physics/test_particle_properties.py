@@ -6,7 +6,7 @@ STATUS: NUMERICAL CORRESPONDENCES (not derivations)
 MOTIVATION:
 Why does the Standard Model have 8 gluons, 12 gauge bosons, and 3 generations?
 These numbers appear fundamental but are typically accepted as inputs from
-gauge theory. GFD observes that the stellated octahedron geometry produces
+gauge theory. GFM observes that the stellated octahedron geometry produces
 the same counts: 8 vertices, 12 edges, and d = 3 SPATIAL faces per tetrahedron.
 
 This module explores whether these numerical matches hint at deeper structure
@@ -186,7 +186,7 @@ class GaugeBosonEdgeCorrespondence(Test):
 class ElectronChargeFromPortRatio(Test):
     """
     The electron charge is exactly 1 in natural units.
-    In GFD, this corresponds to complete activation of a triangular face:
+    In GFM, this corresponds to complete activation of a triangular face:
         3 vertices x (1/3 charge per vertex) = 1
     
     This is CONSISTENCY with the Port Ratio, not a derivation.
@@ -307,7 +307,7 @@ class SpinFromTimeFaces(Test):
     
     The Dirac equation yields spin-1/2 fermions with 2s+1 = 2 projections. But what
     sets this number geometrically? The stellated octahedron has 2 TIME faces: one
-    at each 'pole' of the structure, opposite to the apex vertices. GFD proposes
+    at each 'pole' of the structure, opposite to the apex vertices. GFM proposes
     that spin-up and spin-down correspond to activation of Tetrahedron A vs B TIME face.
     
     audit_score = 85
@@ -364,7 +364,7 @@ class LeptonGenerationsCorrespondence(Test):
     """
     Why are there exactly 3 lepton generations (e, mu, tau)?
     
-    The Standard Model has no explanation for the generation count. GFD observes
+    The Standard Model has no explanation for the generation count. GFM observes
     that each tetrahedron has d = 3 SPATIAL faces, and the total SPATIAL face count
     is 6 = 2 x 3 (one set per tetrahedron). If each generation corresponds to a
     SPATIAL face, then the count is set by spatial dimensionality d = k - 1 = 3.
@@ -399,7 +399,7 @@ class LeptonGenerationsCorrespondence(Test):
     
     commentary = (
         "The 'flavor puzzle' asks why matter comes in 3 copies (generations) with no "
-        "apparent reason. GFD offers a geometric answer: 3 SPATIAL faces per tetrahedron. "
+        "apparent reason. GFM offers a geometric answer: 3 SPATIAL faces per tetrahedron. "
         "If leptons and quarks represent different face activation patterns, then their "
         "generational structure reflects spatial geometry. Lepton universality (all "
         "generations couple identically) follows if all SPATIAL faces are equivalent."
@@ -427,9 +427,9 @@ class LeptonGenerationsCorrespondence(Test):
 
 class PhotonMasslessness(Test):
     """
-    SPECULATIVE: GFD interpretation of photon masslessness.
+    SPECULATIVE: GFM interpretation of photon masslessness.
     
-    The photon is massless. GFD proposes this corresponds to balanced
+    The photon is massless. GFM proposes this corresponds to balanced
     Tetrahedron A and B oscillations with zero net activation.
     
     This is a speculative interpretation, not a derivation.
@@ -443,7 +443,7 @@ class PhotonMasslessness(Test):
         return (
             Derivation()
             .step("SPECULATIVE INTERPRETATION - Standard physics derives this from gauge invariance.")
-            .step("PREMISE: GFD proposes mass arises from net vertex activation imbalance.")
+            .step("PREMISE: GFM proposes mass arises from net vertex activation imbalance.")
             .step("STEP 1: Photon: balanced A/B oscillation, no net activation.")
             .step("STEP 2: Net activation = Tet_A - Tet_B = 0 (speculative).")
             .step("STEP 3: Zero net activation interpreted as zero rest mass.")
@@ -452,7 +452,7 @@ class PhotonMasslessness(Test):
     
     commentary = (
         "SPECULATIVE: The photon's masslessness is explained in the Standard Model by "
-        "gauge invariance. GFD proposes an alternative picture: the photon represents "
+        "gauge invariance. GFM proposes an alternative picture: the photon represents "
         "perfectly balanced oscillation between tetrahedra with zero net activation. "
         "This is a geometric interpretation, not a derivation or replacement for gauge theory."
     )
@@ -471,9 +471,9 @@ class PhotonMasslessness(Test):
 
 class GravitonSpinPrediction(Test):
     """
-    SPECULATIVE: GFD interpretation of graviton spin-2.
+    SPECULATIVE: GFM interpretation of graviton spin-2.
     
-    The hypothetical graviton has spin-2. GFD proposes this corresponds
+    The hypothetical graviton has spin-2. GFM proposes this corresponds
     to coherent activation of BOTH TIME faces (2 x 1 = 2).
     
     This is speculative; gravitons are not yet observed.
@@ -487,7 +487,7 @@ class GravitonSpinPrediction(Test):
         return (
             Derivation()
             .step("SPECULATIVE INTERPRETATION - Graviton not yet observed.")
-            .step("PREMISE: GFD proposes spin corresponds to TIME face activation patterns.")
+            .step("PREMISE: GFM proposes spin corresponds to TIME face activation patterns.")
             .step("STEP 1: Fermion spin-1/2: one TIME face at a time.")
             .step("STEP 2: Graviton spin-2: both TIME faces coherently activated.")
             .step("STEP 3: Spin = TIME faces x contribution per face = 2 x 1 = 2.")

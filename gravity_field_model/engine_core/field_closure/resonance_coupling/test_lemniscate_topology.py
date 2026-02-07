@@ -384,7 +384,7 @@ class ExactHalfPartition(Test):
     commentary = (
         "DISCOVERY: Testing the 'mitosis' metaphor. Perfect mitosis gives "
         "50/50, but biological mitosis often has small asymmetries that "
-        "determine cell fate. Is GFD perfectly symmetric, or is there "
+        "determine cell fate. Is GFM perfectly symmetric, or is there "
         "a detectable 'chirality' to the field?"
     )
 
@@ -401,7 +401,7 @@ class ExactHalfPartition(Test):
             .step("TEST: Measure TetA vs TetB visit fractions.")
             .equation("Perfect mitosis: TetA fraction = TetB fraction = 0.5")
             .step("Any deviation from 0.5 indicates asymmetry.")
-            .conclude("Testing if GFD has perfect or asymmetric 'division'.")
+            .conclude("Testing if GFM has perfect or asymmetric 'division'.")
         )
 
     def model(self):

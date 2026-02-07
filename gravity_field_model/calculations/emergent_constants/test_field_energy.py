@@ -2,14 +2,14 @@
 Field Energy Scales
 ===================
 
-This module documents energy scales relevant to the GFD framework.
+This module documents energy scales relevant to the GFM framework.
 
 CRITICAL NOTE:
 These tests do NOT derive emergent constants. They calculate energy
 scales using standard physics formulas (E = mc^2, E = hf, U = Gm^2/r).
 
 WHY THIS FILE EXISTS:
-Understanding the energy scales helps establish where GFD effects
+Understanding the energy scales helps establish where GFM effects
 should (and should not) be observable. But these are calculations,
 not derivations of fundamental constants.
 
@@ -19,7 +19,7 @@ WHAT WAS REMOVED:
 - Numerology (e.g., 1836/4 = 459)
 
 WHAT REMAINS:
-- Verification of standard physics at GFD-relevant scales
+- Verification of standard physics at GFM-relevant scales
 - Energy scale comparisons to establish the hierarchy
 - The cosmological constant problem (unsolved, honestly noted)
 """
@@ -50,11 +50,11 @@ class ElectronRestEnergy(Test):
     The electron rest energy E = m_e * c^2 = 511 keV.
     
     THIS IS STANDARD PHYSICS, NOT A DERIVATION.
-    We document this as a reference scale for GFD.
+    We document this as a reference scale for GFM.
     """
     name = "Electron Rest Energy (Reference Scale)"
     question = (
-        "Why is 511 keV the fundamental energy scale in GFD? The electron rest energy "
+        "Why is 511 keV the fundamental energy scale in GFM? The electron rest energy "
         "E = m_e * c^2 sets the Field Envelope scale, anchoring field closure physics."
     )
     reference = "CODATA 2018"
@@ -63,17 +63,17 @@ class ElectronRestEnergy(Test):
     audit_score = 78
     audit_notes = None
     future_questions = (
-        "Q1: Why is the electron specifically the anchor scale for GFD rather than another particle? "
+        "Q1: Why is the electron specifically the anchor scale for GFM rather than another particle? "
         "(Answering would improve Question by +3 points: explaining the choice of reference particle) "
         "Q2: How does 511 keV relate to the Field Envelope radius and settlement frequency? "
-        "(Answering would improve Commentary by +3 points: connecting energy to GFD geometry) "
+        "(Answering would improve Commentary by +3 points: connecting energy to GFM geometry) "
         "Q3: What role does rest energy play in determining the tile interaction strength? "
         "(Answering would improve Derivation by +2 points: linking E=mc^2 to field closure)"
     )
     
     commentary = (
         "This is Einstein's E = mc^2 applied to the electron.\n"
-        "It's standard physics, not a GFD derivation.\n"
+        "It's standard physics, not a GFM derivation.\n"
         "The electron rest energy (511 keV) serves as a reference scale."
     )
     
@@ -120,7 +120,7 @@ class GravitationalSelfEnergy(Test):
         "(Answering would improve Derivation by +3 points: quantifying the Planck scale crossover) "
         "Q2: Does the 10^-44 ratio have any relation to the alpha^21 hierarchy in the G derivation? "
         "(Answering would improve Commentary by +3 points: connecting to other emergent constant tests) "
-        "Q3: Why does GFD focus on classical field closure rather than quantized gravity effects? "
+        "Q3: Why does GFM focus on classical field closure rather than quantized gravity effects? "
         "(Answering would improve Audience Accessibility by +2 points: clarifying framework scope)"
     )
     
@@ -131,7 +131,7 @@ class GravitationalSelfEnergy(Test):
         "Ratio: ~2.4e-44\n\n"
         "This 44 orders of magnitude difference explains why:\n"
         "1. Quantum gravity effects are unobservable at particle scales\n"
-        "2. GFD focuses on classical field closure, not quantized gravity\n"
+        "2. GFM focuses on classical field closure, not quantized gravity\n"
         "3. The hierarchy problem (why gravity is weak) is real and important"
     )
     
@@ -177,12 +177,12 @@ class VacuumImpedance(Test):
     """
     The impedance of free space Z_0 = sqrt(mu_0/epsilon_0) = 377 Ohms.
     
-    GFD CONNECTION:
+    GFM CONNECTION:
     The vacuum impedance is deeply connected to the speed of light through:
         c = 1/sqrt(mu_0 * epsilon_0)
         Z_0 = sqrt(mu_0/epsilon_0) = c * mu_0 = 1/(c * epsilon_0)
     
-    LIGO's detection of gravitational waves at speed c (GFD Textbook Section 2.5)
+    LIGO's detection of gravitational waves at speed c (GFM Textbook Section 2.5)
     confirms that both EM and gravitational fields propagate at the same speed,
     determined by the same vacuum properties. This suggests a common geometric
     origin: the speed c emerges from the Field Envelope structure (Chapter 7.4)
@@ -190,7 +190,7 @@ class VacuumImpedance(Test):
     
     The value 377 Ohms = c * mu_0 encodes the ratio of electric to magnetic
     field amplitudes in propagating waves, a geometric constraint from Maxwell's
-    equations that GFD interprets as boundary matching at Coupling Ports.
+    equations that GFM interprets as boundary matching at Coupling Ports.
     
     Textbook References: Section 2.5 (LIGO), Chapter 7.4 (Field Envelope)
     """
@@ -202,7 +202,7 @@ class VacuumImpedance(Test):
         "detected gravitational waves at speed c, it confirmed that gravity propagates "
         "through the same structured vacuum, suggesting a common geometric origin."
     )
-    reference = "CODATA 2018; GFD Textbook Section 2.5 (LIGO)"
+    reference = "CODATA 2018; GFM Textbook Section 2.5 (LIGO)"
     tolerance = 0.01
     level = Level.STANDARD
     audit_score = 86
@@ -223,8 +223,8 @@ class VacuumImpedance(Test):
         "The vacuum impedance Z_0 = 376.73 Ohms encodes fundamental structure: "
         "the same mu_0 and epsilon_0 that define Z_0 also define c = 1/sqrt(mu_0*epsilon_0). "
         "LIGO's detection of gravitational waves traveling at speed c confirms that "
-        "gravity propagates through the same structured vacuum (GFD Textbook Section 2.5). "
-        "In GFD terms, the Field Envelope boundary conditions constrain both EM and "
+        "gravity propagates through the same structured vacuum (GFM Textbook Section 2.5). "
+        "In GFM terms, the Field Envelope boundary conditions constrain both EM and "
         "gravitational wave propagation. The value 377 Ohms = c * mu_0 sets the ratio "
         "of electric to magnetic amplitudes, analogous to how Coupling Port geometry "
         "constrains field closure. This is standard EM but hints at deeper structure."
@@ -239,7 +239,7 @@ class VacuumImpedance(Test):
             .step("VACUUM PROPERTIES: mu_0 (magnetic permeability) and epsilon_0 (electric permittivity)")
             .step("These same properties determine the speed of light: c = 1/sqrt(mu_0*epsilon_0)")
             .equation("Z_0 = sqrt(mu_0/epsilon_0) = c * mu_0 = 376.73 Ohms")
-            .step("GFD CONNECTION: LIGO confirmed gravitational waves travel at c.")
+            .step("GFM CONNECTION: LIGO confirmed gravitational waves travel at c.")
             .step("Both EM and gravity propagate through the same structured vacuum.")
             .conclude("Z_0 = 377 Ohms encodes vacuum structure that constrains all field propagation.")
         )
@@ -290,7 +290,7 @@ class PlanckToElectronRatio(Test):
         "(Answering would improve Derivation by +3 points: connecting to G derivation structure) "
         "Q2: What experiments could probe intermediate scales between electron and Planck? "
         "(Answering would improve Observation Quality by +3 points: identifying testable regimes) "
-        "Q3: Does the 10^22 gap have implications for GFD's cosmological predictions? "
+        "Q3: Does the 10^22 gap have implications for GFM's cosmological predictions? "
         "(Answering would improve Commentary by +2 points: exploring scale hierarchy consequences)"
     )
     
@@ -355,10 +355,10 @@ def run_all() -> bool:
     return run_tests(
         title="Field Energy Scales",
         summary=(
-            "This module documents energy scales relevant to GFD.\n\n"
+            "This module documents energy scales relevant to GFM.\n\n"
             "THESE ARE NOT EMERGENT CONSTANT DERIVATIONS.\n"
             "They are standard physics calculations that establish the\n"
-            "energy hierarchy and justify certain GFD assumptions.\n\n"
+            "energy hierarchy and justify certain GFM assumptions.\n\n"
             "KEY RESULTS:\n"
             "- Electron rest energy: 511 keV (reference scale)\n"
             "- Gravitational self-energy negligible: ratio ~ 10^-44\n"

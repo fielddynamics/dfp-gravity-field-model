@@ -271,7 +271,7 @@ def create_app():
         
         Returns:
             'v2' - New framework (imports from gravity_field_model.framework)
-            'v1' - Legacy framework (imports from base or GFDTest)
+            'v1' - Legacy framework (imports from base or GFMTest)
             'script' - Plain Python script (no test framework)
         """
         try:
@@ -292,8 +292,8 @@ def create_app():
             legacy_patterns = [
                 'from base import',
                 'from gravity_field_model.base import',
-                'class GFDTest',
-                'GFDTest)',  # Inheriting from GFDTest
+                'class GFMTest',
+                'GFMTest)',  # Inheriting from GFMTest
             ]
             for pattern in legacy_patterns:
                 if pattern in content:
@@ -314,7 +314,7 @@ def create_app():
         }
         
         # Count test files (project_root is already gravity_field_model)
-        gfd_model_path = project_root
+        GFM_model_path = project_root
         
         categories = [
             {'name': 'Engine Core Geometry', 'path': 'engine/core_geometry'},
@@ -328,7 +328,7 @@ def create_app():
         ]
         
         for cat in categories:
-            cat_path = os.path.join(gfd_model_path, cat['path'])
+            cat_path = os.path.join(GFM_model_path, cat['path'])
             count = 0
             if os.path.exists(cat_path):
                 for f in os.listdir(cat_path):
@@ -414,7 +414,7 @@ def run_server(port=5000, open_browser=True):
 
 if __name__ == '__main__':
     import argparse
-    parser = argparse.ArgumentParser(description='GFD Model Web Interface')
+    parser = argparse.ArgumentParser(description='GFM Model Web Interface')
     parser.add_argument('--port', type=int, default=5000, help='Port to run the server on')
     parser.add_argument('--no-browser', action='store_true', help='Do not open browser automatically')
     args = parser.parse_args()

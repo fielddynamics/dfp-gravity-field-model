@@ -2,7 +2,7 @@
 Probing Fusion Thresholds: Scaling Laws in Stellar Nucleosynthesis
 ==================================================================
 
-GFD Model V2
+GFM Model V2
 
 INVESTIGATION STATEMENT:
 Stars burn through successively heavier elements: H → He → C → O → Si → Fe.

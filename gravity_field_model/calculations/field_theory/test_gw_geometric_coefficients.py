@@ -5,12 +5,12 @@ Gravitational Wave Geometric Coefficients: ISCO, Chirp Mass, and Quadrupole
 Test file: test_gw_geometric_coefficients.py
 (Named specifically for the coefficients explored: 6, 3/5, 32/5, 3/8, 5/3)
 
-GFD Model V2
+GFM Model V2
 
 HONESTY STATEMENT:
 This module probes STANDARD GRAVITATIONAL WAVE PHYSICS for potential
 geometric correspondences. The physics (chirp mass, ISCO radius, orbital
-decay) is well established from General Relativity. GFD provides a
+decay) is well established from General Relativity. GFM provides a
 geometric framework for interpretation but does NOT derive these formulas
 from first principles.
 
@@ -20,13 +20,13 @@ WHAT IS VERIFIED (standard physics):
 - Orbital decay rate from quadrupole radiation
 - Peters-Mathews energy flux formula
 
-GFD OBSERVATIONS (patterns noted, not derived):
+GFM OBSERVATIONS (patterns noted, not derived):
 - ISCO factor of 6 equals number of SPATIAL faces
 - Chirp mass exponents 3/5 and 1/5 sum to 4/5 (related to k-1?)
 - Quadrupole moment involves factor of 2 (number of tetrahedra)
 
 TEXTBOOK REFERENCE:
-GFD Textbook Chapter 2 (Bimetric Gravity), Chapter 9 (Gravitational Waves)
+GFM Textbook Chapter 2 (Bimetric Gravity), Chapter 9 (Gravitational Waves)
 Misner, Thorne, Wheeler "Gravitation" Chapters 35-36
 
 TEST GROUP GOALS:
@@ -35,7 +35,7 @@ numerical factors appear. Each test builds on test_gw_polarizations.py
 to explore deeper geometric connections. We document correspondences
 honestly without claiming derivations.
 
-Audience: Graduate-level physics students familiar with GR and GFD basics.
+Audience: Graduate-level physics students familiar with GR and GFM basics.
 
 VALIDATION CATEGORIES:
 1. Standard Physics Verification (1 test)
@@ -144,7 +144,7 @@ class ISCORadiusSixFaces(Test):
     Probe the factor of 6 in r_ISCO = 6*GM/c^2.
     
     HONESTY: The factor of 6 is derived from GR (Schwarzschild metric).
-    GFD notes that 6 = number of SPATIAL faces in the stellated octahedron.
+    GFM notes that 6 = number of SPATIAL faces in the stellated octahedron.
     This is documented as an OBSERVATION, not an explanation.
     """
     audit_score = 82
@@ -165,7 +165,7 @@ class ISCORadiusSixFaces(Test):
         "but single coincidence needs more evidence to distinguish from numerology. "
         "Precision: 12/20 - Match is exact, but single data point. Strengthened by "
         "finding photon sphere factor 3 = d in same test. "
-        "Cross-Domain: 14/20 - Connects black hole physics to GFD geometry. Suggests "
+        "Cross-Domain: 14/20 - Connects black hole physics to GFM geometry. Suggests "
         "checking other characteristic radii (ergosphere, photon sphere variants). "
         "Falsifiability: 10/20 - Kerr ISCO varies with spin; could test if variation "
         "tracks geometric quantity. Partially testable prediction. "
@@ -176,7 +176,7 @@ class ISCORadiusSixFaces(Test):
         "does the geometric correspondence break? "
         "(Answering would improve Question by +3 points: tests robustness) "
         "Q2: The photon sphere is at r = 3GM/c^2 (factor of 3 = d). Is this related "
-        "to spatial dimensions in GFD? "
+        "to spatial dimensions in GFM? "
         "(Answering would improve Commentary by +3 points: related correspondence) "
         "Q3: How would observations of plunging orbits near ISCO test this? "
         "(Answering would improve Observation Quality by +2 points: empirical test)"
@@ -184,18 +184,18 @@ class ISCORadiusSixFaces(Test):
     name = "ISCO Radius: Why Factor of 6?"
     question = (
         "Why does the innermost stable circular orbit occur at r = 6*GM/c^2? "
-        "This factor of 6 emerges from the Schwarzschild metric. GFD notes that "
+        "This factor of 6 emerges from the Schwarzschild metric. GFM notes that "
         "6 equals the number of SPATIAL faces in the stellated octahedron. "
         "Is this coincidence or correspondence?"
     )
-    reference = "Schwarzschild (1916); GFD Textbook Chapter 9"
+    reference = "Schwarzschild (1916); GFM Textbook Chapter 9"
     tolerance = 0.01
     level = Level.EXPLORATORY
     commentary = (
         "The ISCO at r = 6*GM/c^2 marks where circular orbits become unstable. "
         "Below this radius, matter plunges into the black hole. The factor of 6 "
         "comes from solving d^2V_eff/dr^2 = 0 in the Schwarzschild metric. "
-        "GFD observes that 6 = number of SPATIAL faces (3 per tetrahedron x 2). "
+        "GFM observes that 6 = number of SPATIAL faces (3 per tetrahedron x 2). "
         "The photon sphere at r = 3*GM/c^2 has factor 3 = d (spatial dimensions). "
         "These are documented as observations requiring further investigation."
     )
@@ -209,7 +209,7 @@ class ISCORadiusSixFaces(Test):
             .step("Stable orbit: d^2V_eff/dr^2 < 0")
             .step("ISCO: d^2V_eff/dr^2 = 0 (marginally stable)")
             .equation("r_ISCO = 6 * GM/c^2 (from GR calculation)")
-            .step("GFD OBSERVATION: 6 = number of SPATIAL faces")
+            .step("GFM OBSERVATION: 6 = number of SPATIAL faces")
             .step("SPATIAL faces per tetrahedron: 3")
             .step("Total SPATIAL faces: 3 x 2 = 6")
             .conclude("Factor of 6 matches SPATIAL face count (noted, not derived)")
@@ -261,12 +261,12 @@ class ChirpMassExponents(Test):
     Probe the exponents 3/5 and 1/5 in the chirp mass formula.
     
     HONESTY: These exponents come from GR orbital dynamics.
-    GFD notes that 3/5 + 1/5 = 4/5, and 4 = k. Also 3 = d, 5 = k+1.
+    GFM notes that 3/5 + 1/5 = 4/5, and 4 = k. Also 3 = d, 5 = k+1.
     These are numerical observations, not derivations.
     """
     audit_score = 81
     audit_notes = (
-        "Question: 14/15 - Excellent 'why 3/5 specifically' with GFD pattern connection. "
+        "Question: 14/15 - Excellent 'why 3/5 specifically' with GFM pattern connection. "
         "Derivation: 11/15 - Clear steps, patterns noted. Could add intuition about why "
         "chirp mass is the 'right' combination for GW observations. "
         "Commentary: 11/15 - Documents patterns well, could connect to bigger picture. "
@@ -293,7 +293,7 @@ class ChirpMassExponents(Test):
     )
     future_questions = (
         "Q1: Do the exponents 3/5 and 1/5 have a dimensional analysis origin that "
-        "could connect to GFD's k and d? "
+        "could connect to GFM's k and d? "
         "(Answering would improve Derivation by +4 points: systematic connection) "
         "Q2: The chirp mass appears in f(t) ~ M_c^(-5/8). Is -5/8 = -(k+1)/8 significant? "
         "(Answering would improve Question by +3 points: extends pattern) "
@@ -304,16 +304,16 @@ class ChirpMassExponents(Test):
     name = "Chirp Mass: Why 3/5 and 1/5?"
     question = (
         "Why does the chirp mass have the specific form M_c = (m1*m2)^(3/5)/(m1+m2)^(1/5)? "
-        "GFD observes that 3 = d (dimensions), 5 = k+1, and 3/5 + 1/5 = 4/5 where 4 = k. "
+        "GFM observes that 3 = d (dimensions), 5 = k+1, and 3/5 + 1/5 = 4/5 where 4 = k. "
         "Are these numerological coincidences or hints of deeper structure?"
     )
-    reference = "Peters & Mathews (1963); GFD pattern observation"
+    reference = "Peters & Mathews (1963); GFM pattern observation"
     tolerance = 0.01
     level = Level.EXPLORATORY
     commentary = (
         "The chirp mass determines GW frequency evolution: f ~ M_c^(-5/8) * t^(-3/8). "
         "The exponents 3/5 and 1/5 emerge from the orbital dynamics of point masses "
-        "losing energy to gravitational radiation. GFD notes several patterns: "
+        "losing energy to gravitational radiation. GFM notes several patterns: "
         "3 = d (spatial dimensions), 5 = k+1 (vertices + 1), 4 = k (closure number). "
         "The sum 3/5 + 1/5 = 4/5 involves both k and k+1. These are observations "
         "that may or may not reflect geometric structure."
@@ -327,7 +327,7 @@ class ChirpMassExponents(Test):
             .step("Frequency: f ~ (m1+m2)^(1/2) / a^(3/2)")
             .step("Combining gives chirp mass as the observable combination.")
             .equation("M_c = (m1 * m2)^(3/5) / (m1 + m2)^(1/5)")
-            .step("GFD OBSERVATIONS:")
+            .step("GFM OBSERVATIONS:")
             .step("  Numerator exponent 3/5: 3 = d (spatial dimensions)")
             .step("  Denominator exponent 1/5: 1 = ?")
             .step("  Denominator base 5 = k + 1 = 5")
@@ -388,7 +388,7 @@ class GWFrequencyEvolution(Test):
     Probe the t^(-3/8) power law in GW frequency evolution.
     
     HONESTY: This exponent comes from GR quadrupole radiation.
-    GFD notes 3/8 = d/8 where d=3 and 8 = 2^d (vertices).
+    GFM notes 3/8 = d/8 where d=3 and 8 = 2^d (vertices).
     """
     audit_score = 84
     audit_notes = (
@@ -414,10 +414,10 @@ class GWFrequencyEvolution(Test):
     name = "GW Frequency: Why t^(-3/8)?"
     question = (
         "Why does GW frequency evolve as f ~ t^(-3/8) during inspiral? "
-        "The exponent -3/8 emerges from the quadrupole formula. GFD notes that "
+        "The exponent -3/8 emerges from the quadrupole formula. GFM notes that "
         "3/8 = d/2^d where d=3 and 2^d=8 (cube vertices). Coincidence?"
     )
-    reference = "Peters & Mathews (1963); GFD pattern observation"
+    reference = "Peters & Mathews (1963); GFM pattern observation"
     tolerance = 0.01
     level = Level.EXPLORATORY
     commentary = (
@@ -426,7 +426,7 @@ class GWFrequencyEvolution(Test):
         "The GW frequency evolution f(t) ~ (t_c - t)^(-3/8) describes how "
         "frequency increases as a binary approaches merger at time t_c. "
         "The exponent -3/8 comes from combining Kepler's law with the energy "
-        "loss rate. GFD observes that 3/8 = d/2^d where 3 = d (dimensions) and "
+        "loss rate. GFM observes that 3/8 = d/2^d where 3 = d (dimensions) and "
         "8 = 2^d (cube vertices). Additionally, 3 + 5 = 8 (where 5/8 appears in "
         "M_c dependence), so the two exponents sum to unity. "
         "These patterns are documented without claiming physical significance."
@@ -442,7 +442,7 @@ class GWFrequencyEvolution(Test):
             .step("Combining: df/dt ~ f^(11/3)")
             .step("Integrating: f ~ (t_c - t)^(-3/8)")
             .equation("f(t) = f_0 * [(t_c - t) / tau]^(-3/8)")
-            .step("GFD OBSERVATIONS:")
+            .step("GFM OBSERVATIONS:")
             .step("  Exponent 3/8: numerator 3 = d (spatial dimensions)")
             .step("  Exponent 3/8: denominator 8 = 2^d (cube vertices)")
             .step("  Related: 5/8 appears in M_c dependence, and 3+5 = 8")
@@ -494,7 +494,7 @@ class HulseTaylorDecay(Test):
     """
     Verify GR prediction for Hulse-Taylor binary pulsar.
     
-    HONESTY: This is a verification of standard GR, not a GFD test.
+    HONESTY: This is a verification of standard GR, not a GFM test.
     Included to establish that GW physics is well-confirmed observationally.
     """
     audit_score = 88
@@ -508,7 +508,7 @@ class HulseTaylorDecay(Test):
         "Accessibility: 12/15 - Historical context helps, could add pulsar timing analogy. "
         "Header: 7/10 - Module docstring comprehensive. "
         "NOTE: This is a STANDARD physics verification, establishing GR is correct "
-        "before we look for GFD patterns. Good practice."
+        "before we look for GFM patterns. Good practice."
     )
     future_questions = (
         "Q1: The agreement between observed and GR P-dot is ~0.3%. What systematic "
@@ -516,8 +516,8 @@ class HulseTaylorDecay(Test):
         "(Answering would improve Observation Quality by +3 points: error analysis) "
         "Q2: How do other binary pulsars (J0737-3039, etc.) further constrain GW emission? "
         "(Answering would improve Commentary by +2 points: additional systems) "
-        "Q3: Could precision timing reveal any GFD-specific deviations from GR? "
-        "(Answering would improve Question by +3 points: GFD testability)"
+        "Q3: Could precision timing reveal any GFM-specific deviations from GR? "
+        "(Answering would improve Question by +3 points: GFM testability)"
     )
     name = "Hulse-Taylor Binary: GR Verified"
     question = (
@@ -586,12 +586,12 @@ class QuadrupoleCoefficient(Test):
     Probe the coefficient 32/5 in the GW power formula.
     
     HONESTY: The coefficient comes from GR's quadrupole approximation.
-    GFD notes 32 = 2^5 and 5 = k+1. Pattern observation only.
+    GFM notes 32 = 2^5 and 5 = k+1. Pattern observation only.
     """
     audit_score = 79
     audit_notes = (
         "Question: 12/15 - Good 'why 32/5' question, connects to bimetric structure. "
-        "Derivation: 11/15 - Lists GFD observations clearly. Could explain where 32/5 "
+        "Derivation: 11/15 - Lists GFM observations clearly. Could explain where 32/5 "
         "comes from in the GR calculation (angular averaging, tensor contractions). "
         "Commentary: 11/15 - Notes 32 = k * 2^d pattern. "
         "Model: 9/10 - Good multiple pattern checks (2^(k+1), k*2^d). "
@@ -604,7 +604,7 @@ class QuadrupoleCoefficient(Test):
     )
     contribution_score = 78
     contribution_notes = (
-        "Discovery: 32/40 - First finding that 32 has TWO independent GFD decompositions "
+        "Discovery: 32/40 - First finding that 32 has TWO independent GFM decompositions "
         "(2^(k+1) AND k*2^d). Double decomposition is not mere numerology; suggests "
         "deep geometric structure in the quadrupole formula. Novel documentation. "
         "Precision: 16/20 - Both decompositions are mathematically exact. Combined with "
@@ -612,7 +612,7 @@ class QuadrupoleCoefficient(Test):
         "Cross-Domain: 15/20 - Factor 32 should be checked in other radiation formulas "
         "(electromagnetic multipoles, scalar field radiation). May reveal unified origin. "
         "Falsifiability: 15/20 - Predicts octupole and higher multipole coefficients "
-        "should also decompose into GFD numbers. Testable with straightforward calculation. "
+        "should also decompose into GFM numbers. Testable with straightforward calculation. "
         "TOTAL: 78/100 - Significant finding. Double decomposition is striking and testable."
     )
     future_questions = (
@@ -629,7 +629,7 @@ class QuadrupoleCoefficient(Test):
     name = "Quadrupole Power: Why 32/5?"
     question = (
         "Why does the GW power formula have coefficient 32/5 in P = (32/5) * G/c^5 * ...? "
-        "GFD notes that 32 = 2^5 and 5 = k+1. The factor 2 appears throughout "
+        "GFM notes that 32 = 2^5 and 5 = k+1. The factor 2 appears throughout "
         "(2 tetrahedra, 2 polarizations). Is 32/5 connected to bimetric structure?"
     )
     reference = "Einstein (1918); Peters & Mathews (1963)"
@@ -639,7 +639,7 @@ class QuadrupoleCoefficient(Test):
         "The GW power radiated by a binary is P = (32/5) * (G^4/c^5) * (m1*m2)^2 * "
         "(m1+m2) / a^5. The coefficient 32/5 = 6.4 emerges from the quadrupole "
         "calculation involving angular averaging and tensor contractions. "
-        "GFD observes: 32 = 2^5, where 5 = k+1 (one more than closure number). "
+        "GFM observes: 32 = 2^5, where 5 = k+1 (one more than closure number). "
         "Also 32 = 4 * 8 = k * 2^d. The factor 2 recurs (2 tetrahedra, 2 modes). "
         "These are pattern observations, not derivations."
     )
@@ -652,7 +652,7 @@ class QuadrupoleCoefficient(Test):
             .step("For circular binary, this evaluates to:")
             .equation("P = (32/5) * (G^4/c^5) * (m1*m2)^2 * (m1+m2) / a^5")
             .step("Coefficient breakdown: 32/5 = 6.4")
-            .step("GFD OBSERVATIONS:")
+            .step("GFM OBSERVATIONS:")
             .step("  32 = 2^5, where 5 = k + 1 = 5")
             .step("  32 = 4 * 8 = k * 2^d")
             .step("  5 = k + 1 (tetrahedron vertices + 1)")
@@ -707,7 +707,7 @@ class GWStrainScaling(Test):
     """
     Probe the strain amplitude scaling h ~ M_c^(5/3) / r.
     
-    HONESTY: The 5/3 exponent comes from GR. GFD notes 5/3 = (k+1)/d.
+    HONESTY: The 5/3 exponent comes from GR. GFM notes 5/3 = (k+1)/d.
     """
     audit_score = 80
     audit_notes = (
@@ -729,24 +729,24 @@ class GWStrainScaling(Test):
         "(Answering would improve Derivation by +3 points: complete scaling) "
         "Q2: How does strain calibration uncertainty affect LIGO parameter estimation? "
         "(Answering would improve Observation Quality by +2 points: systematics) "
-        "Q3: Does the 1/r distance dependence have a GFD interpretation in terms "
+        "Q3: Does the 1/r distance dependence have a GFM interpretation in terms "
         "of field spreading? "
         "(Answering would improve Commentary by +2 points: propagation physics)"
     )
     name = "GW Strain: Why M_c^(5/3)?"
     question = (
         "Why does GW strain scale as h ~ M_c^(5/3)? The exponent 5/3 emerges from "
-        "combining the quadrupole moment with frequency scaling. GFD notes that "
+        "combining the quadrupole moment with frequency scaling. GFM notes that "
         "5/3 = (k+1)/d = 5/3. Is this pattern meaningful?"
     )
-    reference = "Gravitational Wave Physics; GFD pattern observation"
+    reference = "Gravitational Wave Physics; GFM pattern observation"
     tolerance = 0.01
     level = Level.EXPLORATORY
     commentary = (
         "The GW strain amplitude scales as h ~ (G*M_c/c^2) * (pi*G*M_c*f/c^3)^(2/3) / r. "
         "This simplifies to h ~ M_c^(5/3) * f^(2/3) / r. The exponent 5/3 combines "
         "the quadrupole source strength with the frequency dependence. "
-        "GFD observes 5/3 = (k+1)/d = 5/3 exactly. Also 5/3 = 1 + 2/3, where "
+        "GFM observes 5/3 = (k+1)/d = 5/3 exactly. Also 5/3 = 1 + 2/3, where "
         "2/3 might relate to 2/d (2 tetrahedra over d dimensions). "
         "These patterns are documented without claiming derivation."
     )
@@ -762,7 +762,7 @@ class GWStrainScaling(Test):
             .step("Combining with frequency f = omega/pi:")
             .equation("h ~ (G*M_c/c^2) * (pi*G*M_c*f/c^3)^(2/3) / r")
             .step("Strain scales as M_c^(5/3)")
-            .step("GFD OBSERVATION: 5/3 = (k+1)/d = 5/3")
+            .step("GFM OBSERVATION: 5/3 = (k+1)/d = 5/3")
             .step("Also: 5/3 = 1 + 2/3, and 2/3 might be 2/d")
             .conclude("Exponent 5/3 = (k+1)/d (pattern noted)")
         )
@@ -827,7 +827,7 @@ def run_all() -> bool:
             "STANDARD PHYSICS VERIFIED:\n"
             "- Hulse-Taylor binary decay matches GR to 0.3%\n"
             "- ISCO radius, chirp mass, strain scaling from GR\n\n"
-            "GFD PATTERN OBSERVATIONS (not derivations):\n"
+            "GFM PATTERN OBSERVATIONS (not derivations):\n"
             "- ISCO factor 6 = number of SPATIAL faces\n"
             "- Photon sphere factor 3 = d (spatial dimensions)\n"
             "- Chirp exponents: 3/5 = d/(k+1), 4/5 = k/(k+1)\n"

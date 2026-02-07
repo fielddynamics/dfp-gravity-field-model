@@ -32,7 +32,7 @@
 
 
 
-This document describes the mathematical foundations of the field closure traversal algorithm implemented in the GFD (Gravity Field Dynamics) engine. The traversal mechanism employs the transcendental constant pi expressed in octal (base-8) representation to deterministically visit vertices of the stellated octahedron geometry. We demonstrate that this encoding naturally produces the (3+1) spacetime decomposition, establishes immediate bimetric coupling between dual Field Chambers, and achieves geometric closure through complementary pair activation.
+This document describes the mathematical foundations of the field closure traversal algorithm implemented in the GFM (Gravity Field Dynamics) engine. The traversal mechanism employs the transcendental constant pi expressed in octal (base-8) representation to deterministically visit vertices of the stellated octahedron geometry. We demonstrate that this encoding naturally produces the (3+1) spacetime decomposition, establishes immediate bimetric coupling between dual Field Chambers, and achieves geometric closure through complementary pair activation.
 
 
 
@@ -64,7 +64,7 @@ This document describes the mathematical foundations of the field closure traver
 
 
 
-Field closure is the process by which gravitational configurations resolve to geometric consistency. As established in Chapters 3-5 of the GFD theoretical framework, closure operates through three stages:
+Field closure is the process by which gravitational configurations resolve to geometric consistency. As established in Chapters 3-5 of the GFM theoretical framework, closure operates through three stages:
 
 
 
@@ -2508,7 +2508,7 @@ These results support the theoretical prediction that field closure topology is 
 
 
 
-\\\*\\\*Engine Version\\\*\\\*: GFD Model v2  
+\\\*\\\*Engine Version\\\*\\\*: GFM Model v2  
 
 
 

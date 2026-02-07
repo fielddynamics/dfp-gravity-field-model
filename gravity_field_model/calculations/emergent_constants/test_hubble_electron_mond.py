@@ -1,8 +1,8 @@
 """
-MOND Acceleration Scale from GFD Geometry
+MOND Acceleration Scale from GFM Geometry
 =========================================
 
-This module examines GFD's derivation of the MOND acceleration scale a_0
+This module examines GFM's derivation of the MOND acceleration scale a_0
 from electron properties and the Field Closure constant k=4.
 
 THE DERIVATION CHAIN:
@@ -26,7 +26,7 @@ The question: Is the factor k^2 = 16 DERIVED from geometry,
 or is it FITTED to produce the known a_0?
 
 References:
-- GFD Textbook Chapter 6
+- GFM Textbook Chapter 6
 - Milgrom (1983) MOND
 - GW170817 Hubble measurement
 """
@@ -68,7 +68,7 @@ def get_geometry_bridge():
 
 
 def get_a0_from_geometry():
-    """MOND acceleration from GFD: a_0 = k^2 * G * m_e / r_e^2."""
+    """MOND acceleration from GFM: a_0 = k^2 * G * m_e / r_e^2."""
     return (K**2) * G * ELECTRON_MASS / (R_E**2)
 
 
@@ -93,7 +93,7 @@ class MONDScaleFromGeometry(Test):
     """
     THE a_0 DERIVATION: a_0 = k^2 * G * m_e / r_e^2
     
-    This is the key formula that connects GFD geometry to MOND.
+    This is the key formula that connects GFM geometry to MOND.
     
     WHY k^2 = 16?
     k = 4 is the tetrahedral closure constant (minimum faces to enclose 3D).
@@ -107,7 +107,7 @@ class MONDScaleFromGeometry(Test):
         "Why does the MOND transition occur at a_0 ~ 1.2e-10 m/s^2? Field envelope coupling "
         "with k^2 = 16 channels gives a_0 = k^2 * G * m_e / r_e^2, matching observations."
     )
-    reference = "GFD Framework, Milgrom (1983)"
+    reference = "GFM Framework, Milgrom (1983)"
     tolerance = 0.05
     level = Level.CRITICAL
     audit_score = 91
@@ -117,13 +117,13 @@ class MONDScaleFromGeometry(Test):
         "(Answering would improve Derivation by +3 points: justifying the face-to-face counting) "
         "Q2: How do field envelope interactions at r_e scale produce effects at galactic scales? "
         "(Answering would improve Commentary by +2 points: bridging micro-macro connection) "
-        "Q3: What distinguishes GFD's a_0 derivation from dark matter explanations? "
+        "Q3: What distinguishes GFM's a_0 derivation from dark matter explanations? "
         "(Answering would improve Audience Accessibility by +3 points: contrasting paradigms)"
     )
     
     commentary = (
         "THE DERIVATION:\n"
-        "GFD claims the MOND acceleration scale emerges from Field Envelope\n"
+        "GFM claims the MOND acceleration scale emerges from Field Envelope\n"
         "geometry. The electron's classical radius r_e defines the fundamental\n"
         "tile size, and the electron mass m_e defines the tile's inertia.\n\n"
         "Step 1: Two Field Envelopes couple through their k=4 faces.\n"
@@ -143,7 +143,7 @@ class MONDScaleFromGeometry(Test):
     def derivation(self) -> Derivation:
         return (
             Derivation()
-            .step("MOND SCALE FROM GFD GEOMETRY:")
+            .step("MOND SCALE FROM GFM GEOMETRY:")
             .step("k = 4 (tetrahedral closure constant)")
             .step("k^2 = 16 (face-to-face coupling channels)")
             .step("G = 6.674e-11 m^3/(kg*s^2)")
@@ -153,7 +153,7 @@ class MONDScaleFromGeometry(Test):
             .step("a_0 = 16 * 6.674e-11 * 9.109e-31 / (2.818e-15)^2")
             .step("a_0 = 16 * 7.64e-11 = 1.22e-10 m/s^2")
             .step("MOND observed: a_0 ~ 1.2e-10 m/s^2")
-            .conclude("GFD predicts a_0 to within ~2% of MOND value.")
+            .conclude("GFM predicts a_0 to within ~2% of MOND value.")
         )
     
     def model(self) -> Model:
@@ -200,7 +200,7 @@ class GeometryBridge(Test):
         "Why does sqrt(k/pi) bridge continuous and discrete geometry? Spherical geometry "
         "uses pi (4*pi steradians), while tetrahedral uses k=4 discrete ports. The ratio bridges them."
     )
-    reference = "GFD Framework"
+    reference = "GFM Framework"
     tolerance = 0.001
     level = Level.STANDARD
     audit_score = 86
@@ -210,7 +210,7 @@ class GeometryBridge(Test):
         "(Answering would improve Derivation by +2 points: explaining area vs length scaling) "
         "Q2: Where else in physics do spherical-to-discrete geometry conversions appear? "
         "(Answering would improve Audience Accessibility by +3 points: providing familiar analogies) "
-        "Q3: Does the bridge factor appear in other GFD derivations beyond Hubble? "
+        "Q3: Does the bridge factor appear in other GFM derivations beyond Hubble? "
         "(Answering would improve Commentary by +2 points: showing framework consistency)"
     )
     
@@ -285,11 +285,11 @@ class HubbleFromMOND(Test):
     audit_score = 93
     audit_notes = None
     future_questions = (
-        "Q1: Why does GFD predict 70 km/s/Mpc while Planck and SH0ES disagree with each other? "
+        "Q1: Why does GFM predict 70 km/s/Mpc while Planck and SH0ES disagree with each other? "
         "(Answering would improve Commentary by +3 points: addressing the Hubble tension directly) "
         "Q2: How does the horizon thermodynamics step connect to the Gibbons-Hawking temperature? "
         "(Answering would improve Derivation by +2 points: making the physics chain explicit) "
-        "Q3: What future observations could definitively test the GFD Hubble prediction? "
+        "Q3: What future observations could definitively test the GFM Hubble prediction? "
         "(Answering would improve Observation Quality by +3 points: identifying discriminating tests)"
     )
     
@@ -305,20 +305,20 @@ class HubbleFromMOND(Test):
         "- GW170817 (direct): 70.0 +/- 12 km/s/Mpc [BEST MATCH]\n"
         "- Planck CMB: 67.4 +/- 0.5 km/s/Mpc\n"
         "- SH0ES distance ladder: 73.0 +/- 1.0 km/s/Mpc\n\n"
-        "The GFD prediction sits exactly at the GW170817 value,\n"
+        "The GFM prediction sits exactly at the GW170817 value,\n"
         "between Planck and SH0ES (the 'Hubble tension')."
     )
     
     def derivation(self) -> Derivation:
         return (
             Derivation()
-            .step("HUBBLE FROM GFD:")
+            .step("HUBBLE FROM GFM:")
             .step("a_0 = k^2 * G * m_e / r_e^2 = 1.22e-10 m/s^2")
             .step("H_flat = 2*pi*a_0/c = 2*pi * 1.22e-10 / 3e8")
             .step("H_flat = 2.56e-18 s^-1 = 79 km/s/Mpc")
             .step("Geometry correction: divide by sqrt(k/pi) = 1.128")
             .step("H = 79 / 1.128 = 70.0 km/s/Mpc")
-            .conclude("GFD predicts H = 70 km/s/Mpc, matching GW170817.")
+            .conclude("GFM predicts H = 70 km/s/Mpc, matching GW170817.")
         )
     
     def model(self) -> Model:
@@ -380,7 +380,7 @@ class DerivationConsistency(Test):
         "(Answering would improve Commentary by +3 points: interpreting consistency properly) "
         "Q2: Could numerical precision limitations mask a small algebraic inconsistency? "
         "(Answering would improve Observation Quality by +2 points: addressing computation limits) "
-        "Q3: Are there other closed loops in GFD that could serve as consistency tests? "
+        "Q3: Are there other closed loops in GFM that could serve as consistency tests? "
         "(Answering would improve Derivation by +2 points: suggesting additional verification paths)"
     )
     
@@ -440,9 +440,9 @@ ALL_TESTS = [
 def run_all() -> bool:
     """Run all Hubble-Electron-MOND tests."""
     return run_tests(
-        title="MOND Acceleration Scale from GFD Geometry",
+        title="MOND Acceleration Scale from GFM Geometry",
         summary=(
-            "This module tests GFD's derivation of the MOND acceleration scale.\n\n"
+            "This module tests GFM's derivation of the MOND acceleration scale.\n\n"
             "THE DERIVATION CHAIN:\n"
             "1. a_0 = k^2 * G * m_e / r_e^2 = 1.22e-10 m/s^2 (geometry)\n"
             "2. H_flat = 2*pi*a_0/c = 79 km/s/Mpc (horizon thermodynamics)\n"

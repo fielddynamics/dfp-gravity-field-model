@@ -1,5 +1,5 @@
 """
-Emergent Constants: Fundamental Parameters from GFD Geometry
+Emergent Constants: Fundamental Parameters from GFM Geometry
 ============================================================
 
 This module demonstrates that fundamental physical constants are NOT

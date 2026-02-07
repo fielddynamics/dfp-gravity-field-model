@@ -12,7 +12,7 @@ The geometry of the cube then maps to operations on qubits.
 
 WHAT THIS MEANS:
 The correspondences here are MATHEMATICAL FACTS, not physical claims. Whether
-they have physical significance for GFD is a separate question. We document
+they have physical significance for GFM is a separate question. We document
 them because they exist and may be useful.
 
 TEXTBOOK REFERENCE:
@@ -68,7 +68,7 @@ class ThreeQubitBijection(Test):
         "system? Both have 2^d = 8 states in d=3 dimensions, revealing a deep "
         "isomorphism between spatial geometry and quantum information."
     )
-    reference = "GFD Textbook Ch.9 Sec.9.2; Nielsen & Chuang (2000) quantum computing"
+    reference = "GFM Textbook Ch.9 Sec.9.2; Nielsen & Chuang (2000) quantum computing"
     tolerance = 0.01
     commentary = (
         "The bijection vertex i <-> |bin(i)> identifies cube corners with "
@@ -125,7 +125,7 @@ class ParityEqualsParityObservable(Test):
         "quantum parity observable? This reveals how bimetric structure emerges "
         "from a fundamental quantum symmetry operator."
     )
-    reference = "GFD Textbook Ch.9; Quantum parity operator P = Z tensor Z tensor Z"
+    reference = "GFM Textbook Ch.9; Quantum parity operator P = Z tensor Z tensor Z"
     tolerance = 0.01
     commentary = (
         "The parity observable P = Z1 x Z2 x Z3 has eigenvalue +1 for states with "
@@ -183,7 +183,7 @@ class GHZStateIsBodyDiagonal(Test):
         "most distant vertices, revealing how maximal entanglement maps to "
         "maximal geometric separation."
     )
-    reference = "Greenberger, Horne, Zeilinger (1989); GFD Textbook Ch.9"
+    reference = "Greenberger, Horne, Zeilinger (1989); GFM Textbook Ch.9"
     tolerance = 0.01
     commentary = (
         "The GHZ state superposes vertices 0 and 7, which have maximum Hamming "
@@ -251,7 +251,7 @@ class WStateIsTriangle(Test):
         "This shows how another canonical entangled state maps to a regular "
         "geometric structure within Chamber A."
     )
-    reference = "Dur, Vidal, Cirac (2000); GFD Textbook Ch.9"
+    reference = "Dur, Vidal, Cirac (2000); GFM Textbook Ch.9"
     tolerance = 0.05
     commentary = (
         "Vertices 1, 2, 4 are three corners of Tet A (excluding apex 7). Each "
@@ -322,7 +322,7 @@ class HammingDistanceClassification(Test):
         "geometric categories? This reveals how bit-flip distance maps directly "
         "to spatial structure: edges, face diagonals, and body diagonals."
     )
-    reference = "Hamming (1950); GFD Textbook Ch.9 Sec.9.2"
+    reference = "Hamming (1950); GFM Textbook Ch.9 Sec.9.2"
     tolerance = 0.01
     commentary = (
         "Hamming distance 1, 2, 3 correspond to edges (12), face diagonals (12), "
@@ -388,7 +388,7 @@ class PauliOperatorsAsReflections(Test):
         "coordinate planes? This isomorphism shows how fundamental quantum "
         "gates map directly to spatial symmetry operations."
     )
-    reference = "Pauli matrices; GFD Textbook Ch.9: Geometry-gate correspondence"
+    reference = "Pauli matrices; GFM Textbook Ch.9: Geometry-gate correspondence"
     tolerance = 0.01
     commentary = (
         "The Pauli X_i flips bit i, which geometrically reflects the vertex "

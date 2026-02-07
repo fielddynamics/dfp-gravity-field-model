@@ -109,7 +109,7 @@ def get_binding_energy(A: int) -> float:
     ),
     contribution_score=75,
     contribution_notes=(
-        "Discovery: 28/40 - Core GFD concept linking binding energy to field closure. "
+        "Discovery: 28/40 - Core GFM concept linking binding energy to field closure. "
         "Precision: 18/20 - Exact calculation, validated against nuclear data. "
         "Cross-Domain: 17/20 - Used in stellar mechanics, fusion analysis, element studies. "
         "Falsifiability: 12/20 - Predicts Fe-56 peak, testable against nuclear physics."

@@ -2,7 +2,7 @@
 Black Hole Mechanics Tests
 
 Tests for extreme gravity field compression and spacetime topology,
-comparing GFD model predictions against general relativity and
+comparing GFM model predictions against general relativity and
 observational data from LIGO and EHT.
 """
 

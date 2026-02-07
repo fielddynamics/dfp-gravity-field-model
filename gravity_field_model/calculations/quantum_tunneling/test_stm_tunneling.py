@@ -12,9 +12,9 @@ and phi is the effective work function (barrier height). This exponential
 sensitivity, roughly one order of magnitude per angstrom, enables atomic
 resolution imaging and provides a clean testbed for the WKB formula.
 
-GFD OBSERVATION: The decay constant kappa involves sqrt(2*m_e), and the
+GFM OBSERVATION: The decay constant kappa involves sqrt(2*m_e), and the
 factor 2 in the exponent 2*kappa*d echoes the k=4 closure constant as
-2*kappa = k*kappa/2, though no derivation connects GFD to this formula.
+2*kappa = k*kappa/2, though no derivation connects GFM to this formula.
 
 This is an OBSERVATION, not a derivation.
 """
@@ -43,16 +43,16 @@ class STMVacuumBarrierTunneling(Test):
     extraordinary sensitivity is what enables sub angstrom vertical resolution
     and true atomic scale imaging of surfaces.
 
-    GFD OBSERVATION:
+    GFM OBSERVATION:
     The tunneling exponent is 2*kappa*d, where the factor 2 arises from the
-    round trip phase accumulation in the WKB integral. In GFD geometry, the
+    round trip phase accumulation in the WKB integral. In GFM geometry, the
     closure constant k=4 appears in spherical surface integrals (4*pi*r^2),
     and 2 = k/2 = 4/2. The work function phi sets the barrier height, which
     is determined by the electronic surface potential, a boundary condition
     analogous to Field Closure boundaries. These are pattern observations only.
 
     EPISTEMIC STATUS:
-    This is a STANDARD PHYSICS reference test. GFD geometric patterns are
+    This is a STANDARD PHYSICS reference test. GFM geometric patterns are
     noted as OBSERVATIONS. No derivation connects Field Closure to the WKB
     tunneling formula or to the magnitude of metallic work functions.
     """
@@ -88,17 +88,17 @@ class STMVacuumBarrierTunneling(Test):
         "height (work function) is a well characterized material property. "
         "The exponential current decay rate 2*kappa has been measured for "
         "numerous metals and agrees with WKB predictions to within a few "
-        "percent. GFD notes as an observation that the factor 2 in the "
+        "percent. GFM notes as an observation that the factor 2 in the "
         "exponent and the role of surface boundary conditions resemble "
         "Field Closure geometry, but this is not a derivation. The test "
         "establishes that standard QM tunneling theory works quantitatively "
-        "for vacuum barriers before exploring any GFD interpretations."
+        "for vacuum barriers before exploring any GFM interpretations."
     )
 
     # Audit scoring
     audit_score = 86
     audit_notes = (
-        "Question: 14/15 (strong mystery hook with the one order of magnitude per angstrom framing and specific numbers for gold; could sharpen stakes slightly by contrasting with classical expectation of zero current). Derivation: 13/15 (excellent intuition first structure, clear physical setup before math, good numerical walkthrough for gold; minor issue: the step explaining why probability is amplitude squared feels slightly rushed, and the multiple metals step is more of a list than a derivation). Commentary: 12/15 (good insight about STM being the cleanest tunneling testbed, honest about GFD observation status; lacks a memorable analogy for general readers and does not state broader implications beyond establishing baseline). Model: 8/10 (clean structure with four metals and meaningful derived quantities like decades per angstrom; the reconstructed phi value is a self consistency check rather than an independent prediction, and decay_factor is computed but never added to the model output). Observations: 7/10 (values are reasonable and consistent with literature; however the kappa values listed as measured are actually computed from work functions using the same WKB formula being tested, making the comparison partially circular; Chen 2008 Table 2.1 is cited but specific experimental kappa measurements from I vs d curves would strengthen traceability). Constants: 9/10 (M_E, HBAR, EV properly imported from common; C, K, ALPHA, E_CHARGE are imported but never used in the model or observations, which is minor clutter). Accessibility: 13/15 (undergrads can follow the core argument well, the one order of magnitude per angstrom rule of thumb is excellent pedagogical anchoring; some intermediate steps in the numerical evaluation assume comfort with SI unit manipulation, and the GFD observation about 2 = k/2 may confuse readers unfamiliar with the framework). Header: 10/10 (comprehensive module docstring covering phenomenon, formula, GFD observation, and epistemic disclaimer; clear scope and honest limitations)."
+        "Question: 14/15 (strong mystery hook with the one order of magnitude per angstrom framing and specific numbers for gold; could sharpen stakes slightly by contrasting with classical expectation of zero current). Derivation: 13/15 (excellent intuition first structure, clear physical setup before math, good numerical walkthrough for gold; minor issue: the step explaining why probability is amplitude squared feels slightly rushed, and the multiple metals step is more of a list than a derivation). Commentary: 12/15 (good insight about STM being the cleanest tunneling testbed, honest about GFM observation status; lacks a memorable analogy for general readers and does not state broader implications beyond establishing baseline). Model: 8/10 (clean structure with four metals and meaningful derived quantities like decades per angstrom; the reconstructed phi value is a self consistency check rather than an independent prediction, and decay_factor is computed but never added to the model output). Observations: 7/10 (values are reasonable and consistent with literature; however the kappa values listed as measured are actually computed from work functions using the same WKB formula being tested, making the comparison partially circular; Chen 2008 Table 2.1 is cited but specific experimental kappa measurements from I vs d curves would strengthen traceability). Constants: 9/10 (M_E, HBAR, EV properly imported from common; C, K, ALPHA, E_CHARGE are imported but never used in the model or observations, which is minor clutter). Accessibility: 13/15 (undergrads can follow the core argument well, the one order of magnitude per angstrom rule of thumb is excellent pedagogical anchoring; some intermediate steps in the numerical evaluation assume comfort with SI unit manipulation, and the GFM observation about 2 = k/2 may confuse readers unfamiliar with the framework). Header: 10/10 (comprehensive module docstring covering phenomenon, formula, GFM observation, and epistemic disclaimer; clear scope and honest limitations)."
     )
 
     academic_paper = """\
@@ -106,7 +106,7 @@ TITLE
 WKB Tunneling Decay Constants in Scanning Tunneling Microscopy: Validation Across Four Metals
 
 ABSTRACT
-This investigation validates the WKB tunneling formula kappa = sqrt(2*m_e*phi)/hbar against scanning tunneling microscopy decay constants for gold, tungsten, platinum, and aluminum. All four metals agree within 5% tolerance. GFD geometric patterns in the exponent structure are noted as OBSERVATIONS only.
+This investigation validates the WKB tunneling formula kappa = sqrt(2*m_e*phi)/hbar against scanning tunneling microscopy decay constants for gold, tungsten, platinum, and aluminum. All four metals agree within 5% tolerance. GFM geometric patterns in the exponent structure are noted as OBSERVATIONS only.
 
 1. INTRODUCTION: THE SCIENTIFIC QUESTION
 
@@ -114,7 +114,7 @@ Why does the tunneling current in a scanning tunneling microscope decrease by ap
 
 Standard physics provides a complete answer through the WKB approximation. An electron at the Fermi level of a metallic tip encounters a vacuum barrier of height phi (the work function) when crossing to the sample surface. The Schrodinger equation in the forbidden region yields an exponentially decaying wavefunction with decay constant kappa = sqrt(2*m_e*phi)/hbar. The tunneling current, proportional to the transmission probability, scales as exp(-2*kappa*d) where d is the gap width.
 
-GFD observes that the factor 2 in the exponent 2*kappa*d relates to k/2 where k=4 is the closure constant, and that work functions define electronic surface boundaries analogous to Field Closure boundaries. These remain pattern observations without derivation.
+GFM observes that the factor 2 in the exponent 2*kappa*d relates to k/2 where k=4 is the closure constant, and that work functions define electronic surface boundaries analogous to Field Closure boundaries. These remain pattern observations without derivation.
 
 This test specifically investigates whether the WKB formula reproduces measured tunneling decay constants for four representative metals spanning work functions from 4.28 eV to 5.65 eV.
 
@@ -137,15 +137,15 @@ Observational data from STM literature matches all model values. The decades per
 
 The results confirm that the WKB tunneling formula quantitatively reproduces STM decay constants across a representative range of metallic surfaces. The square root dependence on barrier height means that material differences in work function produce relatively modest changes in tunneling sensitivity, explaining why STM achieves atomic resolution on diverse surfaces.
 
-EPISTEMIC STATUS: OBSERVATION. The GFD pattern that 2 = k/2 appears in the tunneling exponent is a numerical coincidence until a derivation connects Field Closure dynamics to the Schrodinger equation. The boundary condition analogy between work function surfaces and closure surfaces is suggestive but unproven. This test establishes baseline agreement with standard quantum mechanics.
+EPISTEMIC STATUS: OBSERVATION. The GFM pattern that 2 = k/2 appears in the tunneling exponent is a numerical coincidence until a derivation connects Field Closure dynamics to the Schrodinger equation. The boundary condition analogy between work function surfaces and closure surfaces is suggestive but unproven. This test establishes baseline agreement with standard quantum mechanics.
 
 5. LIMITATIONS AND HONESTY STATEMENT
 
-This test does NOT derive tunneling from GFD principles. The observed kappa values used for comparison are themselves computed from work functions using the same WKB formula, introducing partial circularity. Direct experimental kappa measurements from current versus distance curves would provide stronger validation. The model assumes a rectangular barrier, neglecting image charge corrections that reduce effective barrier heights by 10 to 20 percent at sub nanometer gaps.
+This test does NOT derive tunneling from GFM principles. The observed kappa values used for comparison are themselves computed from work functions using the same WKB formula, introducing partial circularity. Direct experimental kappa measurements from current versus distance curves would provide stronger validation. The model assumes a rectangular barrier, neglecting image charge corrections that reduce effective barrier heights by 10 to 20 percent at sub nanometer gaps.
 
 6. CONCLUSION
 
-We validate the WKB tunneling formula across four metals in the STM geometry, confirming agreement within stated tolerance. This establishes that standard quantum tunneling theory works quantitatively for vacuum barriers and provides a reference baseline for the quantum tunneling test domain. GFD geometric patterns are documented as observations meriting further investigation.
+We validate the WKB tunneling formula across four metals in the STM geometry, confirming agreement within stated tolerance. This establishes that standard quantum tunneling theory works quantitatively for vacuum barriers and provides a reference baseline for the quantum tunneling test domain. GFM geometric patterns are documented as observations meriting further investigation.
     """
 
 
@@ -216,21 +216,21 @@ We validate the WKB tunneling formula across four metals in the STM geometry, co
                 "For aluminum (phi = 4.28 eV), kappa_Al = 10.60 per angstrom."
             )
             .step(
-                "GFD OBSERVATION: The exponent 2*kappa*d contains the factor 2, "
+                "GFM OBSERVATION: The exponent 2*kappa*d contains the factor 2, "
                 "which in standard QM arises from the probability being the "
                 "square of the wavefunction amplitude (psi decays as exp(-kappa*d), "
-                "probability as exp(-2*kappa*d)). In GFD geometry, 2 = k/2 = 4/2, "
+                "probability as exp(-2*kappa*d)). In GFM geometry, 2 = k/2 = 4/2, "
                 "and the surface area 4*pi*r^2 involves k=4. The work function "
                 "phi defines a field boundary analogous to the closure boundary "
-                "in GFD. These patterns are noted but do not constitute a "
-                "derivation of the tunneling formula from GFD principles."
+                "in GFM. These patterns are noted but do not constitute a "
+                "derivation of the tunneling formula from GFM principles."
             )
             .conclude(
                 "The WKB formula kappa = sqrt(2*m_e*phi)/hbar predicts STM "
                 "tunneling decay constants for multiple metals to within a few "
                 "percent of measured values. The ~10x current change per angstrom "
                 "for typical work functions (4 to 6 eV) is a direct consequence "
-                "of the electron mass and barrier height. GFD geometric patterns "
+                "of the electron mass and barrier height. GFM geometric patterns "
                 "(k=4, boundary conditions) are observed in the formula structure "
                 "but remain interpretive, not predictive."
             )

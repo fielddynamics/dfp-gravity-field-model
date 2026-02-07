@@ -11,7 +11,7 @@ regions. This is a well-known theorem of Euclidean geometry (the medial triangle
 has 1/4 the area of the original). The number 4 matches k, the closure constant.
 
 WHY THIS MATTERS:
-If GFD field sampling requires uniform coverage of each face, the medial subdivision
+If GFM field sampling requires uniform coverage of each face, the medial subdivision
 provides exactly that. Each of the 8 faces subdivides into 4 regions, giving 32
 total sampling points. This connects geometry to sampling theory.
 
@@ -83,7 +83,7 @@ class MedialSubdivisionCount(Test):
         "matching the closure constant k=4? This reveals a geometric coincidence "
         "between face subdivision and tetrahedral topology."
     )
-    reference = "GFD Textbook Ch.7 Sec.7.2: Medial triangle theorem"
+    reference = "GFM Textbook Ch.7 Sec.7.2: Medial triangle theorem"
     tolerance = 0.01
     commentary = (
         "The medial triangle divides the original into 4 congruent sub-triangles: "
@@ -132,7 +132,7 @@ class TotalSamplingRegions(Test):
         "how the binary structure of the cube (2^3 vertices) extends to face "
         "sampling via 8 faces x 4 regions = 2^3 x 2^2 = 2^5."
     )
-    reference = "GFD Textbook Ch.9: Binary structure of stellated octahedron"
+    reference = "GFM Textbook Ch.9: Binary structure of stellated octahedron"
     tolerance = 0.01
     commentary = (
         "The 32 = 2^5 sampling regions inherit the binary structure of the "
@@ -179,7 +179,7 @@ class AllFacesAreTriangles(Test):
         "Triangles are the simplest possible polygons, making the tetrahedron "
         "the minimal 3D enclosure, which is why field closure uses this geometry."
     )
-    reference = "GFD Textbook Ch.7 Sec.7.2: Tetrahedron as minimal 3D enclosure"
+    reference = "GFM Textbook Ch.7 Sec.7.2: Tetrahedron as minimal 3D enclosure"
     tolerance = 0.01
     commentary = (
         "The tetrahedron is the simplest 3D polyhedron (the 3-simplex), having "
@@ -234,7 +234,7 @@ class MedialTriangleAreaRatio(Test):
         "This 1:4 ratio connects to k=4 and ensures each subdivision region "
         "receives equal field coverage."
     )
-    reference = "Euclidean geometry; GFD Textbook Ch.7: Area scaling theorem"
+    reference = "Euclidean geometry; GFM Textbook Ch.7: Area scaling theorem"
     tolerance = 0.01
     commentary = (
         "The medial triangle has sides 1/2 the length of the original, so its "
@@ -293,7 +293,7 @@ class SubTrianglesCongruent(Test):
         "ensures equal field sampling weight across each Coupling Port, "
         "preventing any directional bias in field closure."
     )
-    reference = "GFD Textbook Ch.7: Uniform face sampling requirement"
+    reference = "GFM Textbook Ch.7: Uniform face sampling requirement"
     tolerance = 0.01
     commentary = (
         "Each of the 4 sub-triangles has area exactly 1/4 of the original. "
@@ -358,7 +358,7 @@ class SubdivisionMatchesK(Test):
         "Both numbers emerge from 3D geometry: k=4 from the tetrahedron being the "
         "minimal enclosure, and 4 sub-triangles from the medial construction."
     )
-    reference = "GFD Textbook Ch.7 Sec.7.2: The simplex theorem and k=4"
+    reference = "GFM Textbook Ch.7 Sec.7.2: The simplex theorem and k=4"
     tolerance = 0.01
     commentary = (
         "Both the tetrahedron face count (k=4) and the medial subdivision count (4) "
@@ -370,7 +370,7 @@ class SubdivisionMatchesK(Test):
     def derivation(self):
         return (
             Derivation()
-            .step("The GFD closure constant k=4 comes from tetrahedral topology.")
+            .step("The GFM closure constant k=4 comes from tetrahedral topology.")
             .step("The medial subdivision count 4 comes from Euclidean geometry.")
             .step("Both are consequences of working in 3 dimensions.")
             .step("The tetrahedron has k=4 faces; medial gives 4 sub-regions.")

@@ -9,7 +9,7 @@ EXPLORING:
 - Why does the Rayleigh-Jeans law have factor 8*pi? Because 2^d * pi = VERTICES * pi.
 - Why does the wave equation Laplacian have 3 terms? Because d = 3 spatial dimensions.
 - Why does the Debye model give 3N total modes? Because d = 3 vibrational DOF per atom.
-- Do all wave physics coefficients {2, 3, 4, 8} decompose into GFD structural numbers?
+- Do all wave physics coefficients {2, 3, 4, 8} decompose into GFM structural numbers?
 
 GRADUATION CHECKLIST:
 [x] File name is descriptive (not "probing" or "stuff")
@@ -20,12 +20,12 @@ GRADUATION CHECKLIST:
 [ ] Rename to test_wave_mode_density_dimensional_scaling.py
 [ ] Delete this sandbox file
 
-GFD Model V2
+GFM Model V2
 
 HONESTY STATEMENT:
 This module verifies STANDARD WAVE PHYSICS and explores potential
-GFD correspondences. The physics is well established from classical
-mechanics, electrodynamics, and statistical mechanics. GFD provides
+GFM correspondences. The physics is well established from classical
+mechanics, electrodynamics, and statistical mechanics. GFM provides
 a geometric framework for interpretation but does NOT derive these
 values from first principles.
 
@@ -35,11 +35,11 @@ WHAT IS VERIFIED (standard physics):
 - Wave equation Laplacian structure in d dimensions
 - Debye model total mode count 3N
 
-GFD OBSERVATIONS (patterns noted, not derived):
+GFM OBSERVATIONS (patterns noted, not derived):
 - d-1 = 2 = len(TIME_FACES): mode density exponent matches time face count
 - 8 = 2^d = len(VERTICES): Rayleigh-Jeans factor matches vertex count
 - d = 3: Laplacian terms and Debye DOF match spatial dimension count
-- Wave coefficients {2, 3, 4, 8} are all GFD structural numbers
+- Wave coefficients {2, 3, 4, 8} are all GFM structural numbers
 
 TARGET DOMAIN FOLDER: calculations/field_theory/
 """
@@ -56,7 +56,7 @@ from gravity_field_model.common import (
 # CONSTANTS (document sources)
 # =============================================================================
 
-# Spatial dimensions (standard physics, not GFD-specific)
+# Spatial dimensions (standard physics, not GFM-specific)
 D_SPATIAL = 3
 
 # Derived dimensional quantities
@@ -131,24 +131,24 @@ class ModeDensityExponent(Test):
     HONESTY: The exponent d-1 is standard physics from dimensional analysis
     of the density of states in d-dimensional k-space. The volume of a
     d-sphere shell grows as k^(d-1) dk, and since omega = v*k, we get
-    g(omega) ~ omega^(d-1). For d=3, the exponent is 2. GFD notes that
+    g(omega) ~ omega^(d-1). For d=3, the exponent is 2. GFM notes that
     2 = len(TIME_FACES). This is an OBSERVATION.
     """
     audit_score = 88
     audit_notes = (
         "Question: 14/15 - Strong 'why omega-squared' hook with physical depth. "
         "Derivation: 14/15 - Clear progression from k-space to omega exponent. "
-        "Commentary: 13/15 - Honest about standard physics, notes GFD link carefully. "
+        "Commentary: 13/15 - Honest about standard physics, notes GFM link carefully. "
         "Model: 9/10 - Clean output with binary match check. "
         "Observations: 9/10 - All from standard statistical mechanics, well-cited. "
         "Constants: 10/10 - All from common module. "
-        "Accessibility: 12/15 - Undergrad follows mode counting; PhD sees GFD link. "
+        "Accessibility: 12/15 - Undergrad follows mode counting; PhD sees GFM link. "
         "Header: 7/10 - Complete module docstring with goals and limitations. "
     )
     contribution_score = 55
     contribution_notes = (
         "Discovery: 22/40 - Observation that mode density exponent d-1 = 2 = "
-        "len(TIME_FACES). The d-1 dependence is textbook; the GFD correspondence "
+        "len(TIME_FACES). The d-1 dependence is textbook; the GFM correspondence "
         "is the new observation. Not a single-number coincidence since it connects "
         "to a structural geometric count (time faces). "
         "Precision: 16/20 - Exact integer match. No approximation involved. "
@@ -161,13 +161,13 @@ class ModeDensityExponent(Test):
     future_questions = (
         "Q1: The Planck distribution n(omega) ~ omega^(d-1) / (exp(hbar*omega/kT)-1) "
         "has the SAME d-1 exponent. Does the Bose-Einstein denominator also involve "
-        "GFD numbers? The exponential has hbar*omega/kT — no obvious integer. "
+        "GFM numbers? The exponential has hbar*omega/kT — no obvious integer. "
         "(Answering would improve Cross-Domain by +5: connects to quantum statistics) "
         "Q2: In 2D systems (graphene, surface waves), g(omega) ~ omega^1. "
-        "Does d-1 = 1 = len(TIME_FACES)/2? Is there a GFD interpretation of 2D? "
+        "Does d-1 = 1 = len(TIME_FACES)/2? Is there a GFM interpretation of 2D? "
         "(Answering would improve Falsifiability by +5: testable in lower dimension) "
         "Q3: The ultraviolet catastrophe arises because integral(omega^(d-1) domega) "
-        "diverges. Does GFD geometry suggest a natural cutoff frequency? "
+        "diverges. Does GFM geometry suggest a natural cutoff frequency? "
         "(Answering would improve Discovery by +8: potential prediction)"
     )
     name = "Mode Density Exponent: Why omega-squared?"
@@ -176,7 +176,7 @@ class ModeDensityExponent(Test):
         "g(omega) ~ omega^2. This exponent 2 = d-1 determines everything from "
         "the Debye heat capacity to the Planck radiation spectrum. WHY is the "
         "exponent d-1? Because k-space shells have volume ~ k^(d-1) dk. "
-        "GFD notes that d-1 = 2 equals len(TIME_FACES), the number of temporal "
+        "GFM notes that d-1 = 2 equals len(TIME_FACES), the number of temporal "
         "faces in the stellated octahedron. Is this a coincidence, or does the "
         "mode density exponent encode the temporal structure of the geometry?"
     )
@@ -199,7 +199,7 @@ class ModeDensityExponent(Test):
         "- Planck spectrum: u(omega) ~ omega^(d-1) / (exp(hbar*omega/kT) - 1)\n"
         "- Rayleigh-Jeans law: u(omega) ~ omega^(d-1) * kT (classical limit)\n"
         "- Photon number density: n(omega) ~ omega^(d-1) / (exp(...) - 1)\n\n"
-        "GFD OBSERVATION: d-1 = 2 = len(TIME_FACES). The stellated octahedron "
+        "GFM OBSERVATION: d-1 = 2 = len(TIME_FACES). The stellated octahedron "
         "has exactly 2 time faces (FACE_A7 and FACE_B0), one per tetrahedron. "
         "That the mode density exponent equals the time face count is documented "
         "as an observation. The physical origin is dimensional analysis of k-space."
@@ -217,15 +217,15 @@ class ModeDensityExponent(Test):
             .equation("g(omega) = dN/domega ~ omega^(d-1)")
             .step("For d = 3: g(omega) ~ omega^2.")
             .step("The exponent is d - 1 = 3 - 1 = 2.")
-            .step("GFD OBSERVATION: d - 1 = 2 = len(TIME_FACES).")
-            .conclude("Mode density exponent d-1 = 2 matches the GFD time face count.")
+            .step("GFM OBSERVATION: d - 1 = 2 = len(TIME_FACES).")
+            .conclude("Mode density exponent d-1 = 2 matches the GFM time face count.")
         )
 
     def model(self) -> Model:
         # The mode density exponent from standard physics
         exponent = mode_density_exponent(D_SPATIAL)
 
-        # GFD structural number
+        # GFM structural number
         n_time_faces = len(TIME_FACES)
 
         # Check correspondence
@@ -267,7 +267,7 @@ class RayleighJeansEightPi(Test):
     HONESTY: The Rayleigh-Jeans law u(nu) = 8*pi*nu^2*k_B*T/c^3 is
     classical physics derived from mode counting in a 3D cavity. The
     factor 8*pi comes from (4*pi solid angle) * (2 polarizations) = 8*pi.
-    GFD notes that 8 = 2^d = len(VERTICES). This is an OBSERVATION.
+    GFM notes that 8 = 2^d = len(VERTICES). This is an OBSERVATION.
     """
     audit_score = 86
     audit_notes = (
@@ -294,7 +294,7 @@ class RayleighJeansEightPi(Test):
     )
     future_questions = (
         "Q1: The full Planck law replaces k_B*T with hbar*omega/(exp(...)-1). "
-        "The 8*pi factor survives. Does the quantum correction involve GFD numbers? "
+        "The 8*pi factor survives. Does the quantum correction involve GFM numbers? "
         "(Answering would improve Discovery by +5: quantum modification structure) "
         "Q2: In the Stefan-Boltzmann law sigma = 2*pi^5*k_B^4 / (15*h^3*c^2), "
         "the factor 2 in the numerator — is this related to TIME_FACES? "
@@ -308,7 +308,7 @@ class RayleighJeansEightPi(Test):
         "The Rayleigh-Jeans law for classical radiation energy density is "
         "u(nu) = 8*pi*nu^2*k_B*T / c^3. The factor 8*pi combines the solid "
         "angle (4*pi) with the two polarization states of light (x2). "
-        "But 8 = 2^3 = 2^d = len(VERTICES) in GFD. Is the vertex count "
+        "But 8 = 2^3 = 2^d = len(VERTICES) in GFM. Is the vertex count "
         "of the stellated octahedron accidentally equal to the mode counting "
         "prefactor, or is there a deeper geometric reason?"
     )
@@ -327,7 +327,7 @@ class RayleighJeansEightPi(Test):
         "  8*pi = 2 * 4*pi = (polarizations) * (solid angle)\n"
         "  8 = 2^3 = 2^d\n"
         "  c^3: exponent 3 = d (speed of light raised to spatial dimension)\n\n"
-        "GFD OBSERVATION: 8 = len(VERTICES). The stellated octahedron has "
+        "GFM OBSERVATION: 8 = len(VERTICES). The stellated octahedron has "
         "8 vertices (cube corners). Also 8 = 2 * K_CLOSURE = 2 * 4. "
         "The decomposition 8*pi = VERTICES * pi is documented but the "
         "physical origin is mode counting, not geometry."
@@ -345,7 +345,7 @@ class RayleighJeansEightPi(Test):
             .step("The factor 8*pi arises: 4*pi (solid angle) * 2 (polarizations).")
             .step("Equipartition: each mode gets k_B*T of energy.")
             .equation("u(nu) = 8*pi*nu^2*k_B*T / c^3")
-            .step("GFD OBSERVATION: 8 = 2^d = 2^3 = len(VERTICES) = 8.")
+            .step("GFM OBSERVATION: 8 = 2^d = 2^3 = len(VERTICES) = 8.")
             .step("Also: c^3 has exponent 3 = d.")
             .conclude("Rayleigh-Jeans factor 8*pi = VERTICES * pi, and c^d appears in denominator.")
         )
@@ -357,10 +357,10 @@ class RayleighJeansEightPi(Test):
         # Standard value
         expected = 8 * math.pi
 
-        # GFD decomposition
+        # GFM decomposition
         n_vertices = len(VERTICES)
         two_to_d = 2**D_SPATIAL
-        gfd_factor = n_vertices * math.pi
+        GFM_factor = n_vertices * math.pi
 
         # Check matches
         match_8pi = 1.0 if abs(rj_factor - expected) < 1e-10 else 0.0
@@ -403,8 +403,8 @@ class WaveEquationLaplacianStructure(Test):
 
     HONESTY: The wave equation nabla^2 phi = (1/c^2) d^2phi/dt^2 is
     standard physics. The Laplacian has d = 3 terms. The c^2 exponent
-    is 2 = d-1 = TIME_FACES. These are dimensional facts, not GFD
-    predictions. GFD notes the correspondence.
+    is 2 = d-1 = TIME_FACES. These are dimensional facts, not GFM
+    predictions. GFM notes the correspondence.
     """
     audit_score = 85
     audit_notes = (
@@ -430,7 +430,7 @@ class WaveEquationLaplacianStructure(Test):
     )
     future_questions = (
         "Q1: The Klein-Gordon equation adds a mass term: (nabla^2 - m^2c^2/hbar^2) "
-        "phi = (1/c^2) d^2phi/dt^2. Does the mass term involve GFD numbers? "
+        "phi = (1/c^2) d^2phi/dt^2. Does the mass term involve GFM numbers? "
         "(Answering would improve Discovery by +5: massive wave equation) "
         "Q2: In curved spacetime, the wave equation involves the metric determinant: "
         "Box phi = g^{mu nu} nabla_mu nabla_nu phi. Does the (3+1) split reveal "
@@ -446,7 +446,7 @@ class WaveEquationLaplacianStructure(Test):
         "The wave equation nabla^2 phi = (1/c^2) d^2phi/dt^2 has a Laplacian "
         "with exactly d = 3 second-derivative terms (one per spatial dimension). "
         "The speed-of-light factor appears as c^2, with exponent 2 = d-1. "
-        "Both integers come from spatial dimensionality. GFD notes that "
+        "Both integers come from spatial dimensionality. GFM notes that "
         "d = 3 and d-1 = 2 = len(TIME_FACES). Is the wave equation structure "
         "encoded in the face counts of the stellated octahedron?"
     )
@@ -462,7 +462,7 @@ class WaveEquationLaplacianStructure(Test):
         "DIMENSIONAL ANALYSIS: The wave equation balances [length^(-2)] on the "
         "left with [time^(-2)] * [c^(-2)] on the right. Since c has dimensions "
         "[length/time], c^2 converts time derivatives to length dimensions.\n\n"
-        "GFD OBSERVATION:\n"
+        "GFM OBSERVATION:\n"
         "- Laplacian terms: d = 3 (spatial dimensions)\n"
         "- c^2 exponent: 2 = d-1 = len(TIME_FACES)\n"
         "- Total second derivatives: d + 1 = 4 = K_CLOSURE\n"
@@ -479,11 +479,11 @@ class WaveEquationLaplacianStructure(Test):
             .step("The Laplacian nabla^2 has d = 3 terms (one per spatial axis).")
             .step("The c^2 factor has exponent 2.")
             .step("Total second derivatives: d (spatial) + 1 (temporal) = d + 1 = 4.")
-            .step("GFD OBSERVATION:")
+            .step("GFM OBSERVATION:")
             .step("  d = 3: spatial Laplacian terms")
             .step("  2 = d-1 = len(TIME_FACES): c^2 exponent")
             .step("  d+1 = 4 = K_CLOSURE: total second derivatives")
-            .conclude("Wave equation structure maps to GFD numbers: d=3, d-1=2=TIME_FACES, d+1=4=K_CLOSURE.")
+            .conclude("Wave equation structure maps to GFM numbers: d=3, d-1=2=TIME_FACES, d+1=4=K_CLOSURE.")
         )
 
     def model(self) -> Model:
@@ -492,7 +492,7 @@ class WaveEquationLaplacianStructure(Test):
         c_exponent = 2  # c^2 in the wave equation
         total_second_derivs = D_SPATIAL + 1  # d spatial + 1 temporal
 
-        # GFD numbers
+        # GFM numbers
         n_time_faces = len(TIME_FACES)
         k_closure = K_CLOSURE
 
@@ -532,7 +532,7 @@ class DebyModelTotalModes(Test):
 
     HONESTY: The factor 3 is simply d = 3 (spatial dimensions), giving
     d degrees of vibrational freedom per atom. This is elementary classical
-    mechanics (equipartition theorem). GFD notes that d = 3 is encoded
+    mechanics (equipartition theorem). GFM notes that d = 3 is encoded
     in the stellated octahedron face structure (3 spatial faces per tetrahedron).
     """
     audit_score = 84
@@ -548,7 +548,7 @@ class DebyModelTotalModes(Test):
     )
     contribution_score = 40
     contribution_notes = (
-        "Discovery: 12/40 - Factor 3 = d is elementary. GFD adds the geometric "
+        "Discovery: 12/40 - Factor 3 = d is elementary. GFM adds the geometric "
         "interpretation (3 spatial faces per tetrahedron) but this is incremental. "
         "Precision: 14/20 - Exact integer. No approximation. "
         "Cross-Domain: 8/20 - Connects solid state (Debye) to the same d=3 "
@@ -560,14 +560,14 @@ class DebyModelTotalModes(Test):
     future_questions = (
         "Q1: The Debye temperature Theta_D = hbar*omega_D/k_B involves the "
         "cutoff frequency omega_D. Does omega_D for common solids involve "
-        "any GFD structural ratio? "
+        "any GFM structural ratio? "
         "(Answering would improve Discovery by +8: material-specific connection) "
         "Q2: The Debye T^3 law at low T has exponent 3 = d. This is the same "
         "exponent as BH evaporation. Is there a deeper connection between "
         "thermal radiation and phonon physics via dimensionality? "
         "(Answering would improve Cross-Domain by +5: phonon-photon parallel) "
         "Q3: In 2D materials (graphene), the Debye model gives T^2 heat capacity. "
-        "Can GFD accommodate dimensional reduction naturally? "
+        "Can GFM accommodate dimensional reduction naturally? "
         "(Answering would improve Falsifiability by +5: 2D prediction)"
     )
     name = "Debye Model: Why 3N Total Modes?"
@@ -576,7 +576,7 @@ class DebyModelTotalModes(Test):
         "factor 3 = d represents the d spatial degrees of freedom per atom. "
         "This determines the Dulong-Petit heat capacity (3Nk_B) at high T "
         "and the Debye T^3 law at low T. WHY 3 specifically? Because we "
-        "live in d = 3 spatial dimensions. GFD notes that each tetrahedron "
+        "live in d = 3 spatial dimensions. GFM notes that each tetrahedron "
         "in the stellated octahedron has 3 spatial faces, and d = 3 is the "
         "fundamental spatial dimension of the Merkaba geometry."
     )
@@ -594,7 +594,7 @@ class DebyModelTotalModes(Test):
         "- High T: equipartition gives C_V = d*N*k_B = 3Nk_B (Dulong-Petit)\n"
         "- Low T: Debye model gives C_V ~ (T/Theta_D)^d, so C_V ~ T^3\n"
         "- The exponent in the low-T law is also d, NOT d-1.\n\n"
-        "GFD OBSERVATION: d = 3 = number of spatial faces per tetrahedron. "
+        "GFM OBSERVATION: d = 3 = number of spatial faces per tetrahedron. "
         "The stellated octahedron has 6 spatial faces total, but each tetrahedron "
         "(TET_A or TET_B) contributes 3. The Debye DOF count equals the "
         "per-tetrahedron spatial face count. Documented, not claimed as derivation."
@@ -612,9 +612,9 @@ class DebyModelTotalModes(Test):
             .equation("E = 3 * N * k_B * T  (Dulong-Petit)")
             .step("At low T, only modes with hbar*omega < k_B*T are excited:")
             .equation("C_V ~ N * k_B * (T / Theta_D)^3  (Debye T^3 law)")
-            .step("GFD OBSERVATION: 3 = d = spatial faces per tetrahedron.")
+            .step("GFM OBSERVATION: 3 = d = spatial faces per tetrahedron.")
             .conclude("Debye total modes = d*N = 3N, where d is the spatial dimension "
-                      "and equals the spatial face count per tetrahedron in GFD.")
+                      "and equals the spatial face count per tetrahedron in GFM.")
         )
 
     def model(self) -> Model:
@@ -626,7 +626,7 @@ class DebyModelTotalModes(Test):
         # The factor 3 = d
         debye_factor = D_SPATIAL
 
-        # GFD: spatial faces per tetrahedron
+        # GFM: spatial faces per tetrahedron
         spatial_per_tet = len(SPATIAL_FACES) // 2  # 6 / 2 = 3
 
         # Check
@@ -662,11 +662,11 @@ class DebyModelTotalModes(Test):
 
 class WavePhysicsCoefficientCatalog(Test):
     """
-    Catalog all wave physics coefficients that match GFD structural numbers.
+    Catalog all wave physics coefficients that match GFM structural numbers.
 
     HONESTY: This is a systematic search for coincidences. All coefficients
     are from standard physics. The question is whether the frequency of
-    matches with GFD numbers {2, 3, 4, 8} exceeds random expectation.
+    matches with GFM numbers {2, 3, 4, 8} exceeds random expectation.
     Small-integer bias is a known concern.
     """
     audit_score = 82
@@ -683,7 +683,7 @@ class WavePhysicsCoefficientCatalog(Test):
     contribution_score = 58
     contribution_notes = (
         "Discovery: 23/40 - First systematic catalog of wave physics coefficients "
-        "matched against GFD numbers. Aggregates mode density, Rayleigh-Jeans, "
+        "matched against GFM numbers. Aggregates mode density, Rayleigh-Jeans, "
         "Debye, and wave equation structural parameters. "
         "Precision: 12/20 - All integer matches are exact, but probability "
         "estimate depends on assumptions about the reference set. "
@@ -696,25 +696,25 @@ class WavePhysicsCoefficientCatalog(Test):
     )
     future_questions = (
         "Q1: Combining this wave catalog with the BH coefficient catalog, "
-        "how many TOTAL coefficients match GFD numbers? Is the aggregate "
+        "how many TOTAL coefficients match GFM numbers? Is the aggregate "
         "probability more significant? "
         "(Answering would improve Precision by +5: larger sample) "
         "Q2: Acoustics has speed v = sqrt(B/rho) with a square root (exponent "
         "1/2). Does 1/2 = 1/TIME_FACES? Are fractional exponents in wave "
-        "physics also GFD-related? "
+        "physics also GFM-related? "
         "(Answering would improve Discovery by +5: extends to fractional coefficients) "
         "Q3: The UV catastrophe divergence is because integral(omega^2 domega) "
         "diverges. In d=2, integral(omega domega) also diverges. Only d=1 "
-        "converges marginally. Does GFD predict why d=3 is 'just catastrophic "
+        "converges marginally. Does GFM predict why d=3 is 'just catastrophic "
         "enough' to need quantum mechanics? "
         "(Answering would improve Commentary by +5: deep conceptual question)"
     )
-    name = "Wave Physics Coefficient Catalog: GFD Decompositions"
+    name = "Wave Physics Coefficient Catalog: GFM Decompositions"
     question = (
         "Across wave physics, several key coefficients are small integers: "
         "mode density exponent (2), Laplacian terms (3), total derivatives (4), "
         "Rayleigh-Jeans factor (8), Debye DOF (3), c exponents (2, 3). "
-        "Every one of these belongs to the GFD structural set {2, 3, 4, 8}. "
+        "Every one of these belongs to the GFM structural set {2, 3, 4, 8}. "
         "Is this systematic, or is it just small-integer bias? We catalog "
         "all decompositions and assess the aggregate probability."
     )
@@ -723,20 +723,20 @@ class WavePhysicsCoefficientCatalog(Test):
     level = Level.EXPLORATORY
     commentary = (
         "METHODOLOGY: Enumerate all distinct integer coefficients appearing "
-        "in wave physics formulas, and check each against GFD numbers.\n\n"
+        "in wave physics formulas, and check each against GFM numbers.\n\n"
         "WAVE PHYSICS COEFFICIENTS:\n"
         "  2: mode density exponent (d-1) = len(TIME_FACES)\n"
         "  3: Laplacian terms (d), Debye DOF per atom (d),\n"
         "     c^3 exponent in RJ denominator (d)\n"
         "  4: total 2nd derivatives in wave eq (d+1) = K_CLOSURE\n"
         "  8: RJ prefactor integer part (2^d) = len(VERTICES)\n\n"
-        "GFD NUMBERS in range 1-10: {1, 2, 3, 4, 5, 6, 8} = 7 values.\n\n"
+        "GFM NUMBERS in range 1-10: {1, 2, 3, 4, 5, 6, 8} = 7 values.\n\n"
         "DISTINCT wave coefficients: {2, 3, 4, 8} = 4 values. All match.\n\n"
         "CAVEATS:\n"
         "- These coefficients are NOT independent: 2 = d-1, 3 = d, 4 = d+1, "
         "8 = 2^d. They are all functions of d=3.\n"
         "- Small-integer bias: most physics coefficients are small integers.\n"
-        "- The observation is that ALL wave coefficients are GFD numbers, "
+        "- The observation is that ALL wave coefficients are GFM numbers, "
         "not that any INDIVIDUAL match is surprising.\n\n"
         "COMPARISON: The BH coefficient catalog found {2, 3, 4, 6, 8}. "
         "The wave catalog finds {2, 3, 4, 8}. The overlap is {2, 3, 4, 8}. "
@@ -746,7 +746,7 @@ class WavePhysicsCoefficientCatalog(Test):
     def derivation(self) -> Derivation:
         return (
             Derivation()
-            .step("QUESTION: How many wave physics coefficients match GFD numbers?")
+            .step("QUESTION: How many wave physics coefficients match GFM numbers?")
             .step("Step 1: Enumerate wave physics integer coefficients.")
             .step("  omega^2 exponent: 2 (from mode density, d-1)")
             .step("  Laplacian terms: 3 (from d spatial dimensions)")
@@ -756,18 +756,18 @@ class WavePhysicsCoefficientCatalog(Test):
             .step("  c^3 exponent: 3 (from d in RJ denominator)")
             .step("  c^2 exponent: 2 (from wave equation RHS)")
             .step("Step 2: Distinct values = {2, 3, 4, 8}.")
-            .step("Step 3: GFD structural numbers in 1-10 = {1, 2, 3, 4, 5, 6, 8}.")
-            .step("Step 4: All 4 wave coefficients are in the GFD set.")
+            .step("Step 3: GFM structural numbers in 1-10 = {1, 2, 3, 4, 5, 6, 8}.")
+            .step("Step 4: All 4 wave coefficients are in the GFM set.")
             .equation("P(4 random in {1..10} all match) = (7/10)^4 = 0.24")
             .step("CAVEAT: These are NOT independent. All derive from d=3.")
-            .step("The meaningful observation is that d=3 generates ONLY GFD numbers.")
-            .conclude("All wave physics coefficients {2, 3, 4, 8} are GFD structural numbers.")
+            .step("The meaningful observation is that d=3 generates ONLY GFM numbers.")
+            .conclude("All wave physics coefficients {2, 3, 4, 8} are GFM structural numbers.")
         )
 
     def model(self) -> Model:
-        # GFD structural numbers in 1-10
-        gfd_numbers = {1, 2, 3, 4, 5, 6, 8}
-        n_gfd = len(gfd_numbers)
+        # GFM structural numbers in 1-10
+        GFM_numbers = {1, 2, 3, 4, 5, 6, 8}
+        n_GFM = len(GFM_numbers)
         integer_range = 10
 
         # Wave physics coefficients (distinct)
@@ -780,22 +780,22 @@ class WavePhysicsCoefficientCatalog(Test):
         n_wave = len(wave_coefficients)
 
         # Count matches
-        matches = sum(1 for v in wave_coefficients.values() if v in gfd_numbers)
+        matches = sum(1 for v in wave_coefficients.values() if v in GFM_numbers)
 
         # P(random) for independent matches
-        p_single = n_gfd / integer_range
+        p_single = n_GFM / integer_range
         p_all = p_single ** n_wave
 
-        # Also compute: what fraction of GFD numbers appear?
+        # Also compute: what fraction of GFM numbers appear?
         wave_values = set(wave_coefficients.values())
-        gfd_coverage = len(wave_values & gfd_numbers) / n_gfd
+        GFM_coverage = len(wave_values & GFM_numbers) / n_GFM
 
         return (
             Model()
             .add("Distinct wave coefficients", n_wave)
-            .add("Matches with GFD numbers", matches)
+            .add("Matches with GFM numbers", matches)
             .add("P(all match, independent)", round(p_all, 4))
-            .add("GFD numbers covered", round(gfd_coverage, 4))
+            .add("GFM numbers covered", round(GFM_coverage, 4))
             .add("All coefficients match", 1.0 if matches == n_wave else 0.0)
         )
 
@@ -803,9 +803,9 @@ class WavePhysicsCoefficientCatalog(Test):
         return (
             Observed()
             .add("Distinct wave coefficients", 4)
-            .add("Matches with GFD numbers", 4)
+            .add("Matches with GFM numbers", 4)
             .add("P(all match, independent)", 0.2401)
-            .add("GFD numbers covered", round(4 / 7, 4))
+            .add("GFM numbers covered", round(4 / 7, 4))
             .add("All coefficients match", 1.0)
         )
 
@@ -834,7 +834,7 @@ def run_all() -> bool:
             "- Rayleigh-Jeans factor 8 = 2^d = VERTICES\n"
             "- Wave equation structural parameters {d, d-1, d+1}\n"
             "- Debye model DOF = d = 3\n"
-            "- Systematic catalog of wave physics GFD correspondences\n\n"
+            "- Systematic catalog of wave physics GFM correspondences\n\n"
             "WHEN READY:\n"
             "- audit_score >= 75\n"
             "- Move to calculations/field_theory/test_wave_mode_density_dimensional_scaling.py"

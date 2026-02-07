@@ -1,8 +1,8 @@
 """
-GFD Model V2 Calculations
+GFM Model V2 Calculations
 =========================
 
-Test modules for validating GFD model calculations.
+Test modules for validating GFM model calculations.
 """
 
 from . import coupling_dynamics

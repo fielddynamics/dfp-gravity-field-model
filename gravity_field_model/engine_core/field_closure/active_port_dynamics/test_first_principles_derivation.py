@@ -2,7 +2,7 @@
 First Principles Derivation Tests
 =================================
 
-CERN/NASA level tests that DERIVE the GFD structure from d=3 alone.
+CERN/NASA level tests that DERIVE the GFM structure from d=3 alone.
 
 The claim: Starting from the single empirical fact that d=3 (spatial dimensions),
 the entire structure (k=4 faces, 4 triads, 32 total triads, alpha^21 hierarchy)
@@ -740,16 +740,16 @@ class SpherePackingTetrahedralGroups(Test):
 
 class CompleteDerivationChain(Test):
     """
-    CRITICAL: Verify the complete d=3 to GFD structure derivation.
+    CRITICAL: Verify the complete d=3 to GFM structure derivation.
     """
-    name = "Complete Derivation: d=3 to Full GFD Structure"
+    name = "Complete Derivation: d=3 to Full GFM Structure"
     question = (
-        "Can we derive the ENTIRE GFD structure from the single input d=3? "
+        "Can we derive the ENTIRE GFM structure from the single input d=3? "
         "This includes: k=4 faces, 4 triads per face, 16 triads per tetrahedron, "
         "32 triads for stellated octahedron, and the hierarchy exponent 21. "
-        "Is every number in GFD a CONSEQUENCE of d=3, or are some arbitrary?"
+        "Is every number in GFM a CONSEQUENCE of d=3, or are some arbitrary?"
     )
-    reference = "GFD First Principles, (3+1)^2 Framework"
+    reference = "GFM First Principles, (3+1)^2 Framework"
     level = Critical
     tolerance = 0.01
 
@@ -759,18 +759,18 @@ class CompleteDerivationChain(Test):
         "k = d+1 = 4 (simplex theorem), triads = 4 (medial theorem), "
         "faces per tet = 4, total faces = 8 (stellated octahedron), "
         "total triads = 32, hierarchy = 1 + 4 + 16 = 21. "
-        "The GFD structure is not designed; it is DISCOVERED through "
+        "The GFM structure is not designed; it is DISCOVERED through "
         "geometric necessity. The only input is our empirical observation "
         "that space has 3 dimensions. Everything else follows mathematically."
     )
 
     audit_score = 99
     audit_notes = (
-        "Question: 15/15 - The ultimate question: is GFD derived or assumed? "
+        "Question: 15/15 - The ultimate question: is GFM derived or assumed? "
         "Derivation: 15/15 - Complete chain from d=3 to all quantities. "
         "Commentary: 15/15 - Powerful conclusion (discovered, not designed). "
         "Model: 10/10 - Computes all quantities from d=3 alone. "
-        "Observations: 10/10 - All predictions match GFD structure. "
+        "Observations: 10/10 - All predictions match GFM structure. "
         "Constants: 10/10 - Only uses d=3. "
         "Accessibility: 14/15 - Clear step-by-step derivation. "
         "Header: 10/10 - Comprehensive."
@@ -800,7 +800,7 @@ class CompleteDerivationChain(Test):
             .step("")
             .step("STEP 6: Neighbors in close-packing = d × (d+1) = 12")
             .step("Active channels = 4, Blocked = 8")
-            .conclude("ALL GFD numbers derive from d = 3. QED.")
+            .conclude("ALL GFM numbers derive from d = 3. QED.")
         )
 
     def model(self):
@@ -825,7 +825,7 @@ class CompleteDerivationChain(Test):
         active = k                            # = 4
         blocked = neighbors - active          # = 8
         
-        # Verify all match expected GFD values
+        # Verify all match expected GFM values
         all_correct = (
             k == 4 and
             triads_per_face == 4 and
@@ -885,7 +885,7 @@ def run_all():
     """Run all first principles derivation tests."""
     summary = (
         "FIRST PRINCIPLES DERIVATION TESTS\n\n"
-        "These tests prove that the GFD structure is DERIVED, not assumed.\n\n"
+        "These tests prove that the GFM structure is DERIVED, not assumed.\n\n"
         "Starting from the single empirical fact that d = 3 (spatial dimensions),\n"
         "we derive:\n"
         "  - k = 4 faces per tetrahedron (simplex theorem)\n"
@@ -893,7 +893,7 @@ def run_all():
         "  - 12 neighbors = 3 x 4 (sphere packing geometry)\n"
         "  - 4 active, 8 blocked channels (tetrahedral partition)\n"
         "  - Hierarchy exponent 21 = 1 + 4 + 16\n\n"
-        "If these tests pass, GFD is DISCOVERED, not designed."
+        "If these tests pass, GFM is DISCOVERED, not designed."
     )
     return run_tests("First Principles Derivation", summary, ALL_TESTS)
 

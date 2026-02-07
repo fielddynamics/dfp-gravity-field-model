@@ -6,7 +6,7 @@ STATUS: CONSISTENCY CHECKS (not derivations)
 MOTIVATION:
 Why do quarks carry fractional charges while electrons carry whole charges?
 Why do all fermions have exactly two spin states? The Standard Model accepts
-these as inputs from gauge theory, but GFD offers a geometric interpretation:
+these as inputs from gauge theory, but GFM offers a geometric interpretation:
 the stellated octahedron's structure naturally produces 1/3 charge quanta
 and pairs of TIME faces that map to spin states.
 
@@ -15,7 +15,7 @@ WHAT THESE TESTS EXPLORE:
 1. CHARGE CONSISTENCY: The Port Ratio 1/d = 1/3 emerges from tetrahedral
    geometry. All Standard Model particle charges are integer multiples of
    this quantum. This is consistency, not derivation: we verify the pattern
-   holds, not that GFD predicts it from first principles.
+   holds, not that GFM predicts it from first principles.
 
 2. SPIN CORRESPONDENCE: Each tetrahedron has one TIME face. The two TIME
    faces of the dual structure match the two spin projections of fermions.
@@ -25,13 +25,13 @@ WHAT THESE TESTS EXPLORE:
    Complete face activation (baryon) achieves color neutrality, while partial
    activation (isolated quark) remains confined.
 
-WHAT WAS REMOVED (Standard Model documentation without GFD content):
-    - QCD confinement scale (pure QCD, no GFD)
-    - Neutron beta decay (pure weak interaction, no GFD)
-    - Alpha running (pure QED, no GFD)
-    - Asymptotic freedom (pure QCD, no GFD)
-    - Pion Goldstone boson (pure QCD chiral symmetry, no GFD)
-    - Fermi coupling (pure electroweak, no GFD)
+WHAT WAS REMOVED (Standard Model documentation without GFM content):
+    - QCD confinement scale (pure QCD, no GFM)
+    - Neutron beta decay (pure weak interaction, no GFM)
+    - Alpha running (pure QED, no GFM)
+    - Asymptotic freedom (pure QCD, no GFM)
+    - Pion Goldstone boson (pure QCD chiral symmetry, no GFM)
+    - Fermi coupling (pure electroweak, no GFM)
     - Quark mass hierarchy (no derivation, just lists masses)
     - Cabibbo angle (numerical fit with fudge factor)
 
@@ -64,7 +64,7 @@ class UpQuarkChargeConsistency(Test):
     """
     Why does the up quark carry exactly +2/3 of the electron's charge?
     
-    The Standard Model derives this from gauge anomaly cancellation. GFD offers
+    The Standard Model derives this from gauge anomaly cancellation. GFM offers
     a geometric interpretation: if charge comes in 1/3 quanta (from the Port
     Ratio 1/d), then +2/3 corresponds to activating 2 of 3 vertices on a
     triangular face of Tetrahedron A (the matter sector).
@@ -101,7 +101,7 @@ class UpQuarkChargeConsistency(Test):
         )
     
     commentary = (
-        "The fractional charge +2/3 becomes natural in GFD: it is simply 2 out of 3 "
+        "The fractional charge +2/3 becomes natural in GFM: it is simply 2 out of 3 "
         "available vertex positions on a triangular Coupling Port. This explains why "
         "quark charges come in thirds, not fifths or sevenths. The triangular geometry "
         "of the tetrahedron face, with d = 3 vertices, sets the charge granularity."
@@ -131,7 +131,7 @@ class DownQuarkChargeConsistency(Test):
     Why does the down quark carry the smallest possible fractional charge?
     
     At -1/3, the down quark has the minimum nonzero charge magnitude in the
-    Standard Model. In GFD, this corresponds to activating just 1 vertex on
+    Standard Model. In GFM, this corresponds to activating just 1 vertex on
     a triangular face. The negative sign comes from Tetrahedron B (even parity),
     which represents the antimatter sector.
     
@@ -194,7 +194,7 @@ class BaryonNumberConsistency(Test):
     Why does it take exactly 3 quarks to make a baryon?
     
     The quark model assigns B = 1/3 to each quark, so three quarks sum to B = 1.
-    But why 1/3? In GFD, each triangular face has 3 vertices. One quark per vertex
+    But why 1/3? In GFM, each triangular face has 3 vertices. One quark per vertex
     means each contributes 1/3 of a complete face configuration, and completing
     the face yields an integer baryon number.
     
@@ -355,7 +355,7 @@ class PositronChargeConsistency(Test):
     """
     The positron has charge +1, opposite to the electron's -1.
     
-    In GFD, the positron occupies Tetrahedron A (opposite to electron's Tet B),
+    In GFM, the positron occupies Tetrahedron A (opposite to electron's Tet B),
     demonstrating matter-antimatter charge conjugation.
     """
     name = "Positron Charge = +1"
@@ -411,11 +411,11 @@ class FermionSpinCorrespondence(Test):
     
     The Dirac equation shows that spin-1/2 particles have 2s+1 = 2 projections.
     But why 2? The stellated octahedron has exactly 2 TIME faces (one per
-    tetrahedron). GFD proposes that spin states correspond to which TIME face
+    tetrahedron). GFM proposes that spin states correspond to which TIME face
     is activated: spin-up on Tetrahedron A, spin-down on Tetrahedron B.
     
     This is a CORRESPONDENCE. The Dirac equation remains the rigorous derivation;
-    GFD provides a geometric picture that happens to match.
+    GFM provides a geometric picture that happens to match.
     
     audit_score = 87
     audit_notes = None
@@ -476,7 +476,7 @@ class NeutrinoFlavorCorrespondence(Test):
     Why are there exactly 3 neutrino flavors, not 2 or 4?
     
     LEP measured N_nu = 2.984 from Z boson decay width, confirming exactly 3 light
-    neutrino species. The Standard Model does not explain this number. GFD notes
+    neutrino species. The Standard Model does not explain this number. GFM notes
     that d = k - 1 = 3, matching the neutrino count. Each tetrahedron has 3 SPATIAL
     faces, potentially corresponding to the 3 generations.
     
@@ -510,7 +510,7 @@ class NeutrinoFlavorCorrespondence(Test):
     
     commentary = (
         "The 'generation problem' asks why there are exactly 3 copies of the fermion "
-        "families. GFD offers a structural answer: each tetrahedron has 3 SPATIAL faces, "
+        "families. GFM offers a structural answer: each tetrahedron has 3 SPATIAL faces, "
         "one per dimension. If generations correspond to SPATIAL faces, then d = 3 sets "
         "the count. This does not prove the connection, but the numerical match is exact."
     )
@@ -538,7 +538,7 @@ class ColorNeutralityCorrespondence(Test):
     
     QCD confinement ensures only color-neutral combinations exist as free particles.
     Baryons achieve neutrality by combining all 3 colors (R+G+B); mesons use color
-    plus anticolor. In GFD, this maps to face geometry: a triangular face has 3
+    plus anticolor. In GFM, this maps to face geometry: a triangular face has 3
     vertices, and only complete face activation (all 3) is geometrically 'closed.'
     Partial activation leaves the face 'open' and the particle confined.
     
@@ -626,7 +626,7 @@ def run_all():
     return run_tests(
         title="Charge and Spin Correspondences",
         summary=(
-            "These tests verify CONSISTENCY of GFD's charge quantum (1/d = 1/3) with "
+            "These tests verify CONSISTENCY of GFM's charge quantum (1/d = 1/3) with "
             "Standard Model particle charges, and document spin/structure correspondences.\n\n"
             "CHARGE TESTS: Verify that using q = 1/3, all particle charges are correctly "
             "reproduced. This is consistency, not derivation; the vertex counts are "
@@ -634,7 +634,7 @@ def run_all():
             "STRUCTURE TESTS: Document correspondences between geometric counts (TIME faces, "
             "SPATIAL faces, vertices) and particle physics multiplicities (spin states, "
             "generations, colors).\n\n"
-            "REMOVED: Tests that merely documented Standard Model physics without GFD content "
+            "REMOVED: Tests that merely documented Standard Model physics without GFM content "
             "(QCD running, electroweak physics, quark mass hierarchies)."
         ),
         test_classes=ALL_TESTS

@@ -2,7 +2,7 @@
 MOND Constitutive Law from Hexagonal Geometry
 =============================================
 
-This module contains one of the most significant derivations in GFD:
+This module contains one of the most significant derivations in GFM:
 the constitutive law mu(x) = x/(1+x) from hexagonal packing geometry.
 
 WHY THIS MATTERS:
@@ -36,7 +36,7 @@ This is the standard MOND interpolating function, DERIVED from geometry.
 References:
 - Milgrom (1983) MOND
 - Hexagonal close packing geometry
-- GFD Framework
+- GFM Framework
 """
 
 import sys
@@ -260,7 +260,7 @@ class TilingContributionDerivation(Test):
         "Why is the MOND denominator exactly 1? The tiling contribution C = N * eta * s = "
         "6 neighbors * (1/3 coupling) * (1/2 sharing) = 6/6 = 1 from pure geometry."
     )
-    reference = "GFD Framework"
+    reference = "GFM Framework"
     tolerance = 1e-10
     level = Level.CRITICAL
     audit_score = 96
@@ -505,7 +505,7 @@ class DeepMONDLimit(Test):
         "(Answering would improve Derivation by +3 points: completing the rotation curve derivation) "
         "Q2: Which galaxies provide the cleanest tests of the deep MOND regime? "
         "(Answering would improve Observation Quality by +3 points: connecting theory to data) "
-        "Q3: Does the gravity boost 1/sqrt(x) have a geometric interpretation in GFD? "
+        "Q3: Does the gravity boost 1/sqrt(x) have a geometric interpretation in GFM? "
         "(Answering would improve Commentary by +2 points: relating boost to field closure)"
     )
     

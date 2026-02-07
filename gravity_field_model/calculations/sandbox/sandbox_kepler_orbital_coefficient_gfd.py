@@ -17,15 +17,15 @@ GRADUATION CHECKLIST:
 [x] audit_score >= 65 (quality, see TEST_QUALITY_FRAMEWORK.md)
 [x] contribution_score assessed (see CONTRIBUTION_SCORING_FRAMEWORK.md)
 [ ] Move to appropriate domain folder
-[ ] Rename to test_kepler_orbital_coefficient_gfd.py
+[ ] Rename to test_kepler_orbital_coefficient_GFM.py
 [ ] Delete this sandbox file
 
-GFD Model V2
+GFM Model V2
 
 HONESTY STATEMENT:
 This module verifies STANDARD NEWTONIAN MECHANICS and ORBITAL DYNAMICS and
-explores potential GFD correspondences. The physics is well established since
-Kepler (1619), Newton (1687), and classical orbital mechanics. GFD provides
+explores potential GFM correspondences. The physics is well established since
+Kepler (1619), Newton (1687), and classical orbital mechanics. GFM provides
 a geometric framework for interpretation but does NOT derive these values
 from first principles.
 
@@ -35,7 +35,7 @@ WHAT IS VERIFIED (standard physics):
 - Orbital energy: E = -GMm/(2a)
 - Circular and escape velocities and their ratio sqrt(2)
 
-GFD OBSERVATIONS (patterns noted, not derived):
+GFM OBSERVATIONS (patterns noted, not derived):
 - Kepler coefficient 4 = k = K_CLOSURE
 - Time exponent 2 = len(TIME_FACES), spatial exponent 3 = d
 - Vis-viva factor 2 = len(TIME_FACES)
@@ -65,7 +65,7 @@ from gravity_field_model.common import (
 # CONSTANTS (document sources)
 # =============================================================================
 
-# Spatial dimensions (standard physics, not GFD-specific)
+# Spatial dimensions (standard physics, not GFM-specific)
 D_SPATIAL = 3
 
 # Earth orbital parameters (IAU / NASA Planetary Fact Sheet)
@@ -123,13 +123,13 @@ class KeplerThirdLawCoefficientFour(Test):
     HONESTY: Kepler's Third Law is standard Newtonian gravity, derived from
     Newton's law of gravitation and centripetal acceleration (1687). The factor
     4*pi^2 arises from (2*pi)^2 where 2*pi is the angular circumference.
-    The observation that the integer part 4 = K_CLOSURE is a GFD OBSERVATION.
+    The observation that the integer part 4 = K_CLOSURE is a GFM OBSERVATION.
     """
     audit_score = 88
     audit_notes = (
         "Question: 14/15 - Strong mystery about 'why 4*pi^2 specifically'. "
         "Derivation: 14/15 - Clear step-by-step from circular motion to T^2. "
-        "Commentary: 13/15 - Honest about (2*pi)^2 origin, notes GFD observation. "
+        "Commentary: 13/15 - Honest about (2*pi)^2 origin, notes GFM observation. "
         "Model: 10/10 - Clean verification with Earth's orbit and coefficient extraction. "
         "Observations: 9/10 - Earth period from IAU, Kepler's law exact. "
         "Constants: 10/10 - All from common module. "
@@ -145,7 +145,7 @@ class KeplerThirdLawCoefficientFour(Test):
         "Cross-Domain: 12/20 - Factor 4 = k appears in BH entropy (1/4), BH marginally "
         "bound orbit (4GM/c^2), and here in Kepler's law. Growing pattern. "
         "Falsifiability: 8/20 - Would predict that modified gravity theories preserving "
-        "4*pi^2 form have special GFD status. Difficult to test directly. "
+        "4*pi^2 form have special GFM status. Difficult to test directly. "
         "TOTAL: 58/100 - Valuable single-coefficient observation on the most "
         "fundamental orbital law."
     )
@@ -154,7 +154,7 @@ class KeplerThirdLawCoefficientFour(Test):
         "Does the coefficient 4 remain invariant under all classical modifications? "
         "(Answering would improve Falsifiability by +5: robustness of k=4) "
         "Q2: In GR, Kepler's law gets corrections. Does the leading GR correction "
-        "introduce new GFD numbers? For Mercury, the precession is 6*pi*GM/(c^2*a*(1-e^2)). "
+        "introduce new GFM numbers? For Mercury, the precession is 6*pi*GM/(c^2*a*(1-e^2)). "
         "The factor 6 = SPATIAL_FACES. "
         "(Answering would improve Discovery by +8: GR correction coefficient) "
         "Q3: The 4*pi^2 = (2*pi)^2 factorization gives 4 = 2^2. Is this 2 = TIME_FACES "
@@ -165,7 +165,7 @@ class KeplerThirdLawCoefficientFour(Test):
     question = (
         "Kepler's Third Law states T^2 = 4*pi^2 * a^3 / (GM). The coefficient "
         "4*pi^2 arises because the angular period is 2*pi radians, so (2*pi)^2 = "
-        "4*pi^2. But WHY does the integer part equal exactly 4? In GFD, "
+        "4*pi^2. But WHY does the integer part equal exactly 4? In GFM, "
         "4 = K_CLOSURE = k, the tetrahedral closure constant. Is this coincidence, "
         "or does orbital closure relate to field closure?"
     )
@@ -178,9 +178,9 @@ class KeplerThirdLawCoefficientFour(Test):
         "  GMm/r^2 = m*v^2/r = m*(2*pi*r/T)^2 / r\n"
         "Solving for T^2 gives T^2 = (2*pi)^2 * r^3 / (GM) = 4*pi^2 * r^3 / (GM).\n"
         "The factor 4 is simply (2)^2, where 2*pi is the full angular period.\n\n"
-        "GFD OBSERVATION: 4 = K_CLOSURE = k. In GFD, k is the tetrahedral closure "
+        "GFM OBSERVATION: 4 = K_CLOSURE = k. In GFM, k is the tetrahedral closure "
         "constant, governing how four vertices close a tetrahedron. The observation "
-        "that the Keplerian orbital closure coefficient equals the GFD field closure "
+        "that the Keplerian orbital closure coefficient equals the GFM field closure "
         "constant is documented but NOT claimed as a derivation.\n\n"
         "CONTEXT: The factor 4*pi^2 is arguably the most universal coefficient "
         "in orbital mechanics — it appears in every gravitationally bound orbit "
@@ -198,9 +198,9 @@ class KeplerThirdLawCoefficientFour(Test):
             .step("Solving for T^2:")
             .equation("T^2 = 4*pi^2 * a^3 / (G*M)")
             .step("The integer coefficient is 4 = (2*pi / pi)^2 = 2^2.")
-            .step("GFD OBSERVATION: 4 = K_CLOSURE = k.")
+            .step("GFM OBSERVATION: 4 = K_CLOSURE = k.")
             .step("VERIFICATION: For Earth, T = 365.25 days, a = 1 AU.")
-            .conclude("Kepler's coefficient 4 matches GFD closure constant k = K_CLOSURE.")
+            .conclude("Kepler's coefficient 4 matches GFM closure constant k = K_CLOSURE.")
         )
 
     def model(self) -> Model:
@@ -246,7 +246,7 @@ class KeplerExponentsTimeSpatial(Test):
     HONESTY: The exponents 2 and 3 follow from dimensional analysis and
     Newton's inverse-square law. The time exponent 2 comes from squaring
     T, and the spatial exponent 3 comes from the inverse-square law in
-    3 spatial dimensions. GFD notes 2 = len(TIME_FACES) and 3 = d = D_SPATIAL.
+    3 spatial dimensions. GFM notes 2 = len(TIME_FACES) and 3 = d = D_SPATIAL.
     These are OBSERVATIONS, not derivations.
     """
     audit_score = 86
@@ -257,14 +257,14 @@ class KeplerExponentsTimeSpatial(Test):
         "Model: 9/10 - Clean exponent extraction from numerical data. "
         "Observations: 9/10 - Exponents exact from theory. "
         "Constants: 10/10 - All from common. "
-        "Accessibility: 12/15 - Exponents accessible but GFD link subtle. "
+        "Accessibility: 12/15 - Exponents accessible but GFM link subtle. "
         "Header: 6/10 - Module docstring covers goals."
     )
     contribution_score = 52
     contribution_notes = (
         "Discovery: 18/40 - Observation that Kepler exponents {2, 3} match "
         "{TIME_FACES, d}. The d=3 connection to spatial dimensions is standard "
-        "physics; the TIME_FACES=2 connection is the GFD observation. "
+        "physics; the TIME_FACES=2 connection is the GFM observation. "
         "Precision: 16/20 - Exponents are exact integers; verified numerically "
         "via log-log scaling between two orbits. "
         "Cross-Domain: 12/20 - Exponent 3 also appears in BH evaporation (M^3) "
@@ -282,14 +282,14 @@ class KeplerExponentsTimeSpatial(Test):
         "Does eccentricity introduce any new coefficients beyond {2, 3, 4}? "
         "(Answering would improve Discovery by +3: elliptical extension) "
         "Q3: The ratio of exponents is 3/2 = d/TIME_FACES. Does this ratio "
-        "appear elsewhere in GFD or physics? "
+        "appear elsewhere in GFM or physics? "
         "(Answering would improve Cross-Domain by +3: ratio pattern)"
     )
     name = "Kepler Exponents: T^2 and a^3"
     question = (
         "In T^2 = 4*pi^2 * a^3 / (GM), the time exponent is 2 and the spatial "
         "exponent is 3. The exponent 3 follows from the inverse-square law in "
-        "3 spatial dimensions. The exponent 2 comes from squaring T. But in GFD, "
+        "3 spatial dimensions. The exponent 2 comes from squaring T. But in GFM, "
         "2 = len(TIME_FACES) and 3 = D_SPATIAL = d. Is Kepler's law encoding "
         "the (3+1) spacetime decomposition of the stellated octahedron?"
     )
@@ -302,13 +302,13 @@ class KeplerExponentsTimeSpatial(Test):
         "- [T^alpha] = [a^beta / (GM)^gamma] requires alpha=2, beta=3, gamma=1\n"
         "- The exponent 3 on a comes from the 1/r^2 force law in d=3 dimensions\n"
         "- In d dimensions, the force law is 1/r^(d-1), giving T^2 propto a^d\n\n"
-        "GFD OBSERVATION: The exponents form the pair (2, 3) = (TIME_FACES, d). "
+        "GFM OBSERVATION: The exponents form the pair (2, 3) = (TIME_FACES, d). "
         "In the stellated octahedron, there are 2 time faces and 3 spatial "
         "dimensions. Kepler's law pairs EXACTLY one time exponent with one "
         "spatial exponent, mirroring the (d, TIME_FACES) structure.\n\n"
         "CAVEAT: The exponent 2 on T is simply because kinetic energy is v^2 "
         "(appears in all of mechanics, not just orbits). The exponent 3 on a "
-        "is specific to inverse-square gravity in 3D. The GFD correspondence "
+        "is specific to inverse-square gravity in 3D. The GFM correspondence "
         "is suggestive but may reflect the universality of small integers."
     )
 
@@ -323,8 +323,8 @@ class KeplerExponentsTimeSpatial(Test):
             .step("In d dimensions: F propto 1/r^(d-1), giving T^2 propto a^d.")
             .step("NUMERICAL VERIFICATION: Compare Earth and Mars orbits.")
             .step("If T^alpha propto a^beta, then log(T2/T1)/log(a2/a1) = beta/alpha.")
-            .step("GFD OBSERVATION: alpha = 2 = len(TIME_FACES), beta = 3 = D_SPATIAL.")
-            .conclude("Kepler exponents (2, 3) match GFD face structure (TIME_FACES, d).")
+            .step("GFM OBSERVATION: alpha = 2 = len(TIME_FACES), beta = 3 = D_SPATIAL.")
+            .conclude("Kepler exponents (2, 3) match GFM face structure (TIME_FACES, d).")
         )
 
     def model(self) -> Model:
@@ -340,7 +340,7 @@ class KeplerExponentsTimeSpatial(Test):
         spatial_exponent = round(ratio * 2, 2)  # Multiply by time exponent to get spatial
         time_exponent = 2
 
-        # GFD correspondences
+        # GFM correspondences
         n_time_faces = len(TIME_FACES)
         d_spatial = D_SPATIAL
 
@@ -377,7 +377,7 @@ class VisVivaAndOrbitalEnergyFactorTwo(Test):
     HONESTY: The vis-viva equation v^2 = GM(2/r - 1/a) is derived from energy
     conservation (kinetic + potential = total). The factor 2 in 2/r comes from
     the virial theorem and the structure of Newtonian gravity. The 1/2 in
-    E = -GMm/(2a) comes from the virial theorem: <KE> = -<PE>/2. GFD notes
+    E = -GMm/(2a) comes from the virial theorem: <KE> = -<PE>/2. GFM notes
     that 2 = len(TIME_FACES). This is an OBSERVATION.
     """
     audit_score = 85
@@ -400,19 +400,19 @@ class VisVivaAndOrbitalEnergyFactorTwo(Test):
         "Cross-Domain: 12/20 - Factor 2 appears throughout orbital mechanics, "
         "kinetic energy (1/2 mv^2), BH event horizon (2GM/c^2). Growing catalog. "
         "Falsifiability: 6/20 - The factor 2 in kinetic energy is universal in "
-        "classical mechanics. Difficult to make a GFD-specific prediction. "
+        "classical mechanics. Difficult to make a GFM-specific prediction. "
         "TOTAL: 50/100 - Incremental. The factor 2 is ubiquitous in physics."
     )
     future_questions = (
         "Q1: The virial theorem in d dimensions gives <KE> = -(n/2)<PE> for "
         "force law r^n. In d=3 with n=-2 (gravity), does the virial ratio "
-        "involve GFD numbers beyond 2? "
+        "involve GFM numbers beyond 2? "
         "(Answering would improve Discovery by +5: dimensional generalization) "
         "Q2: The vis-viva factor 2/r can be written as TIME_FACES/r. Does "
-        "the 1/a term also decompose into GFD quantities? "
+        "the 1/a term also decompose into GFM quantities? "
         "(Answering would improve Commentary by +3: complete decomposition) "
         "Q3: For relativistic orbits, the vis-viva equation gets GR corrections. "
-        "Do the correction terms introduce new GFD numbers? "
+        "Do the correction terms introduce new GFM numbers? "
         "(Answering would improve Cross-Domain by +5: GR extension)"
     )
     name = "Vis-Viva Factor 2 and Orbital Energy 1/2"
@@ -420,7 +420,7 @@ class VisVivaAndOrbitalEnergyFactorTwo(Test):
         "The vis-viva equation v^2 = GM(2/r - 1/a) has a factor 2 in the 2/r term. "
         "The orbital energy E = -GMm/(2a) has factor 1/2. Both involve the number 2. "
         "These factors arise from the virial theorem and energy conservation, not from "
-        "any geometric construction. But in GFD, 2 = len(TIME_FACES). Is the "
+        "any geometric construction. But in GFM, 2 = len(TIME_FACES). Is the "
         "pervasive factor of 2 in orbital mechanics connected to the two time faces "
         "of the stellated octahedron?"
     )
@@ -434,7 +434,7 @@ class VisVivaAndOrbitalEnergyFactorTwo(Test):
         "The factor 2 in 2/r comes from the relationship between kinetic and "
         "potential energy. For circular orbits, KE = -PE/2 (virial theorem), "
         "so the total energy E = KE + PE = PE/2 = -GMm/(2r).\n\n"
-        "GFD OBSERVATION: 2 = len(TIME_FACES). The factor 2 appears in:\n"
+        "GFM OBSERVATION: 2 = len(TIME_FACES). The factor 2 appears in:\n"
         "- Vis-viva: 2/r term\n"
         "- Orbital energy: 1/(2a) denominator\n"
         "- Kinetic energy: (1/2)mv^2\n"
@@ -455,7 +455,7 @@ class VisVivaAndOrbitalEnergyFactorTwo(Test):
             .step("It comes from: total energy = kinetic + potential, where KE = (1/2)mv^2.")
             .step("CIRCULAR ORBIT CHECK: set r = a. Then v^2 = GM(2/a - 1/a) = GM/a.")
             .step("This gives v_circ = sqrt(GM/a), the circular orbit velocity.")
-            .step("GFD OBSERVATION: The factor 2 = len(TIME_FACES).")
+            .step("GFM OBSERVATION: The factor 2 = len(TIME_FACES).")
             .step("The energy denominator 2 = 1/len(TIME_FACES).")
             .conclude("Both vis-viva factor 2 and energy factor 1/2 match TIME_FACES count.")
         )
@@ -478,7 +478,7 @@ class VisVivaAndOrbitalEnergyFactorTwo(Test):
         E_earth = _orbital_energy(M_EARTH, A_EARTH, M_SOLAR)
         energy_factor = -G * M_SOLAR * M_EARTH / (E_earth * A_EARTH)  # Should be 2
 
-        # GFD correspondence
+        # GFM correspondence
         n_time_faces = len(TIME_FACES)
 
         return (
@@ -514,7 +514,7 @@ class EscapeCircularVelocityRatio(Test):
     HONESTY: The ratio sqrt(2) follows trivially from the definitions:
     v_circ = sqrt(GM/r) and v_esc = sqrt(2GM/r). The factor 2 in the escape
     velocity comes from setting total energy to zero (E = 0 at escape).
-    GFD notes that 2 = len(TIME_FACES). This is an OBSERVATION.
+    GFM notes that 2 = len(TIME_FACES). This is an OBSERVATION.
     """
     audit_score = 84
     audit_notes = (
@@ -529,7 +529,7 @@ class EscapeCircularVelocityRatio(Test):
     )
     contribution_score = 45
     contribution_notes = (
-        "Discovery: 15/40 - The sqrt(2) ratio is elementary mechanics. GFD "
+        "Discovery: 15/40 - The sqrt(2) ratio is elementary mechanics. GFM "
         "observation that 2 = TIME_FACES adds geometric interpretation. "
         "Precision: 14/20 - Exact from definitions. Verified numerically. "
         "Cross-Domain: 10/20 - Factor 2 in escape velocity connects to BH "
@@ -540,7 +540,7 @@ class EscapeCircularVelocityRatio(Test):
     )
     future_questions = (
         "Q1: For non-Newtonian gravity (e.g., MOND), the escape-to-circular "
-        "ratio changes. Does it still involve GFD numbers? "
+        "ratio changes. Does it still involve GFM numbers? "
         "(Answering would improve Falsifiability by +5: modified gravity test) "
         "Q2: The Schwarzschild event horizon R_s = 2GM/c^2 follows from "
         "v_esc = c. Does this mean the BH horizon is WHERE v_esc/v_circ = sqrt(2) "
@@ -556,7 +556,7 @@ class EscapeCircularVelocityRatio(Test):
         "At any radius r around mass M, the circular orbit velocity is "
         "v_circ = sqrt(GM/r) and the escape velocity is v_esc = sqrt(2GM/r). "
         "Their ratio is exactly sqrt(2), independent of M, r, or G. This "
-        "universal ratio involves the factor 2 = len(TIME_FACES) in GFD. "
+        "universal ratio involves the factor 2 = len(TIME_FACES) in GFM. "
         "Is the energy threshold for orbital escape set by the time-face "
         "structure, or is this simply the factor of 2 from kinetic energy?"
     )
@@ -574,7 +574,7 @@ class EscapeCircularVelocityRatio(Test):
         "This ratio is UNIVERSAL — it holds for ANY mass at ANY radius. It is "
         "a direct consequence of the 1/r potential and the factor 1/2 in "
         "kinetic energy. There is no free parameter involved.\n\n"
-        "GFD OBSERVATION: The factor under the square root is 2 = len(TIME_FACES). "
+        "GFM OBSERVATION: The factor under the square root is 2 = len(TIME_FACES). "
         "This connects to the Schwarzschild radius R_s = 2GM/c^2, which is the "
         "radius where v_esc = c. The factor 2 appears in both the velocity "
         "ratio and the event horizon."
@@ -592,7 +592,7 @@ class EscapeCircularVelocityRatio(Test):
             .step("This is universal: independent of M, r, G.")
             .step("PHYSICAL MEANING: To escape, you need sqrt(2) ~ 1.414 times "
                   "the circular velocity. About 41.4% more speed.")
-            .step("GFD OBSERVATION: factor 2 under sqrt = len(TIME_FACES).")
+            .step("GFM OBSERVATION: factor 2 under sqrt = len(TIME_FACES).")
             .step("VERIFICATION: Compute at Earth's orbit and at 10 AU.")
             .conclude("v_esc/v_circ = sqrt(2), with 2 = len(TIME_FACES).")
         )
@@ -641,7 +641,7 @@ class EscapeCircularVelocityRatio(Test):
 class OrbitalCoefficientCatalog(Test):
     """
     Catalog all integer coefficients in Keplerian orbital mechanics and
-    check whether they all come from the GFD set {2, 3, 4}.
+    check whether they all come from the GFM set {2, 3, 4}.
 
     HONESTY: This is a pattern observation across multiple orbital mechanics
     formulas. All the physics is standard Newtonian mechanics. The observation
@@ -650,7 +650,7 @@ class OrbitalCoefficientCatalog(Test):
     """
     audit_score = 82
     audit_notes = (
-        "Question: 13/15 - Good 'are all coefficients from GFD set' question. "
+        "Question: 13/15 - Good 'are all coefficients from GFM set' question. "
         "Derivation: 12/15 - Clear catalog listing, could use more analysis. "
         "Commentary: 13/15 - Honest about small-integer bias caveat. "
         "Model: 9/10 - Clean catalog check with binary verdicts. "
@@ -662,7 +662,7 @@ class OrbitalCoefficientCatalog(Test):
     contribution_score = 55
     contribution_notes = (
         "Discovery: 22/40 - First systematic catalog of ALL integer coefficients "
-        "in Keplerian orbital mechanics mapped to GFD numbers. Shows the full "
+        "in Keplerian orbital mechanics mapped to GFM numbers. Shows the full "
         "set is {2, 3, 4} = {TIME_FACES, d, k}. "
         "Precision: 12/20 - All coefficients are exact integers from theory. "
         "Statistical significance depends on how we count 'formulas'. "
@@ -670,7 +670,7 @@ class OrbitalCoefficientCatalog(Test):
         "catalog. Together, orbital + BH coefficients use {2, 3, 4, 6, 8} = "
         "{TIME_FACES, d, k, SPATIAL_FACES, VERTICES}. "
         "Falsifiability: 7/20 - Predicts that GR corrections to Kepler should "
-        "introduce new coefficients from the GFD set (e.g., 6 in precession). "
+        "introduce new coefficients from the GFM set (e.g., 6 in precession). "
         "TOTAL: 55/100 - Valuable synthesis. The {2, 3, 4} completeness is "
         "striking but may reflect small-integer dominance."
     )
@@ -684,7 +684,7 @@ class OrbitalCoefficientCatalog(Test):
         "(Answering would improve Precision by +5: completeness verification) "
         "Q3: Combined with BH coefficients {2, 3, 4, 6, 8}, the gravitational "
         "coefficient universe is {2, 3, 4, 6, 8}. Is this exactly the set of "
-        "GFD structural numbers excluding identity and (k+1)? "
+        "GFM structural numbers excluding identity and (k+1)? "
         "(Answering would improve Cross-Domain by +5: unified catalog)"
     )
     name = "Orbital Mechanics Coefficient Catalog"
@@ -694,7 +694,7 @@ class OrbitalCoefficientCatalog(Test):
         "in vis-viva and escape velocity, and 1/2 in orbital energy. Are ALL "
         "of these coefficients drawn from the set {2, 3, 4} = "
         "{TIME_FACES, d, K_CLOSURE}? If so, orbital mechanics uses ONLY "
-        "the three fundamental GFD structural numbers."
+        "the three fundamental GFM structural numbers."
     )
     reference = "Compiled from Goldstein (1980); Murray & Dermott (1999)"
     tolerance = 0.10
@@ -702,7 +702,7 @@ class OrbitalCoefficientCatalog(Test):
     commentary = (
         "METHODOLOGY: We catalog every distinct integer coefficient appearing "
         "in the standard Keplerian orbital mechanics formulas:\n\n"
-        "FORMULA                          | COEFFICIENT | GFD NUMBER\n"
+        "FORMULA                          | COEFFICIENT | GFM NUMBER\n"
         "T^2 = 4*pi^2*a^3/(GM)           | 4           | k = K_CLOSURE\n"
         "T^2 (time exponent)              | 2           | TIME_FACES\n"
         "a^3 (spatial exponent)           | 3           | d = D_SPATIAL\n"
@@ -712,7 +712,7 @@ class OrbitalCoefficientCatalog(Test):
         "RESULT: All coefficients are from {2, 3, 4}.\n\n"
         "CAVEAT: Small-integer bias. Most physics formulas have small integer "
         "coefficients. The set {2, 3, 4} covers many natural formulas. "
-        "However, the ABSENCE of 5, 7, 9 (non-GFD integers) is noted. "
+        "However, the ABSENCE of 5, 7, 9 (non-GFM integers) is noted. "
         "The coefficient 1 (identity) is excluded as trivial.\n\n"
         "STATISTICAL NOTE: P(all 4 distinct coefficients in {2,3,4} | range 2-10) "
         "= (3/9)^4 = 0.0012 = 0.12%. But this assumes independence, which the "
@@ -730,10 +730,10 @@ class OrbitalCoefficientCatalog(Test):
             .step("5. Orbital energy: E = -GMm/(2a) -> 2")
             .step("6. Escape velocity: v_esc = sqrt(2GM/r) -> 2")
             .step("DISTINCT SET: {2, 3, 4}")
-            .step("GFD SET: {TIME_FACES, d, k} = {2, 3, 4}")
+            .step("GFM SET: {TIME_FACES, d, k} = {2, 3, 4}")
             .equation("Orbital coefficients = {2, 3, 4} = {TIME_FACES, d, k}")
             .step("CHECK: Any coefficient NOT in {2, 3, 4}? None found in standard formulas.")
-            .conclude("ALL Keplerian orbital coefficients belong to the GFD structural set {2, 3, 4}.")
+            .conclude("ALL Keplerian orbital coefficients belong to the GFM structural set {2, 3, 4}.")
         )
 
     def model(self) -> Model:
@@ -747,30 +747,30 @@ class OrbitalCoefficientCatalog(Test):
             'Escape velocity factor': 2,
         }
 
-        # GFD structural numbers
-        gfd_set = {len(TIME_FACES), D_SPATIAL, K_CLOSURE}  # {2, 3, 4}
+        # GFM structural numbers
+        GFM_set = {len(TIME_FACES), D_SPATIAL, K_CLOSURE}  # {2, 3, 4}
 
         # Count distinct coefficients
         distinct_coeffs = set(orbital_coefficients.values())
         n_distinct = len(distinct_coeffs)
 
         # Check all match
-        all_in_gfd = all(v in gfd_set for v in orbital_coefficients.values())
-        n_matches = sum(1 for v in distinct_coeffs if v in gfd_set)
+        all_in_GFM = all(v in GFM_set for v in orbital_coefficients.values())
+        n_matches = sum(1 for v in distinct_coeffs if v in GFM_set)
 
         # Sets match exactly?
-        sets_equal = 1.0 if distinct_coeffs == gfd_set else 0.0
+        sets_equal = 1.0 if distinct_coeffs == GFM_set else 0.0
 
-        # Simple probability estimate: P(3 random integers from 2-10 match GFD set)
-        # GFD occupies 3 of 9 possible integers in range 2-10
+        # Simple probability estimate: P(3 random integers from 2-10 match GFM set)
+        # GFM occupies 3 of 9 possible integers in range 2-10
         p_single = 3 / 9  # 1/3
         p_all_3 = p_single ** n_distinct  # (1/3)^3 ~ 0.037
 
         return (
             Model()
             .add("Distinct coefficients found", n_distinct)
-            .add("GFD structural numbers |{2,3,4}|", len(gfd_set))
-            .add("Matches with GFD set", n_matches)
+            .add("GFM structural numbers |{2,3,4}|", len(GFM_set))
+            .add("Matches with GFM set", n_matches)
             .add("Sets are identical", sets_equal)
             .add("P(random match)", round(p_all_3, 4))
         )
@@ -779,8 +779,8 @@ class OrbitalCoefficientCatalog(Test):
         return (
             Observed()
             .add("Distinct coefficients found", 3)
-            .add("GFD structural numbers |{2,3,4}|", 3)
-            .add("Matches with GFD set", 3)
+            .add("GFM structural numbers |{2,3,4}|", 3)
+            .add("Matches with GFM set", 3)
             .add("Sets are identical", 1.0)
             .add("P(random match)", 0.0370)
         )
@@ -809,10 +809,10 @@ def run_all() -> bool:
             "- Why does Kepler's Third Law have coefficient 4 = k = K_CLOSURE?\n"
             "- Why are the exponents (2, 3) = (TIME_FACES, d)?\n"
             "- Why does factor 2 = TIME_FACES appear in vis-viva, energy, escape velocity?\n"
-            "- Are ALL orbital coefficients from the GFD set {2, 3, 4}?\n\n"
+            "- Are ALL orbital coefficients from the GFM set {2, 3, 4}?\n\n"
             "WHEN READY:\n"
             "- audit_score >= 75\n"
-            "- Move to calculations/field_theory/test_kepler_orbital_coefficient_gfd.py"
+            "- Move to calculations/field_theory/test_kepler_orbital_coefficient_GFM.py"
         ),
         test_classes=ALL_TESTS,
     )

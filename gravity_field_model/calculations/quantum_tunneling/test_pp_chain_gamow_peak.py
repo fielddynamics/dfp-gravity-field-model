@@ -14,7 +14,7 @@ interaction bottleneck (~10^-20 probability for p -> n conversion), the total
 reaction probability per collision is ~10^-30, explaining why the Sun burns
 hydrogen over billions of years rather than seconds.
 
-GFD OBSERVATION: The pp chain endpoint He-4 has k=4 nucleons, matching the closure constant.
+GFM OBSERVATION: The pp chain endpoint He-4 has k=4 nucleons, matching the closure constant.
 
 This is an OBSERVATION, not a derivation.
 """
@@ -45,7 +45,7 @@ class PPChainGamowPeakTunneling(Test):
     Bethe (1939) earned the Nobel Prize for working out the full pp chain
     and CNO cycle energy production in stars.
 
-    GFD OBSERVATION:
+    GFM OBSERVATION:
     The pp chain builds geometry step by step: two points form a line
     (deuterium, A=2), adding a third forms a triangle (He-3, A=3), and
     merging two triangles yields a tetrahedron (He-4, A=4=k). The
@@ -55,7 +55,7 @@ class PPChainGamowPeakTunneling(Test):
     4*pi in the Coulomb potential surface integral equals k*pi.
 
     EPISTEMIC STATUS:
-    This test validates STANDARD PHYSICS (Gamow peak theory). The GFD
+    This test validates STANDARD PHYSICS (Gamow peak theory). The GFM
     geometric patterns in nucleon counts and the pp chain geometry are
     noted as OBSERVATIONS, not derivations.
     """
@@ -95,22 +95,22 @@ class PPChainGamowPeakTunneling(Test):
         "and the exponentially falling Maxwell Boltzmann tail. At the peak, "
         "the tunneling probability is roughly 10^-10, and the additional weak "
         "interaction suppression of ~10^-20 yields the combined ~10^-30 per "
-        "collision probability that sets the solar lifetime. GFD observes as "
+        "collision probability that sets the solar lifetime. GFM observes as "
         "a pattern that He-4 (the pp chain product) contains k=4 nucleons and "
         "represents complete tetrahedral closure, and that the geometric "
         "progression 1 -> 2 -> 3 -> 4 nucleons mirrors a dimensional ascent "
         "from point to line to triangle to tetrahedron. These are observations, "
-        "not derivations. No GFD calculation modifies the Gamow formula."
+        "not derivations. No GFM calculation modifies the Gamow formula."
     )
 
     # Audit scoring
     audit_score = 86
     audit_notes = (
-        "Question: 14/15 (excellent mystery hook with the 1000x barrier paradox and specific numbers; the final clause about geometric progression slightly dilutes the sharp tension). Derivation: 14/15 (superb intuition first structure, builds from classical impossibility through Gamow energy to peak location with numerical checkpoints at each stage; minor point: the Maxwell Boltzmann step could use a brief analogy like 'the tail of the bell curve' for accessibility). Commentary: 13/15 (delivers the key insight about competing exponentials clearly and honestly labels GFD patterns as observations; could strengthen with an everyday analogy such as comparing the Gamow peak to a sweet spot on a bat, and could state implications for other stellar burning stages). Model: 8/10 (clean and well organized with 10 values covering the full physics; the last two entries He-4 nucleon count and GFD closure constant are trivial identity checks that add no discriminating power, slightly diluting the signal). Observations: 8/10 (values are physically reasonable and the Adelberger et al. reference is cited for E_G; the Gamow peak observed value 5.9 keV could cite a specific source since literature ranges from 5.9 to 6.2 keV, and the barrier ratio 1077 appears precise but its source is not stated). Constants: 9/10 (all major constants imported from common correctly; the solar core temperature 1.55e7 K, contact distance 1.0e-15 m, and He-4 binding energy 7.07 MeV are hardcoded inline, which is acceptable for astrophysical parameters not in common, but documenting them as derived or sourced constants would be cleaner). Accessibility: 13/15 (excellent progression from classical impossibility through tunneling to the Gamow peak; an undergrad can follow the narrative arc; some nuclear physics jargon like Sommerfeld parameter and WKB is used without brief definition, and the dimensional ascent metaphor in the GFD observation is vivid but could be unpacked one sentence further). Header: 7/10 (module docstring covers the physical domain, states the phenomenon clearly, identifies the GFD observation, and labels epistemic status; missing explicit target audience level, missing scope limitations beyond the pp chain, and the reference list appears only in the class not the module header)."
+        "Question: 14/15 (excellent mystery hook with the 1000x barrier paradox and specific numbers; the final clause about geometric progression slightly dilutes the sharp tension). Derivation: 14/15 (superb intuition first structure, builds from classical impossibility through Gamow energy to peak location with numerical checkpoints at each stage; minor point: the Maxwell Boltzmann step could use a brief analogy like 'the tail of the bell curve' for accessibility). Commentary: 13/15 (delivers the key insight about competing exponentials clearly and honestly labels GFM patterns as observations; could strengthen with an everyday analogy such as comparing the Gamow peak to a sweet spot on a bat, and could state implications for other stellar burning stages). Model: 8/10 (clean and well organized with 10 values covering the full physics; the last two entries He-4 nucleon count and GFM closure constant are trivial identity checks that add no discriminating power, slightly diluting the signal). Observations: 8/10 (values are physically reasonable and the Adelberger et al. reference is cited for E_G; the Gamow peak observed value 5.9 keV could cite a specific source since literature ranges from 5.9 to 6.2 keV, and the barrier ratio 1077 appears precise but its source is not stated). Constants: 9/10 (all major constants imported from common correctly; the solar core temperature 1.55e7 K, contact distance 1.0e-15 m, and He-4 binding energy 7.07 MeV are hardcoded inline, which is acceptable for astrophysical parameters not in common, but documenting them as derived or sourced constants would be cleaner). Accessibility: 13/15 (excellent progression from classical impossibility through tunneling to the Gamow peak; an undergrad can follow the narrative arc; some nuclear physics jargon like Sommerfeld parameter and WKB is used without brief definition, and the dimensional ascent metaphor in the GFM observation is vivid but could be unpacked one sentence further). Header: 7/10 (module docstring covers the physical domain, states the phenomenon clearly, identifies the GFM observation, and labels epistemic status; missing explicit target audience level, missing scope limitations beyond the pp chain, and the reference list appears only in the class not the module header)."
     )
 
     academic_paper = """\
-TITLE Gamow Peak Theory for Proton Proton Fusion: Quantitative Validation and Geometric Pattern Observations ABSTRACT This investigation validates standard Gamow peak theory for proton proton fusion in the solar core, computing the Gamow energy, peak energy, tunneling probability, and Coulomb barrier height. All model values agree with literature to within 10%. GFD geometric patterns in the pp chain are documented as OBSERVATIONS. 1. INTRODUCTION: THE SCIENTIFIC QUESTION The Sun converts hydrogen to helium at a rate that sustains it for roughly 10 billion years. This is remarkable because the thermal energy in the solar core (k_B*T ~ 1.3 keV at T = 1.55 x 10^7 K) is approximately 1000 times smaller than the Coulomb barrier between two protons at contact distance (~1.44 MeV). Classically, fusion is impossible. Standard physics resolves this through quantum tunneling. Gamow (1928) showed that the barrier penetration probability follows P ~ exp(-sqrt(E_G/E)), where E_G ~ 493 keV is the Gamow energy for proton proton interactions. The competition between the falling Maxwell Boltzmann distribution and the rising tunneling probability produces a narrow reaction window called the Gamow peak at E_peak ~ 6 keV. Combined with the weak interaction suppression factor of ~10^-20 for the p + p -> d + e+ + nu_e conversion, the total probability per collision is ~10^-30, quantitatively explaining the solar lifetime. GFD observes that the pp chain endpoint He-4 contains exactly k=4 nucleons and that the fusion pathway traces a dimensional ascent from point (A=1) through line (A=2) and triangle (A=3) to tetrahedron (A=4). This test validates the standard Gamow calculation and documents these geometric correspondences. 2. METHODOLOGY The model computes six physical quantities from fundamental constants imported from the GFD common library: the Gamow energy E_G = 2*m_r*c^2*(pi*alpha)^2 using the reduced mass m_r = m_p/2, the solar core thermal energy k_B*T, the Gamow peak energy E_peak = (E_G*(k_B*T)^2/4)^(1/3), the peak width Delta = 4*sqrt(E_peak*k_B*T/3), the tunneling probability at the peak via log10(exp(-sqrt(E_G/E_peak))), and the Coulomb barrier height V = alpha*hbar*c/r at r = 1.0 fm. Comparison data comes from Adelberger et al. (2011), Bahcall (1989), and standard nuclear physics references. Agreement is defined as model values falling within 10% of accepted literature values. 3. RESULTS Model output versus observations: Gamow energy E_G: model calculates ~492.5 keV, literature value 493 keV. Agreement: 0.1%. Solar core k_B*T: model gives 1.336 keV, consistent with T = 1.55 x 10^7 K. Gamow peak energy: model computes ~6.0 keV, literature range 5.9 to 6.2 keV. Agreement: within 2%. Gamow peak width: model gives ~6.6 keV, literature ~6.7 keV. Agreement: within 2%. Tunneling probability: model log10(P) ~ -3.9, consistent with P ~ 10^-4 at the peak. Coulomb barrier: model gives ~1.44 MeV at 1 fm, matching the standard value exactly. Barrier to thermal ratio: model ~1077, consistent with the ~1000x factor cited in the literature. Additionally, the model confirms He-4 nucleon count A=4 equals the GFD closure constant k=4. This is a trivial identity match, documented for completeness. 4. DISCUSSION All six nontrivial physical quantities computed from fundamental constants agree with accepted values to better than 3%. The Gamow peak framework quantitatively explains why solar fusion occurs in a narrow energy window roughly 4 to 5 times the thermal energy, far below the barrier top yet far above the thermal average. EPISTEMIC STATUS: The Gamow peak calculations are STANDARD PHYSICS validated against literature. The observation that He-4 has A = k = 4 nucleons and that the pp chain traces a dimensional progression (0D to 3D) is an OBSERVATION. GFD does not derive the Gamow formula, modify the tunneling probability, or predict the Gamow peak energy. The geometric pattern of tetrahedral closure at A=4 is noted as a correspondence, not an explanation. 5. LIMITATIONS AND HONESTY STATEMENT This test does NOT derive stellar fusion from GFD principles. The solar core temperature is an input, not a prediction. The A=4 correspondence with k=4 may be coincidental. The weak interaction suppression factor is quoted from literature, not computed. The contact distance r = 1.0 fm is approximate. Further work would need to connect GFD geometry to the tunneling integral itself to move beyond pattern observation. 6. CONCLUSION Standard Gamow peak theory is validated with sub 3% accuracy across six
+TITLE Gamow Peak Theory for Proton Proton Fusion: Quantitative Validation and Geometric Pattern Observations ABSTRACT This investigation validates standard Gamow peak theory for proton proton fusion in the solar core, computing the Gamow energy, peak energy, tunneling probability, and Coulomb barrier height. All model values agree with literature to within 10%. GFM geometric patterns in the pp chain are documented as OBSERVATIONS. 1. INTRODUCTION: THE SCIENTIFIC QUESTION The Sun converts hydrogen to helium at a rate that sustains it for roughly 10 billion years. This is remarkable because the thermal energy in the solar core (k_B*T ~ 1.3 keV at T = 1.55 x 10^7 K) is approximately 1000 times smaller than the Coulomb barrier between two protons at contact distance (~1.44 MeV). Classically, fusion is impossible. Standard physics resolves this through quantum tunneling. Gamow (1928) showed that the barrier penetration probability follows P ~ exp(-sqrt(E_G/E)), where E_G ~ 493 keV is the Gamow energy for proton proton interactions. The competition between the falling Maxwell Boltzmann distribution and the rising tunneling probability produces a narrow reaction window called the Gamow peak at E_peak ~ 6 keV. Combined with the weak interaction suppression factor of ~10^-20 for the p + p -> d + e+ + nu_e conversion, the total probability per collision is ~10^-30, quantitatively explaining the solar lifetime. GFM observes that the pp chain endpoint He-4 contains exactly k=4 nucleons and that the fusion pathway traces a dimensional ascent from point (A=1) through line (A=2) and triangle (A=3) to tetrahedron (A=4). This test validates the standard Gamow calculation and documents these geometric correspondences. 2. METHODOLOGY The model computes six physical quantities from fundamental constants imported from the GFM common library: the Gamow energy E_G = 2*m_r*c^2*(pi*alpha)^2 using the reduced mass m_r = m_p/2, the solar core thermal energy k_B*T, the Gamow peak energy E_peak = (E_G*(k_B*T)^2/4)^(1/3), the peak width Delta = 4*sqrt(E_peak*k_B*T/3), the tunneling probability at the peak via log10(exp(-sqrt(E_G/E_peak))), and the Coulomb barrier height V = alpha*hbar*c/r at r = 1.0 fm. Comparison data comes from Adelberger et al. (2011), Bahcall (1989), and standard nuclear physics references. Agreement is defined as model values falling within 10% of accepted literature values. 3. RESULTS Model output versus observations: Gamow energy E_G: model calculates ~492.5 keV, literature value 493 keV. Agreement: 0.1%. Solar core k_B*T: model gives 1.336 keV, consistent with T = 1.55 x 10^7 K. Gamow peak energy: model computes ~6.0 keV, literature range 5.9 to 6.2 keV. Agreement: within 2%. Gamow peak width: model gives ~6.6 keV, literature ~6.7 keV. Agreement: within 2%. Tunneling probability: model log10(P) ~ -3.9, consistent with P ~ 10^-4 at the peak. Coulomb barrier: model gives ~1.44 MeV at 1 fm, matching the standard value exactly. Barrier to thermal ratio: model ~1077, consistent with the ~1000x factor cited in the literature. Additionally, the model confirms He-4 nucleon count A=4 equals the GFM closure constant k=4. This is a trivial identity match, documented for completeness. 4. DISCUSSION All six nontrivial physical quantities computed from fundamental constants agree with accepted values to better than 3%. The Gamow peak framework quantitatively explains why solar fusion occurs in a narrow energy window roughly 4 to 5 times the thermal energy, far below the barrier top yet far above the thermal average. EPISTEMIC STATUS: The Gamow peak calculations are STANDARD PHYSICS validated against literature. The observation that He-4 has A = k = 4 nucleons and that the pp chain traces a dimensional progression (0D to 3D) is an OBSERVATION. GFM does not derive the Gamow formula, modify the tunneling probability, or predict the Gamow peak energy. The geometric pattern of tetrahedral closure at A=4 is noted as a correspondence, not an explanation. 5. LIMITATIONS AND HONESTY STATEMENT This test does NOT derive stellar fusion from GFM principles. The solar core temperature is an input, not a prediction. The A=4 correspondence with k=4 may be coincidental. The weak interaction suppression factor is quoted from literature, not computed. The contact distance r = 1.0 fm is approximate. Further work would need to connect GFM geometry to the tunneling integral itself to move beyond pattern observation. 6. CONCLUSION Standard Gamow peak theory is validated with sub 3% accuracy across six
     """
 
 
@@ -199,7 +199,7 @@ TITLE Gamow Peak Theory for Proton Proton Fusion: Quantitative Validation and Ge
                 "the barrier is ~1000 times the thermal energy."
             )
             .step(
-                "GFD OBSERVATION: The pp chain builds nucleons into He-4, "
+                "GFM OBSERVATION: The pp chain builds nucleons into He-4, "
                 "which contains exactly k=4 nucleons. The fusion pathway "
                 "traces a geometric ascent: 1 nucleon (point, 0D), "
                 "2 nucleons in deuterium (line, 1D), 3 nucleons in He-3 "
@@ -208,14 +208,14 @@ TITLE Gamow Peak Theory for Proton Proton Fusion: Quantitative Validation and Ge
                 "among light nuclei, suggesting k=4 closure is energetically "
                 "optimal. The surface integral factor 4*pi = k*pi appears "
                 "in the Coulomb potential. These are pattern observations; "
-                "no GFD formula modifies the Gamow calculation."
+                "no GFM formula modifies the Gamow calculation."
             )
             .conclude(
                 "Standard Gamow peak theory quantitatively explains solar "
                 "fusion: E_G ~ 493 keV sets the tunneling scale, E_peak ~ 6 keV "
                 "locates where fusion occurs, and the combined tunneling plus "
                 "weak interaction probability of ~10^-30 per collision explains "
-                "the Sun's billion year lifetime. GFD observes that the endpoint "
+                "the Sun's billion year lifetime. GFM observes that the endpoint "
                 "He-4 achieves k=4 tetrahedral closure and that the pp chain "
                 "traces a dimensional progression, but provides no alternative "
                 "calculation of the Gamow peak."
@@ -271,9 +271,9 @@ TITLE Gamow Peak Theory for Proton Proton Fusion: Quantitative Validation and Ge
         He4_binding_per_nucleon = 7.07  # MeV/nucleon
         m.add("He-4 binding energy per nucleon (MeV)", He4_binding_per_nucleon)
 
-        # GFD observation: He-4 nucleon count equals k
+        # GFM observation: He-4 nucleon count equals k
         m.add("He-4 nucleon count A", 4.0)
-        m.add("GFD closure constant k", float(K))
+        m.add("GFM closure constant k", float(K))
 
         return m
 
@@ -308,8 +308,8 @@ TITLE Gamow Peak Theory for Proton Proton Fusion: Quantitative Validation and Ge
         # He-4 nucleon count
         obs.add("He-4 nucleon count A", 4.0)
 
-        # GFD closure constant
-        obs.add("GFD closure constant k", 4.0)
+        # GFM closure constant
+        obs.add("GFM closure constant k", 4.0)
 
         return obs
 
@@ -318,6 +318,6 @@ if __name__ == "__main__":
     from gravity_field_model.framework import run_tests
     run_tests(
         title="PP Chain Gamow Peak and Solar Tunneling",
-        summary="Validating Gamow peak theory for proton proton fusion and noting GFD geometric patterns in the pp chain",
+        summary="Validating Gamow peak theory for proton proton fusion and noting GFM geometric patterns in the pp chain",
         test_classes=[PPChainGamowPeakTunneling],
     )

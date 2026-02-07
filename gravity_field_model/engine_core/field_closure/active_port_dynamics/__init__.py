@@ -21,7 +21,7 @@ If the Merkaba is vortexing at ~5e19 Hz, what are the local field dynamics
 on each active face? Can we calculate the spin and flux at the face level?
 
 Reference:
-- gfd_concepts.py: Coupling Port mechanics, Triad phase-locking
+- GFM_concepts.py: Coupling Port mechanics, Triad phase-locking
 - test_face_sampling_subdivision.py: Medial construction of triads
 - VORTEX_COSMOLOGY_AND_INFORMATION_DOMAINS.md: Vortex model
 """

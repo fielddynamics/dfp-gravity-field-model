@@ -2,7 +2,7 @@
 Probing Nuclear Binding: Hunting for k-Structure in the Binding Curve
 =====================================================================
 
-GFD Model V2
+GFM Model V2
 
 INVESTIGATION STATEMENT:
 These tests do NOT fit parameters. They ASK whether the binding energy
@@ -90,7 +90,7 @@ class AlphaParticleBindingAnomaly(Test):
         "to go from A=3 to A=4, the binding energy per nucleon jumps by 4.5 MeV "
         "— the largest single-step gain in the entire binding curve. How many "
         "standard deviations does this jump exceed the mean? Is the fact that "
-        "this maximum occurs at A=4 (= k, the GFD closure constant) statistically "
+        "this maximum occurs at A=4 (= k, the GFM closure constant) statistically "
         "remarkable or expected from shell closure alone?"
     )
     reference = "AME2020 Nuclear Binding Energies"

@@ -6,7 +6,7 @@ This module verifies mathematical consistency ("closure") for variational calcul
 and exterior calculus foundations of field theory.
 
 WHY THESE TESTS MATTER:
-The GFD model is built on field closure: the principle that spacetime geometry
+The GFM model is built on field closure: the principle that spacetime geometry
 self-consistently determines its own structure. The mathematical machinery that
 makes this possible includes:
 
@@ -63,7 +63,7 @@ class EulerLagrangeConsistency(Test):
     """
     
     name = "Euler-Lagrange Equation Consistency"
-    reference = "Landau & Lifshitz, Classical Theory of Fields; GFD Textbook Problem 5.17"
+    reference = "Landau & Lifshitz, Classical Theory of Fields; GFM Textbook Problem 5.17"
     level = Level.CRITICAL
     
     audit_score = 88
@@ -164,7 +164,7 @@ class BoundaryTermMatching(Test):
     """
     
     name = "Boundary Term Matching"
-    reference = "Variational principle boundary conditions; GFD Textbook Section 3.3"
+    reference = "Variational principle boundary conditions; GFM Textbook Section 3.3"
     level = Level.CRITICAL
     
     audit_score = 86
@@ -263,7 +263,7 @@ class NoetherCurrentConservation(Test):
     """
     
     name = "Noether Current Conservation"
-    reference = "Noether's theorem (1918); GFD Textbook Problem 3.8"
+    reference = "Noether's theorem (1918); GFM Textbook Problem 3.8"
     level = Level.STANDARD
     
     audit_score = 87
@@ -291,7 +291,7 @@ class NoetherCurrentConservation(Test):
     commentary = (
         "Time translation symmetry gives energy conservation. Spatial translation "
         "symmetry gives momentum conservation. These conservation laws must hold "
-        "exactly for the theory to be consistent. The GFD Textbook shows how the "
+        "exactly for the theory to be consistent. The GFM Textbook shows how the "
         "Bianchi identity guarantees nabla_mu T^mu_nu = 0 (Problem 3.8)."
     )
     
@@ -458,7 +458,7 @@ class StokesTheorem(Test):
     """
     
     name = "Stokes' Theorem Verification"
-    reference = "Stokes' theorem; GFD Textbook Section 3.3"
+    reference = "Stokes' theorem; GFM Textbook Section 3.3"
     level = Level.CRITICAL
     
     audit_score = 88
@@ -669,7 +669,7 @@ class BianchiIdentity(Test):
     dR^a_b + omega^a_c wedge R^c_b - R^a_c wedge omega^c_b = 0
     
     WHY THIS MATTERS FOR FIELD CLOSURE:
-    The GFD Textbook (Problems 3.8, 3.17, 4.19) explains that the Bianchi identity
+    The GFM Textbook (Problems 3.8, 3.17, 4.19) explains that the Bianchi identity
     guarantees CONSTRAINT PROPAGATION: if constraints are satisfied initially,
     they remain satisfied at all later times. This is essential for field closure:
     
@@ -689,7 +689,7 @@ class BianchiIdentity(Test):
     """
     
     name = "Bianchi Identity and Constraint Propagation"
-    reference = "GFD Textbook Problems 3.8, 3.17, 4.19; Section 2.5"
+    reference = "GFM Textbook Problems 3.8, 3.17, 4.19; Section 2.5"
     level = Level.STANDARD
     
     audit_score = 88
@@ -716,7 +716,7 @@ class BianchiIdentity(Test):
     commentary = (
         "The Bianchi identity (nabla_mu G^mu_nu = 0) is not just a mathematical curiosity. "
         "It guarantees CONSTRAINT PROPAGATION: once initial data satisfies the constraints, "
-        "they remain satisfied (GFD Textbook Problem 3.17). This is why the SETTLE stage "
+        "they remain satisfied (GFM Textbook Problem 3.17). This is why the SETTLE stage "
         "can converge to a unique solution (Section 2.5). The contracted identity leads to "
         "energy-momentum conservation (Problem 3.8): Einstein's equation G = 8*pi*T with "
         "nabla_mu G^mu_nu = 0 implies nabla_mu T^mu_nu = 0. Energy conservation follows "
@@ -735,7 +735,7 @@ class BianchiIdentity(Test):
             .step("Taking exterior derivative and using d^2 = 0:")
             .equation("dR^a_b + omega^a_c wedge R^c_b - R^a_c wedge omega^c_b = 0")
             .step("CONTRACTED FORM: nabla_mu G^mu_nu = 0 (Einstein tensor divergence-free)")
-            .step("GFD CONSEQUENCE: Einstein equation G = 8*pi*T implies nabla_mu T^mu_nu = 0")
+            .step("GFM CONSEQUENCE: Einstein equation G = 8*pi*T implies nabla_mu T^mu_nu = 0")
             .step("CONSTRAINT PROPAGATION (Problem 3.17):")
             .step("If Hamiltonian constraint H = 0 on initial slice, then dH/dt = spatial derivs only")
             .step("Therefore H = 0 propagates forward in time automatically.")
@@ -791,7 +791,7 @@ class FieldClosureBoundaryConsistency(Test):
     """
     
     name = "Field Closure Boundary Consistency"
-    reference = "DFP Field Closure; GFD Textbook Chapter 3"
+    reference = "DFP Field Closure; GFM Textbook Chapter 3"
     level = Level.CRITICAL
     
     audit_score = 85
@@ -819,7 +819,7 @@ class FieldClosureBoundaryConsistency(Test):
     commentary = (
         "Field closure requires that at the boundary Sigma where field object meets "
         "NET Field, both configurations must match. This ensures global "
-        "consistency and prevents 'leaks' or 'sources' at boundaries. The GFD "
+        "consistency and prevents 'leaks' or 'sources' at boundaries. The GFM "
         "Textbook Chapter 3 establishes that closure boundaries must satisfy "
         "the three consistency conditions verified here."
     )

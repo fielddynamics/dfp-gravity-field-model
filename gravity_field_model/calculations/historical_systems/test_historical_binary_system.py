@@ -57,7 +57,7 @@ class BinaryVertexCount(Test):
         "The answer reveals how spatial dimension d directly determines the "
         "information capacity (2^d states) of the Field Chamber structure."
     )
-    reference = "GFD Textbook Ch.9 Sec.9.2: Binary encoding of cube vertices"
+    reference = "GFM Textbook Ch.9 Sec.9.2: Binary encoding of cube vertices"
     tolerance = 0.01
     commentary = (
         "The cube in d=3 dimensions offers exactly 2^d = 8 corner positions, "
@@ -104,7 +104,7 @@ class ParityDeterminesTetrahedron(Test):
         "the cube vertices into two interlocking tetrahedra? Understanding this "
         "reveals why the bimetric structure emerges from pure combinatorics."
     )
-    reference = "GFD Textbook Ch.9 Sec.9.2: Parity partition into dual tetrahedra"
+    reference = "GFM Textbook Ch.9 Sec.9.2: Parity partition into dual tetrahedra"
     tolerance = 0.01
     commentary = (
         "The two tetrahedra are the two eigenspaces of the parity operator. "
@@ -161,7 +161,7 @@ class ComplementaryPairsXOR(Test):
         "its geometric opposite? This reveals how bitwise complementation "
         "encodes the cube's spatial inversion symmetry."
     )
-    reference = "GFD Textbook Ch.9 Sec.9.5: Field Origin and body diagonals"
+    reference = "GFM Textbook Ch.9 Sec.9.5: Field Origin and body diagonals"
     tolerance = 0.01
     commentary = (
         "XOR with 111 flips all three bits, geometrically reflecting the vertex "
@@ -212,7 +212,7 @@ class ComplementaryPairsCrossTetrahedra(Test):
         "shows how parity conservation under inversion enforces the bimetric "
         "coupling between Chamber A and Chamber B."
     )
-    reference = "GFD Textbook Ch.9 Sec.9.3: Bimetric balance through antipodal pairs"
+    reference = "GFM Textbook Ch.9 Sec.9.3: Bimetric balance through antipodal pairs"
     tolerance = 0.01
     commentary = (
         "Flipping all d=3 bits changes the popcount by an odd amount (from k "
@@ -263,7 +263,7 @@ class FourVerticesPerTetrahedron(Test):
         "This connects the closure constant k=4 to the binary structure, showing "
         "that field closure naturally produces tetrahedral geometry."
     )
-    reference = "GFD Textbook Ch.7 Sec.7.2: The simplex theorem and k=4"
+    reference = "GFM Textbook Ch.7 Sec.7.2: The simplex theorem and k=4"
     tolerance = 0.01
     commentary = (
         "Of 2^d = 8 binary numbers, exactly half have odd popcount and half have "
@@ -316,7 +316,7 @@ class BinaryExtremaAreAntipodal(Test):
         "These vertices represent the pure states of the Field Chamber, and their "
         "separation ensures maximum information contrast across the structure."
     )
-    reference = "GFD Textbook Ch.9 Sec.9.3: Apex vertices and TIME faces"
+    reference = "GFM Textbook Ch.9 Sec.9.3: Apex vertices and TIME faces"
     tolerance = 0.01
     commentary = (
         "Vertex 0 (popcount 0) and Vertex 7 (popcount 3) have maximally different "
@@ -370,7 +370,7 @@ def run_all():
             "octahedron correspond exactly to the two parity classes (odd/even "
             "popcount). Complementary pairs (body diagonals) link Chamber A to "
             "Chamber B through the Field Origin, ensuring bimetric coupling. "
-            "This structure underlies the GFD field closure mechanism."
+            "This structure underlies the GFM field closure mechanism."
         ),
         test_classes=ALL_TESTS
     )

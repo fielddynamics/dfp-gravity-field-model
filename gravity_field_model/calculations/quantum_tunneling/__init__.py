@@ -2,7 +2,7 @@
 Quantum Tunneling Tests
 
 Tests for barrier penetration through Field Closure,
-comparing GFD model predictions against WKB approximation
+comparing GFM model predictions against WKB approximation
 results and experimental data from STM, alpha decay, and
 Josephson junction measurements.
 """

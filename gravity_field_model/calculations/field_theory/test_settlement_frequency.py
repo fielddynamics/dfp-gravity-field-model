@@ -1,9 +1,9 @@
 """
-Settlement (Closure) Frequency: The Fundamental GFD Timescale
+Settlement (Closure) Frequency: The Fundamental GFM Timescale
 ============================================================
 
 This module examines the Settlement Frequency, a fundamental timescale
-in the GFD framework defined as f_settle = c / (k * r_e).
+in the GFM framework defined as f_settle = c / (k * r_e).
 
 WHY THIS MATTERS:
 
@@ -35,10 +35,10 @@ During this time, the field traverses one r_e/k = r_e/4 distance.
 RELATION TO OTHER SCALES:
 
 - Compton frequency (m_e * c^2 / h): ~1.24e20 Hz (different by factor ~214)
-- Settlement / Compton = 2*pi*k/alpha ~ 214 (GFD orbit factor)
+- Settlement / Compton = 2*pi*k/alpha ~ 214 (GFM orbit factor)
 
 References:
-- GFD Textbook Chapters 7, 15
+- GFM Textbook Chapters 7, 15
 - Classical electron radius definition
 """
 
@@ -82,7 +82,7 @@ def compute_settlement_frequency(k: int = K, r: float = R_E) -> float:
     
     f = c / (k * r)
     
-    Default values give the standard GFD settlement frequency.
+    Default values give the standard GFM settlement frequency.
     """
     return C / (k * r)
 
@@ -100,7 +100,7 @@ def compute_settlement_to_compton_ratio() -> float:
     """
     Compute ratio of settlement frequency to Compton frequency.
     
-    This ratio has geometric significance in GFD.
+    This ratio has geometric significance in GFM.
     """
     return F_SETTLEMENT / F_COMPTON
 
@@ -121,7 +121,7 @@ class SettlementFrequencyDefinition(Test):
         "f = c/(k*r_e) ~ 2.66e22 Hz represents how fast the field configuration "
         "reconciles across the k=4 tetrahedral structure."
     )
-    reference = "GFD Textbook Chapter 7"
+    reference = "GFM Textbook Chapter 7"
     tolerance = 0.0
     level = Level.CRITICAL
     audit_score = 90
@@ -149,7 +149,7 @@ class SettlementFrequencyDefinition(Test):
         "INTERPRETATION:\n"
         "This frequency represents the rate at which the field completes\n"
         "one closure cycle across the k=4 structure. It is the 'clock rate'\n"
-        "of the GFD field dynamics."
+        "of the GFM field dynamics."
     )
     
     def derivation(self) -> Derivation:
@@ -204,7 +204,7 @@ class SettlementPeriod(Test):
         "an incredibly short time. In one femtosecond (10^-15 s), the field "
         "completes about 26 million settlement cycles."
     )
-    reference = "GFD Field Closure timescale"
+    reference = "GFM Field Closure timescale"
     tolerance = 0.0
     level = Level.STANDARD
     audit_score = 88
@@ -283,7 +283,7 @@ class ComptonFrequencyComparison(Test):
         "f_settle/f_Compton ~ 214 ~ 2*pi*k/alpha. This ratio connects the "
         "geometric (k=4) and electromagnetic (alpha) coupling constants."
     )
-    reference = "Compton wavelength and GFD geometry"
+    reference = "Compton wavelength and GFM geometry"
     tolerance = 0.1  # 10% tolerance for this approximate relationship
     level = Level.STANDARD
     audit_score = 85
@@ -308,7 +308,7 @@ class ComptonFrequencyComparison(Test):
         "f_settle / f_C = 2*pi / (k * alpha^2)\n"
         "              = 2*pi / (4 * (1/137)^2)\n"
         "              ~ 214\n\n"
-        "GFD INTERPRETATION:\n"
+        "GFM INTERPRETATION:\n"
         "This ratio connects geometry (k) to electromagnetic coupling (alpha).\n"
         "The factor 2*pi*k/alpha ~ 8*pi / 0.0073 ~ 3440.\n"
         "Closer match: 1/(k*alpha) ~ 34.3. Actual ratio ~ 214."
@@ -367,7 +367,7 @@ class SettlementWavelength(Test):
         "What is the characteristic length of Field Closure? lambda_settle = k*r_e "
         "= 4 * r_e ~ 1.13e-14 m. This is the tetrahedral closure path length."
     )
-    reference = "GFD geometry"
+    reference = "GFM geometry"
     tolerance = 0.0
     level = Level.STANDARD
     audit_score = 87
@@ -444,7 +444,7 @@ class CyclesPerAlpha(Test):
         "The alpha cycle time t_alpha ~ hbar/(m_e*c^2*alpha) contains about "
         "137 / (2*pi*k) ~ 5.5 settlement cycles."
     )
-    reference = "GFD coupling relationships"
+    reference = "GFM coupling relationships"
     tolerance = 0.1
     level = Level.EXPLORATORY
     audit_score = 78
@@ -611,10 +611,10 @@ ALL_TESTS = [
 def run_all() -> bool:
     """Run all settlement frequency tests."""
     return run_tests(
-        title="Settlement (Closure) Frequency: The Fundamental GFD Timescale",
+        title="Settlement (Closure) Frequency: The Fundamental GFM Timescale",
         summary=(
             "This module examines the Settlement Frequency, a fundamental\n"
-            "timescale in the GFD framework.\n\n"
+            "timescale in the GFM framework.\n\n"
             "DEFINITION:\n"
             "f_settle = c / (k * r_e) ~ 2.66e22 Hz\n\n"
             "DERIVED QUANTITIES:\n"
@@ -631,7 +631,7 @@ def run_all() -> bool:
             "SIGNIFICANCE:\n"
             "This enormous frequency (10^12 times visible light) defines\n"
             "the fundamental timescale for gravitational information exchange\n"
-            "in the GFD framework."
+            "in the GFM framework."
         ),
         test_classes=ALL_TESTS
     )

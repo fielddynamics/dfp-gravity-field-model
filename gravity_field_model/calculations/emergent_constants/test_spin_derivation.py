@@ -2,7 +2,7 @@
 Electron Spin from Merkaba Topology
 ===================================
 
-This module contains the most significant derivation in the GFD framework:
+This module contains the most significant derivation in the GFM framework:
 electron spin S = hbar/2 from pure face counting.
 
 WHY THIS DERIVATION MATTERS:
@@ -12,7 +12,7 @@ Standard quantum mechanics does not explain WHY electrons have spin 1/2.
 - Dirac (1928): DERIVED spin 1/2 from requiring relativistic invariance.
   But this just pushes the question: why does relativity produce half-integer spin?
 
-GFD provides a geometric answer: spin is the fraction of angular momentum
+GFM provides a geometric answer: spin is the fraction of angular momentum
 flowing through the TIME faces of the Merkaba (stellated octahedron).
 
 THE DERIVATION:
@@ -30,7 +30,7 @@ NO FREE PARAMETERS. The numbers 2, 8, and 2*hbar all have independent
 geometric meaning. This is pure counting.
 
 References:
-- GFD Textbook Chapter 10
+- GFM Textbook Chapter 10
 - Stern-Gerlach experiment (1922)
 - Pauli (1927), Dirac (1928)
 """
@@ -140,7 +140,7 @@ class TimeFaceClassification(Test):
         "Why are exactly 2 faces designated as TIME faces? Each tetrahedron has one apex, "
         "and the face opposite it couples to time, while the 6 SPATIAL faces couple to space."
     )
-    reference = "GFD face classification"
+    reference = "GFM face classification"
     tolerance = 0.0
     level = Level.CRITICAL
     audit_score = 91
@@ -213,7 +213,7 @@ class TimeFraction(Test):
         "Why is the TIME fraction exactly 1/4? With 2 TIME faces from 8 total, "
         "f_time = 2/8 = 1/4 emerges from pure topology, not fitting to observations."
     )
-    reference = "GFD Framework"
+    reference = "GFM Framework"
     tolerance = 0.0
     level = Level.CRITICAL
     audit_score = 93
@@ -356,7 +356,7 @@ class SpinDerivation(Test):
         "Why is electron spin exactly hbar/2? Spin equals the TIME fraction times spinor "
         "momentum: S = f_time * L = (2/8) * 2*hbar = hbar/2, with no free parameters."
     )
-    reference = "GFD Textbook Chapter 10"
+    reference = "GFM Textbook Chapter 10"
     tolerance = 0.0
     level = Level.CRITICAL
     audit_score = 97
@@ -373,7 +373,7 @@ class SpinDerivation(Test):
     commentary = (
         "THE DERIVATION:\n\n"
         "Spin is the angular momentum associated with the particle's\n"
-        "intrinsic structure. In GFD, this is the angular momentum\n"
+        "intrinsic structure. In GFM, this is the angular momentum\n"
         "flowing through the TIME faces.\n\n"
         "Step 1: TIME face fraction f_time = 2/8 = 1/4\n"
         "Step 2: Total angular momentum in spinor cycle L = 2*hbar\n"
@@ -444,11 +444,11 @@ class SpinQuantumNumber(Test):
     audit_score = 94
     audit_notes = None
     future_questions = (
-        "Q1: Does GFD predict that no particles can have irrational spin quantum numbers? "
+        "Q1: Does GFM predict that no particles can have irrational spin quantum numbers? "
         "(Answering would improve Question by +2 points: exploring spin quantization constraints) "
         "Q2: How does the Pauli exclusion principle follow from the derived s = 1/2? "
         "(Answering would improve Commentary by +3 points: connecting spin to statistics) "
-        "Q3: Could composite particles with integer spin emerge from fermion combinations in GFD? "
+        "Q3: Could composite particles with integer spin emerge from fermion combinations in GFM? "
         "(Answering would improve Derivation by +2 points: addressing boson emergence)"
     )
     
@@ -458,7 +458,7 @@ class SpinQuantumNumber(Test):
         "  Obey Pauli exclusion principle. Examples: electron, proton, neutron.\n\n"
         "- Bosons: integer spin (0, 1, 2, ...)\n"
         "  Can occupy same quantum state. Examples: photon, gluon, Higgs.\n\n"
-        "The GFD derivation produces s = 1/2, a HALF-INTEGER.\n"
+        "The GFM derivation produces s = 1/2, a HALF-INTEGER.\n"
         "This automatically classifies the particle as a FERMION.\n\n"
         "The 720-degree rotation requirement (spinor property) follows:\n"
         "only half-integer spin particles need 720 degrees to return to\n"
@@ -524,7 +524,7 @@ class SpinorRotationProperty(Test):
         "(Answering would improve Derivation by +2 points: interpreting the phase geometrically) "
         "Q2: How was the 720-degree requirement verified in the neutron interferometry experiment? "
         "(Answering would improve Observation Quality by +3 points: detailing experimental evidence) "
-        "Q3: Does the double-cover structure SU(2)/SO(3) have a GFD geometric interpretation? "
+        "Q3: Does the double-cover structure SU(2)/SO(3) have a GFM geometric interpretation? "
         "(Answering would improve Audience Accessibility by +3 points: connecting abstract math to geometry)"
     )
     

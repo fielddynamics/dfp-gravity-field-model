@@ -2,7 +2,7 @@
 Stellated Octahedron Geometry Constants
 =======================================
 
-This module defines the geometric constants for the GFD field closure model:
+This module defines the geometric constants for the GFM field closure model:
 - 8 vertices at unit cube corners
 - 2 interlocking tetrahedra (Chamber A and Chamber B)
 - 8 triangular faces (4 per chamber)

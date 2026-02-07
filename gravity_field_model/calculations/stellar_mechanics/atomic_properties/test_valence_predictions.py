@@ -2,11 +2,11 @@
 Valence Predictions: Empirical Atomic Radius Formula
 =====================================================
 
-GFD Model V2
+GFM Model V2
 
 HONESTY STATEMENT:
 This module contains an EMPIRICALLY FITTED atomic radius formula that uses
-GFD-inspired constants. The formula achieves reasonable accuracy (~13%
+GFM-inspired constants. The formula achieves reasonable accuracy (~13%
 average error) by FITTING parameters to measured data, not by deriving
 atomic radii from first principles.
 
@@ -22,11 +22,11 @@ WHERE:
 
 WHAT THIS IS:
 - An empirical formula that fits measured atomic radii
-- Uses GFD-inspired constants (k, alpha, tetrahedral numbers)
+- Uses GFM-inspired constants (k, alpha, tetrahedral numbers)
 - Achieves ~10-15% average error
 
 WHAT THIS IS NOT:
-- A derivation of atomic radii from GFD geometry
+- A derivation of atomic radii from GFM geometry
 - A prediction that can be tested (it's fitted to the data)
 - More accurate than quantum mechanical calculations
 
@@ -35,7 +35,7 @@ and matches measured data within the fitted accuracy.
 
 TEST GROUP GOALS:
 This module demonstrates empirical curve-fitting vs theoretical derivation.
-The atomic radius formula uses GFD-inspired constants but is fitted to data,
+The atomic radius formula uses GFM-inspired constants but is fitted to data,
 not derived. Students learn to distinguish fitted formulas from predictions
 and understand standard periodic table trends (electronegativity, ionization).
 
@@ -54,7 +54,7 @@ from gravity_field_model.common import (
 
 PI = math.pi
 A_BOHR_PM = 52.9177  # Bohr radius in picometers
-GFD_FACTOR = 84 / 137.036  # Empirical prefactor (T_7 * alpha)
+GFM_FACTOR = 84 / 137.036  # Empirical prefactor (T_7 * alpha)
 
 ELEMENTS = ELEMENTS_118
 
@@ -89,14 +89,14 @@ def predict_atomic_radius(Z, A):
     Empirical atomic radius formula.
 
     HONESTY: This is curve-fitting, not derivation. The formula has been
-    tuned to match measured atomic radii. The GFD-inspired constants
+    tuned to match measured atomic radii. The GFM-inspired constants
     (84, 137, k/pi^2) provide reasonable fits but are not derived from
     first principles.
     """
     n = get_principal_quantum_number(Z)
 
     # Base formula
-    base_radius = GFD_FACTOR * A_BOHR_PM * (n ** 2) * math.sqrt(A) / Z
+    base_radius = GFM_FACTOR * A_BOHR_PM * (n ** 2) * math.sqrt(A) / Z
 
     # Relativistic/topology correction for heavy elements
     # This is an empirical adjustment, not a derivation
@@ -119,9 +119,9 @@ _ELEMENT_LOOKUP = {sym: (name, z, a) for sym, name, z, a, _r, _v in ELEMENTS_118
     inputs={"symbol": "str: Element symbol (e.g. 'Fe', 'C', 'Pb')"},
     outputs={"radius_pm": "float: Predicted atomic radius in picometers"},
     description=(
-        "Empirical atomic radius formula using GFD-inspired constants. "
+        "Empirical atomic radius formula using GFM-inspired constants. "
         "HONESTY: This formula is fitted to measured atomic radii, not derived "
-        "from GFD geometry. The parameters (84/137, k/pi^2, Z/56 threshold) "
+        "from GFM geometry. The parameters (84/137, k/pi^2, Z/56 threshold) "
         "have been tuned to minimize prediction error. "
         "Accuracy: ~13% average error across 118 elements."
     ),
@@ -136,7 +136,7 @@ _ELEMENT_LOOKUP = {sym: (name, z, a) for sym, name, z, a, _r, _v in ELEMENTS_118
     ),
     contribution_score=71,
     contribution_notes=(
-        "Discovery: 25/40 - Empirical formula with GFD-inspired constants (84/137, k/pi^2). "
+        "Discovery: 25/40 - Empirical formula with GFM-inspired constants (84/137, k/pi^2). "
         "Precision: 14/20 - ~13% average error, good for empirical formula. "
         "Cross-Domain: 18/20 - Covers all 118 elements, links atomic to nuclear physics. "
         "Falsifiability: 14/20 - Predictions testable against measured radii."
@@ -158,7 +158,7 @@ class BohrRadiusIdentity(Test):
     """
     Verify a_bohr = r_e / alpha^2.
 
-    HONESTY: This is a standard QM identity, not a GFD derivation.
+    HONESTY: This is a standard QM identity, not a GFM derivation.
     """
     audit_score = 83
     audit_notes = None
@@ -184,7 +184,7 @@ class BohrRadiusIdentity(Test):
     commentary = (
         "The identity a_bohr = r_e / alpha^2 is a standard result connecting "
         "the Bohr radius (atomic scale), classical electron radius (field scale), "
-        "and fine structure constant. This is QED, not GFD."
+        "and fine structure constant. This is QED, not GFM."
     )
 
     def derivation(self) -> Derivation:
@@ -233,7 +233,7 @@ class FormulaAccuracy(Test):
     audit_score = 77
     audit_notes = None
     future_questions = (
-        "Q1: Why does an empirical formula with GFD-inspired constants achieve ~10% accuracy, "
+        "Q1: Why does an empirical formula with GFM-inspired constants achieve ~10% accuracy, "
         "and is this better than random parameter choices would give? "
         "(Answering would improve Question by +3 points: tests significance of fit) "
         "Q2: What physical effects does the simple formula miss that cause the 10% error? "
@@ -253,7 +253,7 @@ class FormulaAccuracy(Test):
     level = Level.STANDARD
     commentary = (
         "This test measures how well the empirical formula fits measured data. "
-        "It is NOT testing a GFD prediction, since the formula was tuned to "
+        "It is NOT testing a GFM prediction, since the formula was tuned to "
         "match these values. The ~10% error on main group elements shows the "
         "formula provides a reasonable algebraic approximation."
     )
@@ -401,7 +401,7 @@ class NobleGasStability(Test):
     commentary = (
         "Helium's ionization energy (24.59 eV) exceeds hydrogen's (13.6 eV) "
         "because He has a closed shell (1s^2). This is standard quantum "
-        "chemistry, not a GFD prediction."
+        "chemistry, not a GFM prediction."
     )
 
     def derivation(self) -> Derivation:
@@ -522,7 +522,7 @@ class CarbonTetravalence(Test):
     question = (
         "Why does carbon have exactly 4 valence electrons, enabling sp3 "
         "hybridization and tetrahedral bonding? Is the coincidence that "
-        "4 = k (GFD's closure constant) physically meaningful or numerical?"
+        "4 = k (GFM's closure constant) physically meaningful or numerical?"
     )
     reference = "Chemistry"
     tolerance = 0.01
@@ -530,7 +530,7 @@ class CarbonTetravalence(Test):
     commentary = (
         "Carbon (Z=6) has electron configuration 1s^2 2s^2 2p^2, giving 4 "
         "valence electrons. This allows sp3 tetrahedral bonding. Standard "
-        "chemistry. The coincidence that 4 = k is noted by GFD but not explained."
+        "chemistry. The coincidence that 4 = k is noted by GFM but not explained."
     )
 
     def derivation(self) -> Derivation:
@@ -539,7 +539,7 @@ class CarbonTetravalence(Test):
             .step("ELECTRON CONFIGURATION: C = 1s^2 2s^2 2p^2")
             .step("Valence electrons = 2 + 2 = 4")
             .step("Allows 4 bonds (sp3 hybridization)")
-            .step("OBSERVATION: 4 = k (GFD notes this coincidence)")
+            .step("OBSERVATION: 4 = k (GFM notes this coincidence)")
             .conclude("Carbon valence = 4. Standard chemistry.")
         )
 
@@ -592,7 +592,7 @@ class TetrahedralPatterns(Test):
     level = Level.STANDARD
     commentary = (
         "He-4 = T_2 = 4, Ne-20 = T_4 = 20, Fe-56 = T_6 = 56. These coincidences "
-        "are OBSERVED by GFD. They do NOT explain nuclear stability, which comes "
+        "are OBSERVED by GFM. They do NOT explain nuclear stability, which comes "
         "from the shell model. Pattern matching is not physics."
     )
 
@@ -636,8 +636,8 @@ class CompletePeriodicTable(Test):
     """
     Verify data for all 118 elements from hydrogen to oganesson.
     
-    GFD TEXTBOOK CONNECTION (Chapter 15, Section 15.7):
-    The periodic table ends for geometric, not technological reasons. The GFD
+    GFM TEXTBOOK CONNECTION (Chapter 15, Section 15.7):
+    The periodic table ends for geometric, not technological reasons. The GFM
     model predicts a maximum mass number of A_max = (k=4)^4 = 256 nucleons.
     
     From Section 15.7 "The 256 Ceiling: Why the Periodic Table Ends":
@@ -655,7 +655,7 @@ class CompletePeriodicTable(Test):
     - Fermium-258 (Z=100, A=258): Marks spontaneous fission threshold
     - Oganesson-294 (Z=118, A=294): Far exceeds 256, extremely unstable
     
-    Having data for all 118 elements lets us test where the GFD stability
+    Having data for all 118 elements lets us test where the GFM stability
     predictions hold and where they break down.
     
     Textbook References: Chapter 15 (Section 15.3, 15.7), Chapter 17 (Section 17.7)
@@ -670,23 +670,23 @@ class CompletePeriodicTable(Test):
         "per Chapter 15. How many of the 118 elements have magic N or Z? "
         "(Answering would improve Model Output by +3 points: stability correlation) "
         "Q3: Island of stability: Could elements near Z=114, N=184 be more stable than "
-        "their neighbors? Does GFD predict any stability islands? "
+        "their neighbors? Does GFM predict any stability islands? "
         "(Answering would improve Commentary by +2 points: research frontier)"
     )
     name = "118 Elements and the (k=4)^4 = 256 Ceiling"
     question = (
         "Why does the periodic table have exactly 118 confirmed elements, and what "
-        "determines this number? The GFD Textbook (Chapter 15) explains that the "
+        "determines this number? The GFM Textbook (Chapter 15) explains that the "
         "geometric ceiling is (k=4)^4 = 256 nucleons. All elements heavier than lead "
         "(A=208) are radioactive, and superheavy elements like oganesson (A=294) are "
         "deeply unstable because they exceed the geometric limit."
     )
-    reference = "IUPAC; GFD Textbook Chapter 15"
+    reference = "IUPAC; GFM Textbook Chapter 15"
     tolerance = 0.01
     level = Level.STANDARD
     commentary = (
         "The 118 known elements span from hydrogen (A=1) to oganesson (A=294). "
-        "The GFD model predicts A_max = 256 from hierarchical nesting: (k=4)^4. "
+        "The GFM model predicts A_max = 256 from hierarchical nesting: (k=4)^4. "
         "Elements with A > 256 can be synthesized but are inherently unstable. "
         "Lead-208 is the heaviest stable nucleus (A < 256), while oganesson-294 "
         "(A > 256) decays in 0.7 milliseconds. This is not coincidence: the "
@@ -701,7 +701,7 @@ class CompletePeriodicTable(Test):
             Derivation()
             .step("INTUITION: Why does the periodic table end?")
             .step("You cannot add protons forever because nuclear stability fails.")
-            .step("GFD EXPLANATION (Chapter 15): Hierarchical nesting limit.")
+            .step("GFM EXPLANATION (Chapter 15): Hierarchical nesting limit.")
             .step("k = 4 from simplex theorem (4 points to enclose 3D space).")
             .step("Maximum nesting levels: n = 4 (from 3+1 spacetime dimensions).")
             .equation("A_max = k^n = 4^4 = 256 nucleons")
@@ -717,23 +717,23 @@ class CompletePeriodicTable(Test):
     def model(self) -> Model:
         count = len(ATOMIC_DATA)
         
-        # GFD ceiling
+        # GFM ceiling
         k = K_CLOSURE  # 4
-        a_max_gfd = k ** 4  # 256
+        a_max_GFM = k ** 4  # 256
         
         # Heaviest stable nucleus
         lead_208 = 208
-        stable_below_ceiling = 1.0 if lead_208 < a_max_gfd else 0.0
+        stable_below_ceiling = 1.0 if lead_208 < a_max_GFM else 0.0
         
         # Oganesson (superheavy, unstable)
         oganesson_a = 294
-        og_exceeds_ceiling = 1.0 if oganesson_a > a_max_gfd else 0.0
+        og_exceeds_ceiling = 1.0 if oganesson_a > a_max_GFM else 0.0
         
         return (
             Model()
             .add("Elements in database", count)
             .add("Complete (118)", 1.0 if count == 118 else 0.0)
-            .add("GFD A_max = k^4", a_max_gfd)
+            .add("GFM A_max = k^4", a_max_GFM)
             .add("Pb-208 below ceiling", stable_below_ceiling)
             .add("Og-294 exceeds ceiling", og_exceeds_ceiling)
         )
@@ -743,7 +743,7 @@ class CompletePeriodicTable(Test):
             Observed()
             .add("Elements in database", 118)
             .add("Complete (118)", 1.0)
-            .add("GFD A_max = k^4", 256)
+            .add("GFM A_max = k^4", 256)
             .add("Pb-208 below ceiling", 1.0)
             .add("Og-294 exceeds ceiling", 1.0)
         )
@@ -774,7 +774,7 @@ def run_all() -> bool:
             "chemistry data.\n\n"
             "THE RADIUS FORMULA:\n"
             "r = (84/137) * a_bohr * n^2 * sqrt(A) / Z * [correction]\n"
-            "This is a FITTED formula using GFD-inspired constants.\n"
+            "This is a FITTED formula using GFM-inspired constants.\n"
             "It achieves ~13% average error by curve-fitting, not derivation.\n\n"
             "STANDARD CHEMISTRY VERIFIED:\n"
             "- Bohr radius identity (QED)\n"

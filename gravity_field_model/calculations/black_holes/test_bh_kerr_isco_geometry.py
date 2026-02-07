@@ -158,7 +158,7 @@ class KerrISCOSpinGeometry(Test):
         "STANDARD PHYSICS: The Kerr ISCO formula is an exact result from GR. "
         "The three boundary values {1, 6, 9} are not adjustable. At zero spin "
         "we recover {2, 3, 4, 6} for all four characteristic radii, matching "
-        "the pattern documented in CharacteristicRadiiGFDSequence. "
+        "the pattern documented in CharacteristicRadiiGFMSequence. "
         "GFM OBSERVATION: The prograde extremal ISCO coefficient 1 equals the "
         "Field Origin count (the single coupling point at the center of the "
         "stellated octahedron). The retrograde extremal ISCO coefficient 9 "

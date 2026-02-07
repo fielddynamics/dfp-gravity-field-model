@@ -2,7 +2,7 @@
 Atomic Data for the Periodic Table
 ===================================
 
-Canonical source for element properties used across all GFD test modules.
+Canonical source for element properties used across all GFM test modules.
 
 Contains:
 - ELEMENTS_118: full periodic table as list of tuples

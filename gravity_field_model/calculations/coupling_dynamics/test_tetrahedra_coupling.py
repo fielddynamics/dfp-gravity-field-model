@@ -3,7 +3,7 @@ Tetrahedra Coupling: Why the Stellated Octahedron Geometry Matters
 ==================================================================
 
 THE PHYSICS QUESTION:
-    Why does the GFD model use a stellated octahedron (two interlocking
+    Why does the GFM model use a stellated octahedron (two interlocking
     tetrahedra) rather than some other shape? What's special about it?
 
 THE ANSWER:
@@ -94,7 +94,7 @@ class ParityPartitionIsUnique(Test):
         "is a severe constraint: the 4 vertices must all be face-diagonal neighbors, never "
         "edge-neighbors or body-diagonal opposites. Only two such sets exist: {1,2,4,7} and "
         "{0,3,5,6}. These are EXACTLY the odd-parity and even-parity vertices. "
-        "This explains WHY k=4 appears throughout the GFD model: the tetrahedron is the "
+        "This explains WHY k=4 appears throughout the GFM model: the tetrahedron is the "
         "minimal closed 3D structure (4 vertices, 4 faces), and parity provides a natural, "
         "symmetric way to embed two of them in the cube scaffold."
     )
@@ -180,7 +180,7 @@ class ComplementsAlwaysCrossTetrahedra(Test):
     future_questions = (
         "Q1: What happens physically when a field propagates along a complementary pair? "
         "(Answering would improve Commentary by +3 points: connecting geometry to "
-        "the actual coupling mechanism in GFD field dynamics) "
+        "the actual coupling mechanism in GFM field dynamics) "
         "Q2: Why is XOR the right operation rather than addition mod 8? "
         "(Answering would improve Derivation by +2 points: explaining bit-level "
         "operations clarifies the algebra for undergrads) "
@@ -205,7 +205,7 @@ class ComplementsAlwaysCrossTetrahedra(Test):
         "all three bits simultaneously. Flipping one bit changes parity. Flipping two "
         "bits restores it. Flipping THREE bits changes it again. Since 3 is odd, the "
         "complement always has opposite parity. This is WHY complementary pairs form "
-        "the 'coupling channels' of the GFD model: they are geometrically antipodal "
+        "the 'coupling channels' of the GFM model: they are geometrically antipodal "
         "(body diagonals through the cube center) AND they connect opposite tetrahedra. "
         "Any field propagating along a complementary pair necessarily crosses from "
         "Tet_A to Tet_B or vice versa. This is the mechanism of dual coupling."
@@ -306,7 +306,7 @@ class OriginEquidistantFromAllVertices(Test):
         "other than the centroid has unequal distances to some vertices, creating a "
         "potential 'tilt' in the structure. The origin is the unique point where all "
         "8 distances are equal, making it a saddle point in the distance variance function. "
-        "In the GFD model, this is the 'Field Origin': the central octahedron where the "
+        "In the GFM model, this is the 'Field Origin': the central octahedron where the "
         "two tetrahedra interpenetrate (see Textbook Section 9.5). All complementary pair "
         "body diagonals pass through this point. Any field propagating between tetrahedra "
         "must transit through this central region, making it the nexus of dual coupling. "

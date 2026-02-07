@@ -20,13 +20,13 @@ GRADUATION CHECKLIST:
 [ ] Rename to test_equipartition_dimensional_coefficient.py
 [ ] Delete this sandbox file
 
-GFD Model V2
+GFM Model V2
 
 HONESTY STATEMENT:
 This module verifies STANDARD STATISTICAL MECHANICS and explores potential
-GFD correspondences. The equipartition theorem, ideal gas law, and heat
+GFM correspondences. The equipartition theorem, ideal gas law, and heat
 capacity relations are textbook results dating to Maxwell, Boltzmann, and
-Clausius. GFD provides a geometric framework for interpretation but does
+Clausius. GFM provides a geometric framework for interpretation but does
 NOT derive these values from first principles.
 
 WHAT IS VERIFIED (standard physics):
@@ -36,7 +36,7 @@ WHAT IS VERIFIED (standard physics):
 - Pressure-energy density relation: P = (2/3)*u
 - Maxwell speed distribution: v_mp = sqrt(2*k_B*T/m)
 
-GFD OBSERVATIONS (patterns noted, not derived):
+GFM OBSERVATIONS (patterns noted, not derived):
 - Factor 1/2 = 1/TIME_FACES (equipartition per DOF)
 - Factor 3 = d (spatial dimensions = translational DOF)
 - Factor 5/3 = (d+2)/d = (k+1)/d (adiabatic index)
@@ -65,10 +65,10 @@ from gravity_field_model.common import (
 # CONSTANTS (documented sources)
 # =============================================================================
 
-# Spatial dimensions (standard physics, not GFD-specific)
+# Spatial dimensions (standard physics, not GFM-specific)
 D_SPATIAL = 3
 
-# Number of time faces in GFD geometry
+# Number of time faces in GFM geometry
 N_TIME_FACES = len(TIME_FACES)  # 2
 
 
@@ -119,18 +119,18 @@ class EquipartitionHalfFactor(Test):
     HONESTY: The equipartition theorem is one of the most fundamental results
     in statistical mechanics, derived by Boltzmann from the canonical ensemble.
     The factor 1/2 arises from integrating a quadratic Hamiltonian term over
-    phase space. GFD notes that 2 = TIME_FACES (the number of temporal faces
+    phase space. GFM notes that 2 = TIME_FACES (the number of temporal faces
     in the stellated octahedron). This is an OBSERVATION.
     """
     audit_score = 88
     audit_notes = (
         "Question: 14/15 - Engages with 'why 1/2 specifically' for equipartition. "
         "Derivation: 14/15 - Clear Gaussian integral argument, physical motivation. "
-        "Commentary: 13/15 - Honest about Boltzmann origin, GFD observation clearly marked. "
+        "Commentary: 13/15 - Honest about Boltzmann origin, GFM observation clearly marked. "
         "Model: 9/10 - Clean computation with identity verification. "
         "Observations: 9/10 - Values from textbook statistical mechanics. "
         "Constants: 10/10 - All from common module. "
-        "Accessibility: 12/15 - Undergrads know equipartition; GFD link explained. "
+        "Accessibility: 12/15 - Undergrads know equipartition; GFM link explained. "
         "Header: 7/10 - Module docstring comprehensive. "
     )
     contribution_score = 55
@@ -140,18 +140,18 @@ class EquipartitionHalfFactor(Test):
         "Precision: 16/20 - Mathematical identity, exact. No approximation involved. "
         "Cross-Domain: 10/20 - Connects to BH entropy (factor 4=k), and to the "
         "Maxwell speed distribution (factor 2=TIME_FACES). Thermal physics is universal. "
-        "Falsifiability: 7/20 - In a GFD framework with different TIME_FACES, "
+        "Falsifiability: 7/20 - In a GFM framework with different TIME_FACES, "
         "equipartition would change. Cannot test experimentally in our universe. "
         "TOTAL: 55/100 - Valuable foundational observation. The 1/2 is so basic that "
         "any geometric interpretation is noteworthy."
     )
     future_questions = (
         "Q1: The quantum equipartition theorem modifies the 1/2 factor at low T. "
-        "Do quantum corrections involve other GFD numbers (e.g., k=4)? "
+        "Do quantum corrections involve other GFM numbers (e.g., k=4)? "
         "(Answering would improve Falsifiability by +5: quantum regime test) "
         "Q2: In 2D systems (e.g., graphene), equipartition still gives 1/2 per DOF "
         "but the number of DOF changes. Does the 1/2 universality strengthen or "
-        "weaken the GFD interpretation? "
+        "weaken the GFM interpretation? "
         "(Answering would improve Commentary by +3: dimension independence) "
         "Q3: The virial theorem gives <KE> = (1/2)<sum F.r> for inverse-square "
         "forces. Is this 1/2 the same 1/TIME_FACES? "
@@ -162,7 +162,7 @@ class EquipartitionHalfFactor(Test):
         "The equipartition theorem states that each quadratic degree of freedom "
         "in a classical Hamiltonian contributes exactly (1/2)*k_B*T to the "
         "average energy. WHY 1/2? The standard derivation shows this comes from "
-        "a Gaussian integral over phase space. But GFD notes that 2 = TIME_FACES, "
+        "a Gaussian integral over phase space. But GFM notes that 2 = TIME_FACES, "
         "the number of temporal faces in the stellated octahedron. Is the "
         "equipartition half related to the temporal structure of spacetime geometry?"
     )
@@ -177,7 +177,7 @@ class EquipartitionHalfFactor(Test):
         "        = (1/2)*k_B*T\n"
         "The 1/2 comes from the Gaussian moment: <x^2> = sigma^2/2 when the "
         "exponential weight is exp(-x^2/(2*sigma^2)).\n\n"
-        "GFD OBSERVATION: 2 = len(TIME_FACES) in the Merkaba. The stellated "
+        "GFM OBSERVATION: 2 = len(TIME_FACES) in the Merkaba. The stellated "
         "octahedron has 8 faces total: 2 temporal + 6 spatial. The equipartition "
         "factor 1/2 = 1/TIME_FACES is noted as a correspondence. The standard "
         "derivation from the Gaussian integral is the established explanation.\n\n"
@@ -196,8 +196,8 @@ class EquipartitionHalfFactor(Test):
             .equation("= -(d/d_beta) ln Z_i = (1/2) * k_B * T")
             .step("where beta = 1/(k_B*T).")
             .step("The factor 1/2 emerges from the Gaussian integral identity.")
-            .step("GFD OBSERVATION: 2 = len(TIME_FACES) = number of temporal faces.")
-            .step("So 1/2 = 1/TIME_FACES in GFD notation.")
+            .step("GFM OBSERVATION: 2 = len(TIME_FACES) = number of temporal faces.")
+            .step("So 1/2 = 1/TIME_FACES in GFM notation.")
             .conclude("Equipartition assigns (1/TIME_FACES)*k_B*T per quadratic DOF.")
         )
 
@@ -243,14 +243,14 @@ class MonatomicEnergyThreeHalves(Test):
 
     HONESTY: The factor 3/2 is standard statistical mechanics: 3 translational
     DOF times 1/2 from equipartition. The factor 3 = d (spatial dimensions) is
-    well-known dimensional analysis. GFD additionally notes that d=3 is encoded
+    well-known dimensional analysis. GFM additionally notes that d=3 is encoded
     in the stellated octahedron face count (3 spatial faces per tetrahedron).
     """
     audit_score = 86
     audit_notes = (
         "Question: 13/15 - Good 'why 3/2' hook connecting to dimensionality. "
         "Derivation: 14/15 - Clear step-by-step from DOF counting to 3/2. "
-        "Commentary: 12/15 - Honest about standard physics, GFD observation clear. "
+        "Commentary: 12/15 - Honest about standard physics, GFM observation clear. "
         "Model: 9/10 - Clean decomposition of 3/2 into d and TIME_FACES. "
         "Observations: 9/10 - Textbook values, well-cited. "
         "Constants: 10/10 - All from common module. "
@@ -260,7 +260,7 @@ class MonatomicEnergyThreeHalves(Test):
     contribution_score = 48
     contribution_notes = (
         "Discovery: 16/40 - The d-dependence of ideal gas energy is textbook. "
-        "GFD adds the structural interpretation of d=3 as spatial face count. "
+        "GFM adds the structural interpretation of d=3 as spatial face count. "
         "Precision: 16/20 - Exact mathematical identity. d/TIME_FACES = 3/2. "
         "Cross-Domain: 10/20 - Connects to BH evaporation exponent (also d=3) "
         "and to equipartition (Test 1). "
@@ -269,13 +269,13 @@ class MonatomicEnergyThreeHalves(Test):
     )
     future_questions = (
         "Q1: Diatomic gases have C_v = (5/2)Nk_B at moderate T (2 rotational DOF). "
-        "Does 5 = k+1 in GFD? If so, diatomic energy involves (k+1)/TIME_FACES. "
+        "Does 5 = k+1 in GFM? If so, diatomic energy involves (k+1)/TIME_FACES. "
         "(Answering would improve Discovery by +5: extends to molecules) "
         "Q2: In 2D systems (e.g., thin films), E = N*k_B*T (factor 1 = d/2 with d=2). "
         "Does the pattern d/TIME_FACES hold in lower dimensions? "
         "(Answering would improve Falsifiability by +5: dimensional test) "
         "Q3: At very high T, relativistic corrections modify the energy. "
-        "Do the corrections involve GFD numbers? "
+        "Do the corrections involve GFM numbers? "
         "(Answering would improve Commentary by +3: relativistic regime)"
     )
     name = "Monatomic Ideal Gas: Why 3/2?"
@@ -284,7 +284,7 @@ class MonatomicEnergyThreeHalves(Test):
         "3/2 = d/(TIME_FACES) decomposes into d=3 translational degrees of "
         "freedom divided by 2 (the equipartition factor per DOF). The 3 is "
         "simply the number of spatial dimensions — a particle can translate "
-        "in x, y, and z. But WHY 3 dimensions? GFD notes that d=3 equals the "
+        "in x, y, and z. But WHY 3 dimensions? GFM notes that d=3 equals the "
         "number of spatial faces per tetrahedron in the Merkaba."
     )
     reference = "Reif (1965); Pathria (1972); Clausius (1870)"
@@ -295,11 +295,11 @@ class MonatomicEnergyThreeHalves(Test):
         "(motion in x, y, z). No rotational or vibrational modes. Equipartition gives:\n"
         "  E = 3 * (1/2)*k_B*T * N = (3/2)*N*k_B*T\n"
         "The factor 3 is simply the number of spatial dimensions. This is textbook.\n\n"
-        "GFD OBSERVATION: 3/2 = d/TIME_FACES where d=3 is the spatial dimension "
+        "GFM OBSERVATION: 3/2 = d/TIME_FACES where d=3 is the spatial dimension "
         "and TIME_FACES=2. In the stellated octahedron, each tetrahedron has exactly "
         "3 spatial faces and 1 temporal face (4 faces total). The ratio 3/2 = "
         "spatial_faces_per_tet / temporal_faces encodes the dimension count.\n\n"
-        "CONTEXT: This is standard dimensional analysis. The GFD observation is that "
+        "CONTEXT: This is standard dimensional analysis. The GFM observation is that "
         "d=3 has a geometric realization in the Merkaba. The physics content is that "
         "3D space gives 3 translational DOF."
     )
@@ -316,8 +316,8 @@ class MonatomicEnergyThreeHalves(Test):
             .step("DECOMPOSITION: 3/2 = d / TIME_FACES")
             .step("  d = 3 (spatial dimensions = translational DOF)")
             .step("  TIME_FACES = 2 (temporal face count in Merkaba)")
-            .step("GFD OBSERVATION: d=3 is the number of spatial faces per tetrahedron.")
-            .conclude("Monatomic energy factor 3/2 = d/TIME_FACES, standard physics with GFD notation.")
+            .step("GFM OBSERVATION: d=3 is the number of spatial faces per tetrahedron.")
+            .conclude("Monatomic energy factor 3/2 = d/TIME_FACES, standard physics with GFM notation.")
         )
 
     def model(self) -> Model:
@@ -366,37 +366,37 @@ class AdiabaticIndexFiveThirds(Test):
 
     HONESTY: The adiabatic index gamma = C_p/C_v = (f+2)/f where f is the
     number of DOF. For monatomic gas f=3, giving gamma = 5/3. This is
-    standard thermodynamics. GFD notes that 5 = k+1 and 3 = d, so
+    standard thermodynamics. GFM notes that 5 = k+1 and 3 = d, so
     gamma = (k+1)/d. This is a numerical OBSERVATION.
     """
     audit_score = 87
     audit_notes = (
         "Question: 14/15 - Strong 'why 5/3' hook with speed of sound context. "
         "Derivation: 13/15 - Good buildup from heat capacities to gamma. "
-        "Commentary: 13/15 - Honest about standard thermodynamics, GFD pattern noted. "
+        "Commentary: 13/15 - Honest about standard thermodynamics, GFM pattern noted. "
         "Model: 10/10 - Clean verification with multiple decomposition checks. "
         "Observations: 8/10 - Standard values cited from Reif. "
         "Constants: 10/10 - All from common module. "
-        "Accessibility: 12/15 - Gamma well known to undergrads, GFD link explained. "
+        "Accessibility: 12/15 - Gamma well known to undergrads, GFM link explained. "
         "Header: 7/10 - Module docstring comprehensive. "
     )
     contribution_score = 58
     contribution_notes = (
         "Discovery: 24/40 - Observation that gamma = (k+1)/d where k=K_CLOSURE. "
-        "More striking than 3/2 because it connects TWO GFD constants (k and d). "
+        "More striking than 3/2 because it connects TWO GFM constants (k and d). "
         "Precision: 16/20 - Exact mathematical identity. No approximation. "
         "Cross-Domain: 10/20 - gamma appears in sound speed, shock waves, stellar "
-        "structure. GFD decomposition applies to all these domains. "
+        "structure. GFM decomposition applies to all these domains. "
         "Falsifiability: 8/20 - Predicts that gamma for different DOF counts should "
-        "have GFD-interpretable numerator/denominator. Testable with diatomic gases. "
-        "TOTAL: 58/100 - Valuable observation connecting two GFD numbers in one ratio."
+        "have GFM-interpretable numerator/denominator. Testable with diatomic gases. "
+        "TOTAL: 58/100 - Valuable observation connecting two GFM numbers in one ratio."
     )
     future_questions = (
         "Q1: For diatomic gas, gamma = 7/5 at moderate T. Does 7 = VERTICES - 1 = "
-        "2^d - 1 have GFD meaning? And 5 = k+1. So gamma_diatomic = (2^d - 1)/(k+1)? "
+        "2^d - 1 have GFM meaning? And 5 = k+1. So gamma_diatomic = (2^d - 1)/(k+1)? "
         "(Answering would improve Discovery by +8: extends gamma pattern to diatomics) "
         "Q2: In stellar interiors, radiation pressure modifies gamma toward 4/3. "
-        "Does 4/3 = k/d in GFD? If so, radiation-dominated matter has gamma = k/d. "
+        "Does 4/3 = k/d in GFM? If so, radiation-dominated matter has gamma = k/d. "
         "(Answering would improve Cross-Domain by +5: stellar structure connection) "
         "Q3: The speed of sound v_s = sqrt(gamma*k_B*T/m). At the Planck temperature, "
         "v_s approaches c. Does this limit constrain gamma geometrically? "
@@ -407,7 +407,7 @@ class AdiabaticIndexFiveThirds(Test):
         "A monatomic ideal gas has adiabatic index gamma = C_p/C_v = 5/3. "
         "This ratio governs the speed of sound, shock wave strength, and "
         "adiabatic expansion. The standard result: gamma = (f+2)/f where "
-        "f=3 DOF gives 5/3. But GFD notes that 5 = k+1 (where k = K_CLOSURE = 4) "
+        "f=3 DOF gives 5/3. But GFM notes that 5 = k+1 (where k = K_CLOSURE = 4) "
         "and 3 = d (spatial dimensions). So gamma = (k+1)/d. Is the adiabatic "
         "index encoding both the closure constant and spatial dimension?"
     )
@@ -421,13 +421,13 @@ class AdiabaticIndexFiveThirds(Test):
         "  gamma = C_p/C_v = (f+2)/f\n"
         "For monatomic gas, f = d = 3 translational DOF:\n"
         "  gamma = (3+2)/3 = 5/3 = 1.6667\n\n"
-        "GFD OBSERVATION: 5/3 = (k+1)/d where k = K_CLOSURE = 4 and d = 3.\n"
+        "GFM OBSERVATION: 5/3 = (k+1)/d where k = K_CLOSURE = 4 and d = 3.\n"
         "This is because f+2 = d+2 = 3+2 = 5 = k+1 is a numerical coincidence "
-        "specific to d=3, k=4 (since k = d+1 in GFD). The standard derivation "
+        "specific to d=3, k=4 (since k = d+1 in GFM). The standard derivation "
         "from heat capacities is the established explanation.\n\n"
-        "NOTE: The equality d+2 = k+1 holds because k = d+1 = 4 in GFD geometry "
+        "NOTE: The equality d+2 = k+1 holds because k = d+1 = 4 in GFM geometry "
         "(tetrahedral coupling). This is a structural relationship, not a coincidence "
-        "within the GFD framework itself."
+        "within the GFM framework itself."
     )
 
     def derivation(self) -> Derivation:
@@ -440,9 +440,9 @@ class AdiabaticIndexFiveThirds(Test):
             .equation("C_p = C_v + N * k_B = ((d+2)/2) * N * k_B = (5/2) * N * k_B")
             .step("Adiabatic index:")
             .equation("gamma = C_p / C_v = (d+2)/d = 5/3")
-            .step("GFD OBSERVATION: d+2 = 3+2 = 5 = k+1 (since k = d+1 = 4).")
+            .step("GFM OBSERVATION: d+2 = 3+2 = 5 = k+1 (since k = d+1 = 4).")
             .equation("gamma = (k+1)/d = 5/3")
-            .step("This connects both fundamental GFD numbers k and d in one ratio.")
+            .step("This connects both fundamental GFM numbers k and d in one ratio.")
             .conclude("Adiabatic index gamma = (d+2)/d = (k+1)/d = 5/3 for monatomic gas.")
         )
 
@@ -453,13 +453,13 @@ class AdiabaticIndexFiveThirds(Test):
         # Standard decomposition
         gamma_from_d = (D_SPATIAL + 2) / D_SPATIAL
 
-        # GFD decomposition
+        # GFM decomposition
         k = K_CLOSURE  # 4
-        gamma_from_gfd = (k + 1) / D_SPATIAL
+        gamma_from_GFM = (k + 1) / D_SPATIAL
 
         # Verify both decompositions match
         match_standard = 1.0 if abs(gamma - gamma_from_d) < 1e-15 else 0.0
-        match_gfd = 1.0 if abs(gamma - gamma_from_gfd) < 1e-15 else 0.0
+        match_GFM = 1.0 if abs(gamma - gamma_from_GFM) < 1e-15 else 0.0
 
         # Verify the structural relation k = d + 1
         k_equals_d_plus_1 = 1.0 if k == D_SPATIAL + 1 else 0.0
@@ -468,9 +468,9 @@ class AdiabaticIndexFiveThirds(Test):
             Model()
             .add("gamma (monatomic)", round(gamma, 6))
             .add("(d+2)/d", round(gamma_from_d, 6))
-            .add("(k+1)/d", round(gamma_from_gfd, 6))
+            .add("(k+1)/d", round(gamma_from_GFM, 6))
             .add("Standard decomposition matches", match_standard)
-            .add("GFD decomposition matches", match_gfd)
+            .add("GFM decomposition matches", match_GFM)
             .add("k equals d+1", k_equals_d_plus_1)
         )
 
@@ -481,7 +481,7 @@ class AdiabaticIndexFiveThirds(Test):
             .add("(d+2)/d", round(5.0 / 3.0, 6))
             .add("(k+1)/d", round(5.0 / 3.0, 6))
             .add("Standard decomposition matches", 1.0)
-            .add("GFD decomposition matches", 1.0)
+            .add("GFM decomposition matches", 1.0)
             .add("k equals d+1", 1.0)
         )
 
@@ -496,13 +496,13 @@ class PressureEnergyTwoThirds(Test):
 
     HONESTY: The relation P = (2/3)*u for an ideal gas follows from kinetic
     theory (Clausius 1870). The factor 2/3 = 2/(d) where d=3 spatial dimensions.
-    This is standard physics. GFD notes that 2 = TIME_FACES, so 2/3 = TIME_FACES/d.
+    This is standard physics. GFM notes that 2 = TIME_FACES, so 2/3 = TIME_FACES/d.
     """
     audit_score = 85
     audit_notes = (
         "Question: 13/15 - Good 'why 2/3' hook connecting pressure to geometry. "
         "Derivation: 13/15 - Clear kinetic theory derivation from momentum transfer. "
-        "Commentary: 12/15 - Honest about Clausius origin, GFD pattern noted. "
+        "Commentary: 12/15 - Honest about Clausius origin, GFM pattern noted. "
         "Model: 9/10 - Clean verification with numerical example. "
         "Observations: 9/10 - Textbook values. "
         "Constants: 10/10 - All from common module. "
@@ -522,11 +522,11 @@ class PressureEnergyTwoThirds(Test):
     )
     future_questions = (
         "Q1: For a photon gas (radiation), P = (1/3)*u. The factor 1/3 = 1/d. "
-        "Is there a GFD interpretation for why radiation pressure lacks the "
+        "Is there a GFM interpretation for why radiation pressure lacks the "
         "TIME_FACES factor? (Photons have no rest frame — no 'temporal face'?) "
         "(Answering would improve Discovery by +8: radiation vs matter distinction) "
         "Q2: The cosmological equation of state P = w*rho*c^2 has w = 0 (dust), "
-        "1/3 (radiation), -1 (dark energy). Do these w values decompose into GFD? "
+        "1/3 (radiation), -1 (dark energy). Do these w values decompose into GFM? "
         "(Answering would improve Cross-Domain by +5: cosmological connection) "
         "Q3: In a degenerate electron gas (white dwarf), P propto rho^(5/3). "
         "The exponent 5/3 = gamma = (k+1)/d (same as Test 3). Pattern? "
@@ -538,7 +538,7 @@ class PressureEnergyTwoThirds(Test):
         "density. WHY 2/3? Kinetic theory derives this from momentum transfer "
         "to the walls: each of 3 dimensions contributes equally, and the "
         "factor 2 comes from relating <mv^2> to kinetic energy (1/2)*mv^2. "
-        "GFD notes that 2/3 = TIME_FACES/d: the ratio of temporal faces to "
+        "GFM notes that 2/3 = TIME_FACES/d: the ratio of temporal faces to "
         "spatial dimension count. Is the pressure factor encoding spacetime "
         "geometry?"
     )
@@ -553,7 +553,7 @@ class PressureEnergyTwoThirds(Test):
         "The factor 1/3 comes from averaging over 3 spatial directions (each "
         "direction carries 1/3 of the kinetic energy). The factor 2 comes from "
         "the ratio of m*v^2 (momentum flux) to (1/2)*m*v^2 (kinetic energy).\n\n"
-        "GFD OBSERVATION: 2/3 = TIME_FACES/d. This is the reciprocal of the "
+        "GFM OBSERVATION: 2/3 = TIME_FACES/d. This is the reciprocal of the "
         "energy factor 3/2 = d/TIME_FACES from Test 2. The consistency is "
         "expected: if energy scales as d/TIME_FACES, pressure as its reciprocal.\n\n"
         "NOTE: For a relativistic gas (photons), P = (1/3)*u. The factor 1/3 = 1/d "
@@ -575,7 +575,7 @@ class PressureEnergyTwoThirds(Test):
             .step("DECOMPOSITION: 2/3 = TIME_FACES / d")
             .step("  TIME_FACES = 2 (the factor from KE = (1/2)*mv^2)")
             .step("  d = 3 (the spatial averaging factor 1/d)")
-            .step("GFD OBSERVATION: 2/3 = TIME_FACES/d, reciprocal of energy factor.")
+            .step("GFM OBSERVATION: 2/3 = TIME_FACES/d, reciprocal of energy factor.")
             .conclude("Pressure-energy relation P = (TIME_FACES/d)*u = (2/3)*u.")
         )
 
@@ -621,7 +621,7 @@ class PressureEnergyTwoThirds(Test):
 
 class ThermodynamicCoefficientCatalog(Test):
     """
-    Catalog all thermodynamic coefficients and check GFD decompositions.
+    Catalog all thermodynamic coefficients and check GFM decompositions.
 
     HONESTY: This is a systematic catalog of standard thermodynamic fractions.
     All coefficients are from textbook statistical mechanics. We check which
@@ -642,7 +642,7 @@ class ThermodynamicCoefficientCatalog(Test):
     contribution_score = 60
     contribution_notes = (
         "Discovery: 25/40 - First systematic catalog of thermal physics coefficients "
-        "checked against GFD numbers. Shows that ALL major thermodynamic fractions "
+        "checked against GFM numbers. Shows that ALL major thermodynamic fractions "
         "decompose into {d, k, TIME_FACES}. "
         "Precision: 14/20 - All identities are exact (integer arithmetic). "
         "Cross-Domain: 12/20 - Connects thermal physics to BH coefficient catalog. "
@@ -654,12 +654,12 @@ class ThermodynamicCoefficientCatalog(Test):
     future_questions = (
         "Q1: Polyatomic gases have gamma = (f+2)/f where f > 3. For f = 5 (diatomic), "
         "gamma = 7/5. For f = 6 (nonlinear triatomic), gamma = 8/6 = 4/3 = k/d. "
-        "Does f = 6 = SPATIAL_FACES have special GFD significance? "
+        "Does f = 6 = SPATIAL_FACES have special GFM significance? "
         "(Answering would improve Discovery by +8: molecular DOF pattern) "
         "Q2: The Stefan-Boltzmann law involves T^4 = T^(d+1). The exponent d+1 = k. "
         "Does this connect the radiation law to the closure constant? "
         "(Answering would improve Cross-Domain by +5: radiation connection) "
-        "Q3: Are there thermodynamic coefficients that do NOT decompose into GFD numbers? "
+        "Q3: Are there thermodynamic coefficients that do NOT decompose into GFM numbers? "
         "Finding failures would strengthen or weaken the pattern. "
         "(Answering would improve Falsifiability by +5: failure catalog)"
     )
@@ -667,9 +667,9 @@ class ThermodynamicCoefficientCatalog(Test):
     question = (
         "The major fractional coefficients in ideal gas thermodynamics are: "
         "1/2, 3/2, 5/2, 2/3, 5/3, and 2. Can ALL of them be expressed as "
-        "simple combinations of just three GFD structural numbers: d=3, "
+        "simple combinations of just three GFM structural numbers: d=3, "
         "k=4, and TIME_FACES=2? If so, the entire thermodynamic coefficient "
-        "structure of ideal gases reduces to GFD geometry."
+        "structure of ideal gases reduces to GFM geometry."
     )
     reference = "Reif (1965); Pathria (1972); Huang (1987)"
     tolerance = 0.001
@@ -685,8 +685,8 @@ class ThermodynamicCoefficientCatalog(Test):
         "ALL six coefficients decompose into {d, k, TIME_FACES}.\n\n"
         "CAVEAT: These decompositions work because k = d+1 = 4 in our universe. "
         "The 'k+1' appearances (giving 5) are really d+2 from the standard "
-        "(f+2)/f formula. GFD adds the observation that d+1 = k, so d+2 = k+1. "
-        "This is a consequence of GFD geometry, not an independent verification.\n\n"
+        "(f+2)/f formula. GFM adds the observation that d+1 = k, so d+2 = k+1. "
+        "This is a consequence of GFM geometry, not an independent verification.\n\n"
         "STATISTICAL NOTE: With three parameters {2, 3, 4} and allowing simple "
         "ratios, many small fractions can be generated. The observation is that "
         "EXACTLY the physically relevant fractions appear, not arbitrary ones."
@@ -709,7 +709,7 @@ class ThermodynamicCoefficientCatalog(Test):
             .step("Coefficient 6: 2 (Maxwell most probable speed factor)")
             .equation("2 = TIME_FACES (v_mp = sqrt(2*k_B*T/m))")
             .step("Result: 6 out of 6 coefficients decompose into {d, k, TIME_FACES}.")
-            .conclude("ALL major ideal gas thermodynamic fractions reduce to GFD structural numbers.")
+            .conclude("ALL major ideal gas thermodynamic fractions reduce to GFM structural numbers.")
         )
 
     def model(self) -> Model:
@@ -717,7 +717,7 @@ class ThermodynamicCoefficientCatalog(Test):
         k = K_CLOSURE              # 4
         tf = N_TIME_FACES          # 2
 
-        # Catalog of coefficients with GFD decompositions
+        # Catalog of coefficients with GFM decompositions
         catalog = {
             '1/2 (equipartition)':   (0.5,     1.0 / tf),
             '3/2 (C_v/Nk_B)':       (1.5,     d / tf),
@@ -730,15 +730,15 @@ class ThermodynamicCoefficientCatalog(Test):
         # Count matches
         n_total = len(catalog)
         n_match = sum(
-            1 for (standard, gfd) in catalog.values()
-            if abs(standard - gfd) < 1e-15
+            1 for (standard, GFM) in catalog.values()
+            if abs(standard - GFM) < 1e-15
         )
         all_match = 1.0 if n_match == n_total else 0.0
 
         return (
             Model()
             .add("Coefficients examined", n_total)
-            .add("GFD decompositions found", n_match)
+            .add("GFM decompositions found", n_match)
             .add("All match", all_match)
             .add("d (spatial dimensions)", d)
             .add("k (closure constant)", k)
@@ -749,7 +749,7 @@ class ThermodynamicCoefficientCatalog(Test):
         return (
             Observed()
             .add("Coefficients examined", 6)
-            .add("GFD decompositions found", 6)
+            .add("GFM decompositions found", 6)
             .add("All match", 1.0)
             .add("d (spatial dimensions)", 3)
             .add("k (closure constant)", 4)
@@ -778,10 +778,10 @@ def run_all() -> bool:
             "STATUS: Work in progress\n\n"
             "EXPLORING:\n"
             "- Do ALL ideal gas thermodynamic fractions decompose into\n"
-            "  GFD structural numbers {d=3, k=4, TIME_FACES=2}?\n\n"
+            "  GFM structural numbers {d=3, k=4, TIME_FACES=2}?\n\n"
             "STANDARD PHYSICS: All coefficients are from textbook statistical\n"
             "mechanics (Boltzmann, Maxwell, Clausius).\n"
-            "GFD OBSERVATIONS: Numerical correspondences documented, not derived.\n\n"
+            "GFM OBSERVATIONS: Numerical correspondences documented, not derived.\n\n"
             "CENTERPIECE FINDING: All six major thermodynamic fractions\n"
             "(1/2, 3/2, 5/2, 2/3, 5/3, 2) decompose into {d, k, TIME_FACES}.\n\n"
             "5 tests: 1 CRITICAL, 3 STANDARD, 1 EXPLORATORY\n\n"

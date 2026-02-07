@@ -10,13 +10,13 @@ to be a normal number, meaning its digits in any base are equidistributed
 in the limit. In base 8, equidistribution implies each digit 0 through 7
 appears with probability 1/8, yielding maximum entropy of exactly 3.0 bits.
 
-The GFD Field Closure traversal reads pi in base 8, mapping each digit to
+The GFM Field Closure traversal reads pi in base 8, mapping each digit to
 one of the 2k = 8 vertices of the stellated octahedron. If the digit stream
 carries less than maximal entropy, some vertices would be visited more often
 than others, biasing the traversal. We measure the Shannon entropy of the
 digit distribution and compare it to the theoretical maximum.
 
-GFD OBSERVATION: The octal pi digit entropy approaches log2(2k) = 3.0 bits.
+GFM OBSERVATION: The octal pi digit entropy approaches log2(2k) = 3.0 bits.
 
 This is an OBSERVATION, not a derivation.
 """
@@ -45,7 +45,7 @@ class PiDigitEntropyApproachesMaximum(Test):
     uniformity. Empirical studies of billions of pi digits in base 8
     confirm near perfect equidistribution.
 
-    GFD OBSERVATION:
+    GFM OBSERVATION:
     The Field Closure has 2k = 8 vertices where k = 4. The traversal
     reads octal pi digits as vertex addresses. The Shannon entropy of
     these digits approaches log2(8) = 3.0 bits, meaning the traversal
@@ -54,7 +54,7 @@ class PiDigitEntropyApproachesMaximum(Test):
 
     EPISTEMIC STATUS:
     This is an empirical observation. The near maximal entropy follows
-    from the conjectured normality of pi, not from GFD geometry. We
+    from the conjectured normality of pi, not from GFM geometry. We
     document the correspondence without claiming the geometry causes
     the equidistribution.
     """
@@ -86,7 +86,7 @@ class PiDigitEntropyApproachesMaximum(Test):
         "We observe that the octal digits of pi, when used as vertex addresses in "
         "the Field Closure traversal, produce a Shannon entropy very close to this "
         "maximum. This is an observation rooted in the empirical properties of pi, "
-        "not a derivation from GFD geometry. However, the correspondence is notable: "
+        "not a derivation from GFM geometry. However, the correspondence is notable: "
         "the geometry requires 8 vertex labels, base 8 provides 8 digit values, and "
         "the digit stream visits all 8 with near equal frequency. The information "
         "channel between pi and the stellated octahedron operates at near full capacity. "
@@ -101,7 +101,7 @@ class PiDigitEntropyApproachesMaximum(Test):
     )
 
     academic_paper = """\
-TITLE Shannon Entropy of Octal Pi Digits and Field Closure Vertex Fairness ABSTRACT We measure the Shannon entropy of pi digits in base 8 and compare it to the theoretical maximum of log2(8) = 3.0 bits. The measured entropy approaches 3.0 bits, confirming near uniform vertex selection across the 2k = 8 vertices of the Field Closure. This is an OBSERVATION. 1. INTRODUCTION: THE SCIENTIFIC QUESTION The Gravity Field Dynamics model traverses a stellated octahedron by reading digits of pi in base 8, where each digit selects one of 2k = 8 vertices. A natural question arises: does this digit stream treat all vertices equally, or does it systematically favor some over others? If the stream is biased, the traversal would unevenly sample the geometry, undermining any statistical claims about the Field Closure structure. Standard information theory, established by Shannon in 1948, provides the tool for answering this question. Shannon entropy measures the average information content per symbol. For an alphabet of N symbols drawn from a uniform distribution, the maximum entropy is log2(N) bits. Any deviation from uniformity reduces entropy below this ceiling. Pi is conjectured to be a normal number, meaning its digits in every base are equidistributed in the limit. While this remains unproven, empirical analysis of billions of digits supports near perfect uniformity. GFD observes that the octal digit entropy approaches log2(2k) = 3.0 bits, the theoretical maximum for 8 symbols. This means the traversal extracts near maximal information per step. This test specifically investigates whether 1000 octal digits of pi achieve Shannon entropy within 2% of 3.0 bits, and whether the entropy efficiency ratio approaches unity. 2. METHODOLOGY The model traverses 1000 digits of pi in base 8 using the traverse_pi_base8 function from the GFD common library. It counts the frequency of each digit 0 through 7, then computes the Shannon entropy as the negative sum of p_i times log2(p_i) over all eight digit categories. The maximum entropy is computed as log2(2K) where K = 4 is the GFD closure constant. The entropy efficiency ratio is the measured entropy divided by the maximum. Agreement is defined as the measured entropy falling within 2% of 3.0 bits, which accommodates the finite sample bias of approximately (M minus 1) / (2N ln 2) = 0.005 bits for M = 8 categories and N = 1000 samples. The observed values are set to the theoretical maximum corresponding to perfect uniformity. 3. RESULTS The model calculates the following from 1000 octal pi digits: Shannon entropy: approximately 2.99 bits (varies with exact digit frequencies in the sample). Maximum entropy: 3.0 bits (exact, from log2(8)). Entropy efficiency ratio: approximately 0.997. The observed reference values are 3.0 bits for Shannon entropy, 3.0 bits for the maximum, and 1.0 for the efficiency ratio. The measured entropy falls within 1% of the theoretical ceiling. We observe that no digit is systematically overrepresented or underrepresented. The small deficit below 3.0 bits is consistent with expected finite sample statistical fluctuation, not with systematic bias in the digit stream. 4. DISCUSSION The results confirm that the octal pi digit stream provides nearly unbiased vertex selection across all eight vertices of the Field Closure. The information channel between pi and the stellated octahedron operates at near full capacity. EPISTEMIC STATUS: This is an OBSERVATION. The near maximal entropy is a property of pi in base 8, supported by the normality conjecture and extensive empirical evidence. GFD does not cause or derive this equidistribution. We document that the geometric requirement for 8 unbiased vertex labels is satisfied by the octal pi stream. This test relates to existing bit encoding tests (InputIs3BitsPerStep, StateIs3Bits) by extending the analysis from quantity of information (3 bits per digit) to quality of information (those 3 bits carry near maximal entropy). It also supports the NoInformationLoss test by showing the input stream itself is well conditioned. 5. LIMITATIONS AND HONESTY STATEMENT This does not prove pi is normal. The 1000 digit sample is small compared to normality studies using billions of digits. The correspondence between 8 vertices and base 8 is by construction, not by discovery. A larger sample would tighten the entropy estimate but would not change the fundamental observation. Further work could examine
+TITLE Shannon Entropy of Octal Pi Digits and Field Closure Vertex Fairness ABSTRACT We measure the Shannon entropy of pi digits in base 8 and compare it to the theoretical maximum of log2(8) = 3.0 bits. The measured entropy approaches 3.0 bits, confirming near uniform vertex selection across the 2k = 8 vertices of the Field Closure. This is an OBSERVATION. 1. INTRODUCTION: THE SCIENTIFIC QUESTION The Gravity Field Dynamics model traverses a stellated octahedron by reading digits of pi in base 8, where each digit selects one of 2k = 8 vertices. A natural question arises: does this digit stream treat all vertices equally, or does it systematically favor some over others? If the stream is biased, the traversal would unevenly sample the geometry, undermining any statistical claims about the Field Closure structure. Standard information theory, established by Shannon in 1948, provides the tool for answering this question. Shannon entropy measures the average information content per symbol. For an alphabet of N symbols drawn from a uniform distribution, the maximum entropy is log2(N) bits. Any deviation from uniformity reduces entropy below this ceiling. Pi is conjectured to be a normal number, meaning its digits in every base are equidistributed in the limit. While this remains unproven, empirical analysis of billions of digits supports near perfect uniformity. GFM observes that the octal digit entropy approaches log2(2k) = 3.0 bits, the theoretical maximum for 8 symbols. This means the traversal extracts near maximal information per step. This test specifically investigates whether 1000 octal digits of pi achieve Shannon entropy within 2% of 3.0 bits, and whether the entropy efficiency ratio approaches unity. 2. METHODOLOGY The model traverses 1000 digits of pi in base 8 using the traverse_pi_base8 function from the GFM common library. It counts the frequency of each digit 0 through 7, then computes the Shannon entropy as the negative sum of p_i times log2(p_i) over all eight digit categories. The maximum entropy is computed as log2(2K) where K = 4 is the GFM closure constant. The entropy efficiency ratio is the measured entropy divided by the maximum. Agreement is defined as the measured entropy falling within 2% of 3.0 bits, which accommodates the finite sample bias of approximately (M minus 1) / (2N ln 2) = 0.005 bits for M = 8 categories and N = 1000 samples. The observed values are set to the theoretical maximum corresponding to perfect uniformity. 3. RESULTS The model calculates the following from 1000 octal pi digits: Shannon entropy: approximately 2.99 bits (varies with exact digit frequencies in the sample). Maximum entropy: 3.0 bits (exact, from log2(8)). Entropy efficiency ratio: approximately 0.997. The observed reference values are 3.0 bits for Shannon entropy, 3.0 bits for the maximum, and 1.0 for the efficiency ratio. The measured entropy falls within 1% of the theoretical ceiling. We observe that no digit is systematically overrepresented or underrepresented. The small deficit below 3.0 bits is consistent with expected finite sample statistical fluctuation, not with systematic bias in the digit stream. 4. DISCUSSION The results confirm that the octal pi digit stream provides nearly unbiased vertex selection across all eight vertices of the Field Closure. The information channel between pi and the stellated octahedron operates at near full capacity. EPISTEMIC STATUS: This is an OBSERVATION. The near maximal entropy is a property of pi in base 8, supported by the normality conjecture and extensive empirical evidence. GFM does not cause or derive this equidistribution. We document that the geometric requirement for 8 unbiased vertex labels is satisfied by the octal pi stream. This test relates to existing bit encoding tests (InputIs3BitsPerStep, StateIs3Bits) by extending the analysis from quantity of information (3 bits per digit) to quality of information (those 3 bits carry near maximal entropy). It also supports the NoInformationLoss test by showing the input stream itself is well conditioned. 5. LIMITATIONS AND HONESTY STATEMENT This does not prove pi is normal. The 1000 digit sample is small compared to normality studies using billions of digits. The correspondence between 8 vertices and base 8 is by construction, not by discovery. A larger sample would tighten the entropy estimate but would not change the fundamental observation. Further work could examine
     """
 
 
@@ -130,7 +130,7 @@ TITLE Shannon Entropy of Octal Pi Digits and Field Closure Vertex Fairness ABSTR
                 "to accommodate this small statistical effect."
             )
             .step(
-                "GFD OBSERVATION: the measured entropy should approach 3.0 bits, "
+                "GFM OBSERVATION: the measured entropy should approach 3.0 bits, "
                 "confirming that the octal pi stream provides unbiased vertex "
                 "selection across all 2k vertices of the Field Closure."
             )

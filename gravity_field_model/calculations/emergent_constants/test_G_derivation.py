@@ -3,9 +3,9 @@ Gravitational Constant G from Merkaba Resonance Topology
 ========================================================
 
 This module derives Newton's gravitational constant G from the dual Field
-Chamber (Merkaba) structure using the GFD/DFP framework.
+Chamber (Merkaba) structure using the GFM/DFP framework.
 
-THE GFD NATIVE FRAMING:
+THE GFM NATIVE FRAMING:
 
 The formula G = (17/13) x alpha^21 x hbar*c/m_e^2 emerges from the Merkaba
 structure, not merely "3+1 spacetime":
@@ -64,7 +64,7 @@ where both forces balance.
 
 References:
 - DFP Paper VI: Deriving the Gravitational Constant from Spacetime Topology
-- GFD Textbook Chapter 9 (Merkaba), Chapter 11 (Field Origin), Chapter 27
+- GFM Textbook Chapter 9 (Merkaba), Chapter 11 (Field Origin), Chapter 27
 - CODATA 2022 values for G, alpha, hbar, c, m_e
 """
 
@@ -148,7 +148,7 @@ def compute_G_from_topology(d_spatial: int = 3) -> float:
     For d=3, k=4:
         G = (17/13) x alpha^21 x hbar*c/m_e^2
     
-    Physical interpretation (GFD native framing):
+    Physical interpretation (GFM native framing):
     
     Prefactor (17/13):
         - Numerator k^2 + 1 = 17: coupling channels
@@ -228,7 +228,7 @@ class SpacetimeDimensionality(Test):
     - In 3D (our space): Tetrahedron has 4 faces (k = 4)
     - In 4D: Pentachoron (5-cell) has 5 faces (k = 5)
     
-    This is why GFD uses k = d + 1 = 4 as the fundamental Field Chamber.
+    This is why GFM uses k = d + 1 = 4 as the fundamental Field Chamber.
     The tetrahedron is the minimal stable configuration.
     """
     name = "Spacetime Dimensionality: Why k = 4?"
@@ -238,7 +238,7 @@ class SpacetimeDimensionality(Test):
         "exactly d+1 faces to enclose d dimensions. For our d=3 universe, k=4. "
         "This is a mathematical necessity, not a choice."
     )
-    reference = "Simplex Theorem, GFD Textbook Ch. 9 (Merkaba)"
+    reference = "Simplex Theorem, GFM Textbook Ch. 9 (Merkaba)"
     tolerance = 0.0
     level = Level.CRITICAL
     audit_score = 93
@@ -264,7 +264,7 @@ class SpacetimeDimensionality(Test):
         "WHY MINIMUM?\n"
         "Fewer faces cannot enclose the space (topological impossibility).\n"
         "More faces are redundant (can always reduce to simplex).\n\n"
-        "GFD INTERPRETATION (Textbook Ch. 9):\n"
+        "GFM INTERPRETATION (Textbook Ch. 9):\n"
         "The tetrahedron is the minimal 'Field Chamber' (TetA).\n"
         "Its 4 faces correspond to:\n"
         "- 3 spatial directions (x, y, z)\n"
@@ -290,7 +290,7 @@ class SpacetimeDimensionality(Test):
             .step("FOR d = 3 (our universe):")
             .equation("k = d + 1 = 3 + 1 = 4")
             .step("The tetrahedron with 4 faces is the unique minimum.")
-            .step("It is the GFD 'Field Chamber' (one half of the Merkaba).")
+            .step("It is the GFM 'Field Chamber' (one half of the Merkaba).")
             .conclude("Result: k = 4 is mathematically required for 3D space.")
         )
     
@@ -346,7 +346,7 @@ class CouplingHierarchy(Test):
         "through the Merkaba: 1 (Field Origin) + k (one chamber's 4 modes) + "
         "k^2 (16 TetA<->TetB interaction channels) = 21. This is 4x4, not 4+4."
     )
-    reference = "DFP Paper VI Sec 8.1, GFD Textbook Ch. 9, 27"
+    reference = "DFP Paper VI Sec 8.1, GFM Textbook Ch. 9, 27"
     tolerance = 0.0
     level = Level.CRITICAL
     audit_score = 98
@@ -361,7 +361,7 @@ class CouplingHierarchy(Test):
     )
     
     commentary = (
-        "THE MERKABA COUPLING HIERARCHY (GFD native framing):\n\n"
+        "THE MERKABA COUPLING HIERARCHY (GFM native framing):\n\n"
         "The alpha exponent 21 is derived from the Merkaba structure:\n\n"
         "  1   = Field Origin: the resonance node (where g = f = Identity)\n"
         "  k   = 4: One Field Chamber's mode pathways (TetA's 4 faces)\n"
@@ -432,7 +432,7 @@ class TopologicalPrefactor(Test):
         "denominator is the Field Origin: 17 = k^2 (TetA<->TetB channels) + 1 (FO as "
         "coupling point), 13 = d*k (skeleton) + 1 (FO as structural base)."
     )
-    reference = "DFP Paper VI Sec 8.1, GFD Textbook Ch. 9, 11"
+    reference = "DFP Paper VI Sec 8.1, GFM Textbook Ch. 9, 11"
     tolerance = 0.0
     level = Level.STANDARD
     audit_score = 96
@@ -467,7 +467,7 @@ class TopologicalPrefactor(Test):
     def derivation(self) -> Derivation:
         return (
             Derivation()
-            .step("TOPOLOGICAL PREFACTOR (GFD native framing):")
+            .step("TOPOLOGICAL PREFACTOR (GFM native framing):")
             .step("d = 3 (spatial dimensions), k = d+1 = 4 (Field Chamber)")
             .step("Numerator: k^2 + 1 = 16 + 1 = 17")
             .step("  (16 TetA<->TetB channels + Field Origin as coupling point)")

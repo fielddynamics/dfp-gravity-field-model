@@ -1,5 +1,5 @@
 """
-SANDBOX: Black Hole Characteristic Radii — GFD Number Sequence
+SANDBOX: Black Hole Characteristic Radii — GFM Number Sequence
 ===============================================================
 
 STATUS: Work in progress.
@@ -7,35 +7,35 @@ STATUS: Work in progress.
 NAMING:
 - Domain: bh (black hole)
 - Phenomenon: characteristic_radii
-- Focus: gfd_sequence (the 2-3-4-6 correspondence)
+- Focus: GFM_sequence (the 2-3-4-6 correspondence)
 
 EXPLORING:
 - The four Schwarzschild BH characteristic radii have coefficients 2, 3, 4, 6
-- These are exactly the four fundamental GFD structural numbers:
+- These are exactly the four fundamental GFM structural numbers:
   TIME_FACES=2, d=3, k=4, SPATIAL_FACES=6
 - We also probe Hawking temperature (8pi), entropy (1/4), evaporation (M^3)
 - We ask: is this pattern statistically significant or coincidence?
 
 WHAT WOULD BE VALUABLE TO KNOW:
 - Is the {2, 3, 4, 6} sequence in BH radii coincidental or structural?
-- Do OTHER BH coefficients (8pi, 1/4) also decompose into GFD numbers?
+- Do OTHER BH coefficients (8pi, 1/4) also decompose into GFM numbers?
 - What is the probability that this many matches occur by random chance?
 
 GRADUATION CHECKLIST:
 [ ] All tests pass
 [ ] audit_score >= 65
 [ ] contribution_score assessed
-[ ] Move to calculations/black_holes/test_bh_characteristic_radii_gfd_sequence.py
+[ ] Move to calculations/black_holes/test_bh_characteristic_radii_GFM_sequence.py
 [ ] Delete this sandbox file
 
-GFD Model V2
+GFM Model V2
 
 HONESTY STATEMENT:
 This module documents STANDARD GENERAL RELATIVITY and notes numerical
-correspondences with GFD structural constants. All black hole physics
+correspondences with GFM structural constants. All black hole physics
 is derived from GR (Schwarzschild 1916, Hawking 1974, Bekenstein 1973).
-GFD does NOT derive these results. It OBSERVES that certain GR coefficients
-match GFD geometric numbers. These observations may be coincidental.
+GFM does NOT derive these results. It OBSERVES that certain GR coefficients
+match GFM geometric numbers. These observations may be coincidental.
 
 WHAT IS VERIFIED (standard physics):
 - Schwarzschild BH characteristic radii: R_s (event horizon), r_ph (photon
@@ -44,7 +44,7 @@ WHAT IS VERIFIED (standard physics):
 - Bekenstein-Hawking entropy S = k_B * A / (4 * l_P^2)
 - BH evaporation timescale tau propto M^3
 
-GFD OBSERVATIONS (patterns noted, not derived):
+GFM OBSERVATIONS (patterns noted, not derived):
 - Radii coefficients {2, 3, 4, 6} = {TIME_FACES, d, k, SPATIAL_FACES}
 - Hawking coefficient 8 = 2^d = VERTICES count
 - Entropy factor 4 = k = K_CLOSURE
@@ -79,12 +79,12 @@ from gravity_field_model.common import (
 # DOMAIN CONSTANTS (all from standard GR, documented sources)
 # =============================================================================
 
-# Spatial dimensions (standard physics, not GFD-specific)
+# Spatial dimensions (standard physics, not GFM-specific)
 D_SPATIAL = 3
 
-# Number of GFD structural numbers in the "small integer" range 1-10
+# Number of GFM structural numbers in the "small integer" range 1-10
 # Used for statistical significance calculation
-N_GFD_NUMBERS = 10  # {1, 2, 3, 4, 5, 6, 8, 12, 24, ...} see derivation
+N_GFM_NUMBERS = 10  # {1, 2, 3, 4, 5, 6, 8, 12, 24, ...} see derivation
 
 # Stefan-Boltzmann constant (CODATA 2022)
 SIGMA_SB = 2 * math.pi**5 * K_B**4 / (15 * C**2 * (2 * math.pi * HBAR)**3)
@@ -121,29 +121,29 @@ def _evaporation_time(M: float) -> float:
 # TEST 1: THE 2-3-4-6 SEQUENCE (CRITICAL)
 # =============================================================================
 
-class CharacteristicRadiiGFDSequence(Test):
+class CharacteristicRadiiGFMSequence(Test):
     """
     Probe the coefficients in Schwarzschild BH characteristic radii.
 
     HONESTY: All four radii are standard GR results derived from the
-    Schwarzschild metric. The correspondence with GFD numbers is an
-    OBSERVATION that may be coincidental. No GFD derivation exists.
+    Schwarzschild metric. The correspondence with GFM numbers is an
+    OBSERVATION that may be coincidental. No GFM derivation exists.
     """
     audit_score = 88
     audit_notes = (
         "Question: 14/15 - Strong mystery hook about the specific sequence. "
-        "Derivation: 14/15 - Excellent GR context before GFD observation. "
+        "Derivation: 14/15 - Excellent GR context before GFM observation. "
         "Commentary: 13/15 - Honest about coincidence, good statistical context. "
         "Model: 10/10 - Clean output with binary verdict checks. "
         "Observations: 9/10 - All from standard GR, well-cited. "
         "Constants: 10/10 - All from common module. "
-        "Accessibility: 13/15 - Undergrad follows orbits, PhD learns GFD link. "
+        "Accessibility: 13/15 - Undergrad follows orbits, PhD learns GFM link. "
         "Header: 5/10 - Module docstring comprehensive but sandbox state. "
     )
     contribution_score = 68
     contribution_notes = (
         "Discovery: 28/40 - First systematic documentation that ALL four BH radii "
-        "match ALL four fundamental GFD structural numbers, in ascending order. "
+        "match ALL four fundamental GFM structural numbers, in ascending order. "
         "Precision: 16/20 - Matches are exact (integer coefficients in GR). "
         "Cross-Domain: 14/20 - ISCO factor 6 already noted in GW tests; this extends "
         "to full set of 4 radii. Connects BH physics to GW pattern catalog. "
@@ -155,9 +155,9 @@ class CharacteristicRadiiGFDSequence(Test):
         "spin-dependent ISCO track any geometric quantity as a varies from 0 to M? "
         "(Answering would improve Falsifiability by +5: testable prediction) "
         "Q2: Do the coefficients for CHARGED (Reissner-Nordstrom) BH also decompose "
-        "into GFD numbers? The RN metric introduces additional radii. "
+        "into GFM numbers? The RN metric introduces additional radii. "
         "(Answering would improve Discovery by +5: extends pattern to charged case) "
-        "Q3: Why does the sequence {2, 3, 4, 6} skip 5? In GFD, 5 = k+1. Is there "
+        "Q3: Why does the sequence {2, 3, 4, 6} skip 5? In GFM, 5 = k+1. Is there "
         "a BH radius with coefficient 5? (r = 5GM/c^2 has no standard physical name) "
         "(Answering would improve Commentary by +3: the gap itself may be informative)"
     )
@@ -167,7 +167,7 @@ class CharacteristicRadiiGFDSequence(Test):
         "a simple integer multiple of GM/c^2: the event horizon (2), photon sphere "
         "(3), marginally bound orbit (4), and ISCO (6). WHY these specific integers? "
         "GR derives them from orbital mechanics, but the sequence {2, 3, 4, 6} happens "
-        "to be exactly {TIME_FACES, d, k, SPATIAL_FACES} in GFD. Is this coincidence "
+        "to be exactly {TIME_FACES, d, k, SPATIAL_FACES} in GFM. Is this coincidence "
         "or a hint that black hole structure reflects discrete geometry?"
     )
     reference = (
@@ -183,13 +183,13 @@ class CharacteristicRadiiGFDSequence(Test):
         "- r = 3GM/c^2: photon sphere (unstable circular photon orbits)\n"
         "- r = 4GM/c^2: marginally bound orbit (E = mc^2 from infinity)\n"
         "- r = 6GM/c^2: ISCO (innermost stable circular orbit)\n\n"
-        "GFD OBSERVATION: These coefficients {2, 3, 4, 6} are precisely the four "
+        "GFM OBSERVATION: These coefficients {2, 3, 4, 6} are precisely the four "
         "fundamental structural numbers of the stellated octahedron / Merkaba:\n"
         "- 2 = TIME_FACES (faces that encode temporal direction)\n"
         "- 3 = d (spatial dimensions)\n"
         "- 4 = k (closure constant, tetrahedral coupling)\n"
         "- 6 = SPATIAL_FACES (faces encoding spatial directions)\n\n"
-        "The probability that four random integers in {1..10} match these four GFD "
+        "The probability that four random integers in {1..10} match these four GFM "
         "numbers is (4/10)^4 = 0.026, or about 1 in 40. Not astronomically unlikely "
         "for a single observation, but suggestive enough to warrant documentation. "
         "The ORDERED correspondence (smallest to largest in both sets) strengthens "
@@ -210,11 +210,11 @@ class CharacteristicRadiiGFDSequence(Test):
             .equation("r_photon = 3 GM/c^2  [unstable null circular orbit]")
             .equation("r_mb = 4 GM/c^2  [E = mc^2, marginally bound]")
             .equation("r_ISCO = 6 GM/c^2  [d^2V/dr^2 = 0, innermost stable]")
-            .step("GFD OBSERVATION (not derivation):")
+            .step("GFM OBSERVATION (not derivation):")
             .step("The coefficients form the set {2, 3, 4, 6}.")
-            .step("In GFD geometry: TIME_FACES=2, d=3, K_CLOSURE=4, SPATIAL_FACES=6.")
+            .step("In GFM geometry: TIME_FACES=2, d=3, K_CLOSURE=4, SPATIAL_FACES=6.")
             .step("These are the SAME set, in the SAME order.")
-            .conclude("All four Schwarzschild characteristic radii map to GFD structural numbers.")
+            .conclude("All four Schwarzschild characteristic radii map to GFM structural numbers.")
         )
 
     def model(self) -> Model:
@@ -224,7 +224,7 @@ class CharacteristicRadiiGFDSequence(Test):
         coeff_mb = 4         # Marginally bound orbit
         coeff_isco = 6       # ISCO
 
-        # GFD structural numbers
+        # GFM structural numbers
         n_time_faces = len(TIME_FACES)     # 2
         d_spatial = D_SPATIAL               # 3
         k_closure = K_CLOSURE               # 4
@@ -248,7 +248,7 @@ class CharacteristicRadiiGFDSequence(Test):
             .add("Photon sphere coefficient", coeff_photon)
             .add("Marginally bound coefficient", coeff_mb)
             .add("ISCO coefficient", coeff_isco)
-            .add("All four match GFD numbers", all_match)
+            .add("All four match GFM numbers", all_match)
             .add("GM/c^2 for M_solar (m)", round(GM_c2, 2))
         )
 
@@ -261,7 +261,7 @@ class CharacteristicRadiiGFDSequence(Test):
             .add("Photon sphere coefficient", 3)
             .add("Marginally bound coefficient", 4)
             .add("ISCO coefficient", 6)
-            .add("All four match GFD numbers", 1.0)
+            .add("All four match GFM numbers", 1.0)
             .add("GM/c^2 for M_solar (m)", 1476.63)
         )
 
@@ -276,13 +276,13 @@ class HawkingTemperatureEightPi(Test):
 
     HONESTY: Hawking derived T_H from quantum field theory in curved spacetime.
     The factor 8*pi arises from the surface gravity of a Schwarzschild BH.
-    GFD notes that 8 = 2^d = number of VERTICES. This is an OBSERVATION.
+    GFM notes that 8 = 2^d = number of VERTICES. This is an OBSERVATION.
     """
     audit_score = 85
     audit_notes = (
         "Question: 13/15 - Good mystery about 'why 8pi' with physics context. "
         "Derivation: 14/15 - Builds from surface gravity to temperature naturally. "
-        "Commentary: 13/15 - Honest about QFT origin, notes GFD correspondence. "
+        "Commentary: 13/15 - Honest about QFT origin, notes GFM correspondence. "
         "Model: 9/10 - Good ratio computation and Planck-scale verification. "
         "Observations: 8/10 - Values correct; Hawking (1974) cited. "
         "Constants: 10/10 - All from common module. "
@@ -297,12 +297,12 @@ class HawkingTemperatureEightPi(Test):
         "Cross-Domain: 12/20 - 8 = 2^d also appears as cube vertices; "
         "connects to GW pattern catalog (32 = k * 2^d). "
         "Falsifiability: 8/20 - Would predict that quantum corrections to T_H "
-        "involve other GFD numbers. Difficult to test. "
+        "involve other GFM numbers. Difficult to test. "
         "TOTAL: 55/100 - Valuable single-coefficient observation."
     )
     future_questions = (
         "Q1: The surface gravity kappa = c^4 / (4GM) has factor 4 = k. Does "
-        "this mean T_H = hbar*kappa / (2*pi*c*k_B) has a cleaner GFD form "
+        "this mean T_H = hbar*kappa / (2*pi*c*k_B) has a cleaner GFM form "
         "when expressed via surface gravity? "
         "(Answering would improve Derivation by +3: alternative decomposition) "
         "Q2: For a Kerr BH, T_H depends on spin. As spin increases from 0 to M, "
@@ -317,7 +317,7 @@ class HawkingTemperatureEightPi(Test):
         "Hawking's 1974 derivation yields T_H = hbar*c^3 / (8*pi*G*M*k_B). "
         "The factor 8*pi comes from the surface gravity kappa = c^4/(4GM) and "
         "the Unruh-like relation T = hbar*kappa/(2*pi*c*k_B). But WHY 8 "
-        "specifically? GFD notes that 8 = 2^d = 2^3 is the number of vertices "
+        "specifically? GFM notes that 8 = 2^d = 2^3 is the number of vertices "
         "in both a cube AND the stellated octahedron. Is this coincidence?"
     )
     reference = "Hawking (1974); Unruh (1976); Birrell & Davies (1982)"
@@ -331,7 +331,7 @@ class HawkingTemperatureEightPi(Test):
         "DECOMPOSITION: 8*pi = (4) * (2*pi). The factor 4 comes from R_s = 2GM/c^2 "
         "(so kappa = c^2/(2*R_s) = c^4/(4GM)). The 2*pi is the Unruh periodicity "
         "in imaginary time.\n\n"
-        "GFD OBSERVATION: 8 = 2^d = 2^3 equals the number of VERTICES in the "
+        "GFM OBSERVATION: 8 = 2^d = 2^3 equals the number of VERTICES in the "
         "Merkaba (stellated octahedron). Also 8 = 2 * k = 2 * K_CLOSURE. These "
         "are numerical observations, not derivations. The factor 8 in the Hawking "
         "formula has a clear physical origin (surface gravity × Unruh factor)."
@@ -350,7 +350,7 @@ class HawkingTemperatureEightPi(Test):
             .equation("T_H = hbar * c^3 / (8*pi * G * M * k_B)")
             .step("For a Planck-mass BH: T_H = T_Planck / (8*pi)")
             .step("VERIFICATION: T_Planck = 1.417e32 K, so T_H(M_P) = 5.637e30 K")
-            .step("GFD OBSERVATION: 8 = 2^d = 2^3 = number of VERTICES")
+            .step("GFM OBSERVATION: 8 = 2^d = 2^3 = number of VERTICES")
             .step("Also: 8 = 2 * k = 2 * K_CLOSURE")
             .conclude("The coefficient 8 in 8*pi matches 2^d and VERTICES count.")
         )
@@ -365,7 +365,7 @@ class HawkingTemperatureEightPi(Test):
         # Ratio to Planck temperature
         ratio_to_planck = T_H_planck / TEMP_PLANCK
 
-        # GFD decomposition of coefficient 8
+        # GFM decomposition of coefficient 8
         n_vertices = len(VERTICES)
         two_to_d = 2**D_SPATIAL
         two_k = 2 * K_CLOSURE
@@ -401,14 +401,14 @@ class BekensteinHawkingEntropyQuarter(Test):
 
     HONESTY: The factor 1/4 was derived by Hawking from the first law of BH
     thermodynamics. Bekenstein's original bound gave S proportional to A/l_P^2
-    with an undetermined coefficient; Hawking fixed it at 1/4. GFD notes that
+    with an undetermined coefficient; Hawking fixed it at 1/4. GFM notes that
     4 = k = K_CLOSURE. This is an OBSERVATION.
     """
     audit_score = 84
     audit_notes = (
         "Question: 13/15 - Good 'why 1/4 specifically' hook. "
         "Derivation: 13/15 - Clear first-law argument, good physical motivation. "
-        "Commentary: 13/15 - Honest about Hawking's derivation vs GFD observation. "
+        "Commentary: 13/15 - Honest about Hawking's derivation vs GFM observation. "
         "Model: 9/10 - Clean entropy computation with Planck-unit verification. "
         "Observations: 8/10 - Values correct from Bekenstein (1973). "
         "Constants: 10/10 - All from common. "
@@ -420,20 +420,20 @@ class BekensteinHawkingEntropyQuarter(Test):
         "Discovery: 18/40 - Observation that 4 = k in entropy formula. Single "
         "coefficient, less striking than the radii sequence. "
         "Precision: 14/20 - Mathematical identity, exact. "
-        "Cross-Domain: 12/20 - Factor 4 = k appears widely in GFD (K_CLOSURE). "
+        "Cross-Domain: 12/20 - Factor 4 = k appears widely in GFM (K_CLOSURE). "
         "Connects to string theory debate about 1/4 coefficient. "
         "Falsifiability: 8/20 - Quantum gravity corrections to entropy should "
-        "involve logarithmic terms; could check for GFD numbers there. "
+        "involve logarithmic terms; could check for GFM numbers there. "
         "TOTAL: 52/100 - Valuable but not novel on its own. Gains value as "
         "part of the full BH coefficient catalog."
     )
     future_questions = (
         "Q1: String theory and loop quantum gravity both derive the 1/4 from "
-        "state counting. Does GFD's tetrahedral structure suggest a counting "
+        "state counting. Does GFM's tetrahedral structure suggest a counting "
         "interpretation for k=4? "
         "(Answering would improve Discovery by +8: connects to quantum gravity) "
         "Q2: Logarithmic corrections to BH entropy have form S = A/(4l_P^2) + "
-        "alpha*ln(A/l_P^2) + ... Does alpha involve GFD numbers? "
+        "alpha*ln(A/l_P^2) + ... Does alpha involve GFM numbers? "
         "(Answering would improve Falsifiability by +5: testable prediction) "
         "Q3: For a solar-mass BH, S/k_B ~ 10^77. Is this number's magnitude "
         "related to powers of k or 2^d? log_4(10^77) ~ 128 = 2^7. "
@@ -444,7 +444,7 @@ class BekensteinHawkingEntropyQuarter(Test):
         "Bekenstein proposed that black hole entropy is proportional to horizon "
         "area in Planck units, but the COEFFICIENT was undetermined. Hawking's "
         "1974 calculation fixed it at exactly 1/4: S = k_B * A / (4 * l_P^2). "
-        "WHY 1/4 and not 1/2 or 1/8? GFD notes that 4 = k = K_CLOSURE, the "
+        "WHY 1/4 and not 1/2 or 1/8? GFM notes that 4 = k = K_CLOSURE, the "
         "tetrahedral coupling constant. Is the entropy quantum related to the "
         "closure topology?"
     )
@@ -456,7 +456,7 @@ class BekensteinHawkingEntropyQuarter(Test):
         "thermodynamics: dM = (kappa / 8*pi*G) dA + work terms. Combined "
         "with T = hbar*kappa/(2*pi*c*k_B), we get dS = dM/T, which integrates "
         "to S = k_B*c^3*A/(4*G*hbar). The 4 comes from 8*pi / (2*pi) = 4.\n\n"
-        "GFD OBSERVATION: 4 = K_CLOSURE = k. In GFD, k is the order of the "
+        "GFM OBSERVATION: 4 = K_CLOSURE = k. In GFM, k is the order of the "
         "tetrahedral coupling — four vertices per tetrahedron. The observation "
         "that the entropy factor equals the closure constant is documented but "
         "NOT claimed as a derivation.\n\n"
@@ -479,9 +479,9 @@ class BekensteinHawkingEntropyQuarter(Test):
             .step("This fixes eta = 1/4.")
             .step("VERIFICATION: For M_solar, A = 4*pi*R_s^2:")
             .equation("S/k_B = 4*pi*(2GM/c^2)^2 / (4*G*hbar/c^3) = 4*pi*G*M^2/(hbar*c)")
-            .step("GFD OBSERVATION: The factor 4 = K_CLOSURE = k.")
-            .step("In GFD geometry, k=4 defines tetrahedral closure.")
-            .conclude("The entropy factor 1/4 matches 1/k where k is the GFD closure constant.")
+            .step("GFM OBSERVATION: The factor 4 = K_CLOSURE = k.")
+            .step("In GFM geometry, k=4 defines tetrahedral closure.")
+            .conclude("The entropy factor 1/4 matches 1/k where k is the GFM closure constant.")
         )
 
     def model(self) -> Model:
@@ -528,7 +528,7 @@ class EvaporationTimeExponentThree(Test):
     HONESTY: The cubic dependence comes from Stefan-Boltzmann radiation law
     combined with the inverse-mass temperature law. The exponent 3 = d
     (spatial dimensions) because the SB law involves T^4 = T^(d+1).
-    This IS a known dimensional analysis result. GFD additionally notes
+    This IS a known dimensional analysis result. GFM additionally notes
     that d is encoded in the stellated octahedron face structure.
     """
     audit_score = 86
@@ -545,7 +545,7 @@ class EvaporationTimeExponentThree(Test):
     contribution_score = 48
     contribution_notes = (
         "Discovery: 15/40 - The d-dependence of evaporation exponent is known "
-        "from dimensional analysis. GFD adds the structural interpretation. "
+        "from dimensional analysis. GFM adds the structural interpretation. "
         "Precision: 14/20 - Exact from the physics; verified numerically. "
         "Cross-Domain: 12/20 - Connects to SB law, stellar luminosity exponents. "
         "Falsifiability: 7/20 - In d != 3 dimensions, exponent would change. "
@@ -554,14 +554,14 @@ class EvaporationTimeExponentThree(Test):
     )
     future_questions = (
         "Q1: The numerical prefactor 5120*pi in tau = 5120*pi*G^2*M^3/(hbar*c^4) — "
-        "does 5120 = 5 * 1024 = (k+1) * 2^(d+k+3) decompose into GFD numbers? "
+        "does 5120 = 5 * 1024 = (k+1) * 2^(d+k+3) decompose into GFM numbers? "
         "(Answering would improve Discovery by +8: hidden coefficient structure) "
         "Q2: In d+1 spacetime dimensions, the SB law gives T^(d+1) dependence. "
         "Does the evaporation exponent become d in general? If so, the physical "
         "content is just 'radiation in d dimensions.' "
         "(Answering would improve Commentary by +3: clarifies what's fundamental) "
         "Q3: For micro black holes near Planck mass, quantum corrections modify "
-        "the evaporation. Do these corrections involve GFD numbers? "
+        "the evaporation. Do these corrections involve GFM numbers? "
         "(Answering would improve Falsifiability by +5: quantum regime test)"
     )
     name = "BH Evaporation Time: Why M-Cubed?"
@@ -586,10 +586,10 @@ class EvaporationTimeExponentThree(Test):
         "WHY 3? The Stefan-Boltzmann law in d+1 spacetime dimensions gives "
         "T^{d+1} radiation. In d=3 spatial dimensions, T^4 leads to M^{d}. "
         "The evaporation exponent IS the spatial dimension.\n\n"
-        "GFD OBSERVATION: d = 3 is the number of spatial faces per tetrahedron. "
+        "GFM OBSERVATION: d = 3 is the number of spatial faces per tetrahedron. "
         "The Merkaba has 6 SPATIAL faces = 2 * 3, three per tetrahedron. "
         "That the evaporation exponent equals d is standard physics; "
-        "that d=3 is encoded geometrically in the Merkaba is GFD."
+        "that d=3 is encoded geometrically in the Merkaba is GFM."
     )
 
     def derivation(self) -> Derivation:
@@ -653,11 +653,11 @@ class EvaporationTimeExponentThree(Test):
 
 class CoefficientCatalogSignificance(Test):
     """
-    Assess whether the collection of BH-GFD coefficient matches exceeds
+    Assess whether the collection of BH-GFM coefficient matches exceeds
     random chance.
 
     HONESTY: This is a statistical test of coincidence probability.
-    The number of GFD structural constants in the range 1-10 determines
+    The number of GFM structural constants in the range 1-10 determines
     the base rate for random matches. We count how many BH coefficients
     match and compute the probability of this happening by chance.
     """
@@ -676,7 +676,7 @@ class CoefficientCatalogSignificance(Test):
     contribution_notes = (
         "Discovery: 25/40 - First systematic assessment of BH coefficient "
         "coincidence probability. Aggregates multiple observations. "
-        "Precision: 12/20 - Probability depends on how we count 'GFD numbers' "
+        "Precision: 12/20 - Probability depends on how we count 'GFM numbers' "
         "and 'BH coefficients'. Assumptions documented but debatable. "
         "Cross-Domain: 15/20 - Connects BH radii, Hawking T, entropy, evaporation. "
         "Also connects to GW coefficient catalog from pattern catalog. "
@@ -689,7 +689,7 @@ class CoefficientCatalogSignificance(Test):
         "Q1: If we include GW coefficients (32/5, 3/8, 5/3), the total set of "
         "matches grows. What is the combined probability across BH + GW? "
         "(Answering would improve Precision by +5: larger sample, stronger stats) "
-        "Q2: Are there BH coefficients that DON'T match GFD numbers? Documenting "
+        "Q2: Are there BH coefficients that DON'T match GFM numbers? Documenting "
         "failures is as important as documenting successes. "
         "(Answering would improve Commentary by +5: honest failure catalog) "
         "Q3: Is the 'integer range 1-10' assumption too narrow? If we expand to "
@@ -698,10 +698,10 @@ class CoefficientCatalogSignificance(Test):
     )
     name = "BH Coefficient Catalog: Statistical Significance"
     question = (
-        "We have documented multiple BH coefficients that match GFD structural "
+        "We have documented multiple BH coefficients that match GFM structural "
         "numbers: {2, 3, 4, 6} in radii, 8 in Hawking temperature, 4 in entropy, "
         "3 in evaporation. Is the frequency of these matches statistically "
-        "significant, or expected by chance given that GFD has many structural "
+        "significant, or expected by chance given that GFM has many structural "
         "numbers in the small-integer range?"
     )
     reference = "Statistical methods; Pattern catalog from PROBING_FRAMEWORK.md"
@@ -709,11 +709,11 @@ class CoefficientCatalogSignificance(Test):
     level = Level.EXPLORATORY
     commentary = (
         "METHODOLOGY: We count distinct BH coefficients and check how many "
-        "match GFD structural numbers. The GFD numbers in range 1-10 are:\n"
+        "match GFM structural numbers. The GFM numbers in range 1-10 are:\n"
         "  {1, 2, 3, 4, 5, 6, 8} = 7 values\n"
         "  (1=identity, 2=TIME_FACES, 3=d, 4=k, 5=k+1, 6=SPATIAL_FACES, 8=VERTICES)\n\n"
         "BH coefficients examined: {2, 3, 4, 6, 8} = 5 distinct values.\n"
-        "All 5 match GFD numbers.\n\n"
+        "All 5 match GFM numbers.\n\n"
         "CAVEAT: Some of these are NOT independent. The entropy factor 4 appears "
         "in the radii sequence. The evaporation exponent 3 is d. We must count "
         "INDEPENDENT observations carefully.\n\n"
@@ -727,9 +727,9 @@ class CoefficientCatalogSignificance(Test):
     def derivation(self) -> Derivation:
         return (
             Derivation()
-            .step("QUESTION: Are BH-GFD coefficient matches statistically significant?")
-            .step("Step 1: Define the set of GFD structural numbers in range 1-10.")
-            .step("GFD numbers: {1, 2, 3, 4, 5, 6, 8} (7 distinct values)")
+            .step("QUESTION: Are BH-GFM coefficient matches statistically significant?")
+            .step("Step 1: Define the set of GFM structural numbers in range 1-10.")
+            .step("GFM numbers: {1, 2, 3, 4, 5, 6, 8} (7 distinct values)")
             .step("  1 = identity")
             .step("  2 = TIME_FACES = len(TIME_FACES)")
             .step("  3 = d (spatial dimensions)")
@@ -745,13 +745,13 @@ class CoefficientCatalogSignificance(Test):
             .step("Step 4: Account for ordering in the radii sequence.")
             .step("P(4 values in correct order) = 1/4! = 1/24 = 0.042")
             .equation("P(ordered match) = (7/10)^4 * (1/24) = 0.010")
-            .conclude("P(all BH radii match GFD in order) ~ 1%. Suggestive but not definitive.")
+            .conclude("P(all BH radii match GFM in order) ~ 1%. Suggestive but not definitive.")
         )
 
     def model(self) -> Model:
-        # GFD structural numbers in range 1-10
-        gfd_numbers = {1, 2, 3, 4, 5, 6, 8}  # identity, TIME_FACES, d, k, k+1, SPATIAL_FACES, VERTICES
-        n_gfd = len(gfd_numbers)
+        # GFM structural numbers in range 1-10
+        GFM_numbers = {1, 2, 3, 4, 5, 6, 8}  # identity, TIME_FACES, d, k, k+1, SPATIAL_FACES, VERTICES
+        n_GFM = len(GFM_numbers)
         integer_range = 10
 
         # BH coefficients
@@ -765,11 +765,11 @@ class CoefficientCatalogSignificance(Test):
         n_bh = len(bh_coefficients)
 
         # Count matches
-        matches = sum(1 for v in bh_coefficients.values() if v in gfd_numbers)
+        matches = sum(1 for v in bh_coefficients.values() if v in GFM_numbers)
         match_fraction = matches / n_bh
 
         # P(random) for independent matches
-        p_single = n_gfd / integer_range
+        p_single = n_GFM / integer_range
         p_all = p_single ** n_bh
 
         # P(ordered sequence in radii)
@@ -780,7 +780,7 @@ class CoefficientCatalogSignificance(Test):
 
         return (
             Model()
-            .add("GFD numbers in 1-10", n_gfd)
+            .add("GFM numbers in 1-10", n_GFM)
             .add("BH coefficients examined", n_bh)
             .add("Matches found", matches)
             .add("P(all match, unordered)", round(p_all, 4))
@@ -790,7 +790,7 @@ class CoefficientCatalogSignificance(Test):
     def observations(self) -> Observed:
         return (
             Observed()
-            .add("GFD numbers in 1-10", 7)
+            .add("GFM numbers in 1-10", 7)
             .add("BH coefficients examined", 5)
             .add("Matches found", 5)
             .add("P(all match, unordered)", 0.1681)
@@ -803,7 +803,7 @@ class CoefficientCatalogSignificance(Test):
 # =============================================================================
 
 ALL_TESTS = [
-    CharacteristicRadiiGFDSequence,    # CRITICAL: The 2-3-4-6 sequence
+    CharacteristicRadiiGFMSequence,    # CRITICAL: The 2-3-4-6 sequence
     HawkingTemperatureEightPi,          # STANDARD: 8pi coefficient decomposition
     BekensteinHawkingEntropyQuarter,    # STANDARD: 1/4 = 1/k factor
     EvaporationTimeExponentThree,       # STANDARD: tau propto M^d
@@ -814,20 +814,20 @@ ALL_TESTS = [
 def run_all() -> bool:
     """Run all BH characteristic radii probing tests."""
     return run_tests(
-        title="SANDBOX: BH Characteristic Radii — GFD Number Sequence",
+        title="SANDBOX: BH Characteristic Radii — GFM Number Sequence",
         summary=(
             "STATUS: Work in progress\n\n"
             "EXPLORING:\n"
             "- The four Schwarzschild BH characteristic radii have coefficients "
             "{2, 3, 4, 6} which match {TIME_FACES, d, k, SPATIAL_FACES}\n"
             "- Additional coefficients (8 in Hawking T, 4 in entropy, 3 in evaporation) "
-            "also match GFD structural numbers\n"
+            "also match GFM structural numbers\n"
             "- Statistical significance of the full coefficient catalog\n\n"
             "STANDARD PHYSICS: All BH results are from General Relativity.\n"
-            "GFD OBSERVATIONS: Numerical correspondences documented, not derived.\n\n"
+            "GFM OBSERVATIONS: Numerical correspondences documented, not derived.\n\n"
             "WHEN READY:\n"
             "- audit_score >= 75 for all tests\n"
-            "- Move to calculations/black_holes/test_bh_characteristic_radii_gfd_sequence.py"
+            "- Move to calculations/black_holes/test_bh_characteristic_radii_GFM_sequence.py"
         ),
         test_classes=ALL_TESTS,
     )

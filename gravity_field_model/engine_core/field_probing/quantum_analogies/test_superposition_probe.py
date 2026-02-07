@@ -7,7 +7,7 @@ PROBING QUESTION: Can the field occupy multiple states simultaneously?
 This probe tests for superposition-like behavior where the field's
 "wave function" is spread across multiple vertices.
 
-IMPORTANT CAVEAT: The GFD model is DETERMINISTIC, not quantum.
+IMPORTANT CAVEAT: The GFM model is DETERMINISTIC, not quantum.
 We're probing whether quantum-like statistics emerge from deterministic chaos.
 
 MATHEMATICAL FOUNDATION:

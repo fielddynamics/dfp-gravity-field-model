@@ -2,7 +2,7 @@
 Probing Stellar Core Conditions: Zero-Parameter Predictions
 ============================================================
 
-GFD Model V2
+GFM Model V2
 
 INVESTIGATION STATEMENT:
 Can we predict stellar core conditions from first principles without free

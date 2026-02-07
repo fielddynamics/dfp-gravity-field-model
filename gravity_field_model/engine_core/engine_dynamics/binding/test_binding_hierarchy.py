@@ -2,7 +2,7 @@
 Binding Hierarchy Tests
 =======================
 
-GFD Model V2: Exploring the hierarchy of gravity field binding
+GFM Model V2: Exploring the hierarchy of gravity field binding
 
 This module investigates fundamental questions about what happens when
 different configurations of gravity fields combine:

@@ -1,6 +1,6 @@
 # Engine Definitions
 
-Authoritative terminology reference for the GFD engine crosscheck framework. Each term has exactly one definition. Code, tests, and documentation must use these terms consistently.
+Authoritative terminology reference for the GFM engine crosscheck framework. Each term has exactly one definition. Code, tests, and documentation must use these terms consistently.
 
 ## Visual Overview: Cube Coordinates vs Tetrahedra Structure
 

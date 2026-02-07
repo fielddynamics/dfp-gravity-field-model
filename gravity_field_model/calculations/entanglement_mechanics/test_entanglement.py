@@ -6,17 +6,17 @@ TEST GROUP GOALS
 ----------------
 Why does the stellated octahedron geometry provide natural vocabulary for
 quantum entanglement? This module examines the geometric correspondences
-(not derivations) between GFD's Field Chamber structure and entanglement.
+(not derivations) between GFM's Field Chamber structure and entanglement.
 
 The tests verify three levels of claims:
 1. GEOMETRIC FACTS: Properties of the stellated octahedron (2k=8 vertices,
    complementary pairs, dual tetrahedra)
-2. COMPATIBILITY: GFD geometry does not contradict Bell violations,
+2. COMPATIBILITY: GFM geometry does not contradict Bell violations,
    distance independence, or no-signaling
 3. SPECULATIVE CORRESPONDENCES: Numerical coincidences that are interesting
    but not derivations (k=4 and multiparty limits)
 
-WHAT GFD DOES AND DOES NOT DO
+WHAT GFM DOES AND DOES NOT DO
 -----------------------------
 DOES: Provide geometric vocabulary (Tet_A local, Tet_B non-local)
 DOES NOT: Derive the Tsirelson bound (2*sqrt(2)) from stellated octahedron
@@ -38,7 +38,7 @@ from gravity_field_model.common import K_CLOSURE
 
 
 # =============================================================================
-# GFD GEOMETRIC STRUCTURE (These are GFD claims, not QM)
+# GFM GEOMETRIC STRUCTURE (These are GFM claims, not QM)
 # =============================================================================
 
 class ComplementaryVertexPairs(Test):
@@ -46,7 +46,7 @@ class ComplementaryVertexPairs(Test):
     Why do the vertices of a stellated octahedron naturally pair across
     the two tetrahedra, and why might this pairing matter for entanglement?
     
-    GFD geometric claim: The 8 vertices pair as (V, 7-V), with each pair
+    GFM geometric claim: The 8 vertices pair as (V, 7-V), with each pair
     spanning both tetrahedra. This is derived geometry, not assumption.
     
 """
@@ -75,7 +75,7 @@ class ComplementaryVertexPairs(Test):
         "through its center. Each vertex V has an 'antipodal partner' at position "
         "(7-V). Because Tet_A and Tet_B are related by inversion, each pair must "
         "contain one vertex from each tetrahedron. This is pure geometry. "
-        "GFD APPLICATION: If entanglement involves 'shared Tet_B configurations,' "
+        "GFM APPLICATION: If entanglement involves 'shared Tet_B configurations,' "
         "these complementary pairs provide the geometric structure for that sharing. "
         "The pairing is derived from the geometry; the entanglement application is "
         "proposed vocabulary, not derivation."
@@ -121,7 +121,7 @@ class DualTetrahedronStructure(Test):
     Why does the stellated octahedron provide exactly two distinct geometric
     domains, and why might this matter for local vs. non-local physics?
     
-    GFD PROPOSED interpretation (not derivation):
+    GFM PROPOSED interpretation (not derivation):
     Tet_A: local, causal (respects speed c)
     Tet_B: subspace, correlation capacity (shared in entanglement)
     
@@ -134,7 +134,7 @@ class DualTetrahedronStructure(Test):
         "(Answering would improve Derivation by +3 points: uniqueness proof from geometric constraints) "
         "Q2: What is the mathematical relationship between inversion symmetry and the local/non-local role assignment in physics? "
         "(Answering would improve Commentary by +2 points: connect geometric symmetry to physical interpretation) "
-        "Q3: How does the shared Field Origin (central point) enable communication between Tet_A and Tet_B in the GFD model? "
+        "Q3: How does the shared Field Origin (central point) enable communication between Tet_A and Tet_B in the GFM model? "
         "(Answering would improve Question by +2 points: clarify the coupling mechanism at the geometric center)"
     )
     question = (
@@ -153,7 +153,7 @@ class DualTetrahedronStructure(Test):
         "This gives two equal but distinct 'spaces' within one structure. "
         "GEOMETRIC DERIVATION: The stellated octahedron is unique because it "
         "satisfies isotropy (no preferred direction), chirality (both handedness), "
-        "and the spinor double-cover (720 degrees). GFD PROPOSES: One tetrahedron "
+        "and the spinor double-cover (720 degrees). GFM PROPOSES: One tetrahedron "
         "(Tet_A) handles local/causal physics, the other (Tet_B) handles non-local "
         "correlations. This role assignment is vocabulary, not derivation."
     )
@@ -168,8 +168,8 @@ class DualTetrahedronStructure(Test):
             .step("Tet_B faces: 1 TIME + 3 SPATIAL.")
             .step("No shared faces or edges; only the central Field Origin is common.")
             .step("UNIQUENESS: Only structure satisfying isotropy + chirality + spinor.")
-            .step("GFD VOCABULARY: Tet_A = local/causal, Tet_B = non-local/correlation.")
-            .conclude("Dual structure is geometric. Role assignment is GFD interpretation.")
+            .step("GFM VOCABULARY: Tet_A = local/causal, Tet_B = non-local/correlation.")
+            .conclude("Dual structure is geometric. Role assignment is GFM interpretation.")
         )
     
     def model(self):
@@ -197,13 +197,13 @@ class DualTetrahedronStructure(Test):
 
 
 # =============================================================================
-# COMPATIBILITY CHECKS (Does GFD geometry conflict with QM facts?)
+# COMPATIBILITY CHECKS (Does GFM geometry conflict with QM facts?)
 # =============================================================================
 
 class CompatibilityWithBellViolations(Test):
     """
-    Why is it important that GFD's geometry does not forbid Bell violations,
-    even though GFD cannot derive them?
+    Why is it important that GFM's geometry does not forbid Bell violations,
+    even though GFM cannot derive them?
     
     COMPATIBILITY CHECK: A good geometric vocabulary must not contradict
     established experimental facts. This test verifies that constraint.
@@ -221,24 +221,24 @@ class CompatibilityWithBellViolations(Test):
         "(Answering would improve Observation Quality by +2 points: cite recent loophole-free Bell tests)"
     )
     question = (
-        "Why must GFD's dual-tetrahedron structure be compatible with Bell "
+        "Why must GFM's dual-tetrahedron structure be compatible with Bell "
         "violations (S > 2)? What would it mean if the geometry forbade them, "
-        "and why can't GFD derive the specific value 2*sqrt(2)?"
+        "and why can't GFM derive the specific value 2*sqrt(2)?"
     )
     reference = "Aspect 1982, Hensen 2015, Tsirelson bound"
     tolerance = 0.01
     level = Standard
     
     commentary = (
-        "INTUITION FIRST: If GFD's geometry implied S <= 2 (classical limit), "
-        "GFD would be falsified by every Bell test. Compatibility is necessary "
+        "INTUITION FIRST: If GFM's geometry implied S <= 2 (classical limit), "
+        "GFM would be falsified by every Bell test. Compatibility is necessary "
         "but not sufficient. EXPERIMENTAL FACT: S ranges from 2.4 to 2.7, "
-        "approaching the Tsirelson bound 2*sqrt(2) = 2.828. GFD COMPATIBILITY: "
+        "approaching the Tsirelson bound 2*sqrt(2) = 2.828. GFM COMPATIBILITY: "
         "The dual-tetrahedron structure provides separate local (Tet_A) and "
         "non-local (Tet_B) domains. This is consistent with S > 2. However, "
-        "GFD does NOT derive why S_max = 2*sqrt(2). The number sqrt(2) does "
+        "GFM does NOT derive why S_max = 2*sqrt(2). The number sqrt(2) does "
         "not emerge from '2 tetrahedra.' Deriving this would require mathematics "
-        "connecting geometry to quantum correlations, which GFD does not provide."
+        "connecting geometry to quantum correlations, which GFM does not provide."
     )
     
     def derivation(self):
@@ -250,23 +250,23 @@ class CompatibilityWithBellViolations(Test):
             .step("Classical limit (local hidden variables): S_max = 2.0.")
             .step("Quantum limit (Tsirelson bound, from QM): S_max = 2*sqrt(2) = 2.828.")
             .step("Typical experiments: S = 2.4 to 2.7.")
-            .step("GFD CHECK: Does dual-tetrahedron forbid S > 2? No.")
+            .step("GFM CHECK: Does dual-tetrahedron forbid S > 2? No.")
             .step("Tet_B provides a 'non-local channel' compatible with violations.")
             .step("NON-DERIVATION: '2 tetrahedra' does not imply 'sqrt(2) enhancement.'")
-            .conclude("GFD compatible but not predictive. S = 2*sqrt(2) is QM, not GFD.")
+            .conclude("GFM compatible but not predictive. S = 2*sqrt(2) is QM, not GFM.")
         )
     
     def model(self):
         classical_limit = 2.0
         quantum_max = 2 * math.sqrt(2)
         enhancement = quantum_max / classical_limit
-        gfd_compatible = 1
+        GFM_compatible = 1
         return (
             Model()
             .add("Classical limit (LHV)", classical_limit)
             .add("Quantum maximum (QM)", quantum_max)
             .add("Enhancement factor", enhancement)
-            .add("GFD compatible (1=yes)", gfd_compatible)
+            .add("GFM compatible (1=yes)", GFM_compatible)
         )
     
     def observations(self):
@@ -275,17 +275,17 @@ class CompatibilityWithBellViolations(Test):
             .add("Classical limit (LHV)", 2.0)
             .add("Quantum maximum (QM)", 2 * math.sqrt(2))
             .add("Enhancement factor", math.sqrt(2))
-            .add("GFD compatible (1=yes)", 1)
+            .add("GFM compatible (1=yes)", 1)
         )
 
 
 class CompatibilityWithDistanceIndependence(Test):
     """
     Why does entanglement strength not decay with distance, and why must
-    GFD's vocabulary accommodate this striking fact?
+    GFM's vocabulary accommodate this striking fact?
     
     EXPERIMENTAL FACT: Correlations at 1200 km equal correlations at 1 meter.
-    GFD must be compatible with this or be falsified.
+    GFM must be compatible with this or be falsified.
     
 """
     name = "Compatibility with Distance Independence"
@@ -301,7 +301,7 @@ class CompatibilityWithDistanceIndependence(Test):
     )
     question = (
         "Why do quantum correlations show no decay with distance (tested to "
-        "1200 km)? How does GFD's 'Tet_B is non-spatial' vocabulary accommodate "
+        "1200 km)? How does GFM's 'Tet_B is non-spatial' vocabulary accommodate "
         "this, and why is this vocabulary rather than derivation?"
     )
     reference = "Micius satellite experiment (Yin et al. 2017)"
@@ -312,10 +312,10 @@ class CompatibilityWithDistanceIndependence(Test):
         "INTUITION FIRST: Classical correlations decay with distance (signals "
         "attenuate, noise increases). Quantum correlations do not. The Micius "
         "satellite proved this at 1200 km with fidelity 0.869, well above "
-        "the classical threshold 0.5. GFD VOCABULARY: If Tet_B is 'subspace' "
+        "the classical threshold 0.5. GFM VOCABULARY: If Tet_B is 'subspace' "
         "(outside ordinary 3D space), then spatial distance (measured in Tet_A) "
         "is irrelevant to Tet_B correlations. This is an evocative frame, not "
-        "a derivation. GFD assumes Tet_B non-locality; it does not derive why "
+        "a derivation. GFM assumes Tet_B non-locality; it does not derive why "
         "quantum systems have this property from geometric first principles."
     )
     
@@ -327,11 +327,11 @@ class CompatibilityWithDistanceIndependence(Test):
             .step("EXPERIMENTAL TEST: Micius satellite, 1200 km separation.")
             .step("Result: Fidelity = 0.869 (well above classical limit 0.5).")
             .step("Conclusion: Quantum correlations are distance-independent.")
-            .step("GFD VOCABULARY: 'Tet_B is non-spatial (subspace).'")
+            .step("GFM VOCABULARY: 'Tet_B is non-spatial (subspace).'")
             .step("If Tet_B exists outside Tet_A's spatial dimensions, distance "
                   "in Tet_A cannot affect Tet_B correlations.")
             .step("This vocabulary frames distance-independence geometrically.")
-            .conclude("GFD compatible. But non-locality is assumed, not derived from geometry.")
+            .conclude("GFM compatible. But non-locality is assumed, not derived from geometry.")
         )
     
     def model(self):
@@ -360,7 +360,7 @@ class CompatibilityWithDistanceIndependence(Test):
 class CompatibilityWithNoSignaling(Test):
     """
     Why can entanglement produce correlations without enabling faster-than-light
-    communication, and how does GFD's vocabulary frame this crucial distinction?
+    communication, and how does GFM's vocabulary frame this crucial distinction?
     
     The no-signaling theorem is foundational. Any vocabulary for entanglement
     must be compatible with it or violate relativity.
@@ -379,7 +379,7 @@ class CompatibilityWithNoSignaling(Test):
     )
     question = (
         "Why can't entanglement be used for FTL communication despite producing "
-        "non-local correlations? How does GFD's Tet_A (causal) vs. Tet_B "
+        "non-local correlations? How does GFM's Tet_A (causal) vs. Tet_B "
         "(correlational) division accommodate this fundamental constraint?"
     )
     reference = "No-signaling theorem, Popescu-Rohrlich box (S=4 limit)"
@@ -391,7 +391,7 @@ class CompatibilityWithNoSignaling(Test):
         "always land the same does not let you control what they land on. The "
         "correlations are random; you cannot encode a message in randomness. "
         "THEORETICAL CONSTRAINT: The Tsirelson bound 2*sqrt(2) < 4 (PR-box limit) "
-        "ensures quantum mechanics respects no-signaling. GFD VOCABULARY: Tet_A "
+        "ensures quantum mechanics respects no-signaling. GFM VOCABULARY: Tet_A "
         "handles causal propagation (speed <= c); Tet_B handles correlation "
         "(random, not controllable). This frames no-signaling as: 'Information "
         "travels via Tet_A channels (limited by c), while Tet_B correlations "
@@ -406,10 +406,10 @@ class CompatibilityWithNoSignaling(Test):
             .step("THEORETICAL: If S could reach 4 (PR-box), signaling would be possible.")
             .step("Tsirelson bound: S_max = 2*sqrt(2) = 2.828 < 4.")
             .step("This gap (2.828 vs 4) is why QM respects no-signaling.")
-            .step("GFD VOCABULARY: 'Tet_A = causal channel (speed <= c).'")
+            .step("GFM VOCABULARY: 'Tet_A = causal channel (speed <= c).'")
             .step("'Tet_B = correlation channel (random, uncontrollable).'")
             .step("Information requires Tet_A; Tet_B only provides correlation.")
-            .conclude("GFD vocabulary frames no-signaling. But the bound 2*sqrt(2) is from QM.")
+            .conclude("GFM vocabulary frames no-signaling. But the bound 2*sqrt(2) is from QM.")
         )
     
     def model(self):
@@ -474,7 +474,7 @@ class SpeculativeK4Correspondence(Test):
         "physics is not automatically meaningful. OBSERVATION: Tetrahedra have "
         "k=4 vertices, k(k-1)/2=6 edges, k=4 faces. GHZ states involve up to 4 "
         "particles naturally before complexity explodes. Is there a connection? "
-        "HONEST ANSWER: We do not know. GFD notes the coincidence. This is "
+        "HONEST ANSWER: We do not know. GFM notes the coincidence. This is "
         "pattern-matching, not derivation. Deriving multiparty limits from "
         "tetrahedral geometry would require mathematics that does not exist. "
         "This test documents the speculation transparently."
@@ -526,10 +526,10 @@ class SpeculativeK4Correspondence(Test):
 # =============================================================================
 
 ALL_TESTS = [
-    # GFD geometric structure (actual GFD claims)
+    # GFM geometric structure (actual GFM claims)
     ComplementaryVertexPairs,
     DualTetrahedronStructure,
-    # Compatibility checks (GFD doesn't contradict QM)
+    # Compatibility checks (GFM doesn't contradict QM)
     CompatibilityWithBellViolations,
     CompatibilityWithDistanceIndependence,
     CompatibilityWithNoSignaling,
@@ -549,7 +549,7 @@ def run_all():
             "(2) Compatibility with Bell violations, distance independence, and "
             "no-signaling, (3) Speculative correspondences (k=4) noted with "
             "appropriate caution. All quantitative predictions come from QM. "
-            "GFD provides compatible vocabulary, not derivation."
+            "GFM provides compatible vocabulary, not derivation."
         ),
         test_classes=ALL_TESTS
     )

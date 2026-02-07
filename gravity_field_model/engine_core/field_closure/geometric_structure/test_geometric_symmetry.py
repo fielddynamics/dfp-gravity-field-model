@@ -58,7 +58,7 @@ VALIDATION CATEGORIES:
 PHYSICAL SIGNIFICANCE:
 
 The geometry is not arbitrary. The stellated octahedron encodes the k=4
-topology central to GFD. If the traversal respects this geometry, it
+topology central to GFM. If the traversal respects this geometry, it
 suggests the mathematics is capturing something fundamental about the
 underlying structure.
 

@@ -13,7 +13,7 @@ orthogonal coordinate axes.
 
 CAVEAT: These are mathematical analogies. Whether they reflect actual physics
 requires separate investigation. We document the correspondences without
-claiming they have operational meaning for GFD.
+claiming they have operational meaning for GFM.
 
 TEXTBOOK REFERENCE:
 Gravity Field Dynamics Textbook, Chapter 9: The vertex-state bijection and its
@@ -64,7 +64,7 @@ class BasisStateVertexCorrespondence(Test):
         "a 3-qubit Hilbert space? The 2^d = 8 correspondence reveals how spatial "
         "dimension directly determines quantum state space dimensionality."
     )
-    reference = "GFD Textbook Ch.9 Sec.9.2; Nielsen & Chuang quantum computing"
+    reference = "GFM Textbook Ch.9 Sec.9.2; Nielsen & Chuang quantum computing"
     tolerance = 0.01
     commentary = (
         "The bijection vertex i <-> |bin(i)> identifies cube geometry with "
@@ -125,7 +125,7 @@ class SuperpositionAsCentroid(Test):
         "Origin? The centroid of all vertices represents the quantum state of "
         "maximum uncertainty, where all basis states are equally weighted."
     )
-    reference = "GFD Textbook Ch.9; quantum expectation values"
+    reference = "GFM Textbook Ch.9; quantum expectation values"
     tolerance = 0.01
     commentary = (
         "The equal superposition gives each vertex probability 1/8. The expected "
@@ -190,7 +190,7 @@ class MeasurementAsProjection(Test):
         "This uniform distance suggests a geometric interpretation of quantum "
         "measurement as projection from the center to a definite state."
     )
-    reference = "Projective measurement; GFD Textbook exploratory appendix"
+    reference = "Projective measurement; GFM Textbook exploratory appendix"
     tolerance = 0.01
     commentary = (
         "The equidistant property means all measurement outcomes involve the "
@@ -249,7 +249,7 @@ class OrthogonalAxesAsObservables(Test):
         "observables? This reveals how geometric orthogonality maps to "
         "compatible measurements that can be performed simultaneously."
     )
-    reference = "Pauli algebra; GFD Textbook Ch.9: Geometry-observable map"
+    reference = "Pauli algebra; GFM Textbook Ch.9: Geometry-observable map"
     tolerance = 0.01
     commentary = (
         "Each axis defines a binary observable (+/-). Orthogonal axes yield "
@@ -306,7 +306,7 @@ class PhaseSpaceDimension(Test):
         "dimension of classical phase space? This correspondence suggests a "
         "possible encoding of position-momentum structure in the geometry."
     )
-    reference = "Hamiltonian mechanics; GFD Textbook exploratory appendix"
+    reference = "Hamiltonian mechanics; GFM Textbook exploratory appendix"
     tolerance = 0.01
     commentary = (
         "The 6 face centers lie along coordinate axes: +/-x, +/-y, +/-z. This "
@@ -365,7 +365,7 @@ class UncertaintyAndConjugateAxes(Test):
         "the number of conjugate variable pairs in quantum mechanics? This "
         "correspondence hints at a geometric encoding of complementarity."
     )
-    reference = "Heisenberg (1927); GFD Textbook exploratory appendix"
+    reference = "Heisenberg (1927); GFM Textbook exploratory appendix"
     tolerance = 0.01
     commentary = (
         "The cube has 3 pairs of opposite faces, one pair perpendicular to each "

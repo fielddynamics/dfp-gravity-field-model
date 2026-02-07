@@ -13,7 +13,7 @@ pairwise distances within each parity class using the coordinates
 (+/- 1, +/- 1, +/- 1) and verifies that all 6 edges per tetrahedron
 are equal, confirming genuine geometric regularity.
 
-GFD OBSERVATION: The closure constant k=4 equals the vertex count of a regular tetrahedron.
+GFM OBSERVATION: The closure constant k=4 equals the vertex count of a regular tetrahedron.
 
 This is a DERIVATION from Euclidean geometry applied to the cube vertex coordinates.
 """
@@ -38,7 +38,7 @@ class TetrahedralEdgeRegularity(Test):
     vertices in the same parity class always differ in exactly 2 coordinates,
     giving distance sqrt(4+4) = 2*sqrt(2) approximately 2.8284.
 
-    GFD OBSERVATION:
+    GFM OBSERVATION:
     Each tetrahedron has exactly k=4 vertices and C(k,2)=6 edges, all of
     length 2*sqrt(2). The edge length 2*sqrt(2) equals 2^(3/2) = 2^(d/2),
     connecting spatial dimension d=3 directly to the metric structure. Both
@@ -66,7 +66,7 @@ class TetrahedralEdgeRegularity(Test):
 
     reference = (
         "Coxeter, Regular Polytopes (1973), Ch.2: vertex coordinates of "
-        "the two tetrahedra inscribed in a cube; GFD Textbook Ch.9 Sec.9.2"
+        "the two tetrahedra inscribed in a cube; GFM Textbook Ch.9 Sec.9.2"
     )
 
     tolerance = 0.0001
@@ -90,7 +90,7 @@ class TetrahedralEdgeRegularity(Test):
     # Audit scoring
     audit_score = 88
     audit_notes = (
-        "Question: 13/15 (clearly frames the gap and stakes, asks a genuine foundational question, but reads slightly more like a problem statement than a mystery hook; could sharpen the tension by leading with the surprise that nobody checked this). Derivation: 14/15 (excellent intuition first structure, the Hamming distance lemma is the key insight and it is well placed before the math, the only minor issue is that the physical setup could spend one more sentence on why regularity matters physically before diving into bit strings). Commentary: 12/15 (solid explanation of why all edges are equal, correctly labels epistemic status, but lacks an analogy for accessibility and does not state broader implications beyond closing the gap; no aha moment beyond confirming what was expected). Model: 9/10 (clean summary with 5 well chosen values, edge counts plus means plus max deviation is exactly the right level of abstraction, the only minor note is that max deviation comparing 0.0 to 0.0 is trivially satisfied by construction). Observations: 7/10 (values are mathematically exact and correct, Coxeter citation is appropriate, but the observed values are geometric truths not empirical measurements, and the test does not explicitly acknowledge that both model and observation are analytic; this weakens the notion of independent verification). Constants: 10/10 (K, TET_A, TET_B, VERTICES all imported from common, no hardcoded physics constants, derived quantities like 2*sqrt(2) are computed inline with clear documentation). Accessibility: 14/15 (builds from cube coordinates to binary parity to Hamming distance to Euclidean metric in a natural progression, an undergraduate in linear algebra could follow, the Hamming distance lemma proof is particularly well scaffolded, only minor gap is that the connection between Hamming distance and Euclidean distance could be stated more explicitly as a bridge sentence). Header: 9/10 (module docstring clearly states what is being tested and why, identifies the gap in the existing suite, labels epistemic status as derivation, cites the GFD observation, only missing element is an explicit target audience statement)."
+        "Question: 13/15 (clearly frames the gap and stakes, asks a genuine foundational question, but reads slightly more like a problem statement than a mystery hook; could sharpen the tension by leading with the surprise that nobody checked this). Derivation: 14/15 (excellent intuition first structure, the Hamming distance lemma is the key insight and it is well placed before the math, the only minor issue is that the physical setup could spend one more sentence on why regularity matters physically before diving into bit strings). Commentary: 12/15 (solid explanation of why all edges are equal, correctly labels epistemic status, but lacks an analogy for accessibility and does not state broader implications beyond closing the gap; no aha moment beyond confirming what was expected). Model: 9/10 (clean summary with 5 well chosen values, edge counts plus means plus max deviation is exactly the right level of abstraction, the only minor note is that max deviation comparing 0.0 to 0.0 is trivially satisfied by construction). Observations: 7/10 (values are mathematically exact and correct, Coxeter citation is appropriate, but the observed values are geometric truths not empirical measurements, and the test does not explicitly acknowledge that both model and observation are analytic; this weakens the notion of independent verification). Constants: 10/10 (K, TET_A, TET_B, VERTICES all imported from common, no hardcoded physics constants, derived quantities like 2*sqrt(2) are computed inline with clear documentation). Accessibility: 14/15 (builds from cube coordinates to binary parity to Hamming distance to Euclidean metric in a natural progression, an undergraduate in linear algebra could follow, the Hamming distance lemma proof is particularly well scaffolded, only minor gap is that the connection between Hamming distance and Euclidean distance could be stated more explicitly as a bridge sentence). Header: 9/10 (module docstring clearly states what is being tested and why, identifies the gap in the existing suite, labels epistemic status as derivation, cites the GFM observation, only missing element is an explicit target audience statement)."
     )
 
     academic_paper = """\

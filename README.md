@@ -52,7 +52,7 @@ General Relativity requires gravity to "close": field configurations must resolv
 
 This single geometric fact, derived from four independent lines of established physics, determines:
 
-| Constant | Standard Value | GFD Derivation | Agreement |
+| Constant | Standard Value | GFM Derivation | Agreement |
 |----------|---------------|----------------|-----------|
 | Fine structure constant | 1/137.036 | Geometric closure cycles | Exact |
 | Electron spin | h/2 | (2 TIME faces / 8 total) x 2h | Exact |
@@ -312,12 +312,12 @@ if __name__ == "__main__":
 
 ### Legacy Framework (v1)
 
-Older tests inherit from `GFDTest`:
+Older tests inherit from `GFMTest`:
 
 ```python
-from gravity_field_model.base import GFDTest
+from gravity_field_model.base import GFMTest
 
-class MyTest(GFDTest):
+class MyTest(GFMTest):
     name = "My Test"
     question = "What does this test verify?"
     reference_source = "Source of observed values"
@@ -354,7 +354,7 @@ Contributions are welcome. To add new tests:
 
 1. Fork the repository
 2. Create a feature branch
-3. Add tests following the GFDTest pattern
+3. Add tests following the GFMTest pattern
 4. Ensure all tests pass
 5. Submit a pull request
 
