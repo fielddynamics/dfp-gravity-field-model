@@ -24,6 +24,13 @@ EXCLUDED_FILES = [
     'build_audit.py',
 ]
 
+HIDDEN_FOLDERS = [
+    'examples',
+    'functions',
+    'templates',
+    'web_interface',
+]
+
 NON_RUNNABLE_FOLDERS = [
     'common',
 ]
@@ -47,8 +54,8 @@ def create_app():
     
     @app.route('/')
     def home():
-        """Redirect to start page."""
-        return redirect('/start')
+        """Redirect to app."""
+        return redirect('/app')
     
     @app.route('/start')
     def start():
@@ -73,6 +80,10 @@ def create_app():
             
             # Skip hidden files and __pycache__
             if name.startswith('.') or name == '__pycache__':
+                return None
+            
+            # Skip hidden folders
+            if os.path.isdir(path) and name in HIDDEN_FOLDERS:
                 return None
             
             # Skip excluded files

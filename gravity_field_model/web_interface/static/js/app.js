@@ -512,8 +512,8 @@ function renderTreeNode(node, container, depth, filter = '') {
             if (childContainer.children.length > 0) {
                 container.appendChild(childContainer);
 
-                // Auto-expand when filtering, at root level, or calculations folder
-                if (filter || depth === 0 || (depth === 1 && node.name === 'calculations')) {
+                // Auto-expand when filtering, at root level, or key folders
+                if (filter || depth === 0 || (depth === 1 && (node.name === 'calculations' || node.name === 'engine_core'))) {
                     item.classList.add('expanded');
                 }
             }
