@@ -41,6 +41,16 @@
                 </div>
             </div>
 
+            <div class="docs-section">
+                <div class="section-header">
+                    <span>Papers</span>
+                    <span id="docs-count" class="file-count"></span>
+                </div>
+                <div id="docs-list" class="docs-list">
+                    <!-- Docs will be populated by JavaScript -->
+                </div>
+            </div>
+
             <div class="sidebar-bottom-bar">
                 <a href="/start" class="take-break-link">Take a break</a>
                 <a href="mailto:stephen@fielddynamics.org" class="bug-report-link" title="Report a bug">
@@ -97,6 +107,22 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Doc Viewer (hidden by default) -->
+            <div class="doc-viewer" id="doc-viewer" style="display: none;">
+                <div class="file-header">
+                    <div class="file-tab">
+                        <span class="file-icon-paper">&#128220;</span>
+                        <span id="doc-file-name">Document</span>
+                        <button class="close-file-btn" onclick="closeDoc()">&#10005;</button>
+                    </div>
+                </div>
+                <div class="paper-content">
+                    <div class="paper-page" id="doc-page">
+                        <!-- Rendered markdown will go here -->
                     </div>
                 </div>
             </div>

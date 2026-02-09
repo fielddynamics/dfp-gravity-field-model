@@ -176,6 +176,64 @@ def create_app():
         except Exception as e:
             return jsonify({'error': str(e)}), 500
     
+    @app.route('/api/docs')
+    def get_docs():
+        """List markdown files in the docs/ folder."""
+        docs_dir = os.path.join(os.path.dirname(project_root), 'docs')
+        if not os.path.exists(docs_dir):
+            return jsonify([])
+        
+        docs = []
+        for fname in sorted(os.listdir(docs_dir)):
+            if fname.endswith('.md'):
+                fpath = os.path.join(docs_dir, fname)
+                mtime = os.path.getmtime(fpath)
+                # Extract title from first heading
+                title = fname.replace('.md', '').replace('_', ' ')
+                try:
+                    with open(fpath, 'r', encoding='utf-8') as f:
+                        for line in f:
+                            line = line.strip()
+                            if line.startswith('# '):
+                                title = line[2:].strip()
+                                break
+                except Exception:
+                    pass
+                
+                docs.append({
+                    'filename': fname,
+                    'title': title,
+                    'modified': mtime,
+                })
+        
+        docs.sort(key=lambda x: x['modified'], reverse=True)
+        return jsonify(docs)
+    
+    @app.route('/api/doc/<path:filename>')
+    def get_doc(filename):
+        """Get raw markdown content of a doc file."""
+        docs_dir = os.path.join(os.path.dirname(project_root), 'docs')
+        full_path = os.path.join(docs_dir, filename)
+        
+        # Security: ensure path stays within docs/
+        real_path = os.path.realpath(full_path)
+        real_docs = os.path.realpath(docs_dir)
+        if not real_path.startswith(real_docs):
+            return jsonify({'error': 'Access denied'}), 403
+        
+        if not os.path.exists(full_path):
+            return jsonify({'error': 'File not found'}), 404
+        
+        try:
+            with open(full_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            return jsonify({
+                'filename': filename,
+                'content': content,
+            })
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+    
     @app.route('/api/top-papers')
     def get_top_papers():
         """Find test files with academic_paper and audit_score >= 89, sorted by recency."""

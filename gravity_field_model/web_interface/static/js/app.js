@@ -28,6 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load top rated papers
     loadTopPapers();
+
+    // Load docs list in sidebar
+    loadDocsList();
 });
 
 /**
@@ -1969,4 +1972,231 @@ function escapeHtml(text) {
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;');
+}
+
+
+// =========================================================================
+// DOCS VIEWER (markdown papers from docs/ folder)
+// =========================================================================
+
+/**
+ * Load the docs list into the sidebar
+ */
+async function loadDocsList() {
+    const container = document.getElementById('docs-list');
+    const countEl = document.getElementById('docs-count');
+    if (!container) return;
+
+    try {
+        const response = await fetch('/api/docs');
+        const docs = await response.json();
+
+        if (countEl) countEl.textContent = docs.length;
+
+        if (docs.length === 0) {
+            container.innerHTML = '<div class="tree-item" style="color: #555; padding: 4px 16px;">No papers found</div>';
+            return;
+        }
+
+        let html = '';
+        for (const doc of docs) {
+            html += `<div class="tree-item file" onclick="openDoc('${doc.filename}')">
+                <span class="tree-icon">&#128220;</span>
+                <span class="tree-name">${escapeHtml(doc.title)}</span>
+            </div>`;
+        }
+        container.innerHTML = html;
+
+    } catch (error) {
+        console.error('Failed to load docs:', error);
+    }
+}
+
+/**
+ * Open a markdown document from docs/
+ */
+async function openDoc(filename) {
+    try {
+        const response = await fetch(`/api/doc/${filename}`);
+        const data = await response.json();
+
+        if (data.error) {
+            alert(data.error);
+            return;
+        }
+
+        // Hide all other views, show doc viewer
+        document.getElementById('welcome-view').style.display = 'none';
+        document.getElementById('file-viewer').style.display = 'none';
+        document.getElementById('output-viewer').style.display = 'none';
+        document.getElementById('paper-viewer').style.display = 'none';
+        document.getElementById('doc-viewer').style.display = 'flex';
+
+        // Update header
+        document.getElementById('doc-file-name').textContent = filename;
+
+        // Render markdown
+        const docPage = document.getElementById('doc-page');
+        docPage.innerHTML = renderMarkdown(data.content);
+
+    } catch (error) {
+        console.error('Error opening doc:', error);
+    }
+}
+
+/**
+ * Close the doc viewer
+ */
+function closeDoc() {
+    document.getElementById('doc-viewer').style.display = 'none';
+    document.getElementById('welcome-view').style.display = 'flex';
+}
+
+/**
+ * Simple markdown to HTML renderer for academic papers.
+ * Handles: headings, bold, italic, tables, code blocks, code inline, lists, hr, paragraphs.
+ */
+function renderMarkdown(md) {
+    const lines = md.split('\n');
+    let html = '<article class="arxiv-paper">';
+    let inCodeBlock = false;
+    let inTable = false;
+    let tableRows = [];
+    let paragraph = [];
+
+    function flushParagraph() {
+        if (paragraph.length > 0) {
+            const text = paragraph.join(' ').trim();
+            if (text) {
+                html += `<p class="md-paragraph">${inlineFormat(text)}</p>`;
+            }
+            paragraph = [];
+        }
+    }
+
+    function flushTable() {
+        if (tableRows.length > 0) {
+            html += '<table class="md-table"><thead><tr>';
+            const headers = tableRows[0];
+            for (const h of headers) {
+                html += `<th>${inlineFormat(h.trim())}</th>`;
+            }
+            html += '</tr></thead><tbody>';
+            for (let i = 2; i < tableRows.length; i++) {  // skip separator row
+                html += '<tr>';
+                for (const c of tableRows[i]) {
+                    html += `<td>${inlineFormat(c.trim())}</td>`;
+                }
+                html += '</tr>';
+            }
+            html += '</tbody></table>';
+            tableRows = [];
+            inTable = false;
+        }
+    }
+
+    function inlineFormat(text) {
+        let s = escapeHtml(text);
+        // Bold
+        s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+        // Italic
+        s = s.replace(/\*(.+?)\*/g, '<em>$1</em>');
+        // Inline code
+        s = s.replace(/`([^`]+)`/g, '<code class="paper-math">$1</code>');
+        return s;
+    }
+
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const trimmed = line.trim();
+
+        // Code blocks
+        if (trimmed.startsWith('```')) {
+            if (inCodeBlock) {
+                html += '</code></pre>';
+                inCodeBlock = false;
+            } else {
+                flushParagraph();
+                flushTable();
+                html += '<pre class="md-code"><code>';
+                inCodeBlock = true;
+            }
+            continue;
+        }
+        if (inCodeBlock) {
+            html += escapeHtml(line) + '\n';
+            continue;
+        }
+
+        // Horizontal rule
+        if (/^---+$/.test(trimmed)) {
+            flushParagraph();
+            flushTable();
+            html += '<hr class="paper-rule">';
+            continue;
+        }
+
+        // Empty line
+        if (trimmed === '') {
+            flushParagraph();
+            flushTable();
+            continue;
+        }
+
+        // Table rows
+        if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
+            flushParagraph();
+            const cells = trimmed.slice(1, -1).split('|');
+            // Check if separator row
+            if (cells.every(c => /^[\s-:]+$/.test(c))) {
+                tableRows.push(cells);  // keep separator to know where headers end
+                inTable = true;
+                continue;
+            }
+            tableRows.push(cells);
+            inTable = true;
+            continue;
+        } else if (inTable) {
+            flushTable();
+        }
+
+        // Headings
+        if (trimmed.startsWith('# ')) {
+            flushParagraph();
+            html += `<h1 class="paper-title">${inlineFormat(trimmed.slice(2))}</h1>`;
+            continue;
+        }
+        if (trimmed.startsWith('## ')) {
+            flushParagraph();
+            html += `<h2 class="md-h2">${inlineFormat(trimmed.slice(3))}</h2>`;
+            continue;
+        }
+        if (trimmed.startsWith('### ')) {
+            flushParagraph();
+            html += `<h3 class="md-h3">${inlineFormat(trimmed.slice(4))}</h3>`;
+            continue;
+        }
+
+        // Unordered list
+        if (/^[-*]\s/.test(trimmed)) {
+            flushParagraph();
+            html += `<div class="md-list-item">${inlineFormat(trimmed.slice(2))}</div>`;
+            continue;
+        }
+
+        // Indented content (4 spaces = code-like)
+        if (line.startsWith('    ') && !inTable) {
+            flushParagraph();
+            html += `<pre class="md-indent"><code>${escapeHtml(trimmed)}</code></pre>`;
+            continue;
+        }
+
+        // Regular text: accumulate into paragraph
+        paragraph.push(trimmed);
+    }
+
+    flushParagraph();
+    flushTable();
+    html += '</article>';
+    return html;
 }
