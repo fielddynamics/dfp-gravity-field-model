@@ -220,18 +220,26 @@ class TimeReversalSymmetryProbe(Test):
             .add("Is T-symmetric", 1.0 if is_symmetric else 0.0)
         )
 
-    def observations(self):
-        # NULL: Time-symmetric (detailed balance)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Transition matrix difference", 0.0)
-            .add("Cross-rate forward", 0.5)
-            .add("Cross-rate backward", 0.5)
-            .add("Detailed balance violation", 0.0)
-            .add("Entropy production rate", 0.0)
-            .add("Is T-symmetric", 1.0)
+            .add("Transition matrix difference", 0.00855547, abs_tol=0.0044)  # random range [0.00542226, 0.0123204]
+            .add("Cross-rate forward", 0.500467, abs_tol=0.017)  # random range [0.4885, 0.5152]
+            .add("Cross-rate backward", 0.500467, abs_tol=0.017)  # random range [0.4885, 0.5152]
+            .add("Detailed balance violation", 0.0341903, abs_tol=0.018)  # random range [0.0216881, 0.0493128]
+            .add("Entropy production rate", 0.00840418, abs_tol=0.0089)  # random range [0.00379549, 0.0161248]
+            .add("Is T-symmetric", 1, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 class ArrowOfTimeProbe(Test):
     """
@@ -324,16 +332,24 @@ class ArrowOfTimeProbe(Test):
             .add("Has arrow of time", 1.0 if combined_accuracy > 0.55 else 0.0)
         )
 
-    def observations(self):
-        # NULL: No arrow (50% accuracy)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Forward detection accuracy", 0.5)
-            .add("Backward detection accuracy", 0.5)
-            .add("Combined accuracy", 0.5)
-            .add("Has arrow of time", 0.0)
+            .add("Forward detection accuracy", 0.509495, abs_tol=0.17)  # random range [0.393939, 0.656566]
+            .add("Backward detection accuracy", 0.499394, abs_tol=0.2)  # random range [0.333333, 0.626263]
+            .add("Combined accuracy", 0.504444, abs_tol=0.11)  # random range [0.414141, 0.585859]
+            .add("Has arrow of time", 0.106667, abs_tol=1.1)  # random range [0, 1]
         )
-
 
 # =============================================================================
 # TEST RUNNER

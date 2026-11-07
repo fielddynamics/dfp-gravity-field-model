@@ -403,6 +403,7 @@ class _Metric:
     value: float
     tolerance: Optional[float] = None
     abs_tolerance: Optional[float] = None
+    fmt: Optional[str] = None
 
 
 class Model:
@@ -421,7 +422,7 @@ class Model:
         self._tables: List[Dict] = []
     
     def add(self, name: str, value: float, tol: Optional[float] = None,
-            abs_tol: Optional[float] = None) -> 'Model':
+            abs_tol: Optional[float] = None, fmt: Optional[str] = None) -> 'Model':
         """
         Add a metric.
         
@@ -432,8 +433,10 @@ class Model:
             abs_tol: Optional absolute tolerance. When given, the metric passes
                 if |model - observed| <= abs_tol. Use it for quantities expected
                 to be zero or near zero, where a relative error is meaningless.
+            fmt: Optional display format (e.g. ".3e"); it does not affect
+                the comparison.
         """
-        self._metrics.append(_Metric(name, value, tol, abs_tol))
+        self._metrics.append(_Metric(name, value, tol, abs_tol, fmt))
         return self
     
     def add_table(self, data: Dict = None, *, title: str = None, 
@@ -488,11 +491,30 @@ class Observed:
     def __init__(self):
         self._values: Dict[str, float] = {}
         self._tables: List[Dict] = []
+        self._tols: Dict[str, float] = {}
+        self._abs_tols: Dict[str, float] = {}
     
-    def add(self, name: str, value: float) -> 'Observed':
-        """Add an observed value."""
+    def add(self, name: str, value: float, tol: Optional[float] = None,
+            abs_tol: Optional[float] = None, fmt: Optional[str] = None) -> 'Observed':
+        """
+        Add an observed value.
+
+        tol / abs_tol optionally give the uncertainty of the reference value
+        itself (relative or absolute). They apply when the model does not set
+        its own tolerance for the same metric.
+        """
         self._values[name] = value
+        if tol is not None:
+            self._tols[name] = tol
+        if abs_tol is not None:
+            self._abs_tols[name] = abs_tol
         return self
+
+    def get_tolerances(self) -> Dict[str, float]:
+        return dict(self._tols)
+
+    def get_abs_tolerances(self) -> Dict[str, float]:
+        return dict(self._abs_tols)
     
     def add_table(self, data: Dict = None, *, title: str = None,
                   headers: List[str] = None, rows: List[List] = None,
@@ -734,6 +756,14 @@ class Test(ABC):
         obs_dict = obs_result.to_dict() if obs_result else None
         if obs_result:
             tables.extend(obs_result.get_tables())
+            # Tolerances attached to the observations apply where the model
+            # did not set one for the same metric.
+            for name, t in getattr(obs_result, 'get_tolerances', lambda: {})().items():
+                if name not in metric_tols and name not in metric_abs_tols:
+                    metric_tols[name] = t
+            for name, t in getattr(obs_result, 'get_abs_tolerances', lambda: {})().items():
+                if name not in metric_tols and name not in metric_abs_tols:
+                    metric_abs_tols[name] = t
         
         return TestResult(
             name=self.name,

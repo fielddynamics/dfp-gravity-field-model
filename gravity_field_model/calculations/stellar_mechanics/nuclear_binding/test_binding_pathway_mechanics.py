@@ -172,7 +172,10 @@ class ProtonRestMass(Test):
             .add("Proton mass (MeV)", 938.272)
             .add("m_p/m_e ratio", 1836.15)
             .add("6*pi^5 value", 1836.12)
-            .add("Coincidence error (%)", 0.002)
+            # Lenz (1951): 6 pi^5 matches m_p/m_e to within 0.002%. Checked as a
+            # bound (the value is 0.00188%); comparing with the rounded 0.002 by
+            # relative error failed at 6%.
+            .add("Coincidence error (%)", 0.0, abs_tol=0.002)
         )
 
 

@@ -231,17 +231,25 @@ class EntanglementEntropyProbe(Test):
             .add("Is highly entangled (ratio > 0.5)", 1.0 if entropy_ratio > 0.5 else 0.0)
         )
 
-    def observations(self):
-        # NULL: Moderate correlation
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Entanglement entropy", 1.5)
-            .add("Max entropy (log2(5))", 2.32)
-            .add("Entropy ratio", 0.65)
-            .add("Mutual information", 0.5)
-            .add("Is highly entangled (ratio > 0.5)", 1.0)
+            .add("Entanglement entropy", 0.0108038, abs_tol=0.055)  # random range [0, 0.0586246]
+            .add("Max entropy (log2(5))", 2.321928094887, abs_tol=2e-09)  # same for all 150 random sequences
+            .add("Entropy ratio", 0.00465293, abs_tol=0.024)  # random range [0, 0.0252482]
+            .add("Mutual information", 2.06301e-06, abs_tol=5.2e-05)  # random range [0, 4.68202e-05]
+            .add("Is highly entangled (ratio > 0.5)", 0, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 class ConcurrenceProbe(Test):
     """
@@ -301,15 +309,23 @@ class ConcurrenceProbe(Test):
             .add("Is strongly correlated", 1.0 if is_strong else 0.0)
         )
 
-    def observations(self):
-        # NULL: Moderate correlation
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Concurrence analog", 0.6)
-            .add("Discord analog", 0.0)
-            .add("Is strongly correlated", 1.0)
+            .add("Concurrence analog", 0.000466305, abs_tol=0.0061)  # random range [0, 0.00571401]
+            .add("Discord analog", 0, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("Is strongly correlated", 0, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 # =============================================================================
 # TEST RUNNER

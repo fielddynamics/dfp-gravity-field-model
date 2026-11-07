@@ -187,16 +187,24 @@ class HeatCapacityProbe(Test):
             .add("Specific heat (per step)", c_specific)
         )
 
-    def observations(self):
-        # NULL: Some heat capacity
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Mean energy", 2.0)
-            .add("Variance of energy", 0.5)
-            .add("Heat capacity C", 0.5)
-            .add("Specific heat (per step)", 0.0001)
+            .add("Mean energy", 4.73459, abs_tol=0.084)  # random range [4.67445, 4.80725]
+            .add("Variance of energy", 3.00534, abs_tol=0.23)  # random range [2.8608, 3.1968]
+            .add("Heat capacity C", 3.00534, abs_tol=0.23)  # random range [2.8608, 3.1968]
+            .add("Specific heat (per step)", 0.000601068, abs_tol=4.5e-05)  # random range [0.000572159, 0.00063936]
         )
-
 
 class PhaseTransitionProbe(Test):
     """
@@ -261,17 +269,25 @@ class PhaseTransitionProbe(Test):
             .add("Scaling exponent alpha", alpha)
         )
 
-    def observations(self):
-        # NULL: No phase transition (smooth C vs scale)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("C at scale 10", 0.3)
-            .add("C at scale 100", 0.3)
-            .add("Has peak", 0.0)
-            .add("Peak scale", 0)
-            .add("Scaling exponent alpha", 0.0)
+            .add("C at scale 10", 0.333161, abs_tol=0.073)  # random range [0.277511, 0.396512]
+            .add("C at scale 100", 0.0287567, abs_tol=0.022)  # random range [0.0155354, 0.0471398]
+            .add("Has peak", 0, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("Peak scale", 10, abs_tol=1e-08)  # same for all 150 random sequences
+            .add("Scaling exponent alpha", -1.02962, abs_tol=0.3)  # random range [-1.22653, -0.777179]
         )
-
 
 # =============================================================================
 # TEST RUNNER

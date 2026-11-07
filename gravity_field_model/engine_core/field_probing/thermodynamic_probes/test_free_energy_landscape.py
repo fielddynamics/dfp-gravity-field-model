@@ -203,18 +203,26 @@ class FreeEnergyLandscapeProbe(Test):
             .add("Mean F(TetA) - F(TetB)", F_a_mean - F_b_mean)
         )
 
-    def observations(self):
-        # NULL: Flat landscape (uniform)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("F range (max - min)", 0.1)
-            .add("Number of minima", 8)
-            .add("Minima in TetA", 4)
-            .add("Minima in TetB", 4)
-            .add("Landscape roughness", 0.01)
-            .add("Mean F(TetA) - F(TetB)", 0.0)
+            .add("F range (max - min)", 0.117407, abs_tol=0.11)  # random range [0.0397825, 0.206971]
+            .add("Number of minima", 1.41333, abs_tol=3)  # random range [1, 4]
+            .add("Minima in TetA", 0.773333, abs_tol=2.6)  # random range [0, 3]
+            .add("Minima in TetB", 0.64, abs_tol=1.6)  # random range [0, 2]
+            .add("Landscape roughness", 0.00149674, abs_tol=0.0031)  # random range [0.000192509, 0.00415809]
+            .add("Mean F(TetA) - F(TetB)", -0.00146949, abs_tol=0.11)  # random range [-0.0899778, 0.0580045]
         )
-
 
 class ChamberFreeEnergyProbe(Test):
     """
@@ -277,18 +285,26 @@ class ChamberFreeEnergyProbe(Test):
             .add("TetB favored", 1.0 if chamber_F['delta_F'] < 0 else 0.0)
         )
 
-    def observations(self):
-        # NULL: Equal free energies
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("F(TetA)", 0.69)
-            .add("F(TetB)", 0.69)
-            .add("delta_F (B - A)", 0.0)
-            .add("Transition rate ratio", 1.0)
-            .add("Expected ratio from F", 1.0)
-            .add("TetB favored", 0.0)
+            .add("F(TetA)", 0.692473, abs_tol=0.05)  # random range [0.649139, 0.721747]
+            .add("F(TetB)", 0.69403, abs_tol=0.052)  # random range [0.665343, 0.739182]
+            .add("delta_F (B - A)", 0.00155782, abs_tol=0.11)  # random range [-0.0564037, 0.0900428]
+            .add("Transition rate ratio", 0.999569, abs_tol=0.0005)  # random range [0.999173, 1]
+            .add("Expected ratio from F", 0.998858, abs_tol=0.098)  # random range [0.913892, 1.05802]
+            .add("TetB favored", 0.46, abs_tol=0.63)  # random range [0, 1]
         )
-
 
 # =============================================================================
 # TEST RUNNER

@@ -187,18 +187,26 @@ class ParticipationRatioProbe(Test):
             .add("Is delocalized (PR > 4)", 1.0 if overall_pr > 4 else 0.0)
         )
 
-    def observations(self):
-        # NULL: Uniform distribution (PR = 8)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Mean PR (windows)", 6.0)
-            .add("Std of PR", 1.0)
-            .add("Min PR", 3.0)
-            .add("Max PR", 8.0)
-            .add("Overall PR", 7.0)
-            .add("Is delocalized (PR > 4)", 1.0)
+            .add("Mean PR (windows)", 7.04506, abs_tol=0.13)  # random range [6.93914, 7.14129]
+            .add("Std of PR", 0.431053, abs_tol=0.068)  # random range [0.372195, 0.48267]
+            .add("Min PR", 5.2434, abs_tol=1.3)  # random range [4.19463, 5.84112]
+            .add("Max PR", 7.92988, abs_tol=0.079)  # random range [7.86164, 7.96178]
+            .add("Overall PR", 7.98804, abs_tol=0.025)  # random range [7.96685, 7.99842]
+            .add("Is delocalized (PR > 4)", 1, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 class WavePacketSpreadingProbe(Test):
     """
@@ -266,17 +274,25 @@ class WavePacketSpreadingProbe(Test):
             .add("Is efficient (ratio < 1.5)", 1.0 if ratio < 1.5 else 0.0)
         )
 
-    def observations(self):
-        # NULL: Near-optimal spreading (coupon collector)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("First spreading time", 17)
-            .add("Expected (coupon collector)", 16.6)
-            .add("Ratio to expected", 1.0)
-            .add("Mean spreading time", 15)
-            .add("Is efficient (ratio < 1.5)", 1.0)
+            .add("First spreading time", 20.9267, abs_tol=37)  # random range [9, 53]
+            .add("Expected (coupon collector)", 16.635532333439, abs_tol=2e-08)  # same for all 150 random sequences
+            .add("Ratio to expected", 1.25795, abs_tol=2.3)  # random range [0.541011, 3.18595]
+            .add("Mean spreading time", 21.5775, abs_tol=11)  # random range [15.125, 30.875]
+            .add("Is efficient (ratio < 1.5)", 0.713333, abs_tol=0.83)  # random range [0, 1]
         )
-
 
 # =============================================================================
 # TEST RUNNER

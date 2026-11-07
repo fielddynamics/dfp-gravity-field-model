@@ -219,17 +219,25 @@ class TunnelingEventProbe(Test):
             .add("Max energy deficit", max_deficit)
         )
 
-    def observations(self):
-        # NULL: No tunneling (all transitions have sufficient energy)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Total chamber crossings", 2000)
-            .add("Tunneling events", 0)
-            .add("Tunneling fraction", 0.0)
-            .add("Mean energy deficit", 0.0)
-            .add("Max energy deficit", 0.0)
+            .add("Total chamber crossings", 2502.39, abs_tol=110)  # random range [2417, 2598]
+            .add("Tunneling events", 0, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("Tunneling fraction", 0, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("Mean energy deficit", 0, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("Max energy deficit", 0, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 class BarrierTransmissionProbe(Test):
     """
@@ -287,17 +295,25 @@ class BarrierTransmissionProbe(Test):
             .add("Shows barrier suppression", 1.0 if suppression_ratio < 0.5 else 0.0)
         )
 
-    def observations(self):
-        # NULL: Equal rates (no barrier effect)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Low barrier fraction", 0.33)
-            .add("Medium barrier fraction", 0.33)
-            .add("High barrier fraction", 0.33)
-            .add("High/Low suppression ratio", 1.0)
-            .add("Shows barrier suppression", 0.0)
+            .add("Low barrier fraction", 1, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("Medium barrier fraction", 0, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("High barrier fraction", 0, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("High/Low suppression ratio", 0, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("Shows barrier suppression", 1, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 # =============================================================================
 # TEST RUNNER

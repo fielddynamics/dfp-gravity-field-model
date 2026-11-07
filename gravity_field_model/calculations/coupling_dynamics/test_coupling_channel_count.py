@@ -147,7 +147,11 @@ Bimetric Coupling Channel Count in the Stellated Octahedron: 17 = k^2 + 1 The ge
         # Each face is defined by 3 vertices from one tetrahedron.
         n_faces_a = 0
         n_faces_b = 0
-        for face in FACES:
+        # FACES maps face names to vertex sets, so iterate over the values.
+        # (Iterating over FACES itself gave the names, which were all skipped,
+        # so every count came out as 0.)
+        face_sets = FACES.values() if isinstance(FACES, dict) else FACES
+        for face in face_sets:
             # Determine face vertices depending on data structure type
             if isinstance(face, dict):
                 verts = face.get('vertices', face.get('verts', set()))

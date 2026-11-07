@@ -139,44 +139,30 @@ class KValueUniquenessTest(Test):
             model_out.add(f"k={k} G predicted", g_values[i])
             model_out.add(f"k={k} fractional error", errors[i])
         
-        model_out.add("k=4 is unique", 1.0 if errors[1] < 0.01 and all(errors[j] > 1.0 for j in [0,2,3,4]) else 0.0)
+        # Distance in orders of magnitude. (The fractional error |G_k - G|/G
+        # is capped at 1 when G_k is far below G, so the earlier criterion
+        # "error > 1" could never be met for k = 5, 6, 8.)
+        orders_off = [abs(math.log10(g / G)) for g in g_values]
+        for i, k in enumerate(k_values):
+            model_out.add(f"k={k} orders of magnitude from G", orders_off[i])
+        model_out.add("k=4 is unique", 1.0 if errors[1] < 0.01 and all(orders_off[j] > 1.0 for j in [0, 2, 3, 4]) else 0.0)
         
         return model_out
 
     def observations(self) -> Observed:
+        # Closed forms for each k (d = 3): exponent 1 + k + k^2 and prefactor
+        # (k^2 + 1)/(kd + 1). Only k = 4 is compared with the measured G (to the
+        # 0.12% tree-level difference); for the other k the prediction must miss
+        # by more than an order of magnitude. (The hand-entered predicted values
+        # for k != 4 did not match the formula, e.g. 4.54e16 for k = 3 where the
+        # formula gives 6.3e6.)
         obs = Observed()
-        obs.add("G measured", G)
-        obs.add("quantum scale", HBAR * C / (M_E ** 2))
-        
-        obs.add("k=3 exponent", 13.0)
-        obs.add("k=3 ratio", 1.0)
-        obs.add("k=3 G predicted", 4.54e16)
-        obs.add("k=3 fractional error", 6.8e26)
-        
-        obs.add("k=4 exponent", 21.0)
-        obs.add("k=4 ratio", 1.3077)
-        obs.add("k=4 G predicted", 6.666e-11)
-        obs.add("k=4 fractional error", 0.0013)
-        
-        obs.add("k=5 exponent", 31.0)
-        obs.add("k=5 ratio", 1.625)
-        obs.add("k=5 G predicted", 7.4e-53)
-        obs.add("k=5 fractional error", 1.1e42)
-        
-        obs.add("k=6 exponent", 43.0)
-        obs.add("k=6 ratio", 1.947)
-        obs.add("k=6 G predicted", 8.8e-78)
-        obs.add("k=6 fractional error", 1.3e67)
-        
-        obs.add("k=8 exponent", 73.0)
-        obs.add("k=8 ratio", 2.60)
-        obs.add("k=8 G predicted", 1.2e-140)
-        obs.add("k=8 fractional error", 1.8e130)
-        
+        for k in [3, 4, 5, 6, 8]:
+            obs.add(f"k={k} exponent", float(1 + k + k ** 2))
+            obs.add(f"k={k} ratio", (k ** 2 + 1) / (3 * k + 1), tol=1e-9)
+        obs.add("k=4 G predicted", G, tol=0.0015)
         obs.add("k=4 is unique", 1.0)
-        
         return obs
-
 
 if __name__ == "__main__":
     from gravity_field_model.framework import run_tests

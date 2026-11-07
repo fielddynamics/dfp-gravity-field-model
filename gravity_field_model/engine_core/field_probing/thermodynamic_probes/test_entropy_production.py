@@ -209,17 +209,25 @@ class EntropyProductionProbe(Test):
             .add("Is producing entropy", 1.0 if production['is_positive'] else 0.0)
         )
 
-    def observations(self):
-        # NULL: At equilibrium (zero production)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Mean entropy", 2.0)
-            .add("Max entropy", 2.08)
-            .add("Entropy deficit", 0.08)
-            .add("Production rate", 0.0)
-            .add("Is producing entropy", 0.0)
+            .add("Mean entropy", 2.00685, abs_tol=0.011)  # random range [1.99744, 2.01528]
+            .add("Max entropy", 2.07944154168, abs_tol=2e-09)  # same for all 150 random sequences
+            .add("Entropy deficit", 0.0725883, abs_tol=0.011)  # random range [0.0641572, 0.0820031]
+            .add("Production rate", -1.97993e-07, abs_tol=4.7e-05)  # random range [-2.89592e-05, 4.02425e-05]
+            .add("Is producing entropy", 0, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 class EquilibrationProbe(Test):
     """
@@ -278,17 +286,25 @@ class EquilibrationProbe(Test):
             .add("Is converging", 1.0 if equilibration['is_converging'] else 0.0)
         )
 
-    def observations(self):
-        # NULL: Not converging (already equilibrated)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Initial KL divergence", 0.1)
-            .add("Final KL divergence", 0.1)
-            .add("KL reduction ratio", 1.0)
-            .add("Relaxation rate", 0.0)
-            .add("Is converging", 0.0)
+            .add("Initial KL divergence", 0.0344074, abs_tol=0.073)  # random range [0.0040088, 0.0974698]
+            .add("Final KL divergence", 0.0334087, abs_tol=0.093)  # random range [0.00465938, 0.114177]
+            .add("KL reduction ratio", 1.39604, abs_tol=8.8)  # random range [0.0929224, 8.97349]
+            .add("Relaxation rate", -0.000206201, abs_tol=0.016)  # random range [-0.0133801, 0.0132217]
+            .add("Is converging", 0.0333333, abs_tol=1.2)  # random range [0, 1]
         )
-
 
 # =============================================================================
 # TEST RUNNER

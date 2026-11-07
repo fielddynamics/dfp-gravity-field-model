@@ -214,16 +214,24 @@ class BispectrumProbe(Test):
             .add("Is nonlinear", 1.0 if max_bicoh > 0.3 else 0.0)
         )
 
-    def observations(self):
-        # NULL: Linear (zero bicoherence)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Max bicoherence", 0.0)
-            .add("Mean bicoherence", 0.0)
-            .add("Number of significant couplings", 0)
-            .add("Is nonlinear", 0.0)
+            .add("Max bicoherence", 1, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("Mean bicoherence", 1, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("Number of significant couplings", 435, abs_tol=4e-07)  # same for all 150 random sequences
+            .add("Is nonlinear", 1, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 class PhaseSynchronizationProbe(Test):
     """
@@ -284,17 +292,24 @@ class PhaseSynchronizationProbe(Test):
             .add("Is synchronized", 1.0 if mean_sync > 0.3 else 0.0)
         )
 
-    def observations(self):
-        # NULL: No synchronization
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Dominant frequency index", 1)
-            .add("Sync with 2nd harmonic", 0.0)
-            .add("Sync with 3rd harmonic", 0.0)
-            .add("Mean synchronization", 0.0)
-            .add("Is synchronized", 0.0)
+            .add("Sync with 2nd harmonic", 0.325418, abs_tol=0.55)  # random range [0.0405222, 0.8002]
+            .add("Sync with 3rd harmonic", 0.29852, abs_tol=0.52)  # random range [0.0264186, 0.744693]
+            .add("Mean synchronization", 0.311969, abs_tol=0.36)  # random range [0.0695337, 0.62403]
+            .add("Is synchronized", 0.513333, abs_tol=0.6)  # random range [0, 1]
         )
-
 
 # =============================================================================
 # TEST RUNNER

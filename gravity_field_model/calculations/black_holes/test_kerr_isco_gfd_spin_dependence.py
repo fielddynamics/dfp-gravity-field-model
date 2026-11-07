@@ -1,6 +1,16 @@
 # FILENAME: test_kerr_isco_GFM_spin_dependence.py
 
 """
+CORRECTION (November 2026): the exact Kerr ISCO formula does NOT give
+ISCO = 3 at a* = 2/3. Independently of the Z1/Z2 route, the prograde ISCO
+radius r (in GM/c^2) is reached at spin a* = (sqrt(r)/3) * (4 - sqrt(3r - 2))
+(Bardeen, Press and Teukolsky 1972), which gives a* = 0.5585 for r = 4,
+0.7819 for r = 3, 2*sqrt(2)/3 = 0.9428 for r = 2 and 1 for r = 1. At
+a* = 2/3 the ISCO is 3.543. The a* = 2/3 = TIME_FACES/d and 5/6
+correspondences described below were therefore based on incorrect
+reference values and do not hold; the test now checks the GR values.
+
+
 Kerr Black Hole ISCO Spin Dependence and GFM Structural Numbers
 ================================================================
 
@@ -94,6 +104,27 @@ def _find_spin_for_isco_coeff(target_coeff: float, tol: float = 1e-10) -> float:
 
 # =============================================================================
 # Precompute the spin values where ISCO hits GFM numbers
+
+def _spin_for_isco_closed_form(r: float) -> float:
+    """
+    Prograde Kerr spin at which the ISCO lies at r (units of GM/c^2):
+    a* = (sqrt(r)/3) * (4 - sqrt(3r - 2)). Independent of the Z1/Z2 route.
+    """
+    return math.sqrt(r) / 3.0 * (4.0 - math.sqrt(3.0 * r - 2.0))
+
+
+def _isco_for_spin_closed_form(a_star: float) -> float:
+    """Invert the closed form above by bisection on r in [1, 6]."""
+    lo, hi = 1.0, 6.0
+    for _ in range(200):
+        mid = 0.5 * (lo + hi)
+        if _spin_for_isco_closed_form(mid) > a_star:
+            lo = mid
+        else:
+            hi = mid
+    return 0.5 * (lo + hi)
+
+
 # =============================================================================
 
 # At a*=0, ISCO coeff = 6 = SPATIAL_FACES (already established)
@@ -157,6 +188,8 @@ class KerrISCOSpinGFMNumbers(Test):
     level = Level.STANDARD
 
     commentary = (
+        "CORRECTION: GR gives ISCO = 3 at a* = 0.7819, not 2/3 (ISCO at a* = 2/3 is "
+        "3.543); the a* = 2/3 and 5/6 correspondences below do not hold. "
         "STANDARD PHYSICS: The Kerr ISCO is an exact result from GR, involving "
         "nested radicals of the spin parameter. Despite this algebraic complexity, "
         "the ISCO coefficient equals exactly 3 when a* = 2/3, which is a simple "
@@ -199,10 +232,10 @@ TITLE Kerr ISCO Spin Dependence and GFM Structural Numbers: Tracking Integer Cro
                   "the Schwarzschild result.")
             .step("We numerically solve for a* values where r_ISCO/(GM/c^2) equals "
                   "each GFM structural number: 4 (K_CLOSURE), 3 (d), and 2 (TIME_FACES).")
-            .step("VERIFICATION: For ISCO = 3, substitute a* = 2/3 into the BPT formula "
-                  "and confirm the result is exactly 3.")
-            .equation("a* = 2/3: Z1 = 1 + (5/9)^(1/3) * [(5/3)^(1/3) + (1/3)^(1/3)]")
-            .step("Numerical evaluation confirms r_ISCO/(GM/c^2) = 3.000 at a* = 2/3.")
+            .step("CHECK: the crossings are compared with the closed-form inverse "
+                  "a* = (sqrt(r)/3)(4 - sqrt(3r - 2)): 0.5585, 0.7819, 0.9428.")
+            .step("At a* = 2/3 the ISCO is 3.543, not 3: the earlier claim of an exact "
+                  "rational crossing at 2/3 does not hold.")
             .step("GFM OBSERVATION: The ISCO trajectory passes through three GFM numbers "
                   "(4, 3, 2) at specific spins. The most notable is ISCO = d at a* = 2/3, "
                   "a simple rational value that is itself a ratio of GFM numbers (2/3 = "
@@ -236,10 +269,10 @@ TITLE Kerr ISCO Spin Dependence and GFM Structural Numbers: Tracking Integer Cro
         spin_2_near_five_sixths = abs(spin_for_2 - 5.0 / 6.0)
 
         # Extremal limit: ISCO at a*=0.999999
-        isco_extremal = _kerr_isco_coefficient(0.999999, prograde=True)
+        isco_extremal = _kerr_isco_coefficient(1.0, prograde=True)  # exact limit; at 0.999999 it is still 1.016
 
         # Retrograde ISCO at a*=0.999999 (should approach 9)
-        isco_retrograde_extremal = _kerr_isco_coefficient(0.999999, prograde=False)
+        isco_retrograde_extremal = _kerr_isco_coefficient(1.0, prograde=False)
 
         return (
             Model()
@@ -256,22 +289,23 @@ TITLE Kerr ISCO Spin Dependence and GFM Structural Numbers: Tracking Integer Cro
         )
 
     def observations(self) -> Observed:
-        # All values from Bardeen, Press, Teukolsky (1972) exact Kerr solution
-        # Numerical values computed from BPT Eq. 2.21
+        # Independent of the Z1/Z2 formula used in model(): the closed-form
+        # inverse a*(r) = (sqrt(r)/3)(4 - sqrt(3r - 2)) and its numerical
+        # inversion. The earlier reference values (0.471895, 2/3, 0.833603, an
+        # ISCO of exactly 3 at a* = 2/3) were not what the BPT formula gives.
         return (
             Observed()
             .add("ISCO coefficient at a*=0", 6.0)
-            .add("Spin a* where ISCO=4", 0.471895)
+            .add("Spin a* where ISCO=4", _spin_for_isco_closed_form(4.0))
             .add("ISCO coefficient verification at that spin", 4.0)
-            .add("Spin a* where ISCO=3", 0.666667)
-            .add("ISCO coefficient at a*=2/3 exact", 3.0)
-            .add("Spin a* where ISCO=2", 0.833603)
+            .add("Spin a* where ISCO=3", _spin_for_isco_closed_form(3.0))
+            .add("ISCO coefficient at a*=2/3 exact", _isco_for_spin_closed_form(2.0 / 3.0))
+            .add("Spin a* where ISCO=2", _spin_for_isco_closed_form(2.0))
             .add("ISCO coefficient verification ISCO=2", 2.0)
-            .add("Deviation of spin for ISCO=2 from 5/6", 0.000270)
+            .add("Deviation of spin for ISCO=2 from 5/6", abs(_spin_for_isco_closed_form(2.0) - 5.0 / 6.0))
             .add("ISCO coefficient at extremal prograde", 1.0)
             .add("ISCO coefficient at extremal retrograde", 9.0)
         )
-
 
 # ======================================================================
 # Runner

@@ -1,4 +1,14 @@
 """
+CORRECTION (November 2026): the exact Kerr ISCO formula does NOT give
+ISCO = 3 at a* = 2/3. Independently of the Z1/Z2 route, the prograde ISCO
+radius r (in GM/c^2) is reached at spin a* = (sqrt(r)/3) * (4 - sqrt(3r - 2))
+(Bardeen, Press and Teukolsky 1972), which gives a* = 0.5585 for r = 4,
+0.7819 for r = 3, 2*sqrt(2)/3 = 0.9428 for r = 2 and 1 for r = 1. At
+a* = 2/3 the ISCO is 3.543. The a* = 2/3 = TIME_FACES/d and 5/6
+correspondences described below were therefore based on incorrect
+reference values and do not hold; the test now checks the GR values.
+
+
 Kerr Black Hole ISCO Spin Dependence and GFM Structural Numbers
 ================================================================
 
@@ -36,6 +46,27 @@ N_TIME_FACES = 2
 
 # =============================================================================
 # HELPER FUNCTIONS: Kerr ISCO from Bardeen, Press, Teukolsky (1972)
+
+def _spin_for_isco_closed_form(r: float) -> float:
+    """
+    Prograde Kerr spin at which the ISCO lies at r (units of GM/c^2):
+    a* = (sqrt(r)/3) * (4 - sqrt(3r - 2)). Independent of the Z1/Z2 route.
+    """
+    return math.sqrt(r) / 3.0 * (4.0 - math.sqrt(3.0 * r - 2.0))
+
+
+def _isco_for_spin_closed_form(a_star: float) -> float:
+    """Invert the closed form above by bisection on r in [1, 6]."""
+    lo, hi = 1.0, 6.0
+    for _ in range(200):
+        mid = 0.5 * (lo + hi)
+        if _spin_for_isco_closed_form(mid) > a_star:
+            lo = mid
+        else:
+            hi = mid
+    return 0.5 * (lo + hi)
+
+
 # =============================================================================
 
 def _kerr_isco_coefficient(a_star: float, prograde: bool = True) -> float:
@@ -159,6 +190,8 @@ class KerrISCOSpinGFMNumbers(Test):
     level = Level.STANDARD
 
     commentary = (
+        "CORRECTION: GR gives ISCO = 3 at a* = 0.7819, not 2/3 (ISCO at a* = 2/3 is "
+        "3.543); the a* = 2/3 and 5/6 correspondences below do not hold. "
         "STANDARD PHYSICS: The Kerr ISCO formula is an exact result from GR, "
         "fully determined by the Kerr metric. The prograde ISCO coefficient is "
         "a smooth, monotonically decreasing function of spin.\n\n"
@@ -208,14 +241,11 @@ TITLE Kerr Black Hole ISCO Spin Dependence and GFM Structural Numbers: Extending
             .step("At a*=0: Z1=3, Z2=sqrt(9)=3, r_ISCO = 3+3-0 = 6. Confirmed.")
             .step("We solve numerically for the spin values where "
                   "r_ISCO/(GM/c^2) equals each GFM number {4, 3, 2}.")
-            .step("For ISCO=3: numerical solution gives a* = 0.66666... = 2/3 exactly.")
-            .step("VERIFICATION: At a*=2/3, compute Z1 and Z2 analytically. "
-                  "The result r_ISCO = 3 can be confirmed by direct substitution.")
-            .step("GFM OBSERVATION: a* = 2/3 = TIME_FACES / d. The spin at which "
-                  "the ISCO equals d (spatial dimensions) is the ratio of temporal "
-                  "to spatial face counts. This is a striking but unproven coincidence.")
-            .step("For ISCO=4: a* ~ 0.4697, not a simple rational number.")
-            .step("For ISCO=2: a* ~ 0.9428 ~ 2*sqrt(2)/3, approximately.")
+            .step("For ISCO=3: the solution is a* = 0.7819, not 2/3 (at a* = 2/3 the "
+                  "ISCO is 3.543).")
+            .step("CHECK: closed-form inverse a* = (sqrt(r)/3)(4 - sqrt(3r - 2)).")
+            .step("For ISCO=4: a* = 0.5585, not a simple rational number.")
+            .step("For ISCO=2: a* = 2*sqrt(2)/3 = 0.9428 exactly.")
             .conclude("The Kerr ISCO sweeps through all four GFM numbers. The "
                       "crossing at ISCO=3 is cleanest, occurring at spin 2/3 = "
                       "TIME_FACES/d. Other crossings lack simple form.")
@@ -239,7 +269,7 @@ TITLE Kerr Black Hole ISCO Spin Dependence and GFM Structural Numbers: Extending
         isco_check_2 = _kerr_isco_coefficient(spin_for_isco_2, prograde=True)
 
         # Retrograde ISCO at extremal spin
-        isco_retrograde_extremal = _kerr_isco_coefficient(0.999999, prograde=False)
+        isco_retrograde_extremal = _kerr_isco_coefficient(1.0, prograde=False)
 
         # Key test: is spin_for_isco_3 equal to 2/3?
         spin_3_ratio = spin_for_isco_3 * 3.0  # Should be 2.0 if a* = 2/3
@@ -256,29 +286,27 @@ TITLE Kerr Black Hole ISCO Spin Dependence and GFM Structural Numbers: Extending
             .add("ISCO verification at crossing 4", round(isco_check_4, 4))
             .add("ISCO verification at crossing 3", round(isco_check_3, 4))
             .add("ISCO verification at crossing 2", round(isco_check_2, 4))
-            .add("3 times spin at ISCO=3 (expect 2)", round(spin_3_ratio, 4))
+            .add("3 times spin at ISCO=3", round(spin_3_ratio, 4))
             .add("TIME_FACES divided by d", round(time_faces_over_d, 4))
             .add("Retrograde ISCO at a*=1", round(isco_retrograde_extremal, 4))
         )
 
     def observations(self) -> Observed:
-        # All values from Bardeen, Press, Teukolsky (1972) exact formula
-        # Spin values computed from the analytic ISCO expression
-        # The a*=2/3 result for ISCO=3 can be verified by direct substitution
+        # Independent of the Z1/Z2 formula used in model(): the closed-form
+        # inverse a*(r) = (sqrt(r)/3)(4 - sqrt(3r - 2)). The earlier references
+        # (0.4697 and 2/3, with 3 x spin = 2) were not what the BPT formula gives.
         return (
             Observed()
             .add("ISCO coeff at a*=0 (Schwarzschild)", 6.0)
-            .add("Spin a* where ISCO=4 (K_CLOSURE)", 0.4697)
-            .add("Spin a* where ISCO=3 (d spatial)", 0.6667)
-            .add("Spin a* where ISCO=2 (TIME_FACES)", 0.9428)
+            .add("Spin a* where ISCO=4 (K_CLOSURE)", _spin_for_isco_closed_form(4.0))
+            .add("Spin a* where ISCO=3 (d spatial)", _spin_for_isco_closed_form(3.0))
+            .add("Spin a* where ISCO=2 (TIME_FACES)", _spin_for_isco_closed_form(2.0))
             .add("ISCO verification at crossing 4", 4.0)
             .add("ISCO verification at crossing 3", 3.0)
             .add("ISCO verification at crossing 2", 2.0)
-            .add("3 times spin at ISCO=3 (expect 2)", 2.0)
-            .add("TIME_FACES divided by d", 0.6667)
+            .add("3 times spin at ISCO=3", 3 * _spin_for_isco_closed_form(3.0))
             .add("Retrograde ISCO at a*=1", 9.0)
         )
-
 
 # ======================================================================
 # Runner

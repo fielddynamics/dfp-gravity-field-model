@@ -229,18 +229,25 @@ class AutocorrelationProbe(Test):
             .add("Exponential decay time", decay_time)
         )
 
-    def observations(self):
-        # NULL: White noise (zero autocorrelation for k > 0)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("R(1) autocorrelation", 0.0)
-            .add("R(2) autocorrelation", 0.0)
-            .add("R(5) autocorrelation", 0.0)
-            .add("R(10) autocorrelation", 0.0)
-            .add("Memory length (steps)", 1)
-            .add("Exponential decay time", 0.0)
+            .add("R(1) autocorrelation", -1.02858e-05, abs_tol=0.031)  # random range [-0.022792, 0.0264949]
+            .add("R(2) autocorrelation", -0.00182745, abs_tol=0.033)  # random range [-0.0299208, 0.0267441]
+            .add("R(5) autocorrelation", 0.000418135, abs_tol=0.03)  # random range [-0.0256023, 0.0227941]
+            .add("R(10) autocorrelation", -0.00106481, abs_tol=0.029)  # random range [-0.0258204, 0.0221081]
+            .add("Memory length (steps)", 1, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 class MarkovOrderProbe(Test):
     """
@@ -303,17 +310,25 @@ class MarkovOrderProbe(Test):
             .add("Effective Markov order", effective_order)
         )
 
-    def observations(self):
-        # NULL: First-order Markov
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Entropy gap (order 1 vs 2)", 0.0)
-            .add("Entropy gap (order 2 vs 3)", 0.0)
-            .add("Entropy gap (order 3 vs 4)", 0.0)
-            .add("Is first-order Markov", 1.0)
-            .add("Effective Markov order", 1)
+            .add("Entropy gap (order 1 vs 2)", 0.0286356, abs_tol=0.0064)  # random range [0.0232067, 0.0341144]
+            .add("Entropy gap (order 2 vs 3)", 0.259702, abs_tol=0.019)  # random range [0.243846, 0.274004]
+            .add("Entropy gap (order 3 vs 4)", 1.37671, abs_tol=0.035)  # random range [1.34695, 1.40363]
+            .add("Is first-order Markov", 1, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("Effective Markov order", 1, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 # =============================================================================
 # TEST RUNNER

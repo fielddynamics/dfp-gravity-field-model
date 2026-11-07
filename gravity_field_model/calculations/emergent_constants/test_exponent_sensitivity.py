@@ -160,11 +160,15 @@ Exponent Sensitivity of the Gravitational Constant Formula: Uniqueness of the Co
         return (
             Observed()
             .add("G_predicted at n=21 (m^3/kg/s^2)", G)
-            .add("log10(G_pred/G_meas) at n=20", 2.137)
-            .add("log10(G_pred/G_meas) at n=21", 0.0)
-            .add("log10(G_pred/G_meas) at n=22", -2.137)
+            # Each step in the exponent changes G by a factor 1/alpha = 137.036,
+            # i.e. by log10(137.036) = 2.1368 in log10. The tree-level formula
+            # is 0.12% from CODATA (0.0005 in log10); the comparisons use
+            # absolute tolerances because the targets are zero or near it.
+            .add("log10(G_pred/G_meas) at n=20", -math.log10(ALPHA), abs_tol=0.002)
+            .add("log10(G_pred/G_meas) at n=21", 0.0, abs_tol=0.001)
+            .add("log10(G_pred/G_meas) at n=22", math.log10(ALPHA), abs_tol=0.002)
             .add("Best exponent from scan (15 to 27)", 21.0)
-            .add("Error at n=21 (percent)", 0.0)
+            .add("Error at n=21 (percent)", 0.0, abs_tol=0.15)
         )
 
 

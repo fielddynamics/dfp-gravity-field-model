@@ -189,18 +189,25 @@ class PropagationTimeProbe(Test):
             .add("Effective speed (cross)", speed_cross)
         )
 
-    def observations(self):
-        # NULL: Uniform random (FPT depends only on graph structure)
-        # For 8-vertex complete graph, expected FPT ~ 7 steps
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Mean FPT (same chamber)", 8.0)
-            .add("Mean FPT (cross chamber)", 8.0)
-            .add("FPT ratio (cross/same)", 1.0)
-            .add("Effective speed (same)", 0.3)
-            .add("Effective speed (cross)", 0.3)
+            .add("Mean FPT (same chamber)", 3.99662, abs_tol=0.47)  # random range [3.58998, 4.34545]
+            .add("Mean FPT (cross chamber)", 3.99627, abs_tol=0.45)  # random range [3.63235, 4.37896]
+            .add("FPT ratio (cross/same)", 1.0008, abs_tol=0.15)  # random range [0.877325, 1.12479]
+            .add("Effective speed (same)", 0.708378, abs_tol=0.092)  # random range [0.650893, 0.787866]
+            .add("Effective speed (cross)", 0.86795, abs_tol=0.099)  # random range [0.791078, 0.95368]
         )
-
 
 class DiffusionProbe(Test):
     """
@@ -275,17 +282,25 @@ class DiffusionProbe(Test):
             .add("Is normal diffusion", 1.0 if 0.8 < alpha < 1.2 else 0.0)
         )
 
-    def observations(self):
-        # NULL: Normal diffusion (alpha = 1)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("MSD at t=10", 5.0)
-            .add("MSD at t=50", 25.0)
-            .add("Diffusion exponent alpha", 1.0)
-            .add("Effective diffusion coeff", 0.5)
-            .add("Is normal diffusion", 1.0)
+            .add("MSD at t=10", 5.999, abs_tol=0.14)  # random range [5.89782, 6.11901]
+            .add("MSD at t=50", 5.99639, abs_tol=0.14)  # random range [5.88406, 6.11594]
+            .add("Diffusion exponent alpha", 2.06903e-05, abs_tol=0.0028)  # random range [-0.00240979, 0.00205576]
+            .add("Effective diffusion coeff", 2.99986, abs_tol=0.032)  # random range [2.97778, 3.02725]
+            .add("Is normal diffusion", 0, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 # =============================================================================
 # TEST RUNNER

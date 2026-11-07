@@ -297,8 +297,16 @@ TITLE Dual Channel Coherence in the Pi Driven Merkaba Traversal: Information The
             Observed()
             .add("Entropy ratio H(implicit)/H(explicit)", 1.0)
             .add("Bimetric balance fraction", 1.0)
-            .add("Cross channel MI at lag 1 (bits)", 0.0)
-            .add("Predictive gain from implicit (bits)", 0.0)
+            # The plug-in MI estimate of two independent 8-symbol variables
+            # is not zero but has expectation (8-1)^2 / (2 N ln 2) bits
+            # (Miller-Madow bias; 2 N ln2 * MI follows chi-squared with 49
+            # degrees of freedom). For N = 9999 pairs that is 0.00354 bits,
+            # standard deviation sqrt(98) / (2 N ln2) = 0.00071 bits. The
+            # tolerance is 3.3 standard deviations. Comparing with exactly 0
+            # by relative error failed for any finite sample.
+            .add("Cross channel MI at lag 1 (bits)", 49.0 / (2 * 9999 * math.log(2)),
+                 abs_tol=0.0024)
+            .add("Predictive gain from implicit (bits)", 0.0, abs_tol=1e-12)
             .add("Explicit entropy efficiency", 1.0)
         )
 

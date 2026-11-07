@@ -24,7 +24,7 @@ import math
 from gravity_field_model.framework import Test, Level, Derivation, Model, Observed
 from gravity_field_model.common import (
     C, G, HBAR, ALPHA, EPSILON_0, E_CHARGE,
-    M_E, K, R_E, A_0,
+    M_E, K, R_E, A_MOND,
 )
 
 
@@ -74,7 +74,9 @@ def route_cosmology() -> float:
     Rearranging:
     m_e = a_0 * r_e^2 / (k^2 * G)
     """
-    return A_0 * R_E**2 / (K_CLOSURE**2 * G)
+    # A_MOND = 1.2e-10 m/s^2. (This used A_0, which is the Bohr radius in
+    # common.constants_codata, and gave m_e 57% too small.)
+    return A_MOND * R_E**2 / (K_CLOSURE**2 * G)
 
 
 def route_electromagnetic() -> float:
@@ -252,17 +254,21 @@ TITLE Electron Mass Recovery from Three Independent Physics Domains: An Overdete
         )
 
     def observations(self) -> Observed:
+        # CODATA m_e. Each route is held to the precision of its least certain
+        # input: gravity 0.1% (tree-level G is 0.12% from measurement, which
+        # shifts m_e by half that), cosmology 20% (measured MOND scale
+        # 1.20 +- 0.02 (stat) +- 0.24 (sys) x 10^-10 m/s^2; McGaugh, Lelli and
+        # Schombert 2016), EM 1e-6 (it inverts the definition of r_e).
         return (
             Observed()
-            .add("m_e from gravity (kg)", M_E_OBSERVED)
-            .add("m_e from cosmology (kg)", M_E_OBSERVED)
-            .add("m_e from EM (kg)", M_E_OBSERVED)
-            .add("Route 1 error (%)", 0.0)
-            .add("Route 2 error (%)", 0.0)
-            .add("Route 3 error (%)", 0.0)
-            .add("Max spread (%)", 0.0)
+            .add("m_e from gravity (kg)", M_E_OBSERVED, tol=0.001)
+            .add("m_e from cosmology (kg)", M_E_OBSERVED, tol=0.20)
+            .add("m_e from EM (kg)", M_E_OBSERVED, tol=1e-6)
+            .add("Route 1 error (%)", 0.0, abs_tol=0.1)
+            .add("Route 2 error (%)", 0.0, abs_tol=20.0)
+            .add("Route 3 error (%)", 0.0, abs_tol=1e-4)
+            .add("Max spread (%)", 0.0, abs_tol=20.0)
         )
-
 
 # ======================================================================
 # Runner

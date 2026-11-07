@@ -216,20 +216,28 @@ class VertexEquiprobabilityProbe(Test):
             .add("Is uniform", 1.0 if chi2_result['is_uniform'] else 0.0)
         )
 
-    def observations(self):
-        # NULL: Uniform distribution
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Min vertex probability", 0.125)
-            .add("Max vertex probability", 0.125)
-            .add("Max/min ratio", 1.0)
-            .add("Distribution entropy", 3.0)
-            .add("Max entropy", 3.0)
-            .add("Chi-squared statistic", 0.0)
-            .add("p-value", 1.0)
-            .add("Is uniform", 1.0)
+            .add("Min vertex probability", 0.120121, abs_tol=0.0069)  # random range [0.114189, 0.123288]
+            .add("Max vertex probability", 0.130067, abs_tol=0.0074)  # random range [0.126487, 0.136486]
+            .add("Max/min ratio", 1.08312, abs_tol=0.13)  # random range [1.03244, 1.18935]
+            .add("Distribution entropy", 2.99948, abs_tol=0.0016)  # random range [2.9981, 2.99992]
+            .add("Max entropy", 3, abs_tol=3e-09)  # same for all 150 random sequences
+            .add("Chi-squared statistic", 7.14798, abs_tol=23)  # random range [1.07409, 26.4274]
+            .add("p-value", 0.503537, abs_tol=0.58)  # random range [0.000422332, 0.993543]
+            .add("Is uniform", 0.933333, abs_tol=1.1)  # random range [0, 1]
         )
-
 
 class TransitionSymmetryProbe(Test):
     """
@@ -286,17 +294,25 @@ class TransitionSymmetryProbe(Test):
             .add("Is transition symmetric", 1.0 if trans_analysis['is_symmetric'] else 0.0)
         )
 
-    def observations(self):
-        # NULL: Symmetric transitions
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Mean row variability", 0.0)
-            .add("Column sum variability", 0.0)
-            .add("TetA vertex ratio", 1.0)
-            .add("TetB vertex ratio", 1.0)
-            .add("Is transition symmetric", 1.0)
+            .add("Mean row variability", 0.00844425, abs_tol=0.0027)  # random range [0.00667963, 0.0107107]
+            .add("Column sum variability", 0.025729, abs_tol=0.03)  # random range [0.0102532, 0.0517482]
+            .add("TetA vertex ratio", 1.05857, abs_tol=0.16)  # random range [1.00162, 1.18935]
+            .add("TetB vertex ratio", 1.06455, abs_tol=0.11)  # random range [1.0032, 1.15438]
+            .add("Is transition symmetric", 1, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 # =============================================================================
 # TEST RUNNER

@@ -229,18 +229,26 @@ class OriginScreeningProbe(Test):
             .add("Is origin a bottleneck", 1.0 if decomp['screening_ratio'] < 0.2 else 0.0)
         )
 
-    def observations(self):
-        # NULL: No special screening (origin is just geometric)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("I(TetA;TetB)", 0.5)
-            .add("I(TetA;Origin)", 0.3)
-            .add("I(TetB;Origin)", 0.3)
-            .add("I(TetA;TetB|Origin)", 0.3)  # Still correlated given origin
-            .add("Screening ratio", 0.6)
-            .add("Is origin a bottleneck", 0.0)
+            .add("I(TetA;TetB)", 1.80989, abs_tol=0.031)  # random range [1.78326, 1.83051]
+            .add("I(TetA;Origin)", 0.292805, abs_tol=0.025)  # random range [0.271471, 0.313676]
+            .add("I(TetB;Origin)", 0.292805, abs_tol=0.025)  # random range [0.271471, 0.313676]
+            .add("I(TetA;TetB|Origin)", 1.51709, abs_tol=0.019)  # random range [1.50064, 1.52861]
+            .add("Screening ratio", 0.838234, abs_tol=0.012)  # random range [0.828527, 0.847973]
+            .add("Is origin a bottleneck", 0, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 class InformationFlowPathProbe(Test):
     """
@@ -304,17 +312,25 @@ class InformationFlowPathProbe(Test):
             .add("Co-information I(A;B;O)", decomp['I(A;B;O)'])
         )
 
-    def observations(self):
-        # NULL: Moderate mediation
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Total I(A;B)", 0.5)
-            .add("Direct I(A;B|O)", 0.2)
-            .add("Mediation fraction", 0.6)
-            .add("Info captured by origin", 0.5)
-            .add("Co-information I(A;B;O)", 0.1)
+            .add("Total I(A;B)", 6.821e-05, abs_tol=0.00069)  # random range [5.2745e-10, 0.00066715]
+            .add("Direct I(A;B|O)", 0.999875, abs_tol=0.0013)  # random range [0.99883, 1]
+            .add("Mediation fraction", 0, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("Info captured by origin", 0, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("Co-information I(A;B;O)", -0.999806, abs_tol=0.0014)  # random range [-0.999999, -0.998651]
         )
-
 
 # =============================================================================
 # TEST RUNNER

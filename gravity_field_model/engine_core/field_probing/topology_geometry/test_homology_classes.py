@@ -237,18 +237,25 @@ class BettiNumbersProbe(Test):
             .add("Euler characteristic", chi)
         )
 
-    def observations(self):
-        # NULL: Fully connected 8-vertex graph
-        # Complete graph K_8: V=8, E=28, Betti_1 = 28 - 8 + 1 = 21
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Vertices explored", 8)
-            .add("Edges (transitions)", 20)
-            .add("Betti_0 (components)", 1)
-            .add("Betti_1 (independent loops)", 13)
-            .add("Euler characteristic", -12)
+            .add("Vertices explored", 8, abs_tol=8e-09)  # same for all 150 random sequences
+            .add("Edges (transitions)", 32, abs_tol=3e-08)  # same for all 150 random sequences
+            .add("Betti_0 (components)", 8, abs_tol=8e-09)  # same for all 150 random sequences
+            .add("Betti_1 (independent loops)", 36, abs_tol=4e-08)  # same for all 150 random sequences
+            .add("Euler characteristic", -24, abs_tol=2e-08)  # same for all 150 random sequences
         )
-
 
 class CyclePatternProbe(Test):
     """
@@ -309,17 +316,25 @@ class CyclePatternProbe(Test):
             .add("Fraction figure-8 (2 crossings)", frac_figure_8)
         )
 
-    def observations(self):
-        # NULL: Random cycling
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Number of cycles", 500)
-            .add("Mean cycle length", 8)
-            .add("Cycles per step", 0.1)
-            .add("Mean crossings per cycle", 2)
-            .add("Fraction figure-8 (2 crossings)", 0.3)
+            .add("Number of cycles", 4368.33, abs_tol=71)  # random range [4307, 4417]
+            .add("Mean cycle length", 9.98836, abs_tol=0.13)  # random range [9.90575, 10.1008]
+            .add("Cycles per step", 0.873491, abs_tol=0.015)  # random range [0.861228, 0.883223]
+            .add("Mean crossings per cycle", 4.57021, abs_tol=0.2)  # random range [4.4031, 4.71612]
+            .add("Fraction figure-8 (2 crossings)", 0.366645, abs_tol=0.025)  # random range [0.345483, 0.382637]
         )
-
 
 # =============================================================================
 # TEST RUNNER

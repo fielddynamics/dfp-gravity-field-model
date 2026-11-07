@@ -224,7 +224,12 @@ class BoundaryTermMatching(Test):
         x_boundary = L / 2
         
         # Test matching
-        A, B = 1.0, 1.0  # Amplitudes (should be equal for matching)
+        # Since sin(k(x - L)) = sin(kx - pi) = -sin(kx) for kL = pi, the right-hand
+        # field continues the left-hand one only with B = -A. (With B = A, as
+        # before, the two fields have opposite signs at the boundary and the
+        # continuity error is 2.)
+        A = 1.0
+        B = -A
         
         phi_L = A * np.sin(k * x_boundary)
         phi_R = B * np.sin(k * (x_boundary - L))
@@ -247,8 +252,8 @@ class BoundaryTermMatching(Test):
     def observations(self) -> Observed:
         return (
             Observed()
-            .add("Continuity error", 0.0)
-            .add("Flux matching error", 0.0)
+            .add("Continuity error", 0.0, abs_tol=1e-12)
+            .add("Flux matching error", 0.0, abs_tol=1e-12)  # floating-point zero
         )
 
 
@@ -446,7 +451,7 @@ class ExteriorDerivativeNilpotency(Test):
         return (
             Observed()
             .add("d^2 operator norm", 0.0)
-            .add("d^2 on test scalar", 0.0)
+            .add("d^2 on test scalar", 0.0, abs_tol=1e-12)  # floating-point zero
         )
 
 

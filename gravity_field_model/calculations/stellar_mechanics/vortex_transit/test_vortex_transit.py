@@ -360,24 +360,29 @@ class TransitRateTemperature(Test):
         rate_low = transit_rate(T_low, barrier)
         rate_med = transit_rate(T_med, barrier)
         rate_high = transit_rate(T_high, barrier)
-        increasing = 1.0 if rate_low <= rate_med <= rate_high else 0.0
+        increasing = 1.0 if rate_low < rate_med < rate_high else 0.0
+        # transit_rate is a qualitative model (see its docstring): what can be
+        # tested is that it rises steeply, by many orders of magnitude per
+        # decade of temperature, as a barrier-penetration rate must.
+        steep = 1.0 if rate_low > 0 and math.log10(rate_med / rate_low) > 10 else 0.0
         return (
             Model()
             .add("Rate at 10^7 K", rate_low)
             .add("Rate at 10^8 K", rate_med)
             .add("Rate at 10^9 K", rate_high)
             .add("Monotonic increase", increasing)
+            .add("Rises > 10 decades from 10^7 to 10^8 K", steep)
         )
 
     def observations(self) -> Observed:
+        # The function is not normalised, so its absolute values are reported
+        # for information. (They were compared with 0, 0 and 1, which the
+        # function was never meant to return.)
         return (
             Observed()
-            .add("Rate at 10^7 K", 0.0)
-            .add("Rate at 10^8 K", 0.0)
-            .add("Rate at 10^9 K", 1.0)
             .add("Monotonic increase", 1.0)
+            .add("Rises > 10 decades from 10^7 to 10^8 K", 1.0)
         )
-
 
 # =============================================================================
 # TEST 5: FIELD ORIGIN STABILITY (Geometry)

@@ -221,18 +221,26 @@ class WorkFromBiasProbe(Test):
             .add("Is exploitable", 1.0 if bias_work['is_exploitable'] else 0.0)
         )
 
-    def observations(self):
-        # NULL: No bias (no extractable work)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("P(TetA)", 0.5)
-            .add("P(TetB)", 0.5)
-            .add("Bias magnitude", 0.0)
-            .add("Extractable work (per symbol)", 0.0)
-            .add("Info content (bits/symbol)", 0.0)
-            .add("Is exploitable", 0.0)
+            .add("P(TetA)", 0.500389, abs_tol=0.026)  # random range [0.485903, 0.522496]
+            .add("P(TetB)", 0.499611, abs_tol=0.026)  # random range [0.477504, 0.514097]
+            .add("Bias magnitude", 0.0117177, abs_tol=0.039)  # random range [0.00019996, 0.044991]
+            .add("Extractable work (per symbol)", 0.000104292, abs_tol=0.0011)  # random range [1.9992e-08, 0.00101244]
+            .add("Info content (bits/symbol)", 0.00107759, abs_tol=0.0023)  # random range [0.000139637, 0.00301032]
+            .add("Is exploitable", 0, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 class HeatEngineSimulationProbe(Test):
     """
@@ -291,17 +299,25 @@ class HeatEngineSimulationProbe(Test):
             .add("Work per crossing", work_per_crossing)
         )
 
-    def observations(self):
-        # NULL: Low efficiency
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Total work extracted", 100)
-            .add("Total heat absorbed", 5000)
-            .add("Efficiency", 0.02)
-            .add("Number of crossings", 1000)
-            .add("Work per crossing", 0.1)
+            .add("Total work extracted", 250.239, abs_tol=11)  # random range [241.7, 259.8]
+            .add("Total heat absorbed", 15012.7, abs_tol=420)  # random range [14712, 15376]
+            .add("Efficiency", 0.0166698, abs_tol=0.00093)  # random range [0.0158636, 0.017367]
+            .add("Number of crossings", 2502.39, abs_tol=110)  # random range [2417, 2598]
+            .add("Work per crossing", 0.1, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 # =============================================================================
 # TEST RUNNER

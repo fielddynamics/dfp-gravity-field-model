@@ -191,18 +191,26 @@ class ChiralityEvolutionProbe(Test):
             .add("Is constant", 1.0 if fit['is_constant'] else 0.0)
         )
 
-    def observations(self):
-        # NULL: Constant chirality (statistical fluctuation only)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("C at 1000 steps", 0.01)
-            .add("C at 5000 steps", 0.01)
-            .add("C at 8000 steps", 0.01)
-            .add("Asymptotic C_infinity", 0.01)
-            .add("Power law alpha", 0.0)
-            .add("Is constant", 1.0)
+            .add("C at 1000 steps", -5.33333e-05, abs_tol=0.092)  # random range [-0.08, 0.076]
+            .add("C at 5000 steps", -0.000762667, abs_tol=0.051)  # random range [-0.0448, 0.0284]
+            .add("C at 8000 steps", -0.000324959, abs_tol=0.044)  # random range [-0.0381202, 0.0308711]
+            .add("Asymptotic C_infinity", -0.000608329, abs_tol=0.077)  # random range [-0.0385719, 0.0655376]
+            .add("Power law alpha", -0.476438, abs_tol=0.99)  # random range [-1.3366, 0.271684]
+            .add("Is constant", 0.12, abs_tol=1.1)  # random range [0, 1]
         )
-
 
 class WindowedChiralityProbe(Test):
     """
@@ -269,18 +277,26 @@ class WindowedChiralityProbe(Test):
             .add("Std ratio (expected CLT)", expected_std_ratio)
         )
 
-    def observations(self):
-        # NULL: Window-independent (constant bias)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Mean C (w=100)", 0.01)
-            .add("Mean C (w=1000)", 0.01)
-            .add("Mean C (w=4000)", 0.01)
-            .add("Window dependence slope", 0.0)
-            .add("Std ratio (actual)", 7.0)  # sqrt(5000/100)
-            .add("Std ratio (expected CLT)", 7.07)
+            .add("Mean C (w=100)", -0.00033, abs_tol=0.044)  # random range [-0.038, 0.03075]
+            .add("Mean C (w=1000)", -0.00033, abs_tol=0.044)  # random range [-0.038, 0.03075]
+            .add("Mean C (w=4000)", -0.00033, abs_tol=0.044)  # random range [-0.038, 0.03075]
+            .add("Window dependence slope", 0, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("Std ratio (actual)", 32.3307, abs_tol=420)  # random range [3.12718, 390.742]
+            .add("Std ratio (expected CLT)", 0.158113883008, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 # =============================================================================
 # TEST RUNNER

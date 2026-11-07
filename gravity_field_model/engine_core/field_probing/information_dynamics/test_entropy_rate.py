@@ -228,20 +228,26 @@ class EntropyRateProbe(Test):
             .add("Conditional H(X|X-1,X-2)", results.get('conditional_order_2', 0))
         )
 
-    def observations(self):
-        # NULL HYPOTHESIS: Maximum entropy (uniform random)
-        # Any deviation is a DISCOVERY
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Single symbol entropy (bits)", 3.0)  # Maximum
-            .add("Markov entropy rate (bits)", 3.0)    # Maximum
-            .add("Maximum entropy (bits)", 3.0)
-            .add("Redundancy (bits)", 0.0)             # No redundancy = max random
-            .add("Efficiency", 1.0)                    # 100% of max
-            .add("Conditional H(X|X-1)", 3.0)
-            .add("Conditional H(X|X-2)", 3.0)
+            .add("Single symbol entropy (bits)", 2.99948, abs_tol=0.0016)  # random range [2.9981, 2.99992]
+            .add("Markov entropy rate (bits)", 0.248695, abs_tol=0.022)  # random range [0.233114, 0.267547]
+            .add("Maximum entropy (bits)", 3, abs_tol=3e-09)  # same for all 150 random sequences
+            .add("Redundancy (bits)", 2.75131, abs_tol=0.022)  # random range [2.73245, 2.76689]
+            .add("Efficiency", 0.0828983, abs_tol=0.0073)  # random range [0.0777046, 0.0891823]
+            .add("Conditional H(X|X-1)", 2.99593, abs_tol=0.0022)  # random range [2.99403, 2.9977]
         )
-
 
 class EntropyConvergenceProbe(Test):
     """
@@ -307,17 +313,25 @@ class EntropyConvergenceProbe(Test):
             .add("First-order Markov gap", markov_gap)
         )
 
-    def observations(self):
-        # NULL: First-order Markov (no drop after order 1)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("H(X|X-1)", 2.8)          # Slightly below max
-            .add("H(X|X-1,X-2)", 2.8)      # Same as order 1 if Markov
-            .add("H(X|context_5)", 2.8)    # Same if Markov
-            .add("Total entropy drop (order 1 to 5)", 0.0)  # No additional drop
-            .add("First-order Markov gap", 0.0)
+            .add("H(X|X-1)", 2.99593, abs_tol=0.0022)  # random range [2.99403, 2.9977]
+            .add("H(X|X-1,X-2)", 2.96729, abs_tol=0.0076)  # random range [2.96072, 2.97303]
+            .add("H(X|context_5)", 0.248695, abs_tol=0.022)  # random range [0.233114, 0.267547]
+            .add("Total entropy drop (order 1 to 5)", 2.74723, abs_tol=0.023)  # random range [2.72734, 2.76426]
+            .add("First-order Markov gap", 0.028635, abs_tol=0.0063)  # random range [0.0232122, 0.0341039]
         )
-
 
 # =============================================================================
 # TEST RUNNER

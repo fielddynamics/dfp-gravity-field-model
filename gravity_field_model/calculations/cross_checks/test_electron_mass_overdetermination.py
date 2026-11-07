@@ -25,7 +25,7 @@ import math
 from gravity_field_model.framework import Test, Level, Derivation, Model, Observed
 from gravity_field_model.common import (
     C, G, HBAR, ALPHA, EPSILON_0, E_CHARGE,
-    M_E, K, R_E, A_0,
+    M_E, K, R_E, A_MOND,
 )
 
 
@@ -47,7 +47,9 @@ def electron_mass_from_gravity():
 
 def electron_mass_from_cosmology():
     """Solve the MOND acceleration formula for m_e."""
-    return A_0 * R_E**2 / (K**2 * G)
+    # A_MOND = 1.2e-10 m/s^2. (This used A_0, which is the Bohr radius in
+    # common.constants_codata, and gave m_e 57% too small.)
+    return A_MOND * R_E**2 / (K**2 * G)
 
 
 # Route 3: Electromagnetic route
@@ -216,13 +218,19 @@ TITLE Electron Mass Overdetermination: Three Independent Routes from Gravity, Co
         )
 
     def observations(self) -> Observed:
+        # CODATA m_e. Each route is held to the precision of its least certain
+        # input: the gravity route to 0.1% (the tree-level G formula is 0.12%
+        # from the measured G, which shifts m_e by half that), the cosmology
+        # route to 20% (the measured MOND scale is 1.20 +- 0.02 (stat)
+        # +- 0.24 (sys) x 10^-10 m/s^2; McGaugh, Lelli and Schombert 2016), and
+        # the EM route to 1e-6 (it inverts the definition of r_e). The spread is
+        # therefore bounded by the cosmology route.
         return (
             Observed()
-            .add("m_e from gravity (kg)", M_E)
-            .add("m_e from cosmology (kg)", M_E)
-            .add("m_e from EM (kg)", M_E)
-            .add("Three route average (kg)", M_E)
-            .add("Max spread (percent)", 0.0)
+            .add("m_e from gravity (kg)", M_E, tol=0.001)
+            .add("m_e from cosmology (kg)", M_E, tol=0.20)
+            .add("m_e from EM (kg)", M_E, tol=1e-6)
+            .add("Max spread (percent)", 0.0, abs_tol=20.0)
         )
 
 

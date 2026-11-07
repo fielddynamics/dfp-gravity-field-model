@@ -195,18 +195,26 @@ class GeodesicEfficiencyProbe(Test):
             .add("Is geodesic-like", 1.0 if ratio_10 > 1.5 else 0.0)
         )
 
-    def observations(self):
-        # NULL: Random walk efficiency
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Mean efficiency (5 steps)", 0.45)  # ~1/sqrt(5)
-            .add("Mean efficiency (10 steps)", 0.32)  # ~1/sqrt(10)
-            .add("Mean efficiency (20 steps)", 0.22)  # ~1/sqrt(20)
-            .add("Ratio to random (5 steps)", 1.0)
-            .add("Ratio to random (10 steps)", 1.0)
-            .add("Is geodesic-like", 0.0)
+            .add("Mean efficiency (5 steps)", 0.267317, abs_tol=0.0099)  # random range [0.261225, 0.275857]
+            .add("Mean efficiency (10 steps)", 0.113802, abs_tol=0.0032)  # random range [0.111606, 0.116501]
+            .add("Mean efficiency (20 steps)", 0.0531846, abs_tol=0.0013)  # random range [0.0523271, 0.0542609]
+            .add("Ratio to random (5 steps)", 0.597739, abs_tol=0.022)  # random range [0.584117, 0.616836]
+            .add("Ratio to random (10 steps)", 0.359872, abs_tol=0.0099)  # random range [0.35293, 0.368409]
+            .add("Is geodesic-like", 0, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 class StepOptimalityProbe(Test):
     """
@@ -268,17 +276,25 @@ class StepOptimalityProbe(Test):
             .add("Has directional intent", 1.0 if t_stat > 2 else 0.0)
         )
 
-    def observations(self):
-        # NULL: Random (zero optimality)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Mean step optimality", 0.0)
-            .add("Std of optimality", 0.5)
-            .add("Fraction positive", 0.5)
-            .add("t-statistic", 0.0)
-            .add("Has directional intent", 0.0)
+            .add("Mean step optimality", -0.000502686, abs_tol=0.022)  # random range [-0.0189746, 0.0185834]
+            .add("Std of optimality", 0.539469, abs_tol=0.015)  # random range [0.52702, 0.549448]
+            .add("Fraction positive", 0.343792, abs_tol=0.018)  # random range [0.328929, 0.358959]
+            .add("t-statistic", -0.0655915, abs_tol=2.9)  # random range [-2.49702, 2.40841]
+            .add("Has directional intent", 0.0333333, abs_tol=1.2)  # random range [0, 1]
         )
-
 
 # =============================================================================
 # TEST RUNNER

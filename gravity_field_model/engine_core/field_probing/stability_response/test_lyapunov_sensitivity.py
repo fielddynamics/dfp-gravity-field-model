@@ -200,16 +200,24 @@ class LyapunovExponentProbe(Test):
             .add("Is stable", 1.0 if divergence['is_stable'] else 0.0)
         )
 
-    def observations(self):
-        # NULL: Marginal dynamics (lambda ~ 0)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Mean Lyapunov exponent", 0.0)
-            .add("Std of Lyapunov", 0.1)
-            .add("Is chaotic", 0.0)
-            .add("Is stable", 0.0)
+            .add("Mean Lyapunov exponent", -4.07316e-08, abs_tol=5.9e-06)  # random range [-5.14698e-06, 4.61748e-06]
+            .add("Std of Lyapunov", 8.1841e-06, abs_tol=5.9e-06)  # random range [3.05954e-06, 1.17072e-05]
+            .add("Is chaotic", 0, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("Is stable", 0, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 class PredictabilityHorizonProbe(Test):
     """
@@ -301,17 +309,25 @@ class PredictabilityHorizonProbe(Test):
             .add("Decay rate", decay_rate)
         )
 
-    def observations(self):
-        # NULL: Random (accuracy = 0.5 always)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Accuracy at lead 1", 0.5)
-            .add("Accuracy at lead 5", 0.5)
-            .add("Accuracy at lead 10", 0.5)
-            .add("Predictability horizon", 1)
-            .add("Decay rate", 0.0)
+            .add("Accuracy at lead 1", 0.499521, abs_tol=0.022)  # random range [0.4804, 0.5166]
+            .add("Accuracy at lead 5", 0.499362, abs_tol=0.023)  # random range [0.479984, 0.517614]
+            .add("Accuracy at lead 10", 0.49848, abs_tol=0.025)  # random range [0.476858, 0.518133]
+            .add("Predictability horizon", 1, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("Decay rate", 0.000421686, abs_tol=0.021)  # random range [-0.017204, 0.0156436]
         )
-
 
 # =============================================================================
 # TEST RUNNER

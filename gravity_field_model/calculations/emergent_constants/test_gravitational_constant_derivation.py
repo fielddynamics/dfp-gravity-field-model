@@ -270,9 +270,14 @@ The formula G = (17/13) * alpha^21 * (hbar*c/m_e^2) reproduces Newton's gravitat
             .add("G predicted (m^3 kg^-1 s^-2)", G_CODATA)
             .add("Topological prefactor 17/13", 17.0 / 13.0)
             .add("Coupling hierarchy exponent", 21.0)
-            .add("Fractional difference from CODATA", 0.0)
-            .add("G with exponent 20 (m^3 kg^-1 s^-2)", G_CODATA)
-            .add("G with exponent 22 (m^3 kg^-1 s^-2)", G_CODATA)
+            # Tree level is 0.12% from CODATA (the one-loop factor 1 + alpha/2pi
+            # closes most of the gap); the near-zero difference uses an
+            # absolute tolerance of 0.15%.
+            .add("Fractional difference from CODATA", 0.0, abs_tol=0.0015)
+            # Neighbouring exponents should miss by exactly one factor of
+            # alpha: G(20) = G/alpha and G(22) = G * alpha, within the same 0.12%.
+            .add("G with exponent 20 (m^3 kg^-1 s^-2)", G_CODATA / ALPHA, tol=0.0015)
+            .add("G with exponent 22 (m^3 kg^-1 s^-2)", G_CODATA * ALPHA, tol=0.0015)
         )
 
 

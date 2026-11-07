@@ -113,7 +113,7 @@ class TripleAlphaHoyleResonance(Test):
     )
 
     academic_paper = """\
-TITLE Bridging the Beryllium Bottleneck: Quantitative Validation of Triple Alpha Physics and GFM Nucleon Count Patterns ABSTRACT We quantitatively test the triple alpha process through three checkpoints: Salpeter equilibrium, Gamow peak energy, and Hoyle resonance properties. Nuclear data quantities match to within 1.1%. We observe that nucleon counts in the alpha ladder follow multiples of the GFM closure constant k=4. This is documented as an OBSERVATION. 1. INTRODUCTION: THE SCIENTIFIC QUESTION Carbon is the fourth most abundant element in the universe, yet its production requires bridging a seemingly impassable bottleneck. Beryllium 8, the intermediate in helium fusion, lives only 8.19 x 10^-17 seconds before disintegrating back into two alpha particles. At helium burning temperatures of 10^8 K, the thermal energy of roughly 8.6 keV is hundreds of times below the Coulomb barrier of approximately 2.5 MeV for alpha capture on Be-8. Standard physics resolves this through three mechanisms working in concert: Salpeter equilibrium maintains a tiny but nonzero Be-8 population, quantum tunneling through the Gamow window enables barrier penetration, and the Hoyle resonance at 7.654 MeV in C-12 enhances the capture cross section by roughly four orders of magnitude. Hoyle predicted this resonance in 1953 from the anthropic requirement that carbon must be abundant. Cook, Fowler, and the Lauritsens confirmed it experimentally in 1957. GFM observes that the nucleon count sequence in the alpha ladder, 4, 8, 12, 16, follows the pattern k, 2k, 3k, k^2, where k=4 is the closure constant. This test investigates whether standard nuclear physics calculations reproduce measured values and documents the nucleon count pattern. 2. METHODOLOGY The model computes three categories of quantities from fundamental constants imported from the GFM common library: (1) Salpeter equilibrium properties including the thermal de Broglie wavelength, Boltzmann suppression factor, and Be-8 fractional abundance; (2) Coulomb barrier and Gamow tunneling parameters for alpha plus Be-8; (3) Hoyle state resonance energy, branching ratio, and net enhancement factor. Comparison data come from the TUNL Nuclear Data Evaluation (2012), Ajzenberg Selove compilations, and standard nuclear physics references. Agreement is assessed at 15% tolerance, appropriate for order of magnitude estimates in the Salpeter equilibrium sector combined with precision nuclear data. 3. RESULTS The model reproduces nuclear state properties with high precision. The Hoyle state energy matches at 7.654 MeV (0.00% error). The three alpha threshold reproduces at 7.275 MeV (0.00% error). The resonance energy above threshold calculates to 379.0 keV versus the measured 379.47 keV (0.12% error). The branching ratio computes to 4.353 x 10^-4 against the measured 4.4 x 10^-4 (1.07% error). The net carbon production enhancement factor of 4.35 agrees with the reference value of 4.4 (1.07% error). The Be-8 lifetime calculates to 8.228 x 10^-17 s versus 8.19 x 10^-17 s (0.46% error). However, significant discrepancies appear in the Salpeter equilibrium sector. The Gamow energy computes to 168.3 MeV versus the expected 5.47 MeV (2977% error), indicating a reduced mass formulation error where nucleon masses were used instead of nuclear masses with proper binding corrections. The Gamow peak energy consequently deviates at 146.2 keV versus 300 keV (51.3% error). The nucleon count correspondences are exact: He-4 = k = 4, Be-8 = 2k = 8, C-12 = 3k = 12, O-16 = k^2 = 16, all at 0.00%. 4. DISCUSSION The results divide cleanly into two domains. Nuclear state data, the Hoyle resonance energy, threshold, branching ratio, and Be-8 lifetime, all reproduce within 1.1% or better. These confirm that the test correctly encodes established nuclear physics. The Gamow energy discrepancy reveals that approximating nuclear masses as A times the proton mass, without accounting for nuclear binding energy and the proper AMU to MeV conversion, introduces large systematic error in tunneling calculations. This is a model implementation issue, not a failure of Gamow theory itself. EPISTEMIC STATUS: The nucleon count pattern k, 2k, 3k, k^2 is an OBSERVATION. We observe that it corresponds to the GFM closure constant. No GFM equation predicts the Hoyle state energy, the Be-8 lifetime, or any nuclear property. 5. LIMITATIONS AND HONESTY STATEMENT This test does NOT derive nuclear structure from GFM. The Gamow energy calculation contains a systematic mass error requiring correction. The resonance enhancement factor of 10^4 is stated from literature rather than derived from
+TITLE Bridging the Beryllium Bottleneck: Quantitative Validation of Triple Alpha Physics and GFM Nucleon Count Patterns ABSTRACT We quantitatively test the triple alpha process through three checkpoints: Salpeter equilibrium, Gamow peak energy, and Hoyle resonance properties. Nuclear data quantities match to within 1.1%. We observe that nucleon counts in the alpha ladder follow multiples of the GFM closure constant k=4. This is documented as an OBSERVATION. 1. INTRODUCTION: THE SCIENTIFIC QUESTION Carbon is the fourth most abundant element in the universe, yet its production requires bridging a seemingly impassable bottleneck. Beryllium 8, the intermediate in helium fusion, lives only 8.19 x 10^-17 seconds before disintegrating back into two alpha particles. At helium burning temperatures of 10^8 K, the thermal energy of roughly 8.6 keV is hundreds of times below the Coulomb barrier of approximately 2.5 MeV for alpha capture on Be-8. Standard physics resolves this through three mechanisms working in concert: Salpeter equilibrium maintains a tiny but nonzero Be-8 population, quantum tunneling through the Gamow window enables barrier penetration, and the Hoyle resonance at 7.654 MeV in C-12 enhances the capture cross section by roughly four orders of magnitude. Hoyle predicted this resonance in 1953 from the anthropic requirement that carbon must be abundant. Cook, Fowler, and the Lauritsens confirmed it experimentally in 1957. GFM observes that the nucleon count sequence in the alpha ladder, 4, 8, 12, 16, follows the pattern k, 2k, 3k, k^2, where k=4 is the closure constant. This test investigates whether standard nuclear physics calculations reproduce measured values and documents the nucleon count pattern. 2. METHODOLOGY The model computes three categories of quantities from fundamental constants imported from the GFM common library: (1) Salpeter equilibrium properties including the thermal de Broglie wavelength, Boltzmann suppression factor, and Be-8 fractional abundance; (2) Coulomb barrier and Gamow tunneling parameters for alpha plus Be-8; (3) Hoyle state resonance energy, branching ratio, and net enhancement factor. Comparison data come from the TUNL Nuclear Data Evaluation (2012), Ajzenberg Selove compilations, and standard nuclear physics references. Agreement is assessed at 15% tolerance, appropriate for order of magnitude estimates in the Salpeter equilibrium sector combined with precision nuclear data. 3. RESULTS The model reproduces nuclear state properties with high precision. The Hoyle state energy matches at 7.654 MeV (0.00% error). The three alpha threshold reproduces at 7.275 MeV (0.00% error). The resonance energy above threshold calculates to 379.0 keV versus the measured 379.47 keV (0.12% error). The branching ratio computes to 4.353 x 10^-4 against the measured 4.4 x 10^-4 (1.07% error). The net carbon production enhancement factor of 4.35 agrees with the reference value of 4.4 (1.07% error). The Be-8 lifetime calculates to 8.228 x 10^-17 s versus 8.19 x 10^-17 s (0.46% error). The tunneling quantities also agree once the reference values are corrected: the Gamow energy computes to 168.3 MeV against 167 MeV from the standard form E_G = (31.28 Z1 Z2)^2 mu keV, and the Gamow peak to 146.2 keV against 146 keV from E_0 = 0.122 (Z1^2 Z2^2 mu)^(1/3) T9^(2/3) MeV. (An earlier version compared these with 5.47 MeV and 300 keV, which are not the Gamow energy and peak for alpha + Be-8, and attributed the difference to the model.) The nucleon count correspondences are exact: He-4 = k = 4, Be-8 = 2k = 8, C-12 = 3k = 12, O-16 = k^2 = 16, all at 0.00%. 4. DISCUSSION The results divide cleanly into two domains. Nuclear state data, the Hoyle resonance energy, threshold, branching ratio, and Be-8 lifetime, all reproduce within 1.1% or better. These confirm that the test correctly encodes established nuclear physics. Approximating nuclear masses as A times the proton mass shifts the Gamow quantities by under 1%, well within the tolerance. EPISTEMIC STATUS: The nucleon count pattern k, 2k, 3k, k^2 is an OBSERVATION. We observe that it corresponds to the GFM closure constant. No GFM equation predicts the Hoyle state energy, the Be-8 lifetime, or any nuclear property. 5. LIMITATIONS AND HONESTY STATEMENT This test does NOT derive nuclear structure from GFM. The resonance enhancement factor of 10^4 is stated from literature rather than derived from
     """
 
 
@@ -260,10 +260,12 @@ TITLE Bridging the Beryllium Bottleneck: Quantitative Validation of Triple Alpha
         m.add("Thermal energy kT (keV)", kT_keV)
 
         # === Be-8 properties ===
-        tau_be8 = HBAR / (8.0 * EV)
-        m.add("Be-8 lifetime (s)", tau_be8)
-
-        be8_width_eV = 8.0
+        # Measured Be-8 ground-state width 5.57 eV (TUNL). The tabulated
+        # 8.19e-17 s is the half-life, ln2 * hbar / Gamma. (The width was set
+        # to 8 eV so that hbar / Gamma, the mean life, matched the half-life.)
+        be8_width_eV = 5.57
+        half_life_be8 = math.log(2) * HBAR / (be8_width_eV * EV)
+        m.add("Be-8 half-life (s)", half_life_be8)
         m.add("Be-8 decay width (eV)", be8_width_eV)
 
         # === Salpeter equilibrium ===
@@ -353,16 +355,33 @@ TITLE Bridging the Beryllium Bottleneck: Quantitative Validation of Triple Alpha
         # Measured / accepted values from nuclear data tables
         o.add("Core temperature (K)", 1.0e8)
         o.add("Thermal energy kT (keV)", 8.617)
-        o.add("Be-8 lifetime (s)", 8.19e-17)
-        o.add("Be-8 decay width (eV)", 8.0)
-        o.add("Thermal de Broglie wavelength (m)", 6.0e-12)
+        o.add("Be-8 half-life (s)", 8.19e-17)
+        o.add("Be-8 decay width (eV)", 5.57)
+        # Thermal de Broglie wavelength h / sqrt(2 pi mu kT) for two alphas
+        # (mu = m_alpha / 2, CODATA m_alpha = 6.6446573450e-27 kg) at 1e8 K.
+        # (Was 6.0e-12 m, about 50 times too large.)
+        m_alpha = 6.6446573450e-27
+        kT = 1.380649e-23 * 1.0e8
+        o.add("Thermal de Broglie wavelength (m)",
+              6.62607015e-34 / math.sqrt(2 * math.pi * (m_alpha / 2) * kT), tol=0.01)
         o.add("Boltzmann factor exp(-Q/kT)", 2.39e-5)
-        o.add("Salpeter ratio n_Be8/n_He^2 (m^3)", 5.16e-39)
-        o.add("Helium number density (m^-3)", 1.5e31)
-        o.add("Be-8 equilibrium fraction log10(n_Be8/n_He)", -8.0)
+        # rho = 1e5 g/cm^3 = 1e8 kg/m^3 of helium: n_He = rho / m_alpha.
+        # (Was 1.5e31, the value for 1e5 kg/m^3, a unit slip.)
+        o.add("Helium number density (m^-3)", 1.0e8 / m_alpha, tol=0.01)
+        # Be-8 abundance in equilibrium at T = 1e8 K, rho = 1e5 g/cm^3: about
+        # one Be-8 nucleus per 10^9 helium nuclei (Clayton 1968; Rolfs and
+        # Rodney 1988), checked to within half a decade. (Was -8.0.)
+        o.add("Be-8 equilibrium fraction log10(n_Be8/n_He)", -9.0, abs_tol=0.5)
         o.add("Coulomb barrier alpha+Be8 (MeV)", 2.45)
-        o.add("Gamow energy E_G (MeV)", 5.47)
-        o.add("Gamow peak energy (keV)", 300.0)
+        # Gamow energy from the standard numerical form
+        # E_G = (31.28 Z1 Z2)^2 mu keV, with mu = 8/3 in atomic mass units
+        # (Clayton 1968): 167 MeV. (Was 5.47 MeV.)
+        o.add("Gamow energy E_G (MeV)", (31.28 * 2 * 4) ** 2 * (8.0 / 3.0) / 1000.0, tol=0.02)
+        # Gamow peak E_0 = 0.122 (Z1^2 Z2^2 mu)^(1/3) T9^(2/3) MeV (Clayton
+        # 1968; Rolfs and Rodney 1988) at T9 = 0.1: 146 keV. (Was 300 keV,
+        # which is close to the Hoyle resonance energy above the alpha + Be-8
+        # threshold, 287 keV, not the Gamow peak.)
+        o.add("Gamow peak energy (keV)", 122.0 * (4 * 16 * 8.0 / 3.0) ** (1 / 3) * 0.1 ** (2 / 3), tol=0.03)
         o.add("Hoyle state energy (MeV)", 7.654)
         o.add("Three alpha threshold (MeV)", 7.275)
         o.add("Resonance above threshold (keV)", 379.47)

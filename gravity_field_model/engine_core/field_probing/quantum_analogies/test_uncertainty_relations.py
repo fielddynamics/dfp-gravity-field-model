@@ -232,17 +232,25 @@ class PositionMomentumUncertaintyProbe(Test):
             .add("Product consistency", np.std(uncertainty['products']))
         )
 
-    def observations(self):
-        # NULL: Products vary with scale
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Delta_x (window=20)", 1.0)
-            .add("Delta_p (window=20)", 1.5)
-            .add("Product (window=20)", 1.5)
-            .add("Minimum product", 1.0)
-            .add("Product consistency", 0.5)
+            .add("Delta_x (window=20)", 2.85009, abs_tol=0.019)  # random range [2.8341, 2.86595]
+            .add("Delta_p (window=20)", 5.99019, abs_tol=0.17)  # random range [5.87056, 6.13684]
+            .add("Product (window=20)", 17.0727, abs_tol=0.58)  # random range [16.6688, 17.5766]
+            .add("Minimum product", 16.0532, abs_tol=0.58)  # random range [15.6419, 16.5493]
+            .add("Product consistency", 0.693595, abs_tol=0.05)  # random range [0.660238, 0.736509]
         )
-
 
 class EnergyTimeUncertaintyProbe(Test):
     """
@@ -294,17 +302,25 @@ class EnergyTimeUncertaintyProbe(Test):
             .add("Product Delta_E * Delta_t", et['product'])
         )
 
-    def observations(self):
-        # NULL: Some variation
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Delta_E (energy std)", 0.5)
-            .add("Mean energy", 1.0)
-            .add("Delta_t (crossing time std)", 2.0)
-            .add("Mean crossing time", 4.0)
-            .add("Product Delta_E * Delta_t", 1.0)
+            .add("Delta_E (energy std)", 1.73352, abs_tol=0.063)  # random range [1.69139, 1.78796]
+            .add("Mean energy", 3.00254, abs_tol=0.084)  # random range [2.9424, 3.0752]
+            .add("Delta_t (crossing time std)", 1.40881, abs_tol=0.14)  # random range [1.32991, 1.52673]
+            .add("Mean crossing time", 1.99814, abs_tol=0.085)  # random range [1.92456, 2.06868]
+            .add("Product Delta_E * Delta_t", 2.44215, abs_tol=0.22)  # random range [2.29151, 2.6281]
         )
-
 
 # =============================================================================
 # TEST RUNNER

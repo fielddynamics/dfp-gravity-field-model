@@ -201,17 +201,25 @@ class CoherenceDecayProbe(Test):
             .add("Shows decoherence", 1.0 if coherence_ratio < 0.5 else 0.0)
         )
 
-    def observations(self):
-        # NULL: No coherence decay (stable)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Initial coherence", 0.5)
-            .add("Final coherence", 0.5)
-            .add("Coherence ratio", 1.0)
-            .add("Decay rate", 0.0)
-            .add("Shows decoherence", 0.0)
+            .add("Initial coherence", 5.53692, abs_tol=2.8)  # random range [3.11184, 6.52082]
+            .add("Final coherence", 5.61578, abs_tol=2.2)  # random range [3.77554, 6.43697]
+            .add("Coherence ratio", 1.03339, abs_tol=0.97)  # random range [0.668909, 1.87391]
+            .add("Decay rate", 3.13284e-06, abs_tol=0.00049)  # random range [-0.000415763, 0.00041213]
+            .add("Shows decoherence", 0, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 class PurityEvolutionProbe(Test):
     """
@@ -272,17 +280,25 @@ class PurityEvolutionProbe(Test):
             .add("Shows purity decay", 1.0 if purity_ratio < 0.8 else 0.0)
         )
 
-    def observations(self):
-        # NULL: Stable purity
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Initial purity", 0.3)
-            .add("Final purity", 0.3)
-            .add("Purity ratio", 1.0)
-            .add("Min purity (mixed)", 0.125)
-            .add("Shows purity decay", 0.0)
+            .add("Initial purity", 0.854002, abs_tol=0.17)  # random range [0.710576, 0.911099]
+            .add("Final purity", 0.858974, abs_tol=0.085)  # random range [0.785081, 0.90861]
+            .add("Purity ratio", 1.00723, abs_tol=0.23)  # random range [0.882964, 1.20468]
+            .add("Min purity (mixed)", 0.125, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("Shows purity decay", 0, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 # =============================================================================
 # TEST RUNNER

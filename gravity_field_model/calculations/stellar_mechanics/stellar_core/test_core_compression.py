@@ -71,6 +71,18 @@ def field_spacing_from_density(density):
     return number_density ** (-1/3)
 
 
+def pp_rate_relative(temperature, reference=1.5e7):
+    """
+    Non-resonant p + p rate relative to its value at `reference`:
+    rate ~ T^(-2/3) exp(-tau), tau = 33.81 * T6^(-1/3) (Gamow peak for
+    p + p; Clayton 1968, Eq. 4-55).
+    """
+    def r(T):
+        t6 = T / 1e6
+        return t6 ** (-2.0 / 3.0) * math.exp(-33.81 * t6 ** (-1.0 / 3.0))
+    return r(temperature) / r(reference)
+
+
 def binding_fraction(temperature, threshold):
     """Model fusion rate vs temperature (Gamow peak approximation)."""
     if temperature < threshold * 0.5:
@@ -608,12 +620,16 @@ class FusionRateVsTemperature(Test):
         )
 
     def model(self) -> Model:
+        # Rates from the Gamow-peak form of the p + p reaction, relative to
+        # 1.5e7 K. (The logistic binding_fraction used before is a toy step that
+        # does not represent fusion rates, and its outputs did not match the
+        # 0 / 0.5 / 1 it was compared with.)
         T_low = 1.0e7
         T_threshold = T_HYDROGEN_FUSION
         T_high = 2.0e7
-        f_low = binding_fraction(T_low, T_threshold)
-        f_threshold = binding_fraction(T_threshold, T_threshold)
-        f_high = binding_fraction(T_high, T_threshold)
+        f_low = pp_rate_relative(T_low, T_threshold)
+        f_threshold = pp_rate_relative(T_threshold, T_threshold)
+        f_high = pp_rate_relative(T_high, T_threshold)
         monotonic = 1.0 if f_low < f_threshold < f_high else 0.0
         return (
             Model()
@@ -624,14 +640,16 @@ class FusionRateVsTemperature(Test):
         )
 
     def observations(self) -> Observed:
+        # The pp-chain energy generation rate near the solar-core temperature
+        # scales as about T^4 (e.g. Clayton 1968; Kippenhahn, Weigert and Weiss
+        # 2012): (1/1.5)^4 = 0.198 and (2/1.5)^4 = 3.16 relative to 1.5e7 K, at
+        # 15% because the exponent itself drifts with temperature.
         return (
             Observed()
-            .add("Rate at 1e7 K (relative)", 0.0)
-            .add("Rate at 1.5e7 K (relative)", 0.5)
-            .add("Rate at 2e7 K (relative)", 1.0)
+            .add("Rate at 1e7 K (relative)", (1.0 / 1.5) ** 4, tol=0.15)
+            .add("Rate at 2e7 K (relative)", (2.0 / 1.5) ** 4, tol=0.15)
             .add("Monotonic increase", 1.0)
         )
-
 
 # =============================================================================
 # TEST 9: SOLAR CORE NUMBER DENSITY (Standard Solar Model)

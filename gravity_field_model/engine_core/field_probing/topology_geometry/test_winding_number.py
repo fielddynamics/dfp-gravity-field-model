@@ -201,18 +201,26 @@ class WindingNumberProbe(Test):
             .add("Local winding variability", winding_std)
         )
 
-    def observations(self):
-        # NULL: No net winding (random)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Winding around x-axis", 0.0)
-            .add("Winding around y-axis", 0.0)
-            .add("Winding around z-axis", 0.0)
-            .add("Total winding magnitude", 0.0)
-            .add("Winding rate (per step)", 0.0)
-            .add("Local winding variability", 0.5)
+            .add("Winding around x-axis", 1.265, abs_tol=55)  # random range [-45.75, 42.75]
+            .add("Winding around y-axis", 0.241667, abs_tol=55)  # random range [-46.75, 47.25]
+            .add("Winding around z-axis", 2.19, abs_tol=56)  # random range [-34.5, 50.75]
+            .add("Total winding magnitude", 27.7873, abs_tol=32)  # random range [4.55522, 54.9067]
+            .add("Winding rate (per step)", 0.000437912, abs_tol=0.012)  # random range [-0.00689862, 0.010148]
+            .add("Local winding variability", 2.45339, abs_tol=0.78)  # random range [2.04186, 3.12629]
         )
-
 
 class WindingDistributionProbe(Test):
     """
@@ -280,18 +288,26 @@ class WindingDistributionProbe(Test):
             .add("Has rotation bias", 1.0 if abs(t_stat) > 2 else 0.0)
         )
 
-    def observations(self):
-        # NULL: Symmetric winding distribution
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Mean local winding", 0.0)
-            .add("Std of local winding", 0.3)
-            .add("Skewness", 0.0)
-            .add("Fraction positive", 0.5)
-            .add("t-statistic", 0.0)
-            .add("Has rotation bias", 0.0)
+            .add("Mean local winding", 0.021632, abs_tol=0.54)  # random range [-0.331836, 0.485814]
+            .add("Std of local winding", 1.74296, abs_tol=0.43)  # random range [1.48954, 2.11471]
+            .add("Skewness", -0.0115575, abs_tol=0.52)  # random range [-0.433965, 0.434165]
+            .add("Fraction positive", 0.478467, abs_tol=0.14)  # random range [0.397011, 0.594709]
+            .add("t-statistic", 0.887053, abs_tol=23)  # random range [-13.2665, 20.4035]
+            .add("Has rotation bias", 0.786667, abs_tol=0.91)  # random range [0, 1]
         )
-
 
 # =============================================================================
 # TEST RUNNER

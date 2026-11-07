@@ -217,17 +217,25 @@ class CriticalFluctuationsProbe(Test):
             .add("Correlation length xi", xi)
         )
 
-    def observations(self):
-        # NULL: Non-critical (finite susceptibility, Gaussian U)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Mean order parameter", 0.0)  # Balanced
-            .add("Variance of order parameter", 0.01)
-            .add("Susceptibility chi", 100.0)  # Finite
-            .add("Binder cumulant U", 0.0)     # Gaussian
-            .add("Correlation length xi", 5.0)
+            .add("Mean order parameter", 0.00075547, abs_tol=0.033)  # random range [-0.0278732, 0.0254575]
+            .add("Variance of order parameter", 0.00981775, abs_tol=0.0046)  # random range [0.00742515, 0.0138071]
+            .add("Susceptibility chi", 97.2154, abs_tol=46)  # random range [73.5239, 136.718]
+            .add("Binder cumulant U", 0.0150028, abs_tol=0.52)  # random range [-0.430829, 0.225979]
+            .add("Correlation length xi", 9.62, abs_tol=47)  # random range [1, 50]
         )
-
 
 class FiniteSizeScalingProbe(Test):
     """
@@ -290,17 +298,25 @@ class FiniteSizeScalingProbe(Test):
             .add("Is near criticality", 1.0 if is_critical else 0.0)
         )
 
-    def observations(self):
-        # NULL: Trivial scaling (chi ~ w, alpha = 1)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Scaling exponent alpha", 1.0)
-            .add("Chi at w=20", 20.0)
-            .add("Chi at w=320", 320.0)
-            .add("Binder variance", 0.01)
-            .add("Is near criticality", 0.0)
+            .add("Scaling exponent alpha", -1.03466, abs_tol=0.24)  # random range [-1.23892, -0.856515]
+            .add("Chi at w=20", 495.538, abs_tol=77)  # random range [443.02, 562.012]
+            .add("Chi at w=320", 28.6311, abs_tol=22)  # random range [15.7018, 47.2111]
+            .add("Binder variance", 0.00629324, abs_tol=0.098)  # random range [0.000107431, 0.0910153]
+            .add("Is near criticality", 0, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 # =============================================================================
 # TEST RUNNER

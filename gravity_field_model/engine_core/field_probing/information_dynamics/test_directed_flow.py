@@ -200,17 +200,25 @@ class TransferEntropyProbe(Test):
             .add("Flow asymmetry ratio", t_a_to_b / t_b_to_a if t_b_to_a > 0.001 else 1.0)
         )
 
-    def observations(self):
-        # NULL: Symmetric coupling (zero net flow)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Transfer entropy A->B (bits)", 0.1)
-            .add("Transfer entropy B->A (bits)", 0.1)
-            .add("Net flow (A->B positive)", 0.0)
-            .add("Mutual information (bits)", 0.5)
-            .add("Flow asymmetry ratio", 1.0)
+            .add("Transfer entropy A->B (bits)", 0.00145395, abs_tol=0.0049)  # random range [9.42189e-05, 0.00569767]
+            .add("Transfer entropy B->A (bits)", 0.00162601, abs_tol=0.0059)  # random range [8.77703e-05, 0.00671442]
+            .add("Net flow (A->B positive)", -0.000172057, abs_tol=0.0073)  # random range [-0.00646323, 0.00415723]
+            .add("Mutual information (bits)", 1.95255, abs_tol=0.028)  # random range [1.92844, 1.97129]
+            .add("Flow asymmetry ratio", 0.901783, abs_tol=2.1)  # random range [0.0266553, 2.65369]
         )
-
 
 class CausalInfluenceProbe(Test):
     """
@@ -308,16 +316,24 @@ class CausalInfluenceProbe(Test):
             .add("Is causally significant", 1.0 if influence_a_to_b > 0.05 else 0.0)
         )
 
-    def observations(self):
-        # NULL: No causal influence (adding source doesn't help)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("H(B|B_past)", 0.9)
-            .add("H(B|B_past,A_past)", 0.9)
-            .add("Causal influence A->B", 0.0)
-            .add("Is causally significant", 0.0)
+            .add("H(B|B_past)", 0.999743, abs_tol=0.00081)  # random range [0.999039, 0.999988]
+            .add("H(B|B_past,A_past)", 0.999743, abs_tol=0.00081)  # random range [0.999039, 0.999988]
+            .add("Causal influence A->B", 0, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("Is causally significant", 0, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 # =============================================================================
 # TEST RUNNER

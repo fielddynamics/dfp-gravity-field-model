@@ -267,7 +267,7 @@ class VesicaPiscisAngleMatch(Test):
             Observed()
             .add("Hexagon angle (deg)", 120)
             .add("Vesica angle (deg)", 120.0)
-            .add("Difference", 0.0)
+            .add("Difference", 0.0, abs_tol=1e-9)  # floating-point zero; a relative error against 0 is undefined
         )
 
 

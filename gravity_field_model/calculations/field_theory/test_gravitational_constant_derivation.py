@@ -267,8 +267,12 @@ TITLE Gravitational Constant from Stellated Octahedron Topology: Zero Free Param
             .add("G from GFM topology (m^3 kg^-1 s^-2)", G_CODATA)
             .add("Rational prefactor 17/13", 17.0 / 13.0)
             .add("alpha^21 dimensionless", ALPHA**21)
-            .add("G with exponent 20 (m^3 kg^-1 s^-2)", G_CODATA)
-            .add("G with exponent 22 (m^3 kg^-1 s^-2)", G_CODATA)
+            # Neighbouring exponents should miss by exactly one factor of
+            # alpha: G(20) = G/alpha and G(22) = G * alpha, within the 0.12%
+            # tree-level difference. (They were compared with G itself, which
+            # the test is designed to show they do not match.)
+            .add("G with exponent 20 (m^3 kg^-1 s^-2)", G_CODATA / ALPHA, tol=0.0015)
+            .add("G with exponent 22 (m^3 kg^-1 s^-2)", G_CODATA * ALPHA, tol=0.0015)
         )
 
 

@@ -210,17 +210,25 @@ class RelaxationTimeProbe(Test):
             .add("Relaxation events measured", len(taus))
         )
 
-    def observations(self):
-        # NULL: Fast relaxation (tau ~ few steps)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Number of extreme events", 50)
-            .add("Mean relaxation time tau", 5.0)
-            .add("Std of tau", 2.0)
-            .add("Integrated autocorrelation time", 3.0)
-            .add("Relaxation events measured", 30)
+            .add("Number of extreme events", 170.267, abs_tol=430)  # random range [14, 539]
+            .add("Mean relaxation time tau", 43.2947, abs_tol=26)  # random range [30.256, 65.3168]
+            .add("Std of tau", 16.8388, abs_tol=12)  # random range [6.98394, 24.9147]
+            .add("Integrated autocorrelation time", 10.0137, abs_tol=4.9)  # random range [9.19738, 14.2417]
+            .add("Relaxation events measured", 38.42, abs_tol=29)  # random range [14, 50]
         )
-
 
 class EquilibriumFluctuationsProbe(Test):
     """
@@ -298,17 +306,25 @@ class EquilibriumFluctuationsProbe(Test):
             .add("Is Gaussian", 1.0 if is_gaussian else 0.0)
         )
 
-    def observations(self):
-        # NULL: Gaussian fluctuations around zero
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Mean imbalance", 0.0)
-            .add("Std of imbalance", 3.0)  # sqrt(window) for random
-            .add("Skewness", 0.0)
-            .add("Excess kurtosis", 0.0)
-            .add("Is Gaussian", 1.0)
+            .add("Mean imbalance", 0.0151526, abs_tol=0.68)  # random range [-0.575636, 0.526949]
+            .add("Std of imbalance", 4.45506, abs_tol=0.34)  # random range [4.2134, 4.74563]
+            .add("Skewness", 0.00512324, abs_tol=0.25)  # random range [-0.204539, 0.158807]
+            .add("Excess kurtosis", -0.0902217, abs_tol=0.45)  # random range [-0.421409, 0.293543]
+            .add("Is Gaussian", 0.333333, abs_tol=0.77)  # random range [0, 1]
         )
-
 
 # =============================================================================
 # TEST RUNNER

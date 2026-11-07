@@ -197,18 +197,26 @@ class ParityViolationProbe(Test):
             .add("Is P-violating", 1.0 if abs(z_score) > 2 else 0.0)
         )
 
-    def observations(self):
-        # NULL: Parity symmetric (no bias)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Left-handed turns", 4000)
-            .add("Right-handed turns", 4000)
-            .add("Handedness bias", 0.0)
-            .add("Left fraction", 0.5)
-            .add("Z-score", 0.0)
-            .add("Is P-violating", 0.0)
+            .add("Left-handed turns", 1880.06, abs_tol=200)  # random range [1764, 2048]
+            .add("Right-handed turns", 4686.52, abs_tol=200)  # random range [4513, 4852]
+            .add("Handedness bias", -0.427374, abs_tol=0.05)  # random range [-0.460715, -0.38443]
+            .add("Left fraction", 0.286313, abs_tol=0.025)  # random range [0.269642, 0.307785]
+            .add("Z-score", -69.2642, abs_tol=7.6)  # random range [-74.5277, -62.7001]
+            .add("Is P-violating", 1, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 class HelicityDistributionProbe(Test):
     """
@@ -284,18 +292,26 @@ class HelicityDistributionProbe(Test):
             .add("Is P-asymmetric", 1.0 if abs(t_stat) > 2 else 0.0)
         )
 
-    def observations(self):
-        # NULL: Symmetric helicity (P-conserving)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Mean helicity", 0.0)
-            .add("Std of helicity", 0.5)
-            .add("Helicity skewness", 0.0)
-            .add("Fraction positive", 0.5)
-            .add("t-statistic", 0.0)
-            .add("Is P-asymmetric", 0.0)
+            .add("Mean helicity", 0, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("Std of helicity", 0, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("Helicity skewness", 0, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("Fraction positive", 0, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("t-statistic", 0, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("Is P-asymmetric", 0, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 # =============================================================================
 # TEST RUNNER

@@ -38,7 +38,7 @@ class STMVacuumBarrierTunneling(Test):
     through the vacuum barrier into the sample. The WKB approximation gives
     a transmission coefficient T ~ exp(-2*kappa*d) where the decay constant
     kappa = sqrt(2*m_e*phi)/hbar. For gold (phi = 5.1 eV), kappa is
-    approximately 11.6 inverse angstroms, meaning the tunnel current drops
+    approximately 1.16 inverse angstroms, meaning the tunnel current drops
     by roughly a factor of 10 for each angstrom increase in gap width. This
     extraordinary sensitivity is what enables sub angstrom vertical resolution
     and true atomic scale imaging of surfaces.
@@ -64,7 +64,7 @@ class STMVacuumBarrierTunneling(Test):
         "decrease by approximately one order of magnitude for each angstrom "
         "of additional vacuum gap? For gold with work function 5.1 eV, the "
         "WKB decay constant kappa equals sqrt(2*m_e*phi)/hbar, predicting "
-        "kappa ~ 11.6 per angstrom. Does this exponential sensitivity, which "
+        "kappa ~ 1.16 per angstrom. Does this exponential sensitivity, which "
         "enables atomic resolution imaging, follow precisely from the "
         "standard WKB formula, and what geometric factors determine the "
         "barrier penetration rate?"
@@ -120,18 +120,18 @@ This test specifically investigates whether the WKB formula reproduces measured 
 
 2. METHODOLOGY
 
-The model computes kappa = sqrt(2*m_e*phi)/hbar for each metal using fundamental constants imported from the common library: electron mass m_e, reduced Planck constant hbar, and electron volt conversion factor. Work functions used are gold (5.10 eV), tungsten (4.50 eV), platinum (5.65 eV), and aluminum (4.28 eV). The derived quantity decades per angstrom, defined as 2*kappa*angstrom/ln(10), provides a directly measurable experimental observable. A self consistency check reconstructs the gold work function from the computed kappa. Agreement criterion is 5% tolerance on kappa values compared against literature values from Chen (2008) and Simmons (1963).
+The model computes kappa = sqrt(2*m_e*phi)/hbar for each metal using fundamental constants imported from the common library: electron mass m_e, reduced Planck constant hbar, and electron volt conversion factor. Work functions used are gold (5.10 eV), tungsten (4.50 eV), platinum (5.65 eV), and aluminum (4.28 eV). The derived quantity decades per angstrom, defined as 2*kappa*angstrom/ln(10), provides a directly measurable experimental observable. A self consistency check reconstructs the gold work function from the computed kappa. Agreement criterion: each metal within 10% of the measured rule of about one decade of current per angstrom (Binnig and Rohrer 1982; Chen 2008).
 
 3. RESULTS
 
 Model output values:
-Gold: kappa = 11.57 inverse angstroms, 10.05 decades per angstrom.
-Tungsten: kappa = 10.87 inverse angstroms, 9.44 decades per angstrom.
-Platinum: kappa = 12.17 inverse angstroms, 10.57 decades per angstrom.
-Aluminum: kappa = 10.60 inverse angstroms, 9.20 decades per angstrom.
+Gold: kappa = 1.157 inverse angstroms, 1.005 decades per angstrom.
+Tungsten: kappa = 1.087 inverse angstroms, 0.944 decades per angstrom.
+Platinum: kappa = 1.218 inverse angstroms, 1.058 decades per angstrom.
+Aluminum: kappa = 1.060 inverse angstroms, 0.921 decades per angstrom.
 Gold reconstructed work function: 5.10 eV (exact self consistency).
 
-Observational data from STM literature matches all model values. The decades per angstrom metric confirms the well known rule of thumb that STM current changes by roughly one order of magnitude per angstrom for typical metallic work functions. The spread across metals, from 9.20 to 10.57 decades per angstrom, reflects the square root dependence on phi, compressing the 32% range in work functions to a 15% range in decay rates.
+Observational data from STM literature matches all model values. The decades per angstrom metric confirms the well known rule of thumb that STM current changes by roughly one order of magnitude per angstrom for typical metallic work functions. The spread across metals, from 0.92 to 1.06 decades per angstrom, reflects the square root dependence on phi, compressing the 32% range in work functions to a 15% range in decay rates.
 
 4. DISCUSSION
 
@@ -178,13 +178,13 @@ We validate the WKB tunneling formula across four metals in the STM geometry, co
                 "2*m_e*phi = 2 * 9.109e-31 * 8.17e-19 = 1.489e-48 kg*J. "
                 "sqrt(1.489e-48) = 1.220e-24 kg^(1/2)*J^(1/2) = 1.220e-24 "
                 "kg*m/s. Then kappa = 1.220e-24 / 1.055e-34 = 1.157e10 m^-1 "
-                "= 11.57 per angstrom."
+                "= 1.157 per angstrom."
             )
             .equation(
                 "kappa_Au = sqrt(2 * 9.109e-31 kg * 5.1 * 1.602e-19 J) / (1.055e-34 J*s)"
             )
             .equation(
-                "kappa_Au = 1.157e10 m^-1 = 11.57 inverse angstroms"
+                "kappa_Au = 1.157e10 m^-1 = 1.157 inverse angstroms"
             )
             .step(
                 "TUNNEL CURRENT: The transmission probability through the "
@@ -200,20 +200,20 @@ We validate the WKB tunneling formula across four metals in the STM geometry, co
             .step(
                 "CURRENT RATIO: For two gap distances d1 and d2, the current "
                 "ratio is I1/I2 = exp(-2*kappa*(d1 - d2)). Per angstrom: "
-                "I_ratio = exp(2 * 11.57) = exp(23.14) = 1.11e10. This means "
-                "the log base 10 decay rate is 2*kappa/(ln(10)) = 23.14/2.303 "
-                "= 10.05 decades per angstrom, confirming the rule of thumb "
+                "I_ratio = exp(2 * 1.157) = exp(2.314) = 10.1. This means "
+                "the log base 10 decay rate is 2*kappa/(ln(10)) = 2.314/2.303 "
+                "= 1.005 decades per angstrom, confirming the rule of thumb "
                 "that current changes by one order of magnitude per angstrom."
             )
             .equation(
-                "log10(I_ratio per angstrom) = 2*kappa*1A / ln(10) ~ 10.05"
+                "log10(I_ratio per angstrom) = 2*kappa*1A / ln(10) ~ 1.005"
             )
             .step(
                 "MULTIPLE METALS: The same formula applies to other metals with "
                 "different work functions. For tungsten (phi = 4.5 eV), "
-                "kappa_W = sqrt(2*m_e*4.5eV)/hbar = 10.87 per angstrom. "
-                "For platinum (phi = 5.65 eV), kappa_Pt = 12.17 per angstrom. "
-                "For aluminum (phi = 4.28 eV), kappa_Al = 10.60 per angstrom."
+                "kappa_W = sqrt(2*m_e*4.5eV)/hbar = 1.087 per angstrom. "
+                "For platinum (phi = 5.65 eV), kappa_Pt = 1.217 per angstrom. "
+                "For aluminum (phi = 4.28 eV), kappa_Al = 1.060 per angstrom."
             )
             .step(
                 "GFM OBSERVATION: The exponent 2*kappa*d contains the factor 2, "
@@ -278,22 +278,19 @@ We validate the WKB tunneling formula across four metals in the STM geometry, co
         return model
 
     def observations(self) -> Observed:
-        # Measured/accepted values from STM literature
-        # Kappa values: Chen (2008), Table 2.1; Simmons (1963)
-        # Decades per angstrom derived from measured kappa
-        return (
-            Observed()
-            .add("Gold: kappa (inverse angstrom)", 11.57)
-            .add("Gold: decades per angstrom", 10.05)
-            .add("Tungsten: kappa (inverse angstrom)", 10.87)
-            .add("Tungsten: decades per angstrom", 9.44)
-            .add("Platinum: kappa (inverse angstrom)", 12.17)
-            .add("Platinum: decades per angstrom", 10.57)
-            .add("Aluminum: kappa (inverse angstrom)", 10.60)
-            .add("Aluminum: decades per angstrom", 9.20)
-            .add("Gold: reconstructed phi (eV)", 5.10)
-        )
-
+        # The measured STM signature: the tunneling current falls by about one
+        # decade per angstrom of gap (Binnig and Rohrer 1982; Chen,
+        # "Introduction to Scanning Tunneling Microscopy", 2008), with apparent
+        # barrier heights of a few eV. Each metal's WKB prediction is checked
+        # against that, at 10%.
+        # (The earlier references, kappa = 10.6 to 12.2 per angstrom and about
+        # 10 decades per angstrom, were the per-nanometre values entered as
+        # per-angstrom, a factor of 10 too large. Kappa itself is reported for
+        # information: comparing it with the same formula would test nothing.)
+        obs = Observed()
+        for metal in ["Gold", "Tungsten", "Platinum", "Aluminum"]:
+            obs.add(f"{metal}: decades per angstrom", 1.0, tol=0.10)
+        return obs
 
 if __name__ == "__main__":
     from gravity_field_model.framework import run_tests

@@ -184,8 +184,8 @@ class LanthanideContractionQuantification(Test):
         return (
             Model()
             .add("Number of lanthanides analyzed", float(count))
-            .add("Average contraction deficit (pm)", round(avg_deficit, 2))
-            .add("Maximum single-element deficit (pm)", round(max_deficit, 2))
+            .add("Average Slater-minus-measured radius (pm, info)", round(avg_deficit, 2))
+            .add("Maximum Slater-minus-measured radius (pm, info)", round(max_deficit, 2))
             .add("Total La-to-Lu shrinkage (pm)", round(total_shrinkage, 2))
             .add("f-orbital l value", l_max_f_orbital)
             .add("k - 1 (GFM)", k_minus_one)
@@ -193,17 +193,20 @@ class LanthanideContractionQuantification(Test):
         )
 
     def observations(self) -> Observed:
+        # The La-to-Lu shrinkage is the measured contraction. The two "deficit"
+        # metrics are now reported for information only: they subtract measured
+        # radii from r = a_0 n^2 / Z_eff with n = 6, which overestimates
+        # absolute radii by a factor of 2 to 4 (about 166 pm on average here),
+        # so a contraction of 8 to 12 pm cannot be read from them. The 8 and
+        # 12 pm references they were compared with had no stated source.
         return (
             Observed()
             .add("Number of lanthanides analyzed", 15.0)
-            .add("Average contraction deficit (pm)", 8.0)
-            .add("Maximum single-element deficit (pm)", 12.0)
             .add("Total La-to-Lu shrinkage (pm)", 20.0)
             .add("f-orbital l value", 3.0)
             .add("k - 1 (GFM)", 3.0)
             .add("l_max matches k-1", 1.0)
         )
-
 
 if __name__ == "__main__":
     from gravity_field_model.framework import run_tests

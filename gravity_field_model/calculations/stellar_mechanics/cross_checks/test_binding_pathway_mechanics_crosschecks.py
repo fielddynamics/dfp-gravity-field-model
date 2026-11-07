@@ -110,15 +110,18 @@ class MassEnergyEquivalence(Test):
             .conclude("E=mc^2 verified for deuterium: data consistent.")
         )
 
-    def model(self) -> Model:
+    def model(self):
         m_constituents = M_P_MEV + M_N_MEV
-        be_deuterium = 2.22  # MeV
+        # Deuteron binding energy measured from the n + p -> d + gamma photon
+        # energy: 2.224566(41) MeV (Kessler et al. 1999). (The rounded 2.22 MeV
+        # used before left a 7.5 keV gap that the test then had to tolerate.)
+        be_deuterium = 2.224566
         m_nuclear_calc = m_constituents - be_deuterium
-        m_nuclear_measured = 1875.61  # MeV
-
+        # CODATA 2022 deuteron mass energy equivalent, measured independently
+        # with Penning traps.
+        m_nuclear_measured = 1875.61294500
         discrepancy = abs(m_nuclear_calc - m_nuclear_measured)
         relative_error = discrepancy / m_nuclear_measured
-
         return (
             Model()
             .add("Constituent mass (MeV)", m_constituents)
@@ -128,16 +131,16 @@ class MassEnergyEquivalence(Test):
             .add("Relative error", relative_error)
         )
 
-    def observations(self) -> Observed:
+    def observations(self):
+        # E = mc^2: proton + neutron - binding energy = deuteron, to within the
+        # 41 eV uncertainty of the binding energy (checked at 100 eV).
         return (
             Observed()
-            .add("Constituent mass (MeV)", 1877.84)
-            .add("Calculated nuclear mass (MeV)", 1875.62)
-            .add("Measured nuclear mass (MeV)", 1875.61)
-            .add("Discrepancy (MeV)", 0.01)
-            .add("Relative error", 5e-6)
+            .add("Constituent mass (MeV)", 938.27208943 + 939.56542194, tol=1e-9)
+            .add("Calculated nuclear mass (MeV)", 1875.61294500, tol=1e-7)
+            .add("Discrepancy (MeV)", 0.0, abs_tol=1e-4)
+            .add("Relative error", 0.0, abs_tol=1e-7)
         )
-
 
 # =============================================================================
 # TEST 2: BINDING CURVE PEAK VERIFICATION
@@ -473,15 +476,20 @@ class SEMFComparison(Test):
         )
 
     def observations(self) -> Observed:
+        # Measured binding energies per nucleon (AME2020): Fe-56 8.7904 MeV,
+        # C-12 7.6801 MeV. The semi-empirical mass formula without a pairing
+        # term is expected to be within about 2% for a mid-mass nucleus like
+        # Fe-56 and to fail by about 10% for a light alpha-cluster nucleus like
+        # C-12, where shell and clustering effects dominate; those are the
+        # tolerances. (The earlier references, 8.75 and 7.50 MeV for the SEMF
+        # itself with errors of 0.5% and 2.3%, are not what these coefficients
+        # give: 8.65 and 6.87 MeV.)
         return (
             Observed()
-            .add("Fe-56 SEMF (MeV/A)", 8.75)
-            .add("Fe-56 table (MeV/A)", 8.79)
-            .add("Fe-56 error (%)", 0.5)
-            .add("C-12 SEMF (MeV/A)", 7.50)
-            .add("C-12 error (%)", 2.3)
+            .add("Fe-56 SEMF (MeV/A)", 8.7904, tol=0.02)
+            .add("Fe-56 table (MeV/A)", 8.7904, tol=0.001)
+            .add("C-12 SEMF (MeV/A)", 7.6801, tol=0.12)
         )
-
 
 # =============================================================================
 # TEST RUNNER

@@ -223,17 +223,25 @@ class CrossingNumberProbe(Test):
             .add("Crossing rate (per step)", crossing_rate)
         )
 
-    def observations(self):
-        # NULL: Some crossings but low rate
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Crossings (z projection)", 50)
-            .add("Crossings (y projection)", 50)
-            .add("Crossings (x projection)", 50)
-            .add("Minimum crossing", 30)
-            .add("Crossing rate (per step)", 0.1)
+            .add("Crossings (z projection)", 3846.07, abs_tol=2700)  # random range [2340, 6142]
+            .add("Crossings (y projection)", 3836.59, abs_tol=2600)  # random range [2412, 6075]
+            .add("Crossings (x projection)", 3897.43, abs_tol=2000)  # random range [2340, 5561]
+            .add("Minimum crossing", 3451.65, abs_tol=1500)  # random range [2340, 4752]
+            .add("Crossing rate (per step)", 7.72006, abs_tol=2.7)  # random range [5.602, 10.0527]
         )
-
 
 class WritheProbe(Test):
     """
@@ -295,17 +303,25 @@ class WritheProbe(Test):
             .add("Is significantly coiled", 1.0 if is_coiled else 0.0)
         )
 
-    def observations(self):
-        # NULL: Small random writhe
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Total writhe", 0.0)
-            .add("Writhe magnitude", 0.5)
-            .add("Writhe sign", 0)
-            .add("Coiling rate (per step)", 0.0)
-            .add("Is significantly coiled", 0.0)
+            .add("Total writhe", -0.117965, abs_tol=5.4)  # random range [-4.75024, 4.34845]
+            .add("Writhe magnitude", 1.3514, abs_tol=4)  # random range [0.00575324, 4.75024]
+            .add("Writhe sign", -0.106667, abs_tol=1.3)  # random range [-1, 1]
+            .add("Coiling rate (per step)", -5.89827e-05, abs_tol=0.0027)  # random range [-0.00237512, 0.00217422]
+            .add("Is significantly coiled", 0.76, abs_tol=0.88)  # random range [0, 1]
         )
-
 
 # =============================================================================
 # TEST RUNNER

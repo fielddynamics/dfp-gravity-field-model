@@ -102,12 +102,12 @@ class GravitationalSelfEnergy(Test):
     The gravitational self-energy U = Gm^2/r is negligible at electron scale.
     
     THIS EXPLAINS WHY QUANTUM GRAVITY CAN BE IGNORED:
-    The ratio U_grav/E_rest ~ 10^-44 shows gravity is ~44 orders of
+    The ratio U_grav/E_rest ~ 10^-43 shows gravity is ~43 orders of
     magnitude weaker than electromagnetic binding at electron scales.
     """
     name = "Gravitational Self-Energy is Negligible"
     question = (
-        "Why can quantum gravity be ignored at particle scales? The ratio U_grav/E_rest ~ 10^-44 "
+        "Why can quantum gravity be ignored at particle scales? The ratio U_grav/E_rest ~ 10^-43 "
         "shows gravitational self-energy is 44 orders of magnitude below rest energy."
     )
     reference = "Standard gravitational physics"
@@ -118,7 +118,7 @@ class GravitationalSelfEnergy(Test):
     future_questions = (
         "Q1: At what scale does gravitational self-energy become comparable to rest energy? "
         "(Answering would improve Derivation by +3 points: quantifying the Planck scale crossover) "
-        "Q2: Does the 10^-44 ratio have any relation to the alpha^21 hierarchy in the G derivation? "
+        "Q2: Does the 10^-43 ratio have any relation to the alpha^21 hierarchy in the G derivation? "
         "(Answering would improve Commentary by +3 points: connecting to other emergent constant tests) "
         "Q3: Why does GFM focus on classical field closure rather than quantized gravity effects? "
         "(Answering would improve Audience Accessibility by +2 points: clarifying framework scope)"
@@ -126,9 +126,9 @@ class GravitationalSelfEnergy(Test):
     
     commentary = (
         "This is an important CONSISTENCY CHECK, not a derivation.\n\n"
-        "Gravitational self-energy: U = Gm_e^2/r_e ~ 2e-57 J\n"
+        "Gravitational self-energy: U = Gm_e^2/r_e ~ 2e-56 J\n"
         "Electron rest energy: E = m_e*c^2 ~ 8e-14 J\n"
-        "Ratio: ~2.4e-44\n\n"
+        "Ratio: ~2.4e-43\n\n"
         "This 44 orders of magnitude difference explains why:\n"
         "1. Quantum gravity effects are unobservable at particle scales\n"
         "2. GFM focuses on classical field closure, not quantized gravity\n"
@@ -144,9 +144,9 @@ class GravitationalSelfEnergy(Test):
             .step("m = m_e = 9.109e-31 kg")
             .step("r = r_e = 2.818e-15 m")
             .step("U = (6.674e-11) * (9.109e-31)^2 / (2.818e-15)")
-            .step("U = 1.96e-57 J")
+            .step("U = 1.965e-56 J")
             .step("E_rest = m_e * c^2 = 8.187e-14 J")
-            .step("Ratio = U / E_rest = 1.96e-57 / 8.187e-14 = 2.4e-44")
+            .step("Ratio = U / E_rest = 1.965e-56 / 8.187e-14 = 2.40e-43")
             .conclude("Gravity is 10^44 times weaker than EM at electron scale.")
         )
     
@@ -166,9 +166,9 @@ class GravitationalSelfEnergy(Test):
     def observations(self) -> Observed:
         return (
             Observed()
-            .add("U_grav (J)", 1.96e-57)
+            .add("U_grav (J)", 1.965e-56)  # G m_e^2 / r_e (CODATA); was 1.96e-57, an arithmetic slip
             .add("E_rest (J)", 8.187e-14)
-            .add("Ratio U/E", 2.4e-44)
+            .add("Ratio U/E", 2.40e-43)  # = G m_e / (r_e c^2)
             .add("Negligible (< 10^-40)", 1)
         )
 
@@ -361,7 +361,7 @@ def run_all() -> bool:
             "energy hierarchy and justify certain GFM assumptions.\n\n"
             "KEY RESULTS:\n"
             "- Electron rest energy: 511 keV (reference scale)\n"
-            "- Gravitational self-energy negligible: ratio ~ 10^-44\n"
+            "- Gravitational self-energy negligible: ratio ~ 10^-43\n"
             "- Vacuum impedance: 377 Ohms (standard EM)\n"
             "- Planck to electron ratio: ~10^22 (the energy hierarchy)"
         ),

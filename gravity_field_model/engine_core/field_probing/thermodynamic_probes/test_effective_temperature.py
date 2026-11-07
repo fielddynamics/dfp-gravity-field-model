@@ -208,17 +208,25 @@ class BoltzmannDistributionProbe(Test):
             .add("Is thermalized (R^2 > 0.7)", 1.0 if fit['fit_quality'] > 0.7 else 0.0)
         )
 
-    def observations(self):
-        # NULL: Poor Boltzmann fit
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Mean kinetic energy", 1.0)
-            .add("Std of kinetic energy", 0.5)
-            .add("Effective temperature", 0.5)
-            .add("Boltzmann fit R^2", 0.5)
-            .add("Is thermalized (R^2 > 0.7)", 0.0)
+            .add("Mean kinetic energy", 3.00254, abs_tol=0.084)  # random range [2.9424, 3.0752]
+            .add("Std of kinetic energy", 1.73352, abs_tol=0.063)  # random range [1.69139, 1.78796]
+            .add("Effective temperature", 0, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("Boltzmann fit R^2", 0, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("Is thermalized (R^2 > 0.7)", 0, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 class FluctuationTemperatureProbe(Test):
     """
@@ -281,16 +289,24 @@ class FluctuationTemperatureProbe(Test):
             .add("Are consistent (ratio ~ 1)", 1.0 if 0.5 < T_ratio < 2.0 else 0.0)
         )
 
-    def observations(self):
-        # NULL: Inconsistent temperatures
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("T (fluctuation method)", 0.3)
-            .add("T (Boltzmann method)", 0.5)
-            .add("T ratio (fluct/Boltz)", 0.6)
-            .add("Are consistent (ratio ~ 1)", 0.0)
+            .add("T (fluctuation method)", 0, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("T (Boltzmann method)", 0, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("T ratio (fluct/Boltz)", 0, abs_tol=1e-09)  # same for all 150 random sequences
+            .add("Are consistent (ratio ~ 1)", 0, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 # =============================================================================
 # TEST RUNNER

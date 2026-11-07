@@ -190,17 +190,25 @@ class SpectralAnalysisProbe(Test):
             .add("Peak SNR", peaks[0]['snr'] if peaks else 1.0)
         )
 
-    def observations(self):
-        # NULL: White noise (flat spectrum, no peaks)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Number of peaks", 0)
-            .add("Dominant frequency (cycles/step)", 0.0)
-            .add("Dominant period (steps)", 0.0)
-            .add("Spectral exponent beta", 0.0)  # White noise
-            .add("Peak SNR", 1.0)
+            .add("Number of peaks", 59.6067, abs_tol=18)  # random range [46, 75]
+            .add("Dominant frequency (cycles/step)", 0.260835, abs_tol=0.3)  # random range [0.000244111, 0.495301]
+            .add("Dominant period (steps)", 34.1528, abs_tol=4700)  # random range [2.01897, 4096.5]
+            .add("Spectral exponent beta", -0.00372695, abs_tol=0.12)  # random range [-0.0990065, 0.0940479]
+            .add("Peak SNR", 8.99765, abs_tol=8.3)  # random range [6.5189, 16.1412]
         )
-
 
 class OscillationModeProbe(Test):
     """
@@ -280,17 +288,25 @@ class OscillationModeProbe(Test):
             .add("Harmonic content", harmonic_power / total_power if total_power > 0 else 0)
         )
 
-    def observations(self):
-        # NULL: No dominant mode (uniform spectrum)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Dominant frequency", 0.0)
-            .add("Dominant period", 0.0)
-            .add("Mode strength (fraction)", 0.0)
-            .add("Is period-2", 0.0)
-            .add("Harmonic content", 0.0)
+            .add("Dominant frequency", 0.265242, abs_tol=0.31)  # random range [0.00292969, 0.498169]
+            .add("Dominant period", 10.6101, abs_tol=390)  # random range [2.00735, 341.333]
+            .add("Mode strength (fraction)", 0.00220021, abs_tol=0.0018)  # random range [0.0016362, 0.00374511]
+            .add("Is period-2", 0.126667, abs_tol=1.1)  # random range [0, 1]
+            .add("Harmonic content", 0.000648985, abs_tol=0.0033)  # random range [1.91436e-06, 0.00348797]
         )
-
 
 # =============================================================================
 # TEST RUNNER

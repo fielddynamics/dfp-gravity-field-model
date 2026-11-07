@@ -167,21 +167,24 @@ class MONDScaleFromGeometry(Test):
             .add("k^2", K**2)
             .add("a_0 predicted (m/s^2)", a_0)
             .add("a_0 MOND (m/s^2)", A_MOND_OBSERVED)
-            .add("Error (%)", round(error_pct, 1))
+            .add("Error vs 1.2e-10 (%, info)", round(error_pct, 1))
             .add("Match (< 5%)", match)
         )
     
     def observations(self) -> Observed:
+        # The measured MOND scale: a_0 = 1.20 +- 0.02 (stat) +- 0.24 (sys)
+        # x 10^-10 m/s^2 (McGaugh, Lelli and Schombert 2016). The prediction is
+        # compared with it at that 20% systematic uncertainty. (Before, the
+        # prediction was compared with a rounded copy of itself, 1.22e-10, and
+        # its error with a hand-entered 1.7% that did not match the 2.1%
+        # computed.)
         return (
             Observed()
             .add("k", 4)
             .add("k^2", 16)
-            .add("a_0 predicted (m/s^2)", 1.22e-10)
-            .add("a_0 MOND (m/s^2)", 1.2e-10)
-            .add("Error (%)", 1.7)
+            .add("a_0 predicted (m/s^2)", 1.20e-10, tol=0.20)
             .add("Match (< 5%)", 1.0)
         )
-
 
 class GeometryBridge(Test):
     """

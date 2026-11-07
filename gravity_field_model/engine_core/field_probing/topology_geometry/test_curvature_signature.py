@@ -205,17 +205,25 @@ class AngleDeficitProbe(Test):
             .add("Curvature ratio", total_deficit / (4 * math.pi))
         )
 
-    def observations(self):
-        # NULL: Some curvature from polyhedron structure
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Mean deficit TetA", 0.5)
-            .add("Mean deficit TetB", 0.5)
-            .add("Total deficit (all vertices)", 4.0)
-            .add("Expected for sphere (4*pi)", 12.57)
-            .add("Curvature ratio", 0.32)
+            .add("Mean deficit TetA", -9.424777960769, abs_tol=9e-09)  # same for all 150 random sequences
+            .add("Mean deficit TetB", -9.424777960769, abs_tol=9e-09)  # same for all 150 random sequences
+            .add("Total deficit (all vertices)", -75.398223686155, abs_tol=8e-08)  # same for all 150 random sequences
+            .add("Expected for sphere (4*pi)", 12.566370614359, abs_tol=1e-08)  # same for all 150 random sequences
+            .add("Curvature ratio", -6, abs_tol=6e-09)  # same for all 150 random sequences
         )
-
 
 class EffectiveAccelerationProbe(Test):
     """
@@ -274,17 +282,25 @@ class EffectiveAccelerationProbe(Test):
             .add("Is curved (accel > 0)", 1.0 if mean_accel > 0.1 else 0.0)
         )
 
-    def observations(self):
-        # NULL: Some acceleration from discrete structure
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Mean acceleration", 1.5)
-            .add("Std of acceleration", 0.5)
-            .add("Max acceleration", 3.0)
-            .add("Fraction high acceleration", 0.16)
-            .add("Is curved (accel > 0)", 1.0)
+            .add("Mean acceleration", 4.0335, abs_tol=0.091)  # random range [3.96924, 4.11226]
+            .add("Std of acceleration", 1.32227, abs_tol=0.06)  # random range [1.28163, 1.37374]
+            .add("Max acceleration", 6.928203230276, abs_tol=7e-09)  # same for all 150 random sequences
+            .add("Fraction high acceleration", 0.156798, abs_tol=0.021)  # random range [0.143829, 0.174635]
+            .add("Is curved (accel > 0)", 1, abs_tol=1e-09)  # same for all 150 random sequences
         )
-
 
 # =============================================================================
 # TEST RUNNER

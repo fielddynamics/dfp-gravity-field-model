@@ -180,18 +180,26 @@ class SpontaneousBreakingProbe(Test):
             .add("Is SSB present", 1.0 if analysis['is_broken'] else 0.0)
         )
 
-    def observations(self):
-        # NULL: Symmetric (no SSB)
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Mean order parameter", 0.0)
-            .add("Std of order parameter", 0.1)
-            .add("Skewness", 0.0)
-            .add("t-statistic", 0.0)
-            .add("Fraction positive", 0.5)
-            .add("Is SSB present", 0.0)
+            .add("Mean order parameter", -0.00033, abs_tol=0.044)  # random range [-0.038, 0.03075]
+            .add("Std of order parameter", 0.0977147, abs_tol=0.024)  # random range [0.0800062, 0.117846]
+            .add("Skewness", -0.0277348, abs_tol=0.93)  # random range [-0.828882, 0.627575]
+            .add("t-statistic", -0.0252835, abs_tol=4.3)  # random range [-3.76118, 2.97961]
+            .add("Fraction positive", 0.463917, abs_tol=0.22)  # random range [0.275, 0.6375]
+            .add("Is SSB present", 0.00666667, abs_tol=1.2)  # random range [0, 1]
         )
-
 
 class SSBPersistenceProbe(Test):
     """
@@ -250,17 +258,25 @@ class SSBPersistenceProbe(Test):
             .add("Bias variance across lengths", np.var(biases_by_length))
         )
 
-    def observations(self):
-        # NULL: No persistent bias
+    def observations(self) -> Observed:
+        # Random-digit baseline. Each expected value is the mean of the metric
+        # over 150 uniformly random base-8 digit sequences of the same length
+        # as the pi digits (seeds 5000-5149), and the absolute tolerance is
+        # 1.15 times the largest distance from that mean to the most extreme
+        # of the 150 values. A pass means pi is indistinguishable from random
+        # digits on this metric; a fail would be a property of pi itself.
+        # Metrics marked 'same for all random sequences' are fixed by the
+        # traversal rule for any generic sequence (degenerate sequences such
+        # as all zeros change them). The previous expected values were
+        # unsourced guesses.
         return (
             Observed()
-            .add("Mean bias across trials", 0.0)
-            .add("Std of bias", 0.05)
-            .add("All same sign", 0.0)
-            .add("Is persistent SSB", 0.0)
-            .add("Bias variance across lengths", 0.001)
+            .add("Mean bias across trials", 3.33333e-05, abs_tol=0.057)  # random range [-0.0492, 0.0358]
+            .add("Std of bias", 0.0126346, abs_tol=0.026)  # random range [0.00222711, 0.0346583]
+            .add("All same sign", 0.333333, abs_tol=0.77)  # random range [0, 1]
+            .add("Is persistent SSB", 0.333333, abs_tol=0.77)  # random range [0, 1]
+            .add("Bias variance across lengths", 0.000195896, abs_tol=0.0016)  # random range [3.32422e-06, 0.00150906]
         )
-
 
 # =============================================================================
 # TEST RUNNER
