@@ -2,6 +2,9 @@
 BBP Structure: tests of the hypothesis that the BBP formula is the
 stellated-octahedron structure.
 
+PROOF.md states the theorems (I Ching and BBP as the stellated octahedron realizing pi);
+test_octahedron_pi_theorems.py checks them exactly.
+
 Each test states a consequence of the hypothesis that could fail, and checks
 it against mathematics independent of the model.
 
@@ -28,5 +31,5 @@ The three failing tests are EXPLORATORY and fail on purpose: their expected
 values are predictions of the claims under test (the geometry alone forces pi;
 the pi walk follows the I Ching's order).
 
-Requires mpmath (PSLQ and 100-digit arithmetic).
+Requires mpmath (PSLQ and 100-digit arithmetic) and sympy (exact integration).
 """
