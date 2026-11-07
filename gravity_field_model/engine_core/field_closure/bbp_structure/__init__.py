@@ -20,6 +20,8 @@ it against mathematics independent of the model.
   tetrahedra; the only documented arrangement that is)
 - test_iching_encoding_selection.py: which I Ching facts fix the trigram encoding? (the Fu Xi numbering
   and the birth order do; parity, opposites and the TIME-face step hold under all six)
+- test_bbp_ladder_base8.py: the BBP ladder gives base-8 digits of pi at any position (up to 10,000)
+- test_walk_from_bbp_ladder.py: the closure walk driven by the BBP formula alone (closes at step 332)
 - test_pi_walk_visit_order.py: does the pi walk visit the vertices in the Shuo Gua order? (fails: no)
 
 The three failing tests are EXPLORATORY and fail on purpose: their expected
