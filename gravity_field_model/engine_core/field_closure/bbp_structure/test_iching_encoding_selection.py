@@ -2,6 +2,9 @@
 Which I Ching facts fix the line-to-bit encoding?
 =================================================
 
+Role:     PROOF.md Theorem 1(e): which I Ching facts fix the encoding.
+Expected: Passes. Corrects IChing_Solve_Synthesis.md section 3: parity, opposites and the TIME-face step hold under all six encodings.
+
 A trigram becomes a cube vertex once each of its three lines is assigned to a
 bit. The model uses bottom line = most significant bit (Kun 0 ... Qian 7).
 The synthesis ``papers/09-complete-field-closure/IChing_Solve_Synthesis.md``

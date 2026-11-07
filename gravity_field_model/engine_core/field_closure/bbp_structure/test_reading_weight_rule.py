@@ -2,6 +2,9 @@
 Can an agreement rule produce the BBP numerators?
 =================================================
 
+Role:     PROOF.md Theorem 5 status: the magnitude rule is ordered, not an agreement rule.
+Expected: Passes when no agreement rule gives pi (as the proof shows none can).
+
 The derivation obtains the numerator magnitudes [4, 2, 1, 1] from the x and y
 axis vectors with what it calls an agreement rule: full weight when both axes
 read D, partial weight when they disagree, unit weight when both read 1. The
@@ -54,7 +57,7 @@ class WeightRuleSymmetry(Test):
         "Amer. Math. Monthly 104, 852-855"
     )
     tolerance = 0.0
-    level = Level.EXPLORATORY
+    level = Level.STANDARD
 
     def derivation(self):
         return (
@@ -76,9 +79,8 @@ class WeightRuleSymmetry(Test):
         "weight 1 when only the middle line is yang. An ordered rule is consistent with the "
         "trigram's ordered lines, but the values 2 and 1 are not given by any stated "
         "principle, and the rule's four entries (4, 2, 1, 1) are the four BBP magnitudes one "
-        "for one: the rule restates them rather than deriving them. This test fails, as "
-        "intended, until a rule follows from the geometry or the trigram order and produces "
-        "the asymmetry."
+        "for one: the rule restates them rather than deriving them. So the description "
+        "'agreement rule' in why_pi_formal_derivation.md is inaccurate; the rule is ordered."
     )
 
     def model(self):
@@ -107,9 +109,11 @@ class WeightRuleSymmetry(Test):
             .add("Pi formulas using only slots 1,4,5,6", 1)
             # BBP: |-2| at slot 4, |-1| at slot 5.
             .add("That formula has equal weights at slots 4 and 5 (1=yes)", 0)
-            # The derivation's description: an agreement rule yields the numerators.
-            .add("Coded rule weights (D,1) and (1,D) equally (1=yes)", 1)
-            .add("An agreement rule gives pi (1=yes)", 1)
+            # why_pi_verification.py, constraint 4: (D,1) -> D-1 = 2, (1,D) -> 1.
+            .add("Coded rule weights (D,1) and (1,D) equally (1=yes)", 0)
+            # Follows from the two lines above: an agreement rule would give equal
+            # weights at slots 4 and 5, and the only pi formula there needs 2 and 1.
+            .add("An agreement rule gives pi (1=yes)", 0)
         )
 
 

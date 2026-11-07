@@ -2,6 +2,9 @@
 The BBP integrand's roots read as stellated-octahedron geometry
 ===============================================================
 
+Role:     Supporting finding for Theorem 4: the integrand's numbers as octahedron ratios, with a square as control.
+Expected: Passes. Note the control: a square has the same numbers.
+
 Hypothesis (geometric reading): the two numbers that make the BBP integral
 work are lengths and angles of the stellated octahedron.
 

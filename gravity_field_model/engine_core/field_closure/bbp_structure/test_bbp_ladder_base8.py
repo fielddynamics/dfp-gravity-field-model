@@ -2,6 +2,9 @@
 The BBP ladder reaches the base-8 digits of pi directly
 =======================================================
 
+Role:     Supporting finding: the BBP formula reaches base-8 (trigram) digits of pi at any position.
+Expected: Passes. A failure means a ladder digit disagrees with the independent mpmath digits.
+
 Claim under test: the BBP formula lets one move through pi like a ladder,
 going to any rung (digit position) without climbing the ones below; and the
 I Ching walk needs pi in base 8, one trigram per digit.

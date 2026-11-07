@@ -2,6 +2,9 @@
 Does the octahedral shape single out pi among BBP constants?
 ============================================================
 
+Role:     Supporting finding: among named BBP constants only pi has an octahedral-shape formula.
+Expected: Passes. Exploratory: the result depends on the chosen list of constants.
+
 Prediction of the hypothesis "the BBP formula is the stellated-octahedron
 structure": among the constants that have base-16, period-8 formulas, pi
 should be the one whose formula has the octahedral shape (TIME apices

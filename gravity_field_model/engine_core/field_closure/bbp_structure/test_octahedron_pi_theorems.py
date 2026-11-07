@@ -2,20 +2,26 @@
 Theorems: the I Ching and the BBP formula as the stellated octahedron
 =====================================================================
 
+Role:     PROOF.md Theorems 1, 4 and 5, with the BBP identity and family selection (exact check).
+Expected: Passes. A failure means one of the stated theorems is false as coded.
+
 Machine check of the theorems in PROOF.md (this directory). Everything here
 is exact: integer and rational arithmetic, and symbolic integration with
 sympy. Nothing is fitted and nothing is read from the model.
 
 Theorem 1  The trigram system is the stellated octahedron, and the Shuo Gua
            ranks fix the encoding.
-Theorem 2  BBP is the member of pi's base-16 family selected by the
-           octahedron's TIME axis and chamber balance.
-Theorem 3  Under the reading R, the rank-ordered octahedron gives exactly
-           the BBP coefficients, in both tetrahedra; so it realizes pi.
-Theorem 4  The rank order is necessary: the other five orders of the
-           children give numbers other than pi, while closure holds in all.
+Theorem 2  (here: the Adamchik-Wagon r-term is exactly 0; completeness of the
+           family is proved in test_bbp_completeness_proof.py.)
+Theorem 3  (here: within the family, TIME silence, zero sum, or four slots in
+           a 2+2 split each select r = 0, the BBP formula.)
+Theorem 4  The BBP combination of the slot series is exactly pi.
+Theorem 5  Read with the trigram-line rule, the rank-ordered octahedron gives
+           exactly the BBP coefficients in both tetrahedra; the other five
+           orders of the children give other numbers; zero sum holds for all.
 
-What is proved, and what is assumed (the reading R), is set out in PROOF.md.
+Theorem numbers refer to PROOF.md. The main result (Theorems 1-3) does not
+depend on the trigram-line rule of Theorem 5.
 """
 
 from fractions import Fraction
@@ -117,32 +123,32 @@ class OctahedronPiTheorems(Test):
         "the r-term of its family is exactly zero, and the octahedron's TIME silence (or "
         "four slots in a 2+2 chamber split) selects BBP alone from that family. Read by R "
         "in rank order, each tetrahedron produces the BBP coefficients and so pi, and no "
-        "other order of the children does. The theorem is conditional on R: two of its "
-        "clauses (positions from the top line, magnitude 2b + m + t) are stated rules, not "
-        "derived from the text or the geometry, as PROOF.md explains."
+        "other order of the children does. Theorem 5 uses the trigram-line rule (positions "
+        "from the top line, magnitude 2b + m + t), which is stated, not derived; the main "
+        "result, Theorems 1-3, does not depend on it (PROOF.md, section 7)."
     )
 
     def model(self):
         m = Model()
         # ---------------- Theorem 1 ----------------
         labs = {n: label(l) for n, l in LINES.items()}
-        m.add("T1a trigrams -> 8 distinct vertices (1=yes)", int(sorted(labs.values()) == list(range(8))))
+        m.add("Thm 1(a): trigrams -> 8 distinct vertices (1=yes)", int(sorted(labs.values()) == list(range(8))))
         yang = [n for n in LINES if sum(LINES[n]) % 2 == 1]
         yin = [n for n in LINES if sum(LINES[n]) % 2 == 0]
         d2 = lambda a, b: sum((p - q) ** 2 for p, q in zip(coords(LINES[a]), coords(LINES[b])))
         reg = all(d2(a, b) == 8 for fam in (yang, yin) for a, b in combinations(fam, 2))
         tets = {frozenset(t) for t in geo.regular_tetrahedra()}
         same = {frozenset(labs[n] for n in yang), frozenset(labs[n] for n in yin)} == tets
-        m.add("T1b yang family = father + sons (1=yes)", int(set(yang) == {"Qian", *SONS}))
-        m.add("T1b families are regular tetrahedra (edge^2 = 8) (1=yes)", int(reg))
-        m.add("T1b families = the cube's two inscribed tetrahedra (1=yes)", int(same))
+        m.add("Thm 1(b): yang family = father + sons (1=yes)", int(set(yang) == {"Qian", *SONS}))
+        m.add("Thm 1(b): families are regular tetrahedra (edge^2 = 8) (1=yes)", int(reg))
+        m.add("Thm 1(b): families = the cube's two inscribed tetrahedra (1=yes)", int(same))
         opp = all(coords(LINES[b]) == tuple(-c for c in coords(LINES[a])) for a, b in OPPOSITES)
         cross = all((a in yang) != (b in yang) for a, b in OPPOSITES)
-        m.add("T1c opposites are antipodes c -> -c (1=yes)", int(opp))
-        m.add("T1c every opposite pair joins the two families (1=yes)", int(cross))
+        m.add("Thm 1(c): opposites are antipodes c -> -c (1=yes)", int(opp))
+        m.add("Thm 1(c): every opposite pair joins the two families (1=yes)", int(cross))
         split = [sum(1 for a in A for b in B) for A in (yang, yin) for B in (yang, yin)]
-        m.add("T1d hexagrams (ordered pairs)", len(LINES) ** 2)
-        m.add("T1d chamber split of hexagrams 16/16/16/16 (1=yes)", int(split == [16, 16, 16, 16]))
+        m.add("Thm 1(d): hexagrams (ordered pairs)", len(LINES) ** 2)
+        m.add("Thm 1(d): chamber split of hexagrams 16/16/16/16 (1=yes)", int(split == [16, 16, 16, 16]))
         encs = list(permutations((2, 1, 0)))
         rank_ok = [e for e in encs if [label(LINES[s], e) for s in SONS] == [4, 2, 1]]
         shao_ok = [e for e in encs if [label(LINES[n], e) for n in SHAO_YONG] == list(range(7, -1, -1))]
@@ -150,13 +156,13 @@ class OctahedronPiTheorems(Test):
             {frozenset(label(LINES[n], e) for n in yang), frozenset(label(LINES[n], e) for n in yin)} == tets
             for e in encs
         )
-        m.add("T1e families/tetrahedra hold under all 6 encodings (1=yes)", int(inv))
-        m.add("T1e encodings making the rank order 4,2,1", len(rank_ok))
-        m.add("T1e that encoding is bottom = MSB and matches Shao Yong (1=yes)",
+        m.add("Thm 1(e): families/tetrahedra hold under all 6 encodings (1=yes)", int(inv))
+        m.add("Thm 1(e): encodings making the rank order 4,2,1", len(rank_ok))
+        m.add("Thm 1(e): that encoding is bottom = MSB and matches Shao Yong (1=yes)",
               int(rank_ok == shao_ok == [(2, 1, 0)]))
         # ---------------- Theorem 2 ----------------
-        m.add("T2a BBP combination equals pi exactly (1=yes)", int(sp.simplify(slot_combination(BBP) - sp.pi) == 0))
-        m.add("T2b r-term combination equals 0 exactly (1=yes)", int(slot_combination(KERNEL) == 0))
+        m.add("Thm 4: BBP combination equals pi exactly (1=yes)", int(sp.simplify(slot_combination(BBP) - sp.pi) == 0))
+        m.add("Thm 2: r-term combination equals 0 exactly (1=yes)", int(slot_combination(KERNEL) == 0))
         r = sp.symbols("r")
         fam = {j: BBP.get(j, 0) + r * KERNEL.get(j, 0) for j in range(1, 9)}
         # Slot 8 (vertex 0) is empty in every member, so TIME silence reduces to w_7 = 0.
@@ -167,17 +173,17 @@ class OctahedronPiTheorems(Test):
         t1, t2 = [set(t) for t in geo.regular_tetrahedra()]
         balanced = [z for z in four
                     if len({j % 8 for j in range(1, 9) if fam[j].subs(r, z) != 0} & t1) == 2]
-        m.add("T2c TIME-silent members: r", str(time_silent))
-        m.add("T2c zero-sum members: r", str(zero_sum))
-        m.add("T2c four-slot members with a 2+2 chamber split: r", str(balanced))
-        m.add("T2c each condition selects r = 0 only (1=yes)",
+        m.add("Thm 3: TIME-silent members: r", str(time_silent))
+        m.add("Thm 3: zero-sum members: r", str(zero_sum))
+        m.add("Thm 3: four-slot members with a 2+2 chamber split: r", str(balanced))
+        m.add("Thm 3: each condition selects r = 0 only (1=yes)",
               int(time_silent == [0] and zero_sum == [0] and balanced == [0]))
         # ---------------- Theorem 3 ----------------
         wa, orbit_a = reading_R("Qian", SONS)
         wb, orbit_b = reading_R("Kun", DAUGHTERS, complement=True)
-        m.add("T3 TetA (Qian; Zhen, Kan, Gen) gives the BBP coefficients (1=yes)", int(wa == BBP))
-        m.add("T3 TetB (Kun; Xun, Li, Dui) by complement gives them (1=yes)", int(wb == BBP))
-        m.add("T3 position increments close one orbit of 8 (1=yes)", int(orbit_a == orbit_b == 8))
+        m.add("Thm 5: TetA (Qian; Zhen, Kan, Gen) gives the BBP coefficients (1=yes)", int(wa == BBP))
+        m.add("Thm 5: TetB (Kun; Xun, Li, Dui) by complement gives them (1=yes)", int(wb == BBP))
+        m.add("Thm 5: position increments close one orbit of 8 (1=yes)", int(orbit_a == orbit_b == 8))
         # ---------------- Theorem 4 ----------------
         n_pi, n_zero, values = 0, 0, []
         for order in permutations(SONS):
@@ -187,33 +193,33 @@ class OctahedronPiTheorems(Test):
             n_pi += int(sp.simplify(v - sp.pi) == 0)
             n_zero += int(sum(w.values()) == 0)
         min_gap = min(abs(float(sp.re(sp.N(v - sp.pi, 30)))) for v in values if sp.simplify(v - sp.pi) != 0)
-        m.add("T4 orders of the children giving pi (of 6)", n_pi)
-        m.add("T4 orders with zero coefficient sum (of 6)", n_zero)
-        m.add("T4 smallest |value - pi| among the other five", round(min_gap, 6))
+        m.add("Thm 5: orders of the children giving pi (of 6)", n_pi)
+        m.add("Thm 5: orders with zero coefficient sum (of 6)", n_zero)
+        m.add("Thm 5: smallest |value - pi| among the other five", round(min_gap, 6))
         return m
 
     def observations(self):
         return (
             Observed()
-            .add("T1a trigrams -> 8 distinct vertices (1=yes)", 1)
-            .add("T1b yang family = father + sons (1=yes)", 1)
-            .add("T1b families are regular tetrahedra (edge^2 = 8) (1=yes)", 1)
-            .add("T1b families = the cube's two inscribed tetrahedra (1=yes)", 1)
-            .add("T1c opposites are antipodes c -> -c (1=yes)", 1)
-            .add("T1c every opposite pair joins the two families (1=yes)", 1)
-            .add("T1d hexagrams (ordered pairs)", 64)
-            .add("T1d chamber split of hexagrams 16/16/16/16 (1=yes)", 1)
-            .add("T1e families/tetrahedra hold under all 6 encodings (1=yes)", 1)
-            .add("T1e encodings making the rank order 4,2,1", 1)
-            .add("T1e that encoding is bottom = MSB and matches Shao Yong (1=yes)", 1)
-            .add("T2a BBP combination equals pi exactly (1=yes)", 1)
-            .add("T2b r-term combination equals 0 exactly (1=yes)", 1)
-            .add("T2c each condition selects r = 0 only (1=yes)", 1)
-            .add("T3 TetA (Qian; Zhen, Kan, Gen) gives the BBP coefficients (1=yes)", 1)
-            .add("T3 TetB (Kun; Xun, Li, Dui) by complement gives them (1=yes)", 1)
-            .add("T3 position increments close one orbit of 8 (1=yes)", 1)
-            .add("T4 orders of the children giving pi (of 6)", 1)
-            .add("T4 orders with zero coefficient sum (of 6)", 6)
+            .add("Thm 1(a): trigrams -> 8 distinct vertices (1=yes)", 1)
+            .add("Thm 1(b): yang family = father + sons (1=yes)", 1)
+            .add("Thm 1(b): families are regular tetrahedra (edge^2 = 8) (1=yes)", 1)
+            .add("Thm 1(b): families = the cube's two inscribed tetrahedra (1=yes)", 1)
+            .add("Thm 1(c): opposites are antipodes c -> -c (1=yes)", 1)
+            .add("Thm 1(c): every opposite pair joins the two families (1=yes)", 1)
+            .add("Thm 1(d): hexagrams (ordered pairs)", 64)
+            .add("Thm 1(d): chamber split of hexagrams 16/16/16/16 (1=yes)", 1)
+            .add("Thm 1(e): families/tetrahedra hold under all 6 encodings (1=yes)", 1)
+            .add("Thm 1(e): encodings making the rank order 4,2,1", 1)
+            .add("Thm 1(e): that encoding is bottom = MSB and matches Shao Yong (1=yes)", 1)
+            .add("Thm 4: BBP combination equals pi exactly (1=yes)", 1)
+            .add("Thm 2: r-term combination equals 0 exactly (1=yes)", 1)
+            .add("Thm 3: each condition selects r = 0 only (1=yes)", 1)
+            .add("Thm 5: TetA (Qian; Zhen, Kan, Gen) gives the BBP coefficients (1=yes)", 1)
+            .add("Thm 5: TetB (Kun; Xun, Li, Dui) by complement gives them (1=yes)", 1)
+            .add("Thm 5: position increments close one orbit of 8 (1=yes)", 1)
+            .add("Thm 5: orders of the children giving pi (of 6)", 1)
+            .add("Thm 5: orders with zero coefficient sum (of 6)", 6)
         )
 
 

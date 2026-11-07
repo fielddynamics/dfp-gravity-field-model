@@ -2,6 +2,9 @@
 Does the octahedron select the BBP member of the family?
 ========================================================
 
+Role:     PROOF.md Theorem 3 remark: each octahedral condition selects BBP within the family.
+Expected: Passes. A failure means a condition admits a second member of the family.
+
 Hypothesis: the BBP formula is the stellated-octahedron structure. If so, the
 octahedral conditions read into it (TIME apices silent, weights summing to
 zero, K = 4 active slots, two active slots per tetrahedron) should pick out
@@ -41,7 +44,7 @@ class OctahedralSelection(Test):
     )
     reference = "Adamchik and Wagon (1997); conditions from the BBP field-closure synthesis note"
     tolerance = 0.0
-    level = Level.EXPLORATORY
+    level = Level.STANDARD
 
     def derivation(self):
         return (
@@ -61,9 +64,9 @@ class OctahedralSelection(Test):
         "is a real, checkable selection, in favour of the hypothesis. Two cautions. In a "
         "one-parameter family any single linear condition already picks one member; TIME "
         "silence alone (w_7 = 0) and zero sum alone (-15r = 0) both give r = 0, because they are "
-        "the same member's properties. And the conditions were read off the BBP formula "
-        "itself, so this shows consistency, not prediction; the prediction test asks whether "
-        "the same conditions single out pi among other constants."
+        "the same member's properties. Since the family is complete "
+        "(test_bbp_completeness_proof.py), these selections hold among all base-16, "
+        "period-8 formulas for pi, not only within the family."
     )
 
     def model(self):

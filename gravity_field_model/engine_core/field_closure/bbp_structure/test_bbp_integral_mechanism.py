@@ -2,6 +2,9 @@
 Where pi comes from inside the BBP formula
 ==========================================
 
+Role:     PROOF.md Theorem 4: where pi arises inside BBP.
+Expected: Passes. A failure means the partial-fraction account of BBP is wrong.
+
 Summing the four BBP slot series term by term turns the formula into one
 integral (Bailey, Borwein, Plouffe 1997):
 

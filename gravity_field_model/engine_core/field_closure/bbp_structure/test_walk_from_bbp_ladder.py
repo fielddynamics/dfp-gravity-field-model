@@ -2,6 +2,9 @@
 The closure walk driven by the BBP ladder alone
 ===============================================
 
+Role:     Supporting finding: the closure walk can be driven by the BBP formula alone.
+Expected: Passes. A failure means the ladder-driven walk differs from the stored-digit walk.
+
 Every digit the I Ching closure walk uses can be taken from the BBP ladder
 (bbp_ladder.py), each from its own rung, with no stored digits and no
 arbitrary-precision library. This test drives the walk that way and checks

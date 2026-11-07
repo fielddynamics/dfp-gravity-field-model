@@ -2,6 +2,9 @@
 All base-16, period-8 formulas for pi
 =====================================
 
+Role:     Numerical cross-check of Theorem 2 (PSLQ at 100 digits).
+Expected: Passes. Superseded as proof by test_bbp_completeness_proof.py; kept as an independent check.
+
 The BBP formula is not the only way to write pi with base 16 and
 denominators 8n + j. Adamchik and Wagon (1997) found a one-parameter family:
 for every r,

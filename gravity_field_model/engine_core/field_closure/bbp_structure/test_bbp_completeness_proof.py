@@ -2,6 +2,9 @@
 Proof that the octahedron's TIME axis selects BBP from all of pi's formulas
 =========================================================================
 
+Role:     PROOF.md Theorems 2 and 3, the main result (exact check).
+Expected: Passes. A failure means a step of the completeness proof does not hold.
+
 Exact check of Theorems 2 and 3 of PROOF.md:
 
 Theorem 2 (completeness). The only rational linear relation among the slot

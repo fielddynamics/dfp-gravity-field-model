@@ -2,6 +2,9 @@
 Is the face reading that yields pi a property of the geometry?
 ==============================================================
 
+Role:     PROOF.md Theorem 5: only the I Ching rank order of the children gives pi; refutes 'no freedom' in why_pi_formal_derivation.md.
+Expected: Passes when 1 of the 6 TIME-preserving relabellings gives pi.
+
 Claim under test (``why_pi_formal_derivation.md``): six constraints, each
 forced by the stellated octahedron, turn the TetA face normals into the BBP
 series, so pi is "the geometry's only possible output".
@@ -14,9 +17,10 @@ spatial faces (or, equivalently, the roles of x, y and z) are relabelled.
 There are six such symmetries. The test runs the mechanism exactly as the
 derivation specifies under each of them.
 
-Prediction of the claim: all six give pi. The closure condition (signed
-numerators summing to zero) is checked separately, since the derivation
-calls it automatic.
+Finding: only one of the six gives pi, so the claim that the geometry alone
+forces every coefficient does not hold. The closure condition (signed
+numerators summing to zero), which the derivation calls automatic, holds in
+all six and so does not select pi.
 
 The I Ching itself breaks this symmetry: a trigram's lines are ordered,
 bottom to top. The test also records which line order the pi-giving
@@ -48,7 +52,7 @@ class ReadingSymmetry(Test):
         "why_pi_verification.py; series values to 100 digits with mpmath"
     )
     tolerance = 0.0
-    level = Level.EXPLORATORY
+    level = Level.STANDARD
 
     def derivation(self):
         return (
@@ -65,8 +69,8 @@ class ReadingSymmetry(Test):
         "(3.1838, 3.1920, 3.3102, 3.3498, 3.3680), although the stellated octahedron, its TIME "
         "axis and its temporal face are identical in all six. Closure holds in every case: the "
         "signed numerators always sum to zero, so closure does not select pi. The geometry "
-        "alone therefore does not force the BBP series, and the first check fails. What does "
-        "select it is the I Ching's own ordering of the lines. The labelling that gives pi "
+        "alone therefore does not force the BBP series, contrary to why_pi_formal_derivation.md. "
+        "What does select it is the I Ching's own ordering of the lines. The labelling that gives pi "
         "reads the bottom and middle lines, in that order, for the magnitudes and the top line "
         "for the sector positions; the axis-to-line assignment is read off the three sons "
         "(Zhen, Kan, Gen). So pi follows from the octahedron together with the trigram line "
@@ -112,8 +116,9 @@ class ReadingSymmetry(Test):
             # Every permutation of the axes preserves the cube, TetA and the TIME axis.
             .add("Axis permutations that are symmetries (of 6)", 6)
             .add("Paper's labelling gives pi (1=yes)", 1)
-            # Prediction of the claim that the geometry forces pi.
-            .add("Symmetry images giving pi (of 6)", 6)
+            # Exact integration of all six series (PROOF.md, Theorem 5): only the
+            # rank order is pi; the nearest other value is ln(675/256) + 2 arctan 2.
+            .add("Symmetry images giving pi (of 6)", 1)
             # The derivation calls closure automatic.
             .add("Symmetry images with zero numerator sum (of 6)", 6)
             # The I Ching reads a trigram from the bottom line up.

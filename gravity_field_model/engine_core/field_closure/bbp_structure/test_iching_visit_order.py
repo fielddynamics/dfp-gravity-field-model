@@ -2,6 +2,9 @@
 The I Ching's order of the trigrams as the BBP reading order
 ============================================================
 
+Role:     PROOF.md Theorem 5: the Shuo Gua family sequence is the order that gives BBP in both tetrahedra.
+Expected: Passes. A failure means another documented arrangement also does, or the Shuo Gua sequence does not.
+
 Claim under test: the I Ching documents field closure; it records the order
 in which the vertices of the stellated octahedron are visited, and that order
 is the BBP structure.
@@ -84,7 +87,7 @@ class IChingVisitOrder(Test):
         "reading mechanism: research/exploratory/i-ching/why_pi_formal_derivation.md"
     )
     tolerance = 0.0
-    level = Level.EXPLORATORY
+    level = Level.STANDARD
 
     def derivation(self):
         return (

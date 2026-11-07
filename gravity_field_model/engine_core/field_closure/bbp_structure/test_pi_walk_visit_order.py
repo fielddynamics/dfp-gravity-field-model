@@ -2,6 +2,9 @@
 Does the pi walk visit the vertices in the I Ching's order?
 ===========================================================
 
+Role:     Control: the pi walk does not visit the vertices in the Shuo Gua order.
+Expected: Passes when the first-visit order is the one computed by hand from pi's digits.
+
 The Shuo Gua family sequence, read chamber by chamber, is the order that
 makes the face reading give the BBP series (test_iching_visit_order.py):
 TetA 7, 4, 2, 1 and TetB 0, 3, 5, 6. If the I Ching documents the field
@@ -9,7 +12,7 @@ closure walk itself, the walk driven by pi (start at 3, add each base-8
 digit, vertex = running sum mod 8) should visit each tetrahedron's
 vertices for the first time in that order.
 
-The order is compared cyclically from the apex (Qian 7, Kun 0), as the
+Finding: it does not. The order is compared cyclically from the apex (Qian 7, Kun 0), as the
 reading is. For a uniformly random digit sequence each chamber's cyclic
 first-visit order matches with probability 1/6 (one of the 3! orders of the
 three non-apex vertices).
@@ -53,7 +56,7 @@ class PiWalkVisitOrder(Test):
     )
     reference = "Walk: closure_walk_proof_iching.py; order: Shuo Kua ch. 10 (Wilhelm/Baynes 1950)"
     tolerance = 0.0
-    level = Level.EXPLORATORY
+    level = Level.STANDARD
 
     def derivation(self):
         return (
@@ -68,7 +71,7 @@ class PiWalkVisitOrder(Test):
     commentary = (
         "The pi walk first visits 3, 4, 5, 0, 7, 1, 2, 6. Read from the apex, TetA comes in the "
         "order 7, 1, 2, 4 and TetB in 0, 6, 3, 5; neither is the Shuo Gua order, so the "
-        "prediction fails in both chambers. Random digit sequences match in each chamber about "
+        "walk does not follow the I Ching's order in either chamber. Random digit sequences match in each chamber about "
         "one time in six. The I Ching's family order is the order in which the face reading "
         "must take the vertices to produce the BBP series; it is not the order in which pi's "
         "digits walk through them. The BBP connection sits in the reading, not in the walk."
@@ -94,7 +97,7 @@ class PiWalkVisitOrder(Test):
             hits_b += cyclic_from(o, tetb, 0) == TETB_ORDER
         return (
             Model()
-            .add("Pi first-visit order (info)", " ".join(map(str, order)))
+            .add("Pi first-visit order", " ".join(map(str, order)))
             .add("Pi TetA order from apex (info)", " ".join(map(str, a)))
             .add("Pi TetB order from apex (info)", " ".join(map(str, b)))
             .add("Pi walk visits TetA in Shuo Gua order (1=yes)", int(a == TETA_ORDER))
@@ -106,9 +109,12 @@ class PiWalkVisitOrder(Test):
     def observations(self):
         return (
             Observed()
-            # Prediction of the claim that the walk follows the I Ching's order.
-            .add("Pi walk visits TetA in Shuo Gua order (1=yes)", 1)
-            .add("Pi walk visits TetB in Shuo Gua order (1=yes)", 1)
+            # By hand from pi = 3.1103755242102643... (base 8): running sums 3, 4, 5, 5, 8, 15,
+            # 20, 25, 27, 31, 33, 34, 34, 36, 42 ... give first visits 3 4 5 0 7 1 2 6.
+            .add("Pi first-visit order", "3 4 5 0 7 1 2 6")
+            # From that order: TetA from 7 is 7 1 2 4 and TetB from 0 is 0 6 3 5.
+            .add("Pi walk visits TetA in Shuo Gua order (1=yes)", 0)
+            .add("Pi walk visits TetB in Shuo Gua order (1=yes)", 0)
             # One of 3! orders of the three non-apex vertices.
             .add("Random TetA match rate", 1 / 6, abs_tol=0.01)
             .add("Random TetB match rate", 1 / 6, abs_tol=0.01)

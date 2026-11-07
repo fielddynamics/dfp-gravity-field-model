@@ -2,6 +2,9 @@
 Does the I Ching closure walk require pi?
 =========================================
 
+Role:     Control: does 64-hexagram closure need pi's particular digits? (No.)
+Expected: Passes. Shows closure at step 332 is typical for well-mixed digits; the case for pi rests on Theorems 2-3.
+
 The closure walk (``research/exploratory/i-ching/closure_walk_proof_iching.py``):
 start with pi's integer part 3, add each base-8 digit of pi, and take the
 running sum mod 8 as the current trigram. Each consecutive pair of trigrams is
