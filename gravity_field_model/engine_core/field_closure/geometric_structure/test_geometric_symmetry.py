@@ -334,46 +334,30 @@ class WindingNumberAnalysis(Test):
         return (
             Model()
             .add("Total transitions", len(increments))
-            .add("Mean angle (deg)", round(mean_angle, 1))
+            .add("Mean angle (deg)", round(mean_angle, 1), tol=0.045)
             .add("Min angle (deg)", round(min_angle, 1))
             .add("Max angle (deg)", round(max_angle, 1))
-            .add("Self transitions (<45)", n_small)
-            .add("Adjacent (45-90)", n_adjacent)
-            .add("Diagonal (90-150)", n_diagonal)
-            .add("Opposite (>150)", n_opposite)
+            .add("Self transitions (<45)", n_small, tol=0.24)
+            .add("Adjacent (45-90)", n_adjacent, tol=0.11)
+            .add("Diagonal (90-150)", n_diagonal, tol=0.11)
+            .add("Opposite (>150)", n_opposite, tol=0.24)
             .add("Balanced exploration", balanced)
         )
     
     def observations(self):
-        traversal = traverse_pi_base8(1000)
-        increments = compute_winding_increments(traversal)
-        
-        increments_deg = [math.degrees(a) for a in increments]
-        
-        mean_angle = sum(increments_deg) / len(increments_deg)
-        min_angle = min(increments_deg)
-        max_angle = max(increments_deg)
-        
-        n_small = sum(1 for a in increments_deg if a < 45)
-        n_adjacent = sum(1 for a in increments_deg if 45 <= a < 90)
-        n_diagonal = sum(1 for a in increments_deg if 90 <= a < 150)
-        n_opposite = sum(1 for a in increments_deg if a >= 150)
-        
-        balanced = 1 if 60 < mean_angle < 120 else 0
-        
+        # The next vertex is uniform, so the angle between successive position
+        # vectors takes four values with probabilities 1/8 (0 deg, self), 3/8
+        # (70.5 deg, adjacent), 3/8 (109.5 deg, diagonal) and 1/8 (180 deg,
+        # opposite). The mean angle is exactly 90 degrees.
         return (
             Observed()
-            .add("Total transitions", len(increments))
-            .add("Mean angle (deg)", round(mean_angle, 1))
-            .add("Min angle (deg)", round(min_angle, 1))
-            .add("Max angle (deg)", round(max_angle, 1))
-            .add("Self transitions (<45)", n_small)
-            .add("Adjacent (45-90)", n_adjacent)
-            .add("Diagonal (90-150)", n_diagonal)
-            .add("Opposite (>150)", n_opposite)
-            .add("Balanced exploration", balanced)
+            .add("Mean angle (deg)", 90.0)
+            .add("Self transitions (<45)", 125)
+            .add("Adjacent (45-90)", 375)
+            .add("Diagonal (90-150)", 375)
+            .add("Opposite (>150)", 125)
+            .add("Balanced exploration", 1)
         )
-
 
 class SymmetryPreservation(Test):
     """
@@ -441,36 +425,26 @@ class SymmetryPreservation(Test):
         
         return (
             Model()
-            .add("Axis cycle mean dev", round(cycle_check['mean_deviation'], 4))
-            .add("X-reflect mean dev", round(reflect_check['mean_deviation'], 4))
-            .add("Inversion mean dev", round(invert_check['mean_deviation'], 4))
-            .add("Overall mean dev", round(mean_dev_all, 4))
+            .add("Axis cycle mean dev", round(cycle_check['mean_deviation'], 4), abs_tol=0.05)
+            .add("X-reflect mean dev", round(reflect_check['mean_deviation'], 4), abs_tol=0.05)
+            .add("Inversion mean dev", round(invert_check['mean_deviation'], 4), abs_tol=0.05)
+            .add("Overall mean dev", round(mean_dev_all, 4), abs_tol=0.05)
             .add("Symmetry preserved", preserved)
         )
     
     def observations(self):
-        traversal = traverse_pi_base8(1000)
-        matrix = compute_transition_matrix(traversal)
-        
-        cycle_check = check_symmetry_preservation(matrix, 'xyz_cycle')
-        reflect_check = check_symmetry_preservation(matrix, 'x_reflect')
-        invert_check = check_symmetry_preservation(matrix, 'inversion')
-        
-        mean_dev_all = (cycle_check['mean_deviation'] + 
-                        reflect_check['mean_deviation'] + 
-                        invert_check['mean_deviation']) / 3
-        
-        preserved = 1 if mean_dev_all < 0.05 else 0
-        
+        # The transition rule (vertex + uniform digit) treats every vertex alike,
+        # so each symmetry leaves the transition matrix unchanged up to sampling
+        # noise: mean deviations of about 0.03, below 0.05 for 99% of random
+        # sequences.
         return (
             Observed()
-            .add("Axis cycle mean dev", round(cycle_check['mean_deviation'], 4))
-            .add("X-reflect mean dev", round(reflect_check['mean_deviation'], 4))
-            .add("Inversion mean dev", round(invert_check['mean_deviation'], 4))
-            .add("Overall mean dev", round(mean_dev_all, 4))
-            .add("Symmetry preserved", preserved)
+            .add("Axis cycle mean dev", 0.0)
+            .add("X-reflect mean dev", 0.0)
+            .add("Inversion mean dev", 0.0)
+            .add("Overall mean dev", 0.0)
+            .add("Symmetry preserved", 1)
         )
-
 
 class TetrahedralCoherence(Test):
     """
@@ -555,49 +529,26 @@ class TetrahedralCoherence(Test):
             .add("Within-A count", within_A)
             .add("Within-B count", within_B)
             .add("Cross-chamber count", cross)
-            .add("Within-A %", round(within_A_pct, 1))
-            .add("Within-B %", round(within_B_pct, 1))
-            .add("Cross-chamber %", round(cross_pct, 1))
+            .add("Within-A %", round(within_A_pct, 1), tol=0.24)
+            .add("Within-B %", round(within_B_pct, 1), tol=0.24)
+            .add("Cross-chamber %", round(cross_pct, 1), tol=0.09)
             .add("Cross near 50%", balanced)
             .add("A/B symmetric", symmetric)
         )
     
     def observations(self):
-        traversal = traverse_pi_base8(1000)
-        
-        classifications = []
-        for i in range(len(traversal) - 1):
-            v1 = traversal[i]['vertex']
-            v2 = traversal[i + 1]['vertex']
-            classifications.append(classify_transition(v1, v2))
-        
-        counts = Counter(classifications)
-        total = len(classifications)
-        
-        within_A = counts.get('within_A', 0)
-        within_B = counts.get('within_B', 0)
-        cross = counts.get('cross_chamber', 0)
-        
-        within_A_pct = within_A / total * 100
-        within_B_pct = within_B / total * 100
-        cross_pct = cross / total * 100
-        
-        balanced = 1 if 40 < cross_pct < 60 else 0
-        symmetric = 1 if abs(within_A_pct - within_B_pct) < 10 else 0
-        
+        # Independent uniform vertices: the next vertex is in the same chamber
+        # with probability 1/2, split equally between A and B, so within-A 25%,
+        # within-B 25% and cross-chamber 50%. Tolerances cover 99% of random
+        # sequences of 1000 transitions.
         return (
             Observed()
-            .add("Total transitions", total)
-            .add("Within-A count", within_A)
-            .add("Within-B count", within_B)
-            .add("Cross-chamber count", cross)
-            .add("Within-A %", round(within_A_pct, 1))
-            .add("Within-B %", round(within_B_pct, 1))
-            .add("Cross-chamber %", round(cross_pct, 1))
-            .add("Cross near 50%", balanced)
-            .add("A/B symmetric", symmetric)
+            .add("Within-A %", 25.0)
+            .add("Within-B %", 25.0)
+            .add("Cross-chamber %", 50.0)
+            .add("Cross near 50%", 1)
+            .add("A/B symmetric", 1)
         )
-
 
 # =============================================================================
 # RUNNER

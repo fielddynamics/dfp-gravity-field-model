@@ -15,6 +15,7 @@ The tests compare:
 No causal claims are made; the tests document numerical correspondences.
 """
 
+import math
 from typing import Dict, Optional
 
 from gravity_field_model.framework import *
@@ -47,7 +48,10 @@ class SpeedOfLightFromClosure(Test):
     )
     reference = "CODATA 2018"
     tolerance = 0.10  # 10% tolerance for this relationship
-    level = Standard
+    level = Ignore
+    ignore_reason = (
+        'Circular: CLOSURE_FREQUENCY is defined in this file as C / R_E, so R_E x CLOSURE_FREQUENCY = c by construction.'
+    )
     audit_score = 93
     audit_notes = (
         "Question: 15/15 - Excellent 'can we derive' from first principles hook. "
@@ -145,23 +149,24 @@ class ClosureAbovePlanckScale(Test):
         threshold_met = 1 if ratio > 1e19 else 0
         return (
             Model()
-            .add("Closure period (s)", CLOSURE_PERIOD)
-            .add("Planck time (s)", T_PLANCK)
-            .add("Ratio (closure/Planck)", ratio)
+            .add("Closure period (s)", CLOSURE_PERIOD, tol=1e-5)
+            .add("Planck time (s)", T_PLANCK, tol=1e-5)
+            .add("Ratio (closure/Planck)", ratio, tol=1e-5)
             .add("Above 10^19 threshold", threshold_met)
         )
     
     def observations(self):
-        # Threshold check: ratio must exceed 10^19 to remain above Planck regime
-        # Expected ratio ~1.86e20 based on T_closure / T_Planck
+        # CODATA 2022: c = 299792458 m/s, r_e = 2.8179403205e-15 m,
+        # t_P = 5.391247e-44 s. Closure period r_e / c = 9.3996e-24 s, which is
+        # 1.743e20 Planck times.
+        period = 2.8179403205e-15 / 299792458
         return (
             Observed()
-            .add("Closure period (s)", CLOSURE_PERIOD)
-            .add("Planck time (s)", T_PLANCK)
-            .add("Ratio (closure/Planck)", 1.86e20)
+            .add("Closure period (s)", period)
+            .add("Planck time (s)", 5.391247e-44)
+            .add("Ratio (closure/Planck)", period / 5.391247e-44)
             .add("Above 10^19 threshold", 1)
         )
-
 
 class GravityFieldAbovePlanckLength(Test):
     """
@@ -217,23 +222,22 @@ class GravityFieldAbovePlanckLength(Test):
         threshold_met = 1 if ratio > 1e18 else 0
         return (
             Model()
-            .add("Gravity field size r_e (m)", R_E)
-            .add("Planck length (m)", L_PLANCK)
-            .add("Ratio (gravity-field/Planck)", ratio)
+            .add("Gravity field size r_e (m)", R_E, tol=1e-5)
+            .add("Planck length (m)", L_PLANCK, tol=1e-5)
+            .add("Ratio (gravity-field/Planck)", ratio, tol=1e-5)
             .add("Above 10^18 threshold", threshold_met)
         )
     
     def observations(self):
-        # Threshold check: ratio must exceed 10^18 to operate above Planck scale
-        # Expected ratio ~1.74e20 based on r_e / l_Planck
+        # CODATA 2022: r_e = 2.8179403205e-15 m, l_P = 1.616255e-35 m;
+        # ratio 1.7435e20.
         return (
             Observed()
-            .add("Gravity field size r_e (m)", R_E)
-            .add("Planck length (m)", L_PLANCK)
-            .add("Ratio (gravity-field/Planck)", 1.74e20)
+            .add("Gravity field size r_e (m)", 2.8179403205e-15)
+            .add("Planck length (m)", 1.616255e-35)
+            .add("Ratio (gravity-field/Planck)", 2.8179403205e-15 / 1.616255e-35)
             .add("Above 10^18 threshold", 1)
         )
-
 
 class ClosureVsComptonFrequency(Test):
     """
@@ -249,7 +253,7 @@ class ClosureVsComptonFrequency(Test):
         "operates at a finer timescale than quantum mechanics typically considers."
     )
     reference = "Theoretical (100-10000x range)"
-    tolerance = 0.50  # Order of magnitude check
+    tolerance = 1e-6
     level = Standard
     audit_score = 91
     audit_notes = (
@@ -291,9 +295,12 @@ class ClosureVsComptonFrequency(Test):
         return Model().add("Ratio (closure/Compton)", ratio)
     
     def observations(self):
-        # Expected to be in 100-10000 range, use geometric mean
-        return Observed().add("Ratio (closure/Compton)", 1000)
-
+        # Exact identity: with r_e = alpha * hbar / (m_e c), the closure
+        # frequency c / r_e divided by the Compton frequency m_e c^2 / h is
+        # h / (alpha * hbar) = 2 pi / alpha = 861.02 (Paper VII, Sec. VI.A).
+        # The earlier target, 1000 as a "geometric mean" of 100-10,000 at 50%
+        # tolerance, is replaced by this value.
+        return Observed().add("Ratio (closure/Compton)", 2 * math.pi / 7.2973525643e-3)
 
 class CausalityPropagation(Test):
     """
@@ -310,7 +317,10 @@ class CausalityPropagation(Test):
     )
     reference = "CODATA 2018"
     tolerance = 0.10
-    level = Standard
+    level = Ignore
+    ignore_reason = (
+        'Circular: CLOSURE_PERIOD is defined as R_E / C, so R_E / CLOSURE_PERIOD = c by construction.'
+    )
     audit_score = 92
     audit_notes = (
         "Question: 15/15 - Excellent 'cosmic speed limit' hook. "
@@ -366,7 +376,7 @@ class ClosureVsZitterbewegung(Test):
         "Closure runs 400 times faster. This test establishes the hierarchy of timescales."
     )
     reference = "Dirac equation prediction"
-    tolerance = 0.50  # Order of magnitude
+    tolerance = 1e-6
     level = Standard
     audit_score = 92
     audit_notes = (
@@ -408,8 +418,9 @@ class ClosureVsZitterbewegung(Test):
         return Model().add("Ratio (closure/zitterbewegung)", ratio)
     
     def observations(self):
-        return Observed().add("Ratio (closure/zitterbewegung)", 400)
-
+        # Zitterbewegung frequency 2 m_e c^2 / h is twice the Compton frequency,
+        # so the ratio is pi / alpha = 430.51 exactly (see ClosureVsComptonFrequency).
+        return Observed().add("Ratio (closure/zitterbewegung)", math.pi / 7.2973525643e-3)
 
 class FineStructureConstant(Test):
     """
@@ -425,7 +436,7 @@ class FineStructureConstant(Test):
         "will become significant in other parts of the model."
     )
     reference = "CODATA 2018"
-    tolerance = 0.001
+    tolerance = 1e-9
     level = Standard
     audit_score = 91
     audit_notes = (
@@ -469,12 +480,12 @@ class FineStructureConstant(Test):
         )
     
     def observations(self):
+        # CODATA 2022: alpha = 7.2973525643(11) x 10^-3, 1/alpha = 137.035999177(21).
         return (
             Observed()
-            .add("Alpha", 1/137.036)
-            .add("1/Alpha", 137.036)
+            .add("Alpha", 7.2973525643e-3)
+            .add("1/Alpha", 137.035999177)
         )
-
 
 class EnergyTimeUncertainty(Test):
     """
@@ -491,6 +502,7 @@ class EnergyTimeUncertainty(Test):
     )
     reference = None  # Model output only
     level = Standard
+    tolerance = 1e-4
     audit_score = 90
     audit_notes = (
         "Question: 15/15 - Excellent 'borrow from nothing' hook with virtual particles. "
@@ -528,7 +540,7 @@ class EnergyTimeUncertainty(Test):
     def model(self):
         delta_t = CLOSURE_PERIOD
         delta_E = H_BAR / (2 * delta_t)
-        delta_E_keV = delta_E / (1.602e-19 * 1000)
+        delta_E_keV = delta_E / (1.602176634e-19 * 1000)  # exact SI elementary charge
         return (
             Model()
             .add("Min time resolution (s)", delta_t)
@@ -537,18 +549,16 @@ class EnergyTimeUncertainty(Test):
         )
     
     def observations(self):
-        # Calculate expected values from uncertainty principle at actual closure timescale
-        # Using actual CLOSURE_PERIOD (not approximate 10^-23), energy ~35 keV
-        delta_t = CLOSURE_PERIOD
-        delta_E = H_BAR / (2 * delta_t)
-        delta_E_keV = delta_E / (1.602e-19 * 1000)
+        # With delta_t = r_e / c and r_e = alpha * hbar / (m_e c):
+        # delta_E = hbar / (2 delta_t) = m_e c^2 / (2 alpha)
+        #         = 510.99895069 keV / (2 * 7.2973525643e-3) = 35013 keV.
+        me_c2_kev = 510.99895069
+        alpha = 7.2973525643e-3
         return (
             Observed()
-            .add("Min time resolution (s)", delta_t)
-            .add("Max energy uncertainty (J)", delta_E)
-            .add("Max energy (keV)", delta_E_keV)
+            .add("Min time resolution (s)", 2.8179403205e-15 / 299792458)
+            .add("Max energy (keV)", me_c2_kev / (2 * alpha))
         )
-
 
 class ClosureVsGravityWaves(Test):
     """
@@ -606,22 +616,21 @@ class ClosureVsGravityWaves(Test):
         return (
             Model()
             .add("Typical GW frequency (Hz)", f_gw_typical)
-            .add("Closure frequency (Hz)", CLOSURE_FREQUENCY)
-            .add("Ratio", ratio)
+            .add("Closure frequency (Hz)", CLOSURE_FREQUENCY, tol=1e-5)
+            .add("Ratio", ratio, tol=1e-5)
             .add("Above 10^20 threshold", threshold_met)
         )
     
     def observations(self):
-        # Threshold: closure must be >10^20 times faster than GW frequencies
-        # LIGO typically detects at 100 Hz, giving ratio ~10^21
+        # Closure frequency c / r_e (CODATA 2022) = 1.0639e23 Hz; against a
+        # typical LIGO frequency of 100 Hz the ratio is 1.0639e21.
+        f = 299792458 / 2.8179403205e-15
         return (
             Observed()
-            .add("Typical GW frequency (Hz)", 100)
-            .add("Closure frequency (Hz)", CLOSURE_FREQUENCY)
-            .add("Ratio", 1e21)
+            .add("Closure frequency (Hz)", f)
+            .add("Ratio", f / 100)
             .add("Above 10^20 threshold", 1)
         )
-
 
 class TimeArrowFromClosure(Test):
     """
@@ -638,6 +647,7 @@ class TimeArrowFromClosure(Test):
     )
     reference = None  # Model output only
     level = Standard
+    tolerance = 1e-5
     audit_score = 89
     audit_notes = (
         "Question: 15/15 - Excellent 'atoms of time' hook with smooth vs discrete. "
@@ -675,7 +685,7 @@ class TimeArrowFromClosure(Test):
     
     def model(self):
         cycles_per_second = CLOSURE_FREQUENCY
-        cycles_per_year = cycles_per_second * 3.15e7
+        cycles_per_year = cycles_per_second * 365.25 * 86400
         return (
             Model()
             .add("Cycles per second", cycles_per_second)
@@ -683,14 +693,14 @@ class TimeArrowFromClosure(Test):
         )
     
     def observations(self):
-        # Expected cycle counts based on closure frequency ~10^23 Hz
-        # Cycles per year = 10^23 * 3.15e7 = 3.15e30
+        # Closure frequency c / r_e (CODATA 2022) and the number of closures in
+        # a Julian year of 365.25 days.
+        f = 299792458 / 2.8179403205e-15
         return (
             Observed()
-            .add("Cycles per second", CLOSURE_FREQUENCY)
-            .add("Cycles per year", 3.15e30)
+            .add("Cycles per second", f)
+            .add("Cycles per year", f * 365.25 * 86400)
         )
-
 
 # =============================================================================
 # RUNNER

@@ -45,6 +45,7 @@ KEY RULES
 
 from typing import Dict, Optional, List
 
+from gravity_field_model.engine_core.field_closure import geometry_derivation as geo
 from gravity_field_model.framework import *
 from gravity_field_model.common.pi_data import get_pi_base8
 from gravity_field_model.common.geometry_constants import (
@@ -220,7 +221,7 @@ class TimeFacesIdentified(Test):
         "This test verifies exactly 2 TIME faces are identified: FACE_A7 and FACE_B0."
     )
     reference = "Face classification"
-    tolerance = 0.0
+    tolerance = 0
     level = Standard
     audit_score = 85
     audit_notes = (
@@ -259,21 +260,26 @@ class TimeFacesIdentified(Test):
     )
     
     def model(self):
+        # TIME faces derived from the coordinates: the faces perpendicular to
+        # the body diagonal through vertices 0 and 7, i.e. opposite those vertices.
+        derived = geo.time_faces()
+        derived_names = {('FACE_A' if v in TET_A else 'FACE_B') + str(v) for v in derived}
         return (
             Model()
-            .add("FACE_A7 is TIME", 1 if 'FACE_A7' in TIME_FACES else 0)
-            .add("FACE_B0 is TIME", 1 if 'FACE_B0' in TIME_FACES else 0)
-            .add("TIME face count", len(TIME_FACES))
+            .add("FACE_A7 is TIME (from coordinates)", 1 if 'FACE_A7' in derived_names else 0)
+            .add("FACE_B0 is TIME (from coordinates)", 1 if 'FACE_B0' in derived_names else 0)
+            .add("TIME face count (from coordinates)", len(derived))
+            .add("Table matches geometry", 1 if set(TIME_FACES) == derived_names else 0)
         )
-    
+
     def observations(self):
         return (
             Observed()
-            .add("FACE_A7 is TIME", 1)
-            .add("FACE_B0 is TIME", 1)
-            .add("TIME face count", 2)
+            .add("FACE_A7 is TIME (from coordinates)", 1)
+            .add("FACE_B0 is TIME (from coordinates)", 1)
+            .add("TIME face count (from coordinates)", 2)
+            .add("Table matches geometry", 1)
         )
-
 
 class ParallelTrackingWorks(Test):
     """
@@ -552,7 +558,7 @@ class SpatialFaceCount(Test):
         "This test verifies the total is 6 SPATIAL faces."
     )
     reference = "Face classification"
-    tolerance = 0.0
+    tolerance = 0
     level = Standard
     audit_score = 86
     audit_notes = (
@@ -591,11 +597,25 @@ class SpatialFaceCount(Test):
     )
     
     def model(self):
-        return Model().add("SPATIAL faces", len(SPATIAL_FACES))
-    
-    def observations(self):
-        return Observed().add("SPATIAL faces", 6)
+        # Count from the coordinates: of the 8 faces of the two inscribed
+        # tetrahedra, those not perpendicular to the 0-7 body diagonal.
+        derived = len(geo.tetrahedron_faces()) - len(geo.time_faces())
+        table = {frozenset(v) for k, v in FACES.items() if k in SPATIAL_FACES}
+        derived_faces = {f for v, f in geo.tetrahedron_faces().items() if v not in geo.time_faces()}
+        return (
+            Model()
+            .add("SPATIAL faces (from coordinates)", derived)
+            .add("SPATIAL faces (table)", len(SPATIAL_FACES))
+            .add("Table matches geometry", 1 if table == derived_faces else 0)
+        )
 
+    def observations(self):
+        return (
+            Observed()
+            .add("SPATIAL faces (from coordinates)", 6)
+            .add("SPATIAL faces (table)", 6)
+            .add("Table matches geometry", 1)
+        )
 
 class EachFaceHasThreeVertices(Test):
     """

@@ -512,7 +512,7 @@ class SettlementFrequency(Test):
         "of about 10^20 Hz. This test computes f = c / lambda_Compton."
     )
     reference = "Compton wavelength"
-    tolerance = 0.5  # Order of magnitude
+    tolerance = 1e-8
     level = Standard
     audit_score = 82
     audit_notes = (
@@ -554,8 +554,15 @@ class SettlementFrequency(Test):
         return Model().add("Settlement frequency (Hz)", f)
     
     def observations(self):
-        return Observed().add("Settlement frequency (Hz)", 1.235e20)
-
+        # The model computes c / lambda_C. Independently, the electron's Compton
+        # frequency is m_e c^2 / h; with CODATA 2022 values
+        # (m_e c^2 = 0.51099895069 MeV, h = 4.135667696e-15 eV s) that is
+        # 1.2355899e20 Hz. The two routes agree only if the stored constants
+        # are mutually consistent.
+        # NOTE: the settlement (closure) frequency is defined differently
+        # elsewhere: c / (K r_e) in common/__init__.py and c / r_e in
+        # test_closure_cycle.py and test_bimetric_coupling.py.
+        return Observed().add("Settlement frequency (Hz)", 0.51099895069e6 / 4.135667696e-15)
 
 class OrbitsForElectron(Test):
     """
@@ -569,7 +576,7 @@ class OrbitsForElectron(Test):
         "a tantalizing numerical correspondence."
     )
     reference = "Fine structure constant"
-    tolerance = 0.001
+    tolerance = 1e-9
     level = Standard
     audit_score = 87
     audit_notes = (
@@ -616,12 +623,12 @@ class OrbitsForElectron(Test):
         )
     
     def observations(self):
+        # CODATA 2022: 1/alpha = 137.035999177; its integer part is 137.
         return (
             Observed()
-            .add("1/alpha", 137.036)
+            .add("1/alpha", 137.035999177)
             .add("Orbits per electron", 137)
         )
-
 
 # =============================================================================
 # RUNNER

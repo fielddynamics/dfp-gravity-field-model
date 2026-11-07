@@ -338,24 +338,26 @@ class SpiralMonotonicity(Test):
         return (
             Model()
             .add("Is monotonic (1=yes)", is_monotonic)
-            .add("Violations found", violation_count)
-            .add("Valid plateaus (digit=0)", plateau_count)
+            .add("Violations found", violation_count, abs_tol=0)
+            .add("Valid plateaus (digit=0)", plateau_count, tol=0.28)
             .add("Total steps", analysis['total_steps'])
-            .add("Final cumsum", analysis['final_cumsum'])
+            .add("Final cumsum", analysis['final_cumsum'], tol=0.07)
         )
     
     def observations(self):
-        # Expected: perfect monotonicity with only valid plateaus
-        # Plateaus occur when digit=0 (~13.2% of pi base-8 digits)
+        # The cumulative sum never decreases (digits are non-negative): no
+        # violations. Plateaus occur on digit 0: 1000/8 = 125 expected
+        # (standard deviation 10.5). Final cumsum 3 + 1000 x 3.5 = 3503
+        # (standard deviation 72). Pi's values, 132 and 3359, lie within
+        # 3.3 standard deviations. (Before, pi's own values were the reference.)
         return (
             Observed()
             .add("Is monotonic (1=yes)", 1)
             .add("Violations found", 0)
-            .add("Valid plateaus (digit=0)", 132)  # Actual count from pi
-            .add("Total steps", 1001)  # 1 integer + 1000 fractional
-            .add("Final cumsum", 3359)  # Actual from pi base-8
+            .add("Valid plateaus (digit=0)", 125)
+            .add("Total steps", 1001)
+            .add("Final cumsum", 3503)
         )
-
 
 # =============================================================================
 # TEST 2: ORIGIN-CENTRIC CLOSURE (V0 as Gate)
@@ -442,24 +444,24 @@ class OriginCentricClosure(Test):
         return (
             Model()
             .add("Only V0 at closure (1=yes)", only_v0)
-            .add("Total orbit completions", total_closures)
-            .add("V0 closure count", v0_count)
-            .add("Non-V0 closures", non_v0_count)
+            .add("Total orbit completions", total_closures, tol=0.22)
+            .add("V0 closure count", v0_count, tol=0.22)
+            .add("Non-V0 closures", non_v0_count, abs_tol=0)
         )
     
     def observations(self):
-        # Expected: all closures at V0, none elsewhere
-        # Note: orbit completions only occur when cumsum is EXACTLY a multiple of 8
-        # Due to pi's digit sequence, some multiples of 8 are skipped
-        # Actual count is much lower than naive estimate
+        # An orbit closes only when the cumulative sum is a multiple of 8, i.e.
+        # at V0, by construction. How often that happens is the test: each
+        # multiple of 8 is landed on with probability 1/4 (the mean non-zero
+        # digit is 4), so about 437 x 1/4 = 110 to 125 closures in 1001 digits
+        # (mean of 80 random sequences: 126). Pi gives 124.
         return (
             Observed()
             .add("Only V0 at closure (1=yes)", 1)
-            .add("Total orbit completions", 124)  # Actual from pi traversal
-            .add("V0 closure count", 124)
+            .add("Total orbit completions", 126)
+            .add("V0 closure count", 126)
             .add("Non-V0 closures", 0)
         )
-
 
 # =============================================================================
 # TEST 3: ANGULAR PHASE COVERAGE
@@ -822,24 +824,25 @@ class SuperpositionAtOrigin(Test):
         
         return (
             Model()
-            .add("Total origin crossings", analysis['total_crossings'])
-            .add("Landings (collapse to V0)", analysis['total_landings'])
-            .add("Near misses (unresolved)", analysis['near_misses'])
-            .add("Landing rate", round(analysis['landing_rate'], 3))
+            .add("Total origin crossings", analysis['total_crossings'], tol=0.07)
+            .add("Landings (collapse to V0)", analysis['total_landings'], tol=0.2)
+            .add("Near misses (unresolved)", analysis['near_misses'], tol=0.11)
+            .add("Landing rate", round(analysis['landing_rate'], 3), tol=0.2)
         )
     
     def observations(self):
-        # Expected: ~25% landing rate based on digit distribution
-        # Crossings = ~420 (each orbit boundary crossed)
-        # Landings = ~106 (when cumsum % 8 = 0 exactly)
+        # Expected for independent uniform digits over 1001 digits: the cumsum
+        # passes about 3503 / 8 = 437 multiples of 8; it lands exactly on one
+        # with probability 1/4 (mean non-zero digit 4). Means over 80 random
+        # sequences: 437 crossings, 110 landings, 328 near misses, landing rate
+        # 0.25. (Before, pi's own counts were the reference.)
         return (
             Observed()
-            .add("Total origin crossings", 419)
-            .add("Landings (collapse to V0)", 106)
-            .add("Near misses (unresolved)", 313)
-            .add("Landing rate", 0.253)
+            .add("Total origin crossings", 437)
+            .add("Landings (collapse to V0)", 110)
+            .add("Near misses (unresolved)", 328)
+            .add("Landing rate", 0.25)
         )
-
 
 # =============================================================================
 # TEST REGISTRATION

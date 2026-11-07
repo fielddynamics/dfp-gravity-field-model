@@ -298,28 +298,22 @@ class ShannonEntropyMaximal(Test):
         
         return (
             Model()
-            .add("Shannon entropy (bits)", round(entropy, 4))
+            .add("Shannon entropy (bits)", round(entropy, 4), tol=0.005)
             .add("Maximum possible (bits)", max_entropy)
-            .add("Entropy efficiency", round(efficiency, 4))
+            .add("Entropy efficiency", round(efficiency, 4), tol=0.005)
             .add("Near maximal (>97%)", 1 if efficiency > 0.97 else 0)
         )
     
     def observations(self):
-        traversal = traverse_pi_base8(1000)
-        vertices = [step['vertex'] for step in traversal]
-        
-        entropy = compute_shannon_entropy(vertices)
-        max_entropy = math.log2(8)
-        efficiency = entropy / max_entropy
-        
+        # Independent uniform vertices: H = log2(8) = 3 bits. The plug-in
+        # estimator over N = 1001 samples is biased low by about
+        # (8 - 1) / (2 N ln 2) = 0.005 bits, so the expected value is 2.995.
         return (
             Observed()
-            .add("Shannon entropy (bits)", round(entropy, 4))
-            .add("Maximum possible (bits)", max_entropy)
-            .add("Entropy efficiency", round(efficiency, 4))
-            .add("Near maximal (>97%)", 1 if efficiency > 0.97 else 0)
+            .add("Shannon entropy (bits)", 2.995)
+            .add("Entropy efficiency", round(2.995 / 3, 4))
+            .add("Near maximal (>97%)", 1)
         )
-
 
 class BlockEntropyScaling(Test):
     """
@@ -387,35 +381,26 @@ class BlockEntropyScaling(Test):
         return (
             Model()
             .add("H(1) single entropy", round(h1, 4))
-            .add("H(2) pair entropy", round(h2, 4))
-            .add("H(3) triple entropy", round(h3, 4))
-            .add("Ratio H(2)/H(1)", round(ratio_2_1, 3))
-            .add("Ratio H(3)/H(1)", round(ratio_3_1, 3))
+            .add("H(2) pair entropy", round(h2, 4), tol=0.01)
+            .add("H(3) triple entropy", round(h3, 4), tol=0.015)
+            .add("Ratio H(2)/H(1)", round(ratio_2_1, 3), tol=0.01)
+            .add("Ratio H(3)/H(1)", round(ratio_3_1, 3), tol=0.015)
             .add("Near linear scaling", linear_scaling)
         )
     
     def observations(self):
-        traversal = traverse_pi_base8(1000)
-        vertices = [step['vertex'] for step in traversal]
-        
-        h1 = compute_shannon_entropy(vertices)
-        h2 = compute_block_entropy(vertices, 2)
-        h3 = compute_block_entropy(vertices, 3)
-        
-        ratio_2_1 = h2 / h1 if h1 > 0 else 0
-        ratio_3_1 = h3 / h1 if h1 > 0 else 0
-        linear_scaling = 1 if ratio_2_1 > 1.9 and ratio_3_1 > 2.8 else 0
-        
+        # Independent uniform vertices: H(n) = 3n bits in the limit. With 1001
+        # samples the plug-in estimates are biased low, most for triples (512
+        # cells). Expected values at this sample size (mean over 200 random
+        # sequences): H(2) = 5.954, H(3) = 8.580, ratios 1.988 and 2.865.
         return (
             Observed()
-            .add("H(1) single entropy", round(h1, 4))
-            .add("H(2) pair entropy", round(h2, 4))
-            .add("H(3) triple entropy", round(h3, 4))
-            .add("Ratio H(2)/H(1)", round(ratio_2_1, 3))
-            .add("Ratio H(3)/H(1)", round(ratio_3_1, 3))
-            .add("Near linear scaling", linear_scaling)
+            .add("H(2) pair entropy", 5.954)
+            .add("H(3) triple entropy", 8.580)
+            .add("Ratio H(2)/H(1)", 1.988)
+            .add("Ratio H(3)/H(1)", 2.865)
+            .add("Near linear scaling", 1)
         )
-
 
 # =============================================================================
 # TESTS: AUTOCORRELATION
@@ -490,30 +475,24 @@ class AutocorrelationDecay(Test):
         
         return (
             Model()
-            .add("R(1) lag-1 autocorr", round(r1, 4))
-            .add("R(5) lag-5 autocorr", round(r5, 4))
-            .add("R(10) lag-10 autocorr", round(r10, 4))
+            .add("R(1) lag-1 autocorr", round(r1, 4), abs_tol=0.11)
+            .add("R(5) lag-5 autocorr", round(r5, 4), abs_tol=0.11)
+            .add("R(10) lag-10 autocorr", round(r10, 4), abs_tol=0.11)
             .add("Max |R(k)| for k>0", round(max_nonzero_lag, 4))
             .add("Low memory (<0.15)", low_memory)
         )
     
     def observations(self):
-        traversal = traverse_pi_base8(1000)
-        vertices = [step['vertex'] for step in traversal]
-        
-        autocorr = compute_autocorrelation(vertices, max_lag=20)
-        max_nonzero_lag = max(abs(r) for r in autocorr[1:])
-        low_memory = 1 if max_nonzero_lag < 0.15 else 0
-        
+        # For independent vertices R(k) = 0 for k > 0, with sampling error of
+        # about 1/sqrt(N) = 0.032. Each lag is checked against 0 with an absolute
+        # bound of 0.11 (about 3.5 standard errors).
         return (
             Observed()
-            .add("R(1) lag-1 autocorr", round(autocorr[1], 4))
-            .add("R(5) lag-5 autocorr", round(autocorr[5], 4))
-            .add("R(10) lag-10 autocorr", round(autocorr[10], 4))
-            .add("Max |R(k)| for k>0", round(max_nonzero_lag, 4))
-            .add("Low memory (<0.15)", low_memory)
+            .add("R(1) lag-1 autocorr", 0.0)
+            .add("R(5) lag-5 autocorr", 0.0)
+            .add("R(10) lag-10 autocorr", 0.0)
+            .add("Low memory (<0.15)", 1)
         )
-
 
 class MutualInformationLow(Test):
     """
@@ -581,32 +560,24 @@ class MutualInformationLow(Test):
         
         return (
             Model()
-            .add("I(t, t+1) lag-1 MI", round(mi_1, 4))
-            .add("I(t, t+2) lag-2 MI", round(mi_2, 4))
-            .add("I(t, t+5) lag-5 MI", round(mi_5, 4))
+            .add("I(t, t+1) lag-1 MI", round(mi_1, 4), abs_tol=0.035)
+            .add("I(t, t+2) lag-2 MI", round(mi_2, 4), abs_tol=0.035)
+            .add("I(t, t+5) lag-5 MI", round(mi_5, 4), abs_tol=0.035)
             .add("Fraction of max MI", round(mi_fraction, 4))
             .add("Low predictability (<0.3)", low_predictability)
         )
     
     def observations(self):
-        traversal = traverse_pi_base8(1000)
-        vertices = [step['vertex'] for step in traversal]
-        
-        mi_1 = compute_mutual_information(vertices, lag=1)
-        mi_2 = compute_mutual_information(vertices, lag=2)
-        mi_5 = compute_mutual_information(vertices, lag=5)
-        mi_fraction = mi_1 / 3.0
-        low_predictability = 1 if mi_1 < 0.3 else 0
-        
+        # For independent vertices the true mutual information is 0. The plug-in
+        # estimate over 1001 samples is biased up by about (8 - 1)^2 / (2 N ln 2)
+        # = 0.035 bits; 99% of random sequences give less than 0.066 bits.
         return (
             Observed()
-            .add("I(t, t+1) lag-1 MI", round(mi_1, 4))
-            .add("I(t, t+2) lag-2 MI", round(mi_2, 4))
-            .add("I(t, t+5) lag-5 MI", round(mi_5, 4))
-            .add("Fraction of max MI", round(mi_fraction, 4))
-            .add("Low predictability (<0.3)", low_predictability)
+            .add("I(t, t+1) lag-1 MI", 0.035)
+            .add("I(t, t+2) lag-2 MI", 0.035)
+            .add("I(t, t+5) lag-5 MI", 0.035)
+            .add("Low predictability (<0.3)", 1)
         )
-
 
 # =============================================================================
 # RUNNER

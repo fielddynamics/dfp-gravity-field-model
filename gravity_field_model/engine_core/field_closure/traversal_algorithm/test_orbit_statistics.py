@@ -219,23 +219,17 @@ class OrbitLengthDistribution(Test):
         is_short = 1 if stats['short_ratio'] > 0.85 else 0
         return (
             Model()
-            .add("Short orbit fraction", stats['short_ratio'])
-            .add("Above 85% threshold", is_short)
+            .add("Short orbit fraction", stats['short_ratio'], tol=0.045)
+            .add("Above 85% threshold (info)", is_short)
         )
     
     def observations(self):
-        # Calculate actual values from data (empirical observation)
-        # Note: Pi's actual digit distribution yields ~84% short orbits,
-        # slightly below the theoretical 85% threshold for uniform digits.
-        # This is a property of pi's specific sequence, not a failure.
-        stats = analyze_orbit_stats(1000)
-        is_short = 1 if stats['short_ratio'] > 0.85 else 0
-        return (
-            Observed()
-            .add("Short orbit fraction", stats['short_ratio'])
-            .add("Above 85% threshold", is_short)
-        )
-
+        # Expected fraction of orbits completing within 3 digits, for independent
+        # uniform digits over 1001 digits: 0.869 (mean of 80 random sequences;
+        # 99% between 0.833 and 0.902). Pi's value, 0.845, is within that range.
+        # The original 85% threshold is reported for information: pi falls just
+        # below it, which the earlier self-comparison hid.
+        return Observed().add("Short orbit fraction", 0.869)
 
 class MinimumOrbitLength(Test):
     """
@@ -349,21 +343,18 @@ class MaximumOrbitBounded(Test):
         bounded = 1 if stats['max_length'] < 15 else 0
         return (
             Model()
-            .add("Maximum orbit length", stats['max_length'])
+            .add("Maximum orbit length", stats['max_length'], abs_tol=3)
             .add("Below 15 threshold", bounded)
         )
     
     def observations(self):
-        # Calculate actual max from data (empirical observation)
-        # Pi's first 1000 base-8 digits show max orbit length around 8 digits
-        stats = analyze_orbit_stats(1000)
-        bounded = 1 if stats['max_length'] < 15 else 0
+        # The longest of about 437 orbits for independent uniform digits is
+        # typically 7 digits (99% between 6 and 10).
         return (
             Observed()
-            .add("Maximum orbit length", stats['max_length'])
-            .add("Below 15 threshold", bounded)
+            .add("Maximum orbit length", 7)
+            .add("Below 15 threshold", 1)
         )
-
 
 class TotalOrbitsMatchCumsum(Test):
     """
@@ -413,23 +404,19 @@ class TotalOrbitsMatchCumsum(Test):
     )
     
     def model(self):
+        # Two independent computations of the orbit count must agree: the count
+        # of orbit completions made while traversing, and final cumsum // 8.
         stats = analyze_orbit_stats(1000)
         expected = stats['final_cumsum'] // 8
         return (
             Model()
             .add("Orbit count", stats['total_orbits'])
             .add("Expected (cumsum // 8)", expected)
-        )
-    
-    def observations(self):
-        stats = analyze_orbit_stats(1000)
-        expected = stats['final_cumsum'] // 8
-        return (
-            Observed()
-            .add("Orbit count", expected)
-            .add("Expected (cumsum // 8)", expected)
+            .add("Difference", stats['total_orbits'] - expected, abs_tol=0)
         )
 
+    def observations(self):
+        return Observed().add("Difference", 0)
 
 # =============================================================================
 # TESTS: TETRAHEDRA BALANCE
@@ -552,18 +539,19 @@ class TetrahedraRatioUnity(Test):
         ratio_bounded = 1.0 if analysis['ab_ratio'] < 1.3 else 0.0
         return (
             Model()
-            .add("Tet_A / Tet_B ratio", analysis['ab_ratio'])
+            .add("Tet_A / Tet_B ratio", analysis['ab_ratio'], tol=0.17)
             .add("Ratio bounded (< 1.3)", ratio_bounded)
         )
     
     def observations(self):
-        analysis = analyze_tetrahedra_balance(1000)
+        # Equal chambers: ratio 1. Its standard deviation over 1001 steps is about
+        # 0.05, and the tolerance is 3.3 standard deviations. Pi's first 1000
+        # digits give 1.14, a fluctuation that disappears over 10,000 digits.
         return (
             Observed()
-            .add("Tet_A / Tet_B ratio", analysis['ab_ratio'])
-            .add("Ratio bounded (< 1.3)", 1.0)
+            .add("Tet_A / Tet_B ratio", 1.0)
+            .add("Ratio bounded (< 1.3)", 1)
         )
-
 
 class VertexDistributionUniform(Test):
     """
@@ -619,21 +607,18 @@ class VertexDistributionUniform(Test):
         uniform = 1 if analysis['max_vertex_deviation'] < 0.05 else 0
         return (
             Model()
-            .add("Max deviation from 12.5%", analysis['max_vertex_deviation'])
+            .add("Max deviation from 12.5%", analysis['max_vertex_deviation'], abs_tol=0.035)
             .add("Below 5% threshold", uniform)
         )
     
     def observations(self):
-        # Calculate actual max deviation from data (empirical observation)
-        # Pi's specific digit sequence determines vertex distribution
-        analysis = analyze_tetrahedra_balance(1000)
-        uniform = 1 if analysis['max_vertex_deviation'] < 0.05 else 0
+        # The largest deviation of any vertex frequency from 1/8 over 1001 steps
+        # is below 0.035 for 99% of independent uniform sequences.
         return (
             Observed()
-            .add("Max deviation from 12.5%", analysis['max_vertex_deviation'])
-            .add("Below 5% threshold", uniform)
+            .add("Max deviation from 12.5%", 0.0)
+            .add("Below 5% threshold", 1)
         )
-
 
 class ParityDeterminesTetrahedron(Test):
     """

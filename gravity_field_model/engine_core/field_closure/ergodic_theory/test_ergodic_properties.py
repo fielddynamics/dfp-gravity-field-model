@@ -288,7 +288,7 @@ class TimeEqualsSpaceAverage(Test):
             Model()
             .add("Sample size", len(vertices))
             .add("Expected frequency", 0.125)
-            .add("MAD from expected", round(deviation['mad'], 4))
+            .add("MAD from expected", round(deviation['mad'], 4), tol=0.7)
             .add("RMSD from expected", round(deviation['rmsd'], 4))
             .add("Max deviation", round(deviation['max_dev'], 4))
             .add("Chi-squared", round(chi_test['chi_squared'], 2))
@@ -297,30 +297,16 @@ class TimeEqualsSpaceAverage(Test):
         )
     
     def observations(self):
-        traversal = traverse_pi_base8(1000)
-        vertices = [step['vertex'] for step in traversal]
-        
-        time_avg = compute_time_averages(vertices)
-        space_avg = compute_space_average()
-        deviation = compute_ergodic_deviation(time_avg, space_avg)
-        
-        counts = Counter(vertices)
-        chi_test = chi_squared_test(counts, 1/8, len(vertices))
-        
-        ergodic = 1 if deviation['mad'] < 0.02 and chi_test['passes_95'] else 0
-        
+        # Space average: 1/8 per vertex. Expected mean absolute deviation of the
+        # time average over N = 1001 steps: 0.2639 / sqrt(N) = 0.0083 (see
+        # ErgodicConvergence). The chi-squared critical value for 7 degrees of
+        # freedom at 95% is 14.067.
         return (
             Observed()
-            .add("Sample size", len(vertices))
-            .add("Expected frequency", 0.125)
-            .add("MAD from expected", round(deviation['mad'], 4))
-            .add("RMSD from expected", round(deviation['rmsd'], 4))
-            .add("Max deviation", round(deviation['max_dev'], 4))
-            .add("Chi-squared", round(chi_test['chi_squared'], 2))
-            .add("Chi-sq critical (95%)", chi_test['critical_95'])
-            .add("Ergodicity confirmed", ergodic)
+            .add("MAD from expected", round(0.2639 / math.sqrt(1001), 4))
+            .add("Chi-sq critical (95%)", 14.067)
+            .add("Ergodicity confirmed", 1)
         )
-
 
 class ErgodicConvergence(Test):
     """
@@ -388,6 +374,7 @@ class ErgodicConvergence(Test):
         scaling_cv = (max(scaling_products) - min(scaling_products)) / (sum(scaling_products) / len(scaling_products))
         
         good_scaling = 1 if scaling_cv < 0.5 else 0  # Products should be similar
+        mean_product = sum(scaling_products) / len(scaling_products)
         
         return (
             Model()
@@ -396,37 +383,20 @@ class ErgodicConvergence(Test):
             .add("MAD at N=1000", round(results[1000], 4))
             .add("MAD at N=5000", round(results[5000], 4))
             .add("Scaling factor CV", round(scaling_cv, 3))
-            .add("Good 1/sqrt(N) scaling", good_scaling)
+            .add("Spread of MAD*sqrt(N) (info)", good_scaling)
+            .add("Mean MAD*sqrt(N)", round(mean_product, 4), tol=0.45)
         )
     
     def observations(self):
-        traversal = traverse_pi_base8(5000)
-        vertices = [step['vertex'] for step in traversal]
-        
-        checkpoints = [100, 500, 1000, 2000, 5000]
-        space_avg = compute_space_average()
-        
-        results = {}
-        for n in checkpoints:
-            time_avg = compute_time_averages(vertices[:n])
-            deviation = compute_ergodic_deviation(time_avg, space_avg)
-            results[n] = deviation['mad']
-        
-        scaling_products = [results[n] * math.sqrt(n) for n in checkpoints]
-        scaling_cv = (max(scaling_products) - min(scaling_products)) / (sum(scaling_products) / len(scaling_products))
-        
-        good_scaling = 1 if scaling_cv < 0.5 else 0
-        
+        # Independent uniform vertices: each frequency is binomial with
+        # sd = sqrt(p(1-p)/N), p = 1/8, so the expected mean absolute deviation
+        # from 1/8 is sqrt(2/pi) * sqrt(7/64) / sqrt(N) = 0.2639 / sqrt(N), and
+        # MAD * sqrt(N) should stay near 0.2639 at every N. Averaged over the five
+        # checkpoints, 98% of random sequences fall within 45% of that value.
         return (
             Observed()
-            .add("MAD at N=100", round(results[100], 4))
-            .add("MAD at N=500", round(results[500], 4))
-            .add("MAD at N=1000", round(results[1000], 4))
-            .add("MAD at N=5000", round(results[5000], 4))
-            .add("Scaling factor CV", round(scaling_cv, 3))
-            .add("Good 1/sqrt(N) scaling", good_scaling)
+            .add("Mean MAD*sqrt(N)", round(math.sqrt(2 / math.pi) * math.sqrt(7 / 64), 4))
         )
-
 
 # =============================================================================
 # RUNNER

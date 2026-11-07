@@ -258,14 +258,16 @@ def compute_traversal_statistics(traversal: List[Dict]) -> Dict[str, float]:
     }
 
 
-def chi_squared_uniformity(distribution: Dict[int, float]) -> float:
+def chi_squared_uniformity(distribution: Dict[int, float], n: int) -> float:
     """
-    Compute chi-squared statistic for uniformity test.
-    
-    Under uniform distribution, expected = 1/8 for each digit.
+    Pearson chi-squared statistic for uniformity of n digits.
+
+    chi^2 = n * sum((f_i - 1/8)^2 / (1/8)), with f_i the observed frequencies.
+    (An earlier version omitted the factor n, which made every statistic
+    about 500 times too small, so the test could never fail.)
     """
     expected = 1 / 8
-    chi_sq = sum(
+    chi_sq = n * sum(
         (freq - expected) ** 2 / expected
         for freq in distribution.values()
     )
@@ -333,61 +335,34 @@ class DigitDistributionComparison(Test):
     
     def model(self):
         n_digits = 500  # Sufficient for statistical comparison
-        
-        # Get pi digits from our standard traversal
         pi_traversal = traverse_pi_base8(n_digits)
         pi_digits = [step['digit'] for step in pi_traversal]
-        
-        # Compute other constants
         e_digits = compute_e_base8_digits(n_digits)
         sqrt2_digits = compute_sqrt2_base8_digits(n_digits)
-        
-        # Compute distributions
-        pi_dist = compute_digit_distribution(pi_digits)
-        e_dist = compute_digit_distribution(e_digits)
-        sqrt2_dist = compute_digit_distribution(sqrt2_digits)
-        
-        # Chi-squared tests
-        pi_chi = chi_squared_uniformity(pi_dist)
-        e_chi = chi_squared_uniformity(e_dist)
-        sqrt2_chi = chi_squared_uniformity(sqrt2_dist)
-        
+        pi_chi = chi_squared_uniformity(compute_digit_distribution(pi_digits), len(pi_digits))
+        e_chi = chi_squared_uniformity(compute_digit_distribution(e_digits), len(e_digits))
+        sqrt2_chi = chi_squared_uniformity(compute_digit_distribution(sqrt2_digits), len(sqrt2_digits))
         # Critical value for 7 df at 95% confidence
         critical = 14.07
-        all_pass = 1 if pi_chi < critical and e_chi < critical and sqrt2_chi < critical else 0
-        
         return (
             Model()
             .add("Pi chi-squared", round(pi_chi, 2))
             .add("e chi-squared", round(e_chi, 2))
             .add("sqrt(2) chi-squared", round(sqrt2_chi, 2))
-            .add("Critical value (95%)", critical)
-            .add("All pass uniformity", all_pass)
-        )
-    
-    def observations(self):
-        n_digits = 500
-        pi_traversal = traverse_pi_base8(n_digits)
-        pi_digits = [step['digit'] for step in pi_traversal]
-        e_digits = compute_e_base8_digits(n_digits)
-        sqrt2_digits = compute_sqrt2_base8_digits(n_digits)
-        
-        pi_chi = chi_squared_uniformity(compute_digit_distribution(pi_digits))
-        e_chi = chi_squared_uniformity(compute_digit_distribution(e_digits))
-        sqrt2_chi = chi_squared_uniformity(compute_digit_distribution(sqrt2_digits))
-        
-        critical = 14.07
-        all_pass = 1 if pi_chi < critical and e_chi < critical and sqrt2_chi < critical else 0
-        
-        return (
-            Observed()
-            .add("Pi chi-squared", round(pi_chi, 2))
-            .add("e chi-squared", round(e_chi, 2))
-            .add("sqrt(2) chi-squared", round(sqrt2_chi, 2))
-            .add("Critical value (95%)", critical)
-            .add("All pass uniformity", all_pass)
+            .add("Pi uniform (chi^2 < 14.07)", 1 if pi_chi < critical else 0)
+            .add("e uniform (chi^2 < 14.07)", 1 if e_chi < critical else 0)
+            .add("sqrt(2) uniform (chi^2 < 14.07)", 1 if sqrt2_chi < critical else 0)
         )
 
+    def observations(self):
+        # Null hypothesis for each constant: digits uniform on 0-7. Each passes
+        # if its chi-squared statistic (7 degrees of freedom) is below 14.07.
+        return (
+            Observed()
+            .add("Pi uniform (chi^2 < 14.07)", 1)
+            .add("e uniform (chi^2 < 14.07)", 1)
+            .add("sqrt(2) uniform (chi^2 < 14.07)", 1)
+        )
 
 class TraversalPropertyComparison(Test):
     """
@@ -489,18 +464,18 @@ class TraversalPropertyComparison(Test):
         ) else 0
         
         all_uniform = 1 if (
-            pi_stats['vertex_cv'] < 0.15 and
-            e_stats['vertex_cv'] < 0.15 and
-            sqrt2_stats['vertex_cv'] < 0.15
+            pi_stats['vertex_cv'] < 0.2 and
+            e_stats['vertex_cv'] < 0.2 and
+            sqrt2_stats['vertex_cv'] < 0.2
         ) else 0
         
         all_good = 1 if all_high_entropy and all_balanced and all_uniform else 0
         
         return (
             Model()
-            .add("Pi entropy", round(pi_stats['entropy'], 3))
-            .add("e entropy", round(e_stats['entropy'], 3))
-            .add("sqrt(2) entropy", round(sqrt2_stats['entropy'], 3))
+            .add("Pi entropy", round(pi_stats['entropy'], 3), tol=0.01)
+            .add("e entropy", round(e_stats['entropy'], 3), tol=0.01)
+            .add("sqrt(2) entropy", round(sqrt2_stats['entropy'], 3), tol=0.01)
             .add("Pi chamber A frac", round(pi_stats['chamber_a_frac'], 3))
             .add("e chamber A frac", round(e_stats['chamber_a_frac'], 3))
             .add("sqrt(2) chamber A frac", round(sqrt2_stats['chamber_a_frac'], 3))
@@ -508,50 +483,20 @@ class TraversalPropertyComparison(Test):
         )
     
     def observations(self):
-        n_digits = 500
-        
-        pi_traversal = traverse_pi_base8(n_digits)
-        pi_stats = compute_traversal_statistics(pi_traversal)
-        
-        e_digits = compute_e_base8_digits(n_digits)
-        e_traversal = traverse_constant_base8(e_digits)
-        e_stats = compute_traversal_statistics(e_traversal)
-        
-        sqrt2_digits = compute_sqrt2_base8_digits(n_digits)
-        sqrt2_traversal = traverse_constant_base8(sqrt2_digits)
-        sqrt2_stats = compute_traversal_statistics(sqrt2_traversal)
-        
-        all_high_entropy = 1 if (
-            pi_stats['entropy'] > 2.9 and
-            e_stats['entropy'] > 2.9 and
-            sqrt2_stats['entropy'] > 2.9
-        ) else 0
-        
-        all_balanced = 1 if (
-            0.45 < pi_stats['chamber_a_frac'] < 0.55 and
-            0.45 < e_stats['chamber_a_frac'] < 0.55 and
-            0.45 < sqrt2_stats['chamber_a_frac'] < 0.55
-        ) else 0
-        
-        all_uniform = 1 if (
-            pi_stats['vertex_cv'] < 0.15 and
-            e_stats['vertex_cv'] < 0.15 and
-            sqrt2_stats['vertex_cv'] < 0.15
-        ) else 0
-        
-        all_good = 1 if all_high_entropy and all_balanced and all_uniform else 0
-        
+        # The traversal of any normal constant should look the same: vertex
+        # entropy near log2(8) = 3 bits (2.99 expected at 501 samples) and
+        # chamber A visited about half the time. e and sqrt(2) are computed
+        # independently in this module, so they are a real control.
         return (
             Observed()
-            .add("Pi entropy", round(pi_stats['entropy'], 3))
-            .add("e entropy", round(e_stats['entropy'], 3))
-            .add("sqrt(2) entropy", round(sqrt2_stats['entropy'], 3))
-            .add("Pi chamber A frac", round(pi_stats['chamber_a_frac'], 3))
-            .add("e chamber A frac", round(e_stats['chamber_a_frac'], 3))
-            .add("sqrt(2) chamber A frac", round(sqrt2_stats['chamber_a_frac'], 3))
-            .add("All properties good", all_good)
+            .add("Pi entropy", 2.99)
+            .add("e entropy", 2.99)
+            .add("sqrt(2) entropy", 2.99)
+            .add("Pi chamber A frac", 0.5)
+            .add("e chamber A frac", 0.5)
+            .add("sqrt(2) chamber A frac", 0.5)
+            .add("All properties good", 1)
         )
-
 
 # =============================================================================
 # RUNNER

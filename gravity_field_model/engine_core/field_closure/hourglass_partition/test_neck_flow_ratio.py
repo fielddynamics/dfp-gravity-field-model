@@ -19,6 +19,7 @@ Reference: ELECTRON_HALF_SPIN_HOURGLASS_VORTEX.md
 
 from collections import Counter
 
+from gravity_field_model.engine_core.field_closure import geometry_derivation as geo
 from gravity_field_model.framework import *
 from gravity_field_model.common import traverse_pi_base8, TET_A, TET_B, HBAR
 from gravity_field_model.common.geometry_constants import (
@@ -129,18 +130,20 @@ class NeckCrossingRate(Test):
         return (
             Model()
             .add("Total transitions", analysis['total_transitions'])
-            .add("Neck crossings", analysis['neck_crossings'])
-            .add("Bulb stays", analysis['bulb_stays'])
-            .add("Neck crossing rate", analysis['neck_crossing_rate'])
+            .add("Neck crossings", analysis['neck_crossings'], tol=0.03)
+            .add("Bulb stays", analysis['bulb_stays'], tol=0.03)
+            .add("Neck crossing rate", analysis['neck_crossing_rate'], tol=0.03)
         )
 
     def observations(self):
+        # A transition crosses chambers with probability 1/2: about 5000 of
+        # 10,000 (standard deviation 50, i.e. 1%).
         return (
             Observed()
-            .add("Expected neck crossing rate", 0.50)
-            .add("Expected bulb stay rate", 0.50)
+            .add("Neck crossings", 5000)
+            .add("Bulb stays", 5000)
+            .add("Neck crossing rate", 0.5)
         )
-
 
 class SpinFromFaceRatio(Test):
     """
@@ -186,36 +189,30 @@ class SpinFromFaceRatio(Test):
         )
 
     def model(self):
-        # Pure geometric calculation
-        n_time = len(TIME_FACES)
-        n_total = len(FACES)
+        # Face counts from the coordinates; total angular momentum 2 hbar is the
+        # model's input. The derived spin is compared with the measured hbar/2.
+        n_time = len(geo.time_faces())
+        n_total = len(geo.tetrahedron_faces())
         f_neck = n_time / n_total
-
-        L_total = 2 * HBAR
-        S_derived = f_neck * L_total
-        S_expected = HBAR / 2
-
-        error = abs(S_derived - S_expected) / S_expected
-
+        S_derived = f_neck * 2 * HBAR
         return (
             Model()
             .add("N_TIME faces", n_time)
             .add("N_total faces", n_total)
             .add("f_neck = N_TIME/N_total", f_neck)
             .add("S_derived (J*s)", S_derived)
-            .add("S_expected (hbar/2)", S_expected)
-            .add("Error", error)
         )
 
     def observations(self):
+        # Electron spin angular momentum hbar/2, with hbar = h / 2 pi and
+        # h = 6.62607015e-34 J s (exact).
         return (
             Observed()
             .add("N_TIME faces", 2)
             .add("N_total faces", 8)
             .add("f_neck = N_TIME/N_total", 0.25)
-            .add("S_expected (hbar/2)", HBAR / 2)
+            .add("S_derived (J*s)", 6.62607015e-34 / (2 * 3.141592653589793) / 2)
         )
-
 
 class AngularMomentumBudget(Test):
     """
@@ -263,41 +260,34 @@ class AngularMomentumBudget(Test):
         )
 
     def model(self):
-        # Face counting
-        n_time = 2
-        n_total = 8
-
-        # Face fractions
-        f_time = n_time / n_total
-        f_tetA_spatial = 3 / n_total
-        f_tetB_spatial = 3 / n_total
-
-        # Angular momentum in units of hbar
+        # Face counts from the coordinates: 8 faces, 2 of them perpendicular to
+        # the 0-7 axis (TIME), 3 spatial faces on each tetrahedron. The total of
+        # 2 hbar is the hourglass model's input.
+        faces = geo.tetrahedron_faces()
+        time = geo.time_faces()
+        tets = sorted(geo.regular_tetrahedra(), key=min)
+        n_total = len(faces)
+        f_time = len(time) / n_total
+        f_tetA_spatial = sum(1 for v, f in faces.items() if v not in time and f <= tets[1]) / n_total
+        f_tetB_spatial = sum(1 for v, f in faces.items() if v not in time and f <= tets[0]) / n_total
         L_total_hbar = 2.0
-        L_time = f_time * L_total_hbar
-        L_tetA = f_tetA_spatial * L_total_hbar
-        L_tetB = f_tetB_spatial * L_total_hbar
-
-        # Verify sum
-        L_sum = L_tetA + L_time + L_tetB
-
         return (
             Model()
-            .add("TetA SPATIAL (3/8 x 2hbar)", L_tetA)
-            .add("TIME neck (2/8 x 2hbar)", L_time)
-            .add("TetB SPATIAL (3/8 x 2hbar)", L_tetB)
-            .add("Sum (should = 2)", L_sum)
+            .add("TetA SPATIAL (3/8 x 2hbar)", f_tetA_spatial * L_total_hbar)
+            .add("TIME neck (2/8 x 2hbar)", f_time * L_total_hbar)
+            .add("TetB SPATIAL (3/8 x 2hbar)", f_tetB_spatial * L_total_hbar)
+            .add("Sum (should = 2)", (f_tetA_spatial + f_time + f_tetB_spatial) * L_total_hbar)
         )
 
     def observations(self):
+        # TIME neck = electron spin, hbar/2; the remainder split equally.
         return (
             Observed()
-            .add("TetA SPATIAL", 0.75)
-            .add("TIME neck (spin)", 0.50)
-            .add("TetB SPATIAL", 0.75)
-            .add("Sum", 2.00)
+            .add("TetA SPATIAL (3/8 x 2hbar)", 0.75)
+            .add("TIME neck (2/8 x 2hbar)", 0.5)
+            .add("TetB SPATIAL (3/8 x 2hbar)", 0.75)
+            .add("Sum (should = 2)", 2.0)
         )
-
 
 # =============================================================================
 # RUN ALL TESTS

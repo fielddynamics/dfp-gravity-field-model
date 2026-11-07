@@ -35,6 +35,7 @@ from typing import Dict, List, Tuple, Set
 from itertools import combinations
 from collections import Counter
 
+from gravity_field_model.engine_core.field_closure import geometry_derivation as geo
 from gravity_field_model.framework import *
 
 
@@ -804,44 +805,23 @@ class CompleteDerivationChain(Test):
         )
 
     def model(self):
-        d = 3  # The ONLY input
-        
-        # Derive everything
-        k = d + 1                              # = 4
-        triads_per_face = k                    # = 4 (medial theorem gives same k)
-        faces_per_tet = k                      # = 4
-        triads_per_tet = faces_per_tet * triads_per_face  # = 16
-        
-        # Bimetric structure
-        n_tetrahedra = 2                       # TetA + TetB
-        total_faces = n_tetrahedra * faces_per_tet  # = 8
-        total_triads = n_tetrahedra * triads_per_tet  # = 32
-        
-        # Hierarchy exponent
-        hierarchy = 1 + k + k**2              # = 1 + 4 + 16 = 21
-        
-        # Sphere packing
-        neighbors = d * (d + 1)               # = 12
-        active = k                            # = 4
-        blocked = neighbors - active          # = 8
-        
-        # Verify all match expected GFM values
-        all_correct = (
-            k == 4 and
-            triads_per_face == 4 and
-            faces_per_tet == 4 and
-            triads_per_tet == 16 and
-            total_faces == 8 and
-            total_triads == 32 and
-            hierarchy == 21 and
-            neighbors == 12 and
-            active == 4 and
-            blocked == 8
-        )
-        
+        # Every count is now constructed rather than typed in: the 3-simplex
+        # (faces = k), the medial subdivision of a triangle (triads per face),
+        # the two tetrahedra inscribed in the cube, and the 12 FCC neighbours.
+        d = 3
+        k = build_d_simplex(d)['n_faces']
+        equilateral = np.array([[0, 1], [np.sqrt(3) / 2, -0.5], [-np.sqrt(3) / 2, -0.5]])
+        triads_per_face = compute_medial_subdivision(equilateral)['n_sub_triangles']
+        n_tetrahedra = len(geo.regular_tetrahedra())
+        total_faces = len(geo.tetrahedron_faces())
+        triads_per_tet = k * triads_per_face
+        total_triads = n_tetrahedra * triads_per_tet
+        hierarchy = 1 + k + k ** 2
+        neighbors = len(build_fcc_neighbors())
+        active = k
+        blocked = neighbors - active
         return (
             Model()
-            .add("All quantities derived correctly", 1.0 if all_correct else 0.0)
             .add("k (faces per tet)", k)
             .add("triads per face", triads_per_face)
             .add("triads per tetrahedron", triads_per_tet)
@@ -854,9 +834,11 @@ class CompleteDerivationChain(Test):
         )
 
     def observations(self):
+        # Expected values from d = 3: k = d + 1 = 4; medial subdivision gives 4
+        # triads per face; 2 inscribed tetrahedra with 8 faces; 1 + k + k^2 = 21;
+        # d(d + 1) = 12 FCC neighbours, of which k are active.
         return (
             Observed()
-            .add("All quantities derived correctly", 1.0)
             .add("k (faces per tet)", 4)
             .add("triads per face", 4)
             .add("triads per tetrahedron", 16)
@@ -867,7 +849,6 @@ class CompleteDerivationChain(Test):
             .add("active channels", 4)
             .add("blocked channels", 8)
         )
-
 
 # =============================================================================
 # TEST RUNNER

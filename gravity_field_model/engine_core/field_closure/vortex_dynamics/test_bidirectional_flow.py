@@ -119,7 +119,7 @@ class ForwardReverseVertexSymmetry(Test):
     )
     reference = "Vortex cosmology bi-directional model"
     level = Standard
-    tolerance = 0.05
+    tolerance = 0.09
 
     commentary = (
         "INTERPRETING TIME-REVERSAL SYMMETRY: "
@@ -151,16 +151,20 @@ class ForwardReverseVertexSymmetry(Test):
             .add("Reverse V0 freq", rev[0])
             .add("Forward V7 freq", fwd[7])
             .add("Reverse V7 freq", rev[7])
-            .add("Max frequency difference", comparison['max_freq_difference'])
+            .add("Max frequency difference (0 by construction, info)", comparison['max_freq_difference'])
         )
 
     def observations(self):
+        # The reverse sequence visits exactly the same vertices, so forward and
+        # reverse frequencies are identical by construction and the maximum
+        # difference is always 0 (reported for information). What is tested is
+        # the frequency itself: 1/8 per vertex, standard deviation 0.0033 over
+        # 10,001 steps, so 9% is about 3.3 standard deviations.
         return (
             Observed()
-            .add("Expected vertex freq", 0.125)
-            .add("Expected max difference", 0.02)
+            .add("Forward V0 freq", 0.125)
+            .add("Forward V7 freq", 0.125)
         )
-
 
 class CrossChamberSymmetry(Test):
     """
@@ -176,7 +180,7 @@ class CrossChamberSymmetry(Test):
     )
     reference = "Bimetric gravity, vortex bi-directional flow"
     level = Standard
-    tolerance = 0.05
+    tolerance = 0.035
 
     commentary = (
         "BIMETRIC BALANCE: "
@@ -210,11 +214,15 @@ class CrossChamberSymmetry(Test):
         )
 
     def observations(self):
+        # Uniform next vertex: a transition crosses chambers with probability
+        # 1/2, split equally between A->B and B->A: about 2500 each in 10,000
+        # transitions (standard deviation 1%).
         return (
             Observed()
-            .add("Expected cross rate", 0.50)
+            .add("Forward A->B", 2500)
+            .add("Forward B->A", 2500)
+            .add("Forward cross rate", 0.5)
         )
-
 
 class VortexInVsVortexOut(Test):
     """
@@ -230,7 +238,10 @@ class VortexInVsVortexOut(Test):
         "bi-directional gate."
     )
     reference = "Vortex cosmology bi-directional flow"
-    level = Critical
+    level = Ignore
+    ignore_reason = (
+        "The 'reverse' traversal is the same vertex list read backwards, so its vertex frequencies equal the forward ones and the symmetry score is 1 for every sequence."
+    )
     tolerance = 0.10
 
     commentary = (

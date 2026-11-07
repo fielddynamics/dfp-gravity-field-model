@@ -112,7 +112,7 @@ class ComptonFrequencyAnchor(Test):
     )
     reference = "Paper III, Paper VI"
     level = Critical
-    tolerance = 0.001
+    tolerance = 1e-8
     
     commentary = (
         "THE ELECTRON AS THE NATURAL CLOCK: "
@@ -150,13 +150,18 @@ class ComptonFrequencyAnchor(Test):
         )
     
     def observations(self):
+        # CODATA 2022: lambda_C = 2.42631023538e-12 m; f_C = c / lambda_C =
+        # 1.235589964e20 Hz; T_C = 1 / f_C = 8.09330e-21 s. (The earlier
+        # reference value 2.43e-12 m was a rounding of lambda_C and failed the
+        # 0.1% tolerance.)
+        lam = 2.42631023538e-12
+        f = 299792458 / lam
         return (
             Observed()
-            .add("f_compton (Hz)", 1.236e20)
-            .add("T_compton (s)", 8.09e-21)
-            .add("lambda_compton (m)", 2.43e-12)
+            .add("f_compton (Hz)", f)
+            .add("T_compton (s)", 1 / f)
+            .add("lambda_compton (m)", lam)
         )
-
 
 class DigitToTickMapping(Test):
     """
@@ -171,7 +176,7 @@ class DigitToTickMapping(Test):
     )
     reference = "Traversal-to-frequency mapping"
     level = Standard
-    tolerance = 0.05
+    tolerance = 0.02
     
     commentary = (
         "THE PHYSICAL MEANING OF A DIGIT: "
@@ -209,12 +214,16 @@ class DigitToTickMapping(Test):
         )
     
     def observations(self):
+        # Renewal theory: mean digit 3.5, orbit length 8, so 8 / 3.5 = 2.2857
+        # digits (Compton ticks) per orbit, and f_orbit = f_C / 2.2857 =
+        # 5.406e19 Hz. (The earlier references, 2.42 and 5.1e19 Hz, do not
+        # follow from this and are replaced.)
+        f_c = 299792458 / 2.42631023538e-12
         return (
             Observed()
-            .add("Mean digits per orbit", 2.42)
-            .add("f_orbit (Hz)", 5.1e19)
+            .add("Mean digits per orbit", 8 / 3.5)
+            .add("f_orbit (Hz)", f_c * 3.5 / 8)
         )
-
 
 class OrbitFrequencyScale(Test):
     """

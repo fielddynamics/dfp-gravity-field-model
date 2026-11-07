@@ -159,26 +159,20 @@ class TetrahedraRatioConvergence(Test):
         return (
             Model()
             .add("Ratio at 100 digits", convergence['values'][0])
-            .add("Ratio at 1000 digits", convergence['values'][idx_1000])
-            .add("Ratio at 5000 digits", value_5000)
-            .add("Near 1.0 at 5000", near_unity)
+            .add("Ratio at 1000 digits", convergence['values'][idx_1000], tol=0.19)
+            .add("Ratio at 5000 digits", value_5000, tol=0.085)
+            .add("Within 5% of 1.0 at 5000 (info)", near_unity)
         )
     
     def observations(self):
-        # Compute actual values for comparison
-        convergence = analyze_convergence(compute_tetrahedra_ratio, SAMPLE_SIZES)
-        idx_1000 = SAMPLE_SIZES.index(1000)
-        value_5000 = convergence['values'][-1]
-        near_unity = 1 if abs(value_5000 - 1.0) < 0.05 else 0
-        
+        # Each chamber holds half the vertices, so the visit ratio tends to 1.
+        # Its standard deviation is about 4 * sqrt(0.25 / N): 0.063 at 1000
+        # digits and 0.028 at 5000.
         return (
             Observed()
-            .add("Ratio at 100 digits", convergence['values'][0])
-            .add("Ratio at 1000 digits", convergence['values'][idx_1000])
-            .add("Ratio at 5000 digits", value_5000)
-            .add("Near 1.0 at 5000", near_unity)
+            .add("Ratio at 1000 digits", 1.0)
+            .add("Ratio at 5000 digits", 1.0)
         )
-
 
 class VertexUniformityConvergence(Test):
     """
@@ -222,25 +216,20 @@ class VertexUniformityConvergence(Test):
         return (
             Model()
             .add("Max deviation at 100 digits", convergence['values'][0])
-            .add("Max deviation at 1000 digits", deviation_1000)
-            .add("Max deviation at 5000 digits", convergence['values'][-1])
-            .add("Below 3% at 1000", 1 if deviation_1000 < 0.03 else 0)
+            .add("Max deviation at 1000 digits", deviation_1000, abs_tol=0.035)
+            .add("Max deviation at 5000 digits", convergence['values'][-1], abs_tol=0.015)
+            .add("Below 3% at 1000 (info)", 1 if deviation_1000 < 0.03 else 0)
         )
     
     def observations(self):
-        # Compute actual values
-        convergence = analyze_convergence(compute_max_vertex_deviation, SAMPLE_SIZES)
-        idx_1000 = SAMPLE_SIZES.index(1000)
-        deviation_1000 = convergence['values'][idx_1000]
-        
+        # The largest deviation of any vertex frequency from 1/8 shrinks as
+        # 1/sqrt(N). For independent uniform sequences it is below 0.035 at
+        # 1000 digits and below 0.015 at 5000 in 99% of cases.
         return (
             Observed()
-            .add("Max deviation at 100 digits", convergence['values'][0])
-            .add("Max deviation at 1000 digits", deviation_1000)
-            .add("Max deviation at 5000 digits", convergence['values'][-1])
-            .add("Below 3% at 1000", 1 if deviation_1000 < 0.03 else 0)
+            .add("Max deviation at 1000 digits", 0.0)
+            .add("Max deviation at 5000 digits", 0.0)
         )
-
 
 class MeanDigitConvergence(Test):
     """
@@ -288,25 +277,20 @@ class MeanDigitConvergence(Test):
         return (
             Model()
             .add("Mean digit at 100", mean_100)
-            .add("Mean digit at 1000", mean_1000)
-            .add("Mean digit at 5000", mean_5000)
+            .add("Mean digit at 1000", mean_1000, tol=0.065)
+            .add("Mean digit at 5000", mean_5000, tol=0.03)
             .add("Near 3.5 at 5000", near_expected)
         )
     
     def observations(self):
-        # Compute actual values
-        convergence = analyze_convergence(compute_mean_digit, SAMPLE_SIZES)
-        mean_5000 = convergence['values'][-1]
-        near_expected = 1 if abs(mean_5000 - 3.5) < 0.2 else 0
-        
+        # Uniform digits 0-7 have mean 3.5 and variance 5.25, so the standard
+        # error of the mean is 0.072 at 1000 digits and 0.032 at 5000.
         return (
             Observed()
-            .add("Mean digit at 100", convergence['values'][0])
-            .add("Mean digit at 1000", convergence['values'][SAMPLE_SIZES.index(1000)])
-            .add("Mean digit at 5000", mean_5000)
-            .add("Near 3.5 at 5000", near_expected)
+            .add("Mean digit at 1000", 3.5)
+            .add("Mean digit at 5000", 3.5)
+            .add("Near 3.5 at 5000", 1)
         )
-
 
 class ComplementaryRateConvergence(Test):
     """
@@ -352,25 +336,20 @@ class ComplementaryRateConvergence(Test):
         return (
             Model()
             .add("Rate at 100 digits", rate_100)
-            .add("Rate at 1000 digits", rate_1000)
-            .add("Rate at 5000 digits", rate_5000)
+            .add("Rate at 1000 digits", rate_1000, tol=0.21)
+            .add("Rate at 5000 digits", rate_5000, tol=0.11)
             .add("Near 12.5% at 5000", 1 if close_to_expected else 0)
         )
     
     def observations(self):
-        # Compute actual values
-        convergence = analyze_convergence(compute_complementary_rate, SAMPLE_SIZES)
-        rate_5000 = convergence['values'][-1]
-        close_to_expected = abs(rate_5000 - 0.125) < 0.03
-        
+        # The complementary vertex follows with probability 1/8. Standard
+        # deviation of the rate: 0.0105 at 1000 digits, 0.0047 at 5000.
         return (
             Observed()
-            .add("Rate at 100 digits", convergence['values'][0])
-            .add("Rate at 1000 digits", convergence['values'][SAMPLE_SIZES.index(1000)])
-            .add("Rate at 5000 digits", rate_5000)
-            .add("Near 12.5% at 5000", 1 if close_to_expected else 0)
+            .add("Rate at 1000 digits", 0.125)
+            .add("Rate at 5000 digits", 0.125)
+            .add("Near 12.5% at 5000", 1)
         )
-
 
 class ConvergenceRate1OverSqrtN(Test):
     """
@@ -407,50 +386,31 @@ class ConvergenceRate1OverSqrtN(Test):
     
     def model(self):
         convergence = analyze_convergence(compute_max_vertex_deviation, SAMPLE_SIZES)
-        
         idx_500 = SAMPLE_SIZES.index(500)
         idx_2000 = SAMPLE_SIZES.index(2000)
-        
         dev_500 = convergence['values'][idx_500]
         dev_2000 = convergence['values'][idx_2000]
-        
-        # Expected ratio based on 1/sqrt(N)
         expected_ratio = math.sqrt(2000 / 500)  # = 2.0
         actual_ratio = dev_500 / dev_2000 if dev_2000 > 0 else 0
-        
-        # Is actual within 50% of expected?
-        ratio_error = abs(actual_ratio - expected_ratio) / expected_ratio if expected_ratio > 0 else 0
-        close_to_expected = ratio_error < 0.50
-        
+        # A two-point ratio is noisy; the scaling exponent is estimated instead
+        # by a least-squares fit of log(deviation) against log(N) over all
+        # seven sample sizes. 1/sqrt(N) convergence gives a slope of -0.5.
+        xs = [math.log(n) for n in SAMPLE_SIZES]
+        ys = [math.log(max(v, 1e-12)) for v in convergence['values']]
+        mx, my = sum(xs) / len(xs), sum(ys) / len(ys)
+        slope = sum((x - mx) * (y - my) for x, y in zip(xs, ys)) / sum((x - mx) ** 2 for x in xs)
         return (
             Model()
             .add("Deviation at 500 digits", dev_500)
             .add("Deviation at 2000 digits", dev_2000)
-            .add("Actual ratio", actual_ratio)
+            .add("Actual ratio (500/2000, info)", actual_ratio)
             .add("Expected ratio (sqrt(4))", expected_ratio)
-            .add("Within 50% of expected", 1 if close_to_expected else 0)
-        )
-    
-    def observations(self):
-        # Compute actual values
-        convergence = analyze_convergence(compute_max_vertex_deviation, SAMPLE_SIZES)
-        idx_500 = SAMPLE_SIZES.index(500)
-        idx_2000 = SAMPLE_SIZES.index(2000)
-        dev_500 = convergence['values'][idx_500]
-        dev_2000 = convergence['values'][idx_2000]
-        expected_ratio = math.sqrt(2000 / 500)
-        actual_ratio = dev_500 / dev_2000 if dev_2000 > 0 else 0
-        ratio_error = abs(actual_ratio - expected_ratio) / expected_ratio if expected_ratio > 0 else 0
-        
-        return (
-            Observed()
-            .add("Deviation at 500 digits", dev_500)
-            .add("Deviation at 2000 digits", dev_2000)
-            .add("Actual ratio", actual_ratio)
-            .add("Expected ratio (sqrt(4))", expected_ratio)
-            .add("Within 50% of expected", 1 if ratio_error < 0.50 else 0)
+            .add("Scaling exponent (log-log slope)", round(slope, 3), tol=0.5)
         )
 
+    def observations(self):
+        # Central limit theorem: deviations shrink as N^(-1/2).
+        return Observed().add("Scaling exponent (log-log slope)", -0.5)
 
 class SufficientSampleSize(Test):
     """
@@ -522,48 +482,19 @@ class SufficientSampleSize(Test):
         
         return (
             Model()
-            .add("Metrics stable (of 4)", stable_count)
+            .add("Metrics stable (of 4)", stable_count, abs_tol=1)
             .add("Acceptable (>=3)", acceptable)
         )
     
     def observations(self):
-        # Compute actual stability
-        t1000 = traverse_pi_base8(1000)
-        t5000 = traverse_pi_base8(5000)
-        
-        metrics_1000 = {
-            'tet_ratio': compute_tetrahedra_ratio(t1000),
-            'max_dev': compute_max_vertex_deviation(t1000),
-            'mean_digit': compute_mean_digit(t1000),
-            'comp_rate': compute_complementary_rate(t1000),
-        }
-        
-        metrics_5000 = {
-            'tet_ratio': compute_tetrahedra_ratio(t5000),
-            'max_dev': compute_max_vertex_deviation(t5000),
-            'mean_digit': compute_mean_digit(t5000),
-            'comp_rate': compute_complementary_rate(t5000),
-        }
-        
-        stable_count = 0
-        for key in metrics_1000:
-            v1 = metrics_1000[key]
-            v5 = metrics_5000[key]
-            if v1 > 0:
-                rel_change = abs(v5 - v1) / v1
-            else:
-                rel_change = abs(v5 - v1)
-            if rel_change < 0.20:
-                stable_count += 1
-        
-        acceptable = 1 if stable_count >= 3 else 0
-        
+        # Of the four metrics, three should change by less than 20% between
+        # 1000 and 5000 digits; the maximum vertex deviation is expected to
+        # shrink as 1/sqrt(N) and so is not expected to be stable.
         return (
             Observed()
-            .add("Metrics stable (of 4)", stable_count)
-            .add("Acceptable (>=3)", acceptable)
+            .add("Metrics stable (of 4)", 3)
+            .add("Acceptable (>=3)", 1)
         )
-
 
 # =============================================================================
 # RUNNER

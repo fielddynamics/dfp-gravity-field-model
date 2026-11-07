@@ -391,19 +391,20 @@ class FaceCompletionEfficiency(Test):
         within_50 = 1 if steps is not None and steps < 50 else 0
         return (
             Model()
-            .add("Steps to complete all", steps if steps else 999)
+            .add("Steps to complete all", steps if steps else 999, abs_tol=30)
             .add("Within 50 steps", within_50)
         )
     
     def observations(self):
-        # Expected: all faces complete well within 50 steps
-        # Typical completion is around 10-20 steps
+        # All eight faces complete after about 19 steps on average for
+        # independent uniform digits (99% within 9 to 48), so the criterion
+        # "within 50 steps" holds; pi takes 15. (The earlier reference, 15, was
+        # pi's own value at 10% tolerance.)
         return (
             Observed()
-            .add("Steps to complete all", 15)
+            .add("Steps to complete all", 19)
             .add("Within 50 steps", 1)
         )
-
 
 class AllEdgesTraversed(Test):
     """
@@ -661,23 +662,24 @@ class VertexReturnFrequency(Test):
         balanced = 1 if ratio < 3 else 0
         return (
             Model()
-            .add("Max vertex visits", max_visits)
-            .add("Min vertex visits", min_visits)
-            .add("Max/min ratio", ratio)
+            .add("Max vertex visits", max_visits, abs_tol=35)
+            .add("Min vertex visits", min_visits, abs_tol=35)
+            .add("Max/min ratio (info)", ratio)
             .add("Balanced (ratio < 3)", balanced)
         )
     
     def observations(self):
-        # Expected: ratio close to 1 with balanced flag set
-        # With 1000 digits, expect ~125 visits per vertex (1000/8)
+        # 1001 steps over 8 equally likely vertices: 125.1 visits each, binomial
+        # standard deviation sqrt(1001 * 7/64) = 10.5. The busiest and quietest
+        # vertices are checked against 125 within 3.3 standard deviations (35);
+        # the max/min ratio is reported for information. (The original check,
+        # max/min within 10% of 1, fails for most genuinely uniform sequences.)
         return (
             Observed()
             .add("Max vertex visits", 125)
             .add("Min vertex visits", 125)
-            .add("Max/min ratio", 1.0)
             .add("Balanced (ratio < 3)", 1)
         )
-
 
 # =============================================================================
 # RUNNER

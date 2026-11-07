@@ -302,32 +302,29 @@ class BothChambersContribute(Test):
         
         return (
             Model()
-            .add("Tet A face completions", analysis['a_completions'])
-            .add("Tet B face completions", analysis['b_completions'])
-            .add("Total completions", analysis['total_completions'])
-            .add("Tet A fraction", round(analysis['a_fraction'], 3))
-            .add("Tet B fraction", round(analysis['b_fraction'], 3))
+            .add("Tet A face completions", analysis['a_completions'], tol=0.14)
+            .add("Tet B face completions", analysis['b_completions'], tol=0.14)
+            .add("Total completions", analysis['total_completions'], tol=0.1)
+            .add("Tet A fraction", round(analysis['a_fraction'], 3), tol=0.115)
+            .add("Tet B fraction", round(analysis['b_fraction'], 3), tol=0.115)
             .add("Both contribute (1=yes)", both_contribute)
             .add("Balanced 40-60% (1=yes)", balanced)
         )
     
     def observations(self):
-        analysis = analyze_chamber_contributions(1000)
-        
-        both_contribute = 1 if analysis['both_contribute'] else 0
-        balanced = 1 if 0.4 < analysis['a_fraction'] < 0.6 else 0
-        
+        # The two chambers are mirror images, so with uniform vertices each
+        # contributes half the face completions: about 270 each, 540 in total
+        # over 1001 steps (mean over 150 random sequences).
         return (
             Observed()
-            .add("Tet A face completions", analysis['a_completions'])
-            .add("Tet B face completions", analysis['b_completions'])
-            .add("Total completions", analysis['total_completions'])
-            .add("Tet A fraction", round(analysis['a_fraction'], 3))
-            .add("Tet B fraction", round(analysis['b_fraction'], 3))
-            .add("Both contribute (1=yes)", both_contribute)
-            .add("Balanced 40-60% (1=yes)", balanced)
+            .add("Tet A face completions", 270)
+            .add("Tet B face completions", 270)
+            .add("Total completions", 540)
+            .add("Tet A fraction", 0.5)
+            .add("Tet B fraction", 0.5)
+            .add("Both contribute (1=yes)", 1)
+            .add("Balanced 40-60% (1=yes)", 1)
         )
-
 
 # =============================================================================
 # TEST 2: SPEED DERIVATION HOLDS
@@ -347,7 +344,10 @@ class SpeedDerivationNoPenalty(Test):
         "This implies NO propagation delay: Tet B is instantaneous."
     )
     reference = "c = r_e x f_closure (CODATA)"
-    level = Critical
+    level = Ignore
+    ignore_reason = (
+        'Circular: f_closure is defined in this file as c / r_e, so r_e x f_closure = c by construction.'
+    )
     tolerance = 0.01
     
     audit_score = 95
@@ -429,6 +429,7 @@ class HypotheticalDelayAnalysis(Test):
     )
     reference = "Theoretical calculation"
     level = Standard
+    tolerance = 0.001
     
     audit_score = 90
     audit_notes = (
@@ -480,19 +481,19 @@ class HypotheticalDelayAnalysis(Test):
         )
     
     def observations(self):
-        result = calculate_hypothetical_delay_penalty()
-        
+        # Closed form for the hypothetical spatial model: vertex-to-origin
+        # distance sqrt(3) (unit cube), delay ratio sqrt(3), average step time
+        # 1 + sqrt(3)/2 = 1.866, speed 1 / 1.866 = 0.536 c.
+        r3 = math.sqrt(3)
         return (
             Observed()
-            .add("Vertex to origin (r_e units)", result['vertex_to_origin_dimensionless'])
-            .add("Round trip (r_e)", result['delay_ratio'])
-            .add("Delay ratio (prop/closure)", result['delay_ratio'])
-            .add("Avg step time factor", result['avg_step_time_factor'])
-            .add("Hypothetical speed (c)", result['speed_ratio'])
-            .add("Best case speed (c)", result['best_case_ratio'])
-            .add("Not c (penalty exists)", 1 if result['speed_ratio'] < 0.99 else 0)
+            .add("Vertex to origin (r_e units)", round(r3, 4))
+            .add("Delay ratio (prop/closure)", round(r3, 3))
+            .add("Avg step time factor", round(1 + r3 / 2, 3))
+            .add("Hypothetical speed (c)", round(1 / (1 + r3 / 2), 3))
+            .add("Best case speed (c)", 0.5)
+            .add("Not c (penalty exists)", 1)
         )
-
 
 # =============================================================================
 # TEST 4: INSTANTANEOUS COUPLING NECESSITY
@@ -747,28 +748,23 @@ class OriginMeetingFrequency(Test):
         return (
             Model()
             .add("Total steps", result['total_steps'])
-            .add("Meeting count", result['meeting_count'])
-            .add("Meeting frequency", result['meeting_frequency'])
+            .add("Meeting count", result['meeting_count'], tol=0.1)
+            .add("Meeting frequency", result['meeting_frequency'], tol=0.1)
             .add("Near 50% (within 5%)", 1 if abs(result['meeting_frequency'] - 0.5) < 0.05 else 0)
-            .add("Mean interval (steps)", result['mean_interval'])
+            .add("Mean interval (steps)", result['mean_interval'], tol=0.09)
             .add("Physical freq (x10^22 Hz)", round(phys_freq_1e22, 2))
         )
     
     def observations(self):
-        result = analyze_origin_meetings(1000)
-        
-        phys_freq_1e22 = result['meeting_physical_freq_hz'] / 1e22
-        
+        # A chamber switch occurs with probability 1/2 per step: about 500
+        # meetings in 1001 steps, mean interval 2 steps.
         return (
             Observed()
-            .add("Total steps", result['total_steps'])
-            .add("Meeting count", result['meeting_count'])
-            .add("Meeting frequency", result['meeting_frequency'])
-            .add("Near 50% (within 5%)", 1 if abs(result['meeting_frequency'] - 0.5) < 0.05 else 0)
-            .add("Mean interval (steps)", result['mean_interval'])
-            .add("Physical freq (x10^22 Hz)", round(phys_freq_1e22, 2))
+            .add("Meeting count", 500)
+            .add("Meeting frequency", 0.5)
+            .add("Near 50% (within 5%)", 1)
+            .add("Mean interval (steps)", 2.0)
         )
-
 
 # =============================================================================
 # TEST 6: MEETING INTERVAL DISTRIBUTION
@@ -827,7 +823,7 @@ class MeetingIntervalDistribution(Test):
         intervals = result['intervals']
         
         if not intervals:
-            return Model().add("No intervals", 0)
+            return Model().add("Mean interval", 0.0)  # no chamber switches at all
         
         mean = sum(intervals) / len(intervals)
         variance = sum((x - mean)**2 for x in intervals) / len(intervals)
@@ -839,42 +835,31 @@ class MeetingIntervalDistribution(Test):
         
         return (
             Model()
-            .add("Mean interval", round(mean, 2))
-            .add("Variance", round(variance, 2))
-            .add("Min interval", min(intervals))
+            .add("Mean interval", round(mean, 2), tol=0.09)
+            .add("Variance", round(variance, 2), tol=0.4)
+            .add("Min interval", min(intervals), abs_tol=0)
             .add("Max interval", max(intervals))
-            .add("Count interval=1", interval_1)
-            .add("Count interval=2", interval_2)
-            .add("Count interval>=3", interval_3plus)
+            .add("Count interval=1", interval_1, tol=0.24)
+            .add("Count interval=2", interval_2, tol=0.26)
+            .add("Count interval>=3", interval_3plus, tol=0.16)
             .add("Mean near 2 (within 0.5)", 1 if abs(mean - 2) < 0.5 else 0)
         )
     
     def observations(self):
-        result = analyze_origin_meetings(1000)
-        intervals = result['intervals']
-        
-        if not intervals:
-            return Observed().add("No intervals", 0)
-        
-        mean = sum(intervals) / len(intervals)
-        variance = sum((x - mean)**2 for x in intervals) / len(intervals)
-        
-        interval_1 = sum(1 for x in intervals if x == 1)
-        interval_2 = sum(1 for x in intervals if x == 2)
-        interval_3plus = sum(1 for x in intervals if x >= 3)
-        
+        # A meeting is a chamber switch, which happens with probability 1/2 at
+        # each step. Intervals are therefore geometric with p = 1/2: mean 2,
+        # variance (1 - p) / p^2 = 2, and of about 500 intervals half have
+        # length 1, a quarter length 2 and a quarter length 3 or more.
         return (
             Observed()
-            .add("Mean interval", round(mean, 2))
-            .add("Variance", round(variance, 2))
-            .add("Min interval", min(intervals))
-            .add("Max interval", max(intervals))
-            .add("Count interval=1", interval_1)
-            .add("Count interval=2", interval_2)
-            .add("Count interval>=3", interval_3plus)
-            .add("Mean near 2 (within 0.5)", 1 if abs(mean - 2) < 0.5 else 0)
+            .add("Mean interval", 2.0)
+            .add("Variance", 2.0)
+            .add("Min interval", 1)
+            .add("Count interval=1", 250)
+            .add("Count interval=2", 125)
+            .add("Count interval>=3", 125)
+            .add("Mean near 2 (within 0.5)", 1)
         )
-
 
 # =============================================================================
 # TEST 7: CHAMBER DWELL SYMMETRY
@@ -943,41 +928,28 @@ class OriginMeetingDwellSymmetry(Test):
         
         return (
             Model()
-            .add("Tet A mean dwell", round(mean_a, 2))
-            .add("Tet B mean dwell", round(mean_b, 2))
+            .add("Tet A mean dwell", round(mean_a, 2), tol=0.14)
+            .add("Tet B mean dwell", round(mean_b, 2), tol=0.14)
             .add("Tet A max dwell", max_a)
             .add("Tet B max dwell", max_b)
-            .add("Symmetry ratio (A/B)", round(symmetry_ratio, 3))
+            .add("Symmetry ratio (A/B)", round(symmetry_ratio, 3), tol=0.19)
             .add("Symmetric (ratio 0.8-1.2)", 1 if 0.8 <= symmetry_ratio <= 1.2 else 0)
-            .add("Total A dwells", len(dwell_a))
-            .add("Total B dwells", len(dwell_b))
+            .add("Total A dwells", len(dwell_a), tol=0.1)
+            .add("Total B dwells", len(dwell_b), tol=0.1)
         )
     
     def observations(self):
-        result = analyze_origin_meetings(1000)
-        
-        dwell_a = result['dwell_times_a']
-        dwell_b = result['dwell_times_b']
-        
-        mean_a = sum(dwell_a) / len(dwell_a) if dwell_a else 0
-        mean_b = sum(dwell_b) / len(dwell_b) if dwell_b else 0
-        max_a = max(dwell_a) if dwell_a else 0
-        max_b = max(dwell_b) if dwell_b else 0
-        
-        symmetry_ratio = mean_a / mean_b if mean_b > 0 else 0
-        
+        # Dwell times are geometric with p = 1/2 in both chambers: mean 2, about
+        # 250 dwells each over 1001 steps, ratio A/B of 1.
         return (
             Observed()
-            .add("Tet A mean dwell", round(mean_a, 2))
-            .add("Tet B mean dwell", round(mean_b, 2))
-            .add("Tet A max dwell", max_a)
-            .add("Tet B max dwell", max_b)
-            .add("Symmetry ratio (A/B)", round(symmetry_ratio, 3))
-            .add("Symmetric (ratio 0.8-1.2)", 1 if 0.8 <= symmetry_ratio <= 1.2 else 0)
-            .add("Total A dwells", len(dwell_a))
-            .add("Total B dwells", len(dwell_b))
+            .add("Tet A mean dwell", 2.0)
+            .add("Tet B mean dwell", 2.0)
+            .add("Symmetry ratio (A/B)", 1.0)
+            .add("Symmetric (ratio 0.8-1.2)", 1)
+            .add("Total A dwells", 250)
+            .add("Total B dwells", 250)
         )
-
 
 # =============================================================================
 # TEST 8: PHYSICAL MEETING FREQUENCY
@@ -1048,37 +1020,27 @@ class PhysicalMeetingFrequency(Test):
         
         return (
             Model()
-            .add("Closure freq (x10^23 Hz)", round(f_closure_1e23, 2))
-            .add("Meeting rate", round(meeting_rate, 4))
-            .add("Meeting freq (x10^22 Hz)", round(f_meeting_1e22, 2))
-            .add("Meeting period (x10^-23 s)", round(period_1e23, 2))
+            .add("Closure freq (x10^23 Hz)", round(f_closure_1e23, 2), tol=0.001)
+            .add("Meeting rate", round(meeting_rate, 4), tol=0.1)
+            .add("Meeting freq (x10^22 Hz)", round(f_meeting_1e22, 2), tol=0.1)
+            .add("Meeting period (x10^-23 s)", round(period_1e23, 2), tol=0.1)
             .add("Meetings/ns (x10^13)", round(meetings_per_ns, 2))
             .add("Ultra-high freq (>1e22)", 1 if f_meeting > 1e22 else 0)
         )
     
     def observations(self):
-        result = analyze_origin_meetings(1000)
-        
-        f_closure = CLOSURE_FREQUENCY
-        meeting_rate = result['meeting_frequency']
-        f_meeting = f_closure * meeting_rate
-        period_meeting = 1 / f_meeting if f_meeting > 0 else 0
-        
-        f_closure_1e23 = f_closure / 1e23
-        f_meeting_1e22 = f_meeting / 1e22
-        period_1e23 = period_meeting * 1e23
-        meetings_per_ns = f_meeting * 1e-9 / 1e13
-        
+        # The meeting rate is 1/2 per step. At the closure frequency c / r_e
+        # (CODATA c and r_e: 1.0638 x 10^23 Hz) that is 5.32 x 10^22 meetings
+        # per second, a period of 1.88 x 10^-23 s.
+        f_closure = 299792458.0 / 2.8179403205e-15
         return (
             Observed()
-            .add("Closure freq (x10^23 Hz)", round(f_closure_1e23, 2))
-            .add("Meeting rate", round(meeting_rate, 4))
-            .add("Meeting freq (x10^22 Hz)", round(f_meeting_1e22, 2))
-            .add("Meeting period (x10^-23 s)", round(period_1e23, 2))
-            .add("Meetings/ns (x10^13)", round(meetings_per_ns, 2))
-            .add("Ultra-high freq (>1e22)", 1 if f_meeting > 1e22 else 0)
+            .add("Closure freq (x10^23 Hz)", round(f_closure / 1e23, 2))
+            .add("Meeting rate", 0.5)
+            .add("Meeting freq (x10^22 Hz)", round(0.5 * f_closure / 1e22, 2))
+            .add("Meeting period (x10^-23 s)", round(1e23 / (0.5 * f_closure), 2))
+            .add("Ultra-high freq (>1e22)", 1)
         )
-
 
 # =============================================================================
 # TEST 9: MEETING CADENCE VS DELAY - THE KEY DISTINCTION
@@ -1218,6 +1180,7 @@ class HypotheticalReadDelay(Test):
     )
     reference = "Speed reduction from communication delay"
     level = Critical
+    tolerance = 0.002
     
     audit_score = 94
     audit_notes = (
@@ -1277,35 +1240,22 @@ class HypotheticalReadDelay(Test):
             .add("c'/c for tau=1 period", round(c_ratio_tau_1, 3))
             .add("c'/c for tau=sqrt(3) period", round(c_ratio_tau_sqrt3, 3))
             .add("c'/c for tau=2 periods", round(c_ratio_tau_2, 3))
-            .add("Observed c'/c", 1.0)
-            .add("Implies tau=0 (yes=1)", 1)
+            .add("Observed c'/c (assumed, info)", 1.0)
+            .add("Implies tau=0 (assumed, info)", 1)
         )
     
     def observations(self):
-        closure_period = R_E / C
-        meeting_rate = 0.5
-        
-        def calc_c_ratio(tau_factor):
-            tau = tau_factor * closure_period
-            avg_step = closure_period + meeting_rate * tau
-            c_prime = R_E / avg_step
-            return c_prime / C
-        
-        c_ratio_tau_0 = calc_c_ratio(0)
-        c_ratio_tau_1 = calc_c_ratio(1)
-        c_ratio_tau_2 = calc_c_ratio(2)
-        c_ratio_tau_sqrt3 = calc_c_ratio(SQRT_3)
-        
+        # With half the steps delayed by tau, the average step lasts
+        # (1 + tau/2) closure periods, so c'/c = 1 / (1 + tau/2):
+        # 1, 2/3, 1/(1 + sqrt(3)/2) and 1/2 for tau = 0, 1, sqrt(3), 2.
+        f = lambda tau: round(1 / (1 + tau / 2), 3)
         return (
             Observed()
-            .add("c'/c for tau=0", round(c_ratio_tau_0, 3))
-            .add("c'/c for tau=1 period", round(c_ratio_tau_1, 3))
-            .add("c'/c for tau=sqrt(3) period", round(c_ratio_tau_sqrt3, 3))
-            .add("c'/c for tau=2 periods", round(c_ratio_tau_2, 3))
-            .add("Observed c'/c", 1.0)
-            .add("Implies tau=0 (yes=1)", 1)
+            .add("c'/c for tau=0", f(0))
+            .add("c'/c for tau=1 period", f(1))
+            .add("c'/c for tau=sqrt(3) period", f(math.sqrt(3)))
+            .add("c'/c for tau=2 periods", f(2))
         )
-
 
 # =============================================================================
 # TEST 11: NON-LINEAR TET B PROVES QUANTUM NATURE
@@ -1334,7 +1284,10 @@ class NonLinearQuantumNature(Test):
         "holistic state, not sequential classical readout."
     )
     reference = "Quantum superposition vs classical sequential access"
-    level = Critical
+    level = Ignore
+    ignore_reason = (
+        "Inputs, including the 'observed' speed ratio, are hard-coded; observations() repeats model(). Nothing is measured."
+    )
     
     audit_score = 96
     audit_notes = (
@@ -1453,7 +1406,10 @@ class CompleteStateSnapshot(Test):
         "This requires quantum coherence: all vertices in superposition."
     )
     reference = "Field Object configuration completeness"
-    level = Critical
+    level = Ignore
+    ignore_reason = (
+        'Counts are hard-coded and observations() repeats model(); nothing is measured.'
+    )
     
     audit_score = 95
     audit_notes = (
@@ -1574,7 +1530,10 @@ class SpeedOfLightQuantumProof(Test):
         "The observed c proves quantum non-locality at the Field Origin."
     )
     reference = "Quantum non-locality signature"
-    level = Critical
+    level = Ignore
+    ignore_reason = (
+        'Inputs, including c_observed = 1.0, are hard-coded; observations() repeats model(), and predicted c = r_e x (c / r_e) is circular.'
+    )
     
     audit_score = 97
     audit_notes = (
@@ -1754,35 +1713,25 @@ class PiDigitsToClosureRelationship(Test):
             Model()
             .add("Pi digits per step", pi_digits_per_step)
             .add("Steps per FC_sigma", steps_per_fc_sigma)
-            .add("FC_sigma (x10^-24 s)", round(fc_sigma * 1e24, 2))
-            .add("Pi digits per meeting (avg)", round(pi_digits_per_meeting, 2))
+            .add("FC_sigma (x10^-24 s)", round(fc_sigma * 1e24, 2), tol=0.001)
+            .add("Pi digits per meeting (avg)", round(pi_digits_per_meeting, 2), tol=0.09)
             .add("Time per pi digit (x10^-24 s)", round(time_per_pi_digit * 1e24, 2))
-            .add("Time per meeting (x10^-23 s)", round(time_per_meeting * 1e23, 2))
+            .add("Time per meeting (x10^-23 s)", round(time_per_meeting * 1e23, 2), tol=0.09)
             .add("Meetings = every ~2 digits", 1 if 1.5 < pi_digits_per_meeting < 2.5 else 0)
         )
     
     def observations(self):
-        fc_sigma = R_E / C
-        result = analyze_origin_meetings(1000)
-        
-        pi_digits_per_step = 1
-        steps_per_fc_sigma = 1
-        pi_digits_per_meeting = result['mean_interval']
-        
-        time_per_pi_digit = fc_sigma
-        time_per_meeting = fc_sigma * pi_digits_per_meeting
-        
+        # One digit per step and one step per closure period r_e / c
+        # (CODATA: 9.40 x 10^-24 s). A meeting (chamber switch) occurs every
+        # 2 digits on average, so every 1.88 x 10^-23 s.
+        fc_sigma = 2.8179403205e-15 / 299792458.0
         return (
             Observed()
-            .add("Pi digits per step", pi_digits_per_step)
-            .add("Steps per FC_sigma", steps_per_fc_sigma)
             .add("FC_sigma (x10^-24 s)", round(fc_sigma * 1e24, 2))
-            .add("Pi digits per meeting (avg)", round(pi_digits_per_meeting, 2))
-            .add("Time per pi digit (x10^-24 s)", round(time_per_pi_digit * 1e24, 2))
-            .add("Time per meeting (x10^-23 s)", round(time_per_meeting * 1e23, 2))
-            .add("Meetings = every ~2 digits", 1 if 1.5 < pi_digits_per_meeting < 2.5 else 0)
+            .add("Pi digits per meeting (avg)", 2.0)
+            .add("Time per meeting (x10^-23 s)", round(2 * fc_sigma * 1e23, 2))
+            .add("Meetings = every ~2 digits", 1)
         )
-
 
 # =============================================================================
 # TEST 15: DUAL TIME DIMENSION TOPOLOGY
@@ -1918,7 +1867,10 @@ class FrequencyLockingAtOrigin(Test):
         "If resonant, their states are already correlated, no propagation needed."
     )
     reference = "Chapter 27: The Field Origin as Resonance Node"
-    level = Critical
+    level = Ignore
+    ignore_reason = (
+        'The observed speed ratio is hard-coded as 1.0 and the conclusion follows from it; the computed part duplicates HypotheticalDelayAnalysis.'
+    )
     
     audit_score = 96
     audit_notes = (
@@ -2163,7 +2115,10 @@ class TemporalCouplingNonLinearity(Test):
         "The dual time structure creates inherent non-linearity at the coupling point."
     )
     reference = "Temporal topology and non-linear dynamics"
-    level = Critical
+    level = Ignore
+    ignore_reason = (
+        "Premises are hard-coded as 1 ('by construction') and the observed speed is assumed; the conclusion cannot fail."
+    )
     
     audit_score = 97
     audit_notes = (
@@ -2291,7 +2246,10 @@ class ResonanceNodeNotSpatialPoint(Test):
         "a frequency (resonance node), not a place. TetB is wherever resonates."
     )
     reference = "Chapter 27: Where Is TetB?"
-    level = Critical
+    level = Ignore
+    ignore_reason = (
+        'Every metric is derived from the circular speed check (r_e x c / r_e = c); nothing independent is tested.'
+    )
     
     audit_score = 96
     audit_notes = (
@@ -2412,7 +2370,10 @@ class EntanglementEnablesInstantaneousRead(Test):
         "correlation at the Field Origin."
     )
     reference = "Quantum entanglement and READ process"
-    level = Critical
+    level = Ignore
+    ignore_reason = (
+        "Two of three premises are hard-coded as 1 ('by construction'); the third is the circular speed check."
+    )
     
     audit_score = 97
     audit_notes = (
@@ -2550,7 +2511,10 @@ class TemporalVanishingAtOrigin(Test):
         "This is the mathematical proof of instantaneous coupling."
     )
     reference = "Fundamental closure kinematics: t = r / c"
-    level = Critical
+    level = Ignore
+    ignore_reason = (
+        'Computes t = r / c at r = 0; the result is 0 by arithmetic and cannot fail.'
+    )
     
     audit_score = 99
     audit_notes = (
@@ -2710,7 +2674,10 @@ class DualTimeSquaredTopology(Test):
         "The origin is where time vanishes and only space persists."
     )
     reference = "Bimetric topology and (3+1)^2 structure"
-    level = Critical
+    level = Ignore
+    ignore_reason = (
+        'Checks the arithmetic of (3 + t_A)(3 + t_B) at hard-coded values of t; it cannot fail.'
+    )
     
     audit_score = 98
     audit_notes = (
@@ -2870,7 +2837,10 @@ class ClosureAtCMeansTVanishes(Test):
         "The closure speed c guarantees time vanishes at the coupling point."
     )
     reference = "Closure kinematics and temporal collapse"
-    level = Critical
+    level = Ignore
+    ignore_reason = (
+        'Computes 0 / c = 0; the result cannot fail.'
+    )
     
     audit_score = 98
     audit_notes = (

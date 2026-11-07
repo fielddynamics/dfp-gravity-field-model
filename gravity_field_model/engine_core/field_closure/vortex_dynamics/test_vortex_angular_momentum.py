@@ -173,25 +173,29 @@ class AngularMomentumAccumulation(Test):
     def model(self):
         analysis = analyze_angular_momentum(10000)
         L = analysis['L_final']
+        magnitude = analysis['L_final_magnitude']
         return (
             Model()
             .add("L_x (final)", L[0])
             .add("L_y (final)", L[1])
             .add("L_z (final)", L[2])
-            .add("L magnitude (final)", analysis['L_final_magnitude'])
+            .add("L magnitude (final)", magnitude)
+        .add("log10 |L| (final)", math.log10(magnitude) if magnitude > 0 else -99.0, abs_tol=0.65)
+            .add("Below vortex scale (|L| < 0.1 N)", 1 if magnitude < 0.1 * analysis['total_steps'] else 0)
             .add("Total steps", analysis['total_steps'])
         )
 
     def observations(self):
-        # For a random walk, L should be ~sqrt(N) in magnitude
-        n_steps = 10000
-        random_walk_expected = math.sqrt(n_steps) * 2  # Rough estimate
+        # For independent steps L accumulates as a random walk: mean |L| after
+        # 10,000 steps is about 234 (mean of 60 random sequences; 99% between
+        # 57 and 520). A coherent vortex would instead grow like N, reaching
+        # thousands; the flag separates the two. The magnitude is compared on a
+    # log scale (234 within a factor of 4.5) because its spread is skewed.
         return (
             Observed()
-            .add("Expected for random walk", random_walk_expected)
-            .add("Expected for vortex", n_steps * 0.1)
+            .add("log10 |L| (final)", round(math.log10(234), 3))
+            .add("Below vortex scale (|L| < 0.1 N)", 1)
         )
-
 
 class ChiralityMeasurement(Test):
     """
@@ -208,7 +212,7 @@ class ChiralityMeasurement(Test):
     )
     reference = "Vortex cosmology, spinor structure"
     level = Standard
-    tolerance = 0.10
+    tolerance = 0.045
 
     commentary = (
         "CHIRALITY AND SPIN: "
@@ -239,17 +243,19 @@ class ChiralityMeasurement(Test):
             Model()
             .add("Positive L_z steps", analysis['positive_z'])
             .add("Negative L_z steps", analysis['negative_z'])
-            .add("Chirality", analysis['chirality'])
+            .add("Chirality", analysis['chirality'], abs_tol=0.02)
             .add("Chirality (%)", abs(analysis['chirality']) * 100)
         )
 
     def observations(self):
+        # No preferred handedness for independent steps: about 2500 positive and
+        # 2500 negative L_z steps (99% within 4%), and chirality 0 within 0.02.
         return (
             Observed()
-            .add("Expected chirality (random)", 0.0)
-            .add("Expected chirality range", 0.02)
+            .add("Positive L_z steps", 2500)
+            .add("Negative L_z steps", 2500)
+            .add("Chirality", 0.0)
         )
-
 
 class VortexVsRandomWalk(Test):
     """
@@ -305,16 +311,15 @@ class VortexVsRandomWalk(Test):
             Model()
             .add("N=100 L magnitude", L_magnitudes[0])
             .add("N=10000 L magnitude", L_magnitudes[4])
-            .add("Scaling exponent", exponent)
+            .add("Scaling exponent", exponent, abs_tol=0.35)
         )
 
     def observations(self):
-        return (
-            Observed()
-            .add("Random walk exponent", 0.5)
-            .add("Vortex exponent", 1.0)
-        )
-
+        # Random walk: |L| ~ N^0.5. A vortex: |L| ~ N^1. The exponent here is a
+        # two-point estimate (N = 100 and 10,000), which scatters between 0.15
+        # and 0.85 for random sequences, so it is checked against 0.5 within
+        # 0.35; an exponent near 1 fails.
+        return Observed().add("Scaling exponent", 0.5)
 
 # =============================================================================
 # RUN ALL TESTS

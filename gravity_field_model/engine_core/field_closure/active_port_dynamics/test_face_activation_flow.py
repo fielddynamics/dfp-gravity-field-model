@@ -256,19 +256,24 @@ class FaceActivationUniformity(Test):
         
         return (
             Model()
-            .add("Mean activation rate", mean_rate)
-            .add("Max deviation from mean", max_deviation)
-            .add("TIME face rate", analysis['time_face_rate'])
-            .add("SPATIAL face rate", analysis['spatial_face_rate'])
+            .add("Mean activation rate (identity, info)", mean_rate)
+            .add("Max deviation from mean", max_deviation, abs_tol=0.02)
+            .add("TIME face rate", analysis['time_face_rate'], tol=0.05)
+            .add("SPATIAL face rate", analysis['spatial_face_rate'], tol=0.05)
         )
 
     def observations(self):
+        # Each face is active when the vertex is one of its 3 corners: rate 3/8
+        # for every face, TIME and SPATIAL alike. Over 10,001 steps each rate
+        # has standard deviation sqrt(0.375 * 0.625 / 10001) = 0.0048, so the
+        # largest deviation from the mean should stay below 0.02 (4 sd).
+        # (The mean over all faces is 3/8 for any sequence and is not checked.)
         return (
             Observed()
-            .add("Expected activation rate", 0.375)
-            .add("Expected max deviation", 0.02)
+            .add("Max deviation from mean", 0.0)
+            .add("TIME face rate", 0.375)
+            .add("SPATIAL face rate", 0.375)
         )
-
 
 class FaceCoactivationPattern(Test):
     """

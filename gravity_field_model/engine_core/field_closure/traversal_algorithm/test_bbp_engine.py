@@ -14,6 +14,7 @@ numerical correspondences with k=4 topology parameters.
 import math
 from typing import Dict, Optional
 
+from gravity_field_model.engine_core.field_closure import geometry_derivation as geo
 from gravity_field_model.framework import *
 from gravity_field_model.common import K
 
@@ -48,21 +49,33 @@ ENGINE_STROKES = {
 # BBP FORMULA IMPLEMENTATION
 # =============================================================================
 
+# Radix and denominator spacing of the BBP series:
+#   pi = sum_k 16^-k * sum_p c_p / (8k + p)
+BBP_RADIX = 16
+BBP_SPACING = 8
+
+
 def bbp_term(k):
-    """Compute the k-th term of the BBP formula."""
-    factor = 1.0 / (16 ** k)
-    bracket = (
-        4.0 / (8*k + 1) -
-        2.0 / (8*k + 4) -
-        1.0 / (8*k + 5) -
-        1.0 / (8*k + 6)
-    )
+    """
+    Compute the k-th term of the BBP formula from the tables above.
+
+    (Earlier the coefficients were typed into this function separately from
+    BBP_COEFFICIENTS, so the table tests could not detect a wrong entry.
+    Building the series from the tables ties every entry to the value of pi.)
+    """
+    factor = 1.0 / (BBP_RADIX ** k)
+    bracket = sum(BBP_COEFFICIENTS[p] / (BBP_SPACING * k + p) for p in BBP_POSITIONS)
     return factor * bracket
 
 
 def bbp_pi(n_terms=100):
     """Compute pi using the BBP formula with n_terms."""
     return sum(bbp_term(k) for k in range(n_terms))
+
+
+def bbp_table_error(n_terms=50):
+    """Absolute difference between the series built from the tables and math.pi."""
+    return abs(bbp_pi(n_terms) - PI)
 
 
 def bbp_coefficient_sum():
@@ -187,16 +200,17 @@ class BBPCoefficientsClosure(Test):
             .add("Coefficient sum", coeff_sum)
             .add("Positive total", positive)
             .add("Negative total", negative)
+            .add("Table reproduces pi (abs error)", bbp_table_error(), abs_tol=1e-13)
         )
-    
+
     def observations(self):
         return (
             Observed()
             .add("Coefficient sum", 0)
             .add("Positive total", 4)
             .add("Negative total", 4)
+            .add("Table reproduces pi (abs error)", 0.0)
         )
-
 
 class BBPFourPositions(Test):
     """
@@ -253,15 +267,16 @@ class BBPFourPositions(Test):
             Model()
             .add("Number of positions", n_positions)
             .add("Expected (k)", K)
+            .add("Table reproduces pi (abs error)", bbp_table_error(), abs_tol=1e-13)
         )
-    
+
     def observations(self):
         return (
             Observed()
             .add("Number of positions", 4)
             .add("Expected (k)", 4)
+            .add("Table reproduces pi (abs error)", 0.0)
         )
-
 
 class BBPBase16Structure(Test):
     """
@@ -314,21 +329,23 @@ class BBPBase16Structure(Test):
     )
     
     def model(self):
-        bbp_base = 16
-        four_k = 4 * K
+        # The radix is the one the series actually uses (it reproduces pi only
+        # with 16); k is counted from the cube geometry.
+        k = sum(1 for f in geo.tetrahedron_faces().values() if f <= geo.regular_tetrahedra()[0])
         return (
             Model()
-            .add("BBP base", bbp_base)
-            .add("4 * k", four_k)
+            .add("BBP base", BBP_RADIX)
+            .add("4 * k", 4 * k)
+            .add("Table reproduces pi (abs error)", bbp_table_error(), abs_tol=1e-13)
         )
-    
+
     def observations(self):
         return (
             Observed()
             .add("BBP base", 16)
             .add("4 * k", 16)
+            .add("Table reproduces pi (abs error)", 0.0)
         )
-
 
 class BBPDenominatorSpacing(Test):
     """
@@ -380,21 +397,22 @@ class BBPDenominatorSpacing(Test):
     )
     
     def model(self):
-        spacing = 8
-        two_k = 2 * K
+        # The spacing the series actually uses, and 2k = the number of cube
+        # vertices counted from the coordinates.
         return (
             Model()
-            .add("Denominator spacing", spacing)
-            .add("2 * k", two_k)
+            .add("Denominator spacing", BBP_SPACING)
+            .add("2 * k", len(geo.cube_vertices()))
+            .add("Table reproduces pi (abs error)", bbp_table_error(), abs_tol=1e-13)
         )
-    
+
     def observations(self):
         return (
             Observed()
             .add("Denominator spacing", 8)
             .add("2 * k", 8)
+            .add("Table reproduces pi (abs error)", 0.0)
         )
-
 
 class BBPFiringOrder(Test):
     """
@@ -457,8 +475,9 @@ class BBPFiringOrder(Test):
             .add("Position 2 (COMPRESS)", BBP_POSITIONS[1])
             .add("Position 3 (POWER)", BBP_POSITIONS[2])
             .add("Position 4 (EXHAUST)", BBP_POSITIONS[3])
+            .add("Table reproduces pi (abs error)", bbp_table_error(), abs_tol=1e-13)
         )
-    
+
     def observations(self):
         return (
             Observed()
@@ -467,8 +486,8 @@ class BBPFiringOrder(Test):
             .add("Position 2 (COMPRESS)", 4)
             .add("Position 3 (POWER)", 5)
             .add("Position 4 (EXHAUST)", 6)
+            .add("Table reproduces pi (abs error)", 0.0)
         )
-
 
 class BBPIntakeStroke(Test):
     """
@@ -524,15 +543,16 @@ class BBPIntakeStroke(Test):
             Model()
             .add("Position 1 coefficient", coeff)
             .add("Is positive (intake)", 1 if coeff > 0 else 0)
+            .add("Table reproduces pi (abs error)", bbp_table_error(), abs_tol=1e-13)
         )
-    
+
     def observations(self):
         return (
             Observed()
             .add("Position 1 coefficient", 4)
             .add("Is positive (intake)", 1)
+            .add("Table reproduces pi (abs error)", 0.0)
         )
-
 
 class BBPCompressStroke(Test):
     """
@@ -590,15 +610,16 @@ class BBPCompressStroke(Test):
             Model()
             .add("Position 4 coefficient", coeff)
             .add("Position equals k", is_k)
+            .add("Table reproduces pi (abs error)", bbp_table_error(), abs_tol=1e-13)
         )
-    
+
     def observations(self):
         return (
             Observed()
             .add("Position 4 coefficient", -2)
             .add("Position equals k", 1)
+            .add("Table reproduces pi (abs error)", 0.0)
         )
-
 
 class BBPPowerStroke(Test):
     """
@@ -655,15 +676,16 @@ class BBPPowerStroke(Test):
             Model()
             .add("Position 5 coefficient", coeff)
             .add("Position equals k+1", is_k_plus_1)
+            .add("Table reproduces pi (abs error)", bbp_table_error(), abs_tol=1e-13)
         )
-    
+
     def observations(self):
         return (
             Observed()
             .add("Position 5 coefficient", -1)
             .add("Position equals k+1", 1)
+            .add("Table reproduces pi (abs error)", 0.0)
         )
-
 
 class BBPExhaustStroke(Test):
     """
@@ -715,12 +737,18 @@ class BBPExhaustStroke(Test):
     )
     
     def model(self):
-        coeff = BBP_COEFFICIENTS[6]
-        return Model().add("Position 6 coefficient", coeff)
-    
-    def observations(self):
-        return Observed().add("Position 6 coefficient", -1)
+        return (
+            Model()
+            .add("Position 6 coefficient", BBP_COEFFICIENTS[6])
+            .add("Table reproduces pi (abs error)", bbp_table_error(), abs_tol=1e-13)
+        )
 
+    def observations(self):
+        return (
+            Observed()
+            .add("Position 6 coefficient", -1)
+            .add("Table reproduces pi (abs error)", 0.0)
+        )
 
 class BBPLargestAtBlocked(Test):
     """
@@ -780,15 +808,16 @@ class BBPLargestAtBlocked(Test):
             Model()
             .add("Largest coefficient magnitude", largest_coeff)
             .add("Position of largest", position_of_largest)
+            .add("Table reproduces pi (abs error)", bbp_table_error(), abs_tol=1e-13)
         )
-    
+
     def observations(self):
         return (
             Observed()
             .add("Largest coefficient magnitude", 4)
             .add("Position of largest", 1)
+            .add("Table reproduces pi (abs error)", 0.0)
         )
-
 
 # =============================================================================
 # RUNNER

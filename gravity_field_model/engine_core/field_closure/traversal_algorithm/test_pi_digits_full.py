@@ -290,14 +290,21 @@ class DigitDistribution(Test):
         
         return (
             Model()
-            .add("Min digit count", min_count)
-            .add("Max digit count", max_count)
-            .add("Expected per digit", expected)
+            .add("Min digit count", min_count, abs_tol=110)
+            .add("Max digit count", max_count, abs_tol=110)
+            .add("Expected per digit (info)", expected)
         )
     
     def observations(self):
-        return Observed().add("Expected per digit", 1250)
-
+        # 10,000 uniform digits: 1250 per digit, binomial standard deviation
+        # sqrt(10000 * 1/8 * 7/8) = 33. The least and most frequent digits are
+        # checked against 1250 within 3.3 standard deviations (110). (Before,
+        # only the arithmetic 10000 / 8 was checked, never the counts.)
+        return (
+            Observed()
+            .add("Min digit count", 1250)
+            .add("Max digit count", 1250)
+        )
 
 class DigitSumChecksum(Test):
     """

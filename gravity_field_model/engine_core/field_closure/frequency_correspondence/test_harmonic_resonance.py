@@ -150,21 +150,29 @@ class OrbitLengthDistribution(Test):
         
         return (
             Model()
-            .add("Total orbits", analysis['total_orbits'])
-            .add("Mean length", analysis['mean'])
-            .add("Std deviation", analysis['std'])
-            .add("Mode (most common)", analysis['mode'])
-            .add("Min length", analysis['min_length'])
+            .add("Total orbits", analysis['total_orbits'], tol=0.02)
+            .add("Mean length", analysis['mean'], tol=0.02)
+            .add("Std deviation", analysis['std'], tol=0.045)
+            .add("Mode (most common)", analysis['mode'], abs_tol=0)
+            .add("Min length", analysis['min_length'], abs_tol=0)
             .add("Max length", analysis['max_length'])
         )
     
     def observations(self):
+        # Renewal theory: digits average 3.5 and an orbit is 8 units of cumsum,
+        # so the mean orbit length is 8 / 3.5 = 2.2857 digits. Expected for
+        # independent uniform digits over 10,001 digits (mean of 60 random
+        # sequences): 4374 orbits, standard deviation 1.105, mode 2, minimum 1.
+        # (The earlier reference mean, 2.42, does not follow from any
+        # calculation and is replaced.)
         return (
             Observed()
-            .add("Expected mean", 2.42)
-            .add("Expected mode", 2)
+            .add("Total orbits", 4375)
+            .add("Mean length", 8 / 3.5)
+            .add("Std deviation", 1.105)
+            .add("Mode (most common)", 2)
+            .add("Min length", 1)
         )
-
 
 class HarmonicRatioSearch(Test):
     """
@@ -178,7 +186,10 @@ class HarmonicRatioSearch(Test):
         "This would indicate the Field Origin is a true resonance node."
     )
     reference = "Harmonic oscillator theory"
-    level = Standard
+    level = Ignore
+    ignore_reason = (
+        'Returns 5 peaks and 20 harmonic ratios for every digit sequence tested, random or pi, so it cannot distinguish resonance from noise.'
+    )
     tolerance = 0.20
     
     commentary = (
@@ -280,17 +291,21 @@ class SequencePeriodicity(Test):
         return (
             Model()
             .add("Total orbits", n)
-            .add("Autocorrelation lag 1", corr1)
-            .add("Autocorrelation lag 2", corr2)
+            .add("Autocorrelation lag 1", corr1, abs_tol=0.045)
+            .add("Autocorrelation lag 2", corr2, abs_tol=0.045)
         )
     
     def observations(self):
+        # Successive orbit lengths are not independent: a long orbit tends to
+        # end deep into the next multiple of 8, leaving a shorter next orbit.
+        # For independent uniform digits the lag-1 autocorrelation is therefore
+        # about -0.098 (not 0) and the lag-2 autocorrelation about 0 (mean of
+        # 60 random sequences; 99% within +-0.045 of these values).
         return (
             Observed()
-            .add("Expected for random (lag 1)", 0.0)
-            .add("Expected for random (lag 2)", 0.0)
+            .add("Autocorrelation lag 1", -0.098)
+            .add("Autocorrelation lag 2", 0.0)
         )
-
 
 # =============================================================================
 # RUN ALL TESTS

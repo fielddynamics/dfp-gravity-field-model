@@ -342,36 +342,29 @@ class MarkovOrderTest(Test):
         
         return (
             Model()
-            .add("H(X_n|X_{n-1})", round(h_order1, 3))
-            .add("H(X_n|X_{n-1},X_{n-2})", round(h_order2, 3))
-            .add("Difference (bits)", round(difference, 3))
+            .add("H(X_n|X_{n-1})", round(h_order1, 3), tol=0.015)
+            .add("H(X_n|X_{n-1},X_{n-2})", round(h_order2, 3), tol=0.03)
+            .add("Difference (bits)", round(difference, 3), abs_tol=0.07)
             .add("Max possible", max_entropy)
             .add("Near max entropy", near_max_entropy)
-            .add("Effectively memoryless", effectively_memoryless)
+            .add("Difference < 0.1 bits (info)", effectively_memoryless)
         )
     
     def observations(self):
-        traversal = traverse_pi_base8(1000)
-        vertices = [step['vertex'] for step in traversal]
-        
-        h_order1 = compute_conditional_entropy_order1(vertices)
-        h_order2 = compute_conditional_entropy_order2(vertices)
-        
-        difference = abs(h_order1 - h_order2)
-        
-        effectively_memoryless = 1 if difference < 0.1 else 0
-        near_max_entropy = 1 if h_order1 > 2.8 else 0
-        
+        # For a memoryless (independent) sequence both conditional entropies are
+        # 3 bits in the limit. At 1001 samples the plug-in estimates are biased
+        # low, strongly for order 2 (512 contexts): expected values over 150
+        # random sequences are 2.959 and 2.625 bits, a difference of 0.334 bits.
+        # A sequence with real memory would show a larger drop than this.
+        # (The original criterion, difference < 0.1 bits, fails for every
+        # random sequence of this length because of that bias.)
         return (
             Observed()
-            .add("H(X_n|X_{n-1})", round(h_order1, 3))
-            .add("H(X_n|X_{n-1},X_{n-2})", round(h_order2, 3))
-            .add("Difference (bits)", round(difference, 3))
-            .add("Max possible", 3.0)
-            .add("Near max entropy", near_max_entropy)
-            .add("Effectively memoryless", effectively_memoryless)
+            .add("H(X_n|X_{n-1})", 2.959)
+            .add("H(X_n|X_{n-1},X_{n-2})", 2.625)
+            .add("Difference (bits)", 0.334)
+            .add("Near max entropy", 1)
         )
-
 
 class LempelZivComplexityTest(Test):
     """
@@ -436,29 +429,20 @@ class LempelZivComplexityTest(Test):
             Model()
             .add("Sequence length", len(vertices))
             .add("LZ complexity (raw)", lz_raw)
-            .add("LZ complexity (normalized)", round(lz_normalized, 3))
+            .add("LZ complexity (normalized)", round(lz_normalized, 3), tol=0.03)
             .add("Threshold", 0.7)
             .add("High complexity (random-like)", high_complexity)
         )
     
     def observations(self):
-        traversal = traverse_pi_base8(500)
-        vertices = [step['vertex'] for step in traversal]
-        
-        lz_raw = lempel_ziv_complexity(vertices)
-        lz_normalized = normalized_lz_complexity(vertices)
-        
-        high_complexity = 1 if lz_normalized > 0.7 else 0
-        
+        # Expected for independent uniform vertices at this length (501 symbols,
+        # mean over 150 random sequences): raw LZ complexity 188, normalised
+        # 1.121; 99% of random sequences lie within 2% of these values.
         return (
             Observed()
-            .add("Sequence length", len(vertices))
-            .add("LZ complexity (raw)", lz_raw)
-            .add("LZ complexity (normalized)", round(lz_normalized, 3))
-            .add("Threshold", 0.7)
-            .add("High complexity (random-like)", high_complexity)
+            .add("LZ complexity (normalized)", 1.121)
+            .add("High complexity (random-like)", 1)
         )
-
 
 class PermutationEntropyTest(Test):
     """
@@ -521,32 +505,25 @@ class PermutationEntropyTest(Test):
         
         return (
             Model()
-            .add("PE (d=3, 6 patterns)", round(pe_d3, 3))
-            .add("PE (d=4, 24 patterns)", round(pe_d4, 3))
-            .add("PE (d=5, 120 patterns)", round(pe_d5, 3))
+            .add("PE (d=3, 6 patterns)", round(pe_d3, 3), tol=0.025)
+            .add("PE (d=4, 24 patterns)", round(pe_d4, 3), tol=0.025)
+            .add("PE (d=5, 120 patterns)", round(pe_d5, 3), tol=0.025)
             .add("Threshold", 0.9)
             .add("All dimensions high PE", all_high)
         )
     
     def observations(self):
-        traversal = traverse_pi_base8(1000)
-        vertices = [step['vertex'] for step in traversal]
-        
-        pe_d3 = compute_permutation_entropy(vertices, embedding_dim=3)
-        pe_d4 = compute_permutation_entropy(vertices, embedding_dim=4)
-        pe_d5 = compute_permutation_entropy(vertices, embedding_dim=5)
-        
-        all_high = 1 if pe_d3 > 0.9 and pe_d4 > 0.9 and pe_d5 > 0.9 else 0
-        
+        # Expected normalised permutation entropy for independent uniform
+        # vertices at 1001 samples (mean over 150 random sequences; ties between
+        # equal values lower it slightly below 1): 0.986, 0.980 and 0.967 for
+        # d = 3, 4, 5. 99% of random sequences lie within 2%.
         return (
             Observed()
-            .add("PE (d=3, 6 patterns)", round(pe_d3, 3))
-            .add("PE (d=4, 24 patterns)", round(pe_d4, 3))
-            .add("PE (d=5, 120 patterns)", round(pe_d5, 3))
-            .add("Threshold", 0.9)
-            .add("All dimensions high PE", all_high)
+            .add("PE (d=3, 6 patterns)", 0.986)
+            .add("PE (d=4, 24 patterns)", 0.980)
+            .add("PE (d=5, 120 patterns)", 0.967)
+            .add("All dimensions high PE", 1)
         )
-
 
 # =============================================================================
 # RUNNER

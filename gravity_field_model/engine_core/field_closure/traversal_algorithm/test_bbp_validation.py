@@ -14,6 +14,10 @@ Key relationships examined:
 
 from typing import Dict, Optional
 
+from gravity_field_model.engine_core.field_closure import geometry_derivation as geo
+from gravity_field_model.engine_core.field_closure.traversal_algorithm.test_bbp_engine import (
+    BBP_COEFFICIENTS, BBP_POSITIONS, BBP_RADIX, BBP_SPACING, bbp_table_error,
+)
 from gravity_field_model.framework import *
 from gravity_field_model.common import K, pi_base_8, pi_base_16
 
@@ -68,21 +72,25 @@ class Base16Is4K(Test):
     )
     
     def model(self):
+        # k counted from the cube geometry; the base is the BBP radix or the
+        # number of cube vertices, not a typed-in number.
+        k = sum(1 for f in geo.tetrahedron_faces().values() if f <= geo.regular_tetrahedra()[0])
         return (
             Model()
-            .add("Base 16", 16)
-            .add("4 x k", 4 * K)
-            .add("k value", K)
+            .add("Base 16", BBP_RADIX)
+            .add("4 x k", 4 * k)
+            .add("k value", k)
+            .add("Stored K matches geometry", 1 if K == k else 0)
         )
-    
+
     def observations(self):
         return (
             Observed()
             .add("Base 16", 16)
             .add("4 x k", 16)
             .add("k value", 4)
+            .add("Stored K matches geometry", 1)
         )
-
 
 class Base8Is2K(Test):
     """Base 8 equals 2k where k=4."""
@@ -131,21 +139,25 @@ class Base8Is2K(Test):
     )
     
     def model(self):
+        # k counted from the cube geometry; the base is the BBP radix or the
+        # number of cube vertices, not a typed-in number.
+        k = sum(1 for f in geo.tetrahedron_faces().values() if f <= geo.regular_tetrahedra()[0])
         return (
             Model()
-            .add("Base 8", 8)
-            .add("2 x k", 2 * K)
-            .add("k value", K)
+            .add("Base 8", len(geo.cube_vertices()))
+            .add("2 x k", 2 * k)
+            .add("k value", k)
+            .add("Stored K matches geometry", 1 if K == k else 0)
         )
-    
+
     def observations(self):
         return (
             Observed()
             .add("Base 8", 8)
             .add("2 x k", 8)
             .add("k value", 4)
+            .add("Stored K matches geometry", 1)
         )
-
 
 class PiBase16Valid(Test):
     """Pi base-16 produces valid hexadecimal digits (0-15)."""
@@ -412,20 +424,22 @@ class BBPCoefficientBalance(Test):
     )
     
     def model(self):
-        coefficients = [4, -2, -1, -1]
+        # Read from the coefficient table that builds the series.
+        coefficients = [BBP_COEFFICIENTS[p] for p in BBP_POSITIONS]
         return (
             Model()
             .add("Coefficient sum", sum(coefficients))
             .add("Coefficient count", len(coefficients))
+            .add("Table reproduces pi (abs error)", bbp_table_error(), abs_tol=1e-13)
         )
-    
+
     def observations(self):
         return (
             Observed()
             .add("Coefficient sum", 0)
             .add("Coefficient count", 4)
+            .add("Table reproduces pi (abs error)", 0.0)
         )
-
 
 class BBPOffsetsUnique(Test):
     """BBP denominator offsets (1, 4, 5, 6) are all unique mod 8."""
@@ -474,21 +488,21 @@ class BBPOffsetsUnique(Test):
     )
     
     def model(self):
-        offsets = [1, 4, 5, 6]
-        unique_mod_8 = len(set(o % 8 for o in offsets))
+        offsets = list(BBP_POSITIONS)
         return (
             Model()
             .add("Offsets count", len(offsets))
-            .add("Unique mod 8", unique_mod_8)
+            .add("Unique mod 8", len(set(o % BBP_SPACING for o in offsets)))
+            .add("Table reproduces pi (abs error)", bbp_table_error(), abs_tol=1e-13)
         )
-    
+
     def observations(self):
         return (
             Observed()
             .add("Offsets count", 4)
             .add("Unique mod 8", 4)
+            .add("Table reproduces pi (abs error)", 0.0)
         )
-
 
 class IntegerPartIs3(Test):
     """Both bases give integer part of pi = 3."""

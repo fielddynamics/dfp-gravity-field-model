@@ -113,7 +113,7 @@ class TimeFaceCompleteLater(Test):
     )
     reference = "ELECTRON_HALF_SPIN_HOURGLASS_VORTEX.md"
     level = Critical
-    tolerance = 0.20
+    tolerance = 0
 
     commentary = (
         "THE NECK BOTTLENECK: "
@@ -150,12 +150,18 @@ class TimeFaceCompleteLater(Test):
         )
 
     def observations(self):
+        # Facts about pi's first digits: TIME faces complete at a mean step of
+        # 13.0 and SPATIAL faces at 10.5, a ratio of 1.24. This is not a
+        # structural effect: all faces are equivalent under the cube's
+        # symmetry, the mean ratio over random digit sequences is 1.02, and 16%
+        # of random sequences give a ratio of 1.24 or more.
         return (
             Observed()
-            .add("Expected delay ratio", 1.2)
-            .add("TIME should be > SPATIAL", 1)
+            .add("TIME mean completion", 13.0)
+            .add("SPATIAL mean completion", 10.5)
+            .add("TIME min", 11)
+            .add("TIME max", 15)
         )
-
 
 class TimeFaceRareVisitation(Test):
     """
@@ -217,20 +223,25 @@ class TimeFaceRareVisitation(Test):
 
         return (
             Model()
-            .add("V0 frequency", vertex_counts[0] / total)
-            .add("V7 frequency", vertex_counts[7] / total)
-            .add("Apex total (V0+V7)", apex_freq)
-            .add("Non-apex total", time_freq)
+            .add("V0 frequency", vertex_counts[0] / total, tol=0.09)
+            .add("V7 frequency", vertex_counts[7] / total, tol=0.09)
+            .add("Apex total (V0+V7)", apex_freq, tol=0.05)
+            .add("Non-apex total", time_freq, tol=0.017)
         )
 
     def observations(self):
+        # Uniform vertices: V0 and V7 each 1/8, together 1/4; the six TIME-face
+        # vertices 3/4. Over 10,001 steps a single vertex frequency has standard
+        # deviation 0.0033 (2.6%); tolerances are about 3.3 standard deviations.
+        # (The TIME-face vertices are therefore not rarely visited: they carry
+        # three quarters of all visits.)
         return (
             Observed()
-            .add("Expected per vertex", 0.125)
-            .add("Expected apex total", 0.25)
-            .add("Expected non-apex total", 0.75)
+            .add("V0 frequency", 0.125)
+            .add("V7 frequency", 0.125)
+            .add("Apex total (V0+V7)", 0.25)
+            .add("Non-apex total", 0.75)
         )
-
 
 class NeckVsBulbCompletionOrder(Test):
     """
@@ -246,7 +257,7 @@ class NeckVsBulbCompletionOrder(Test):
     )
     reference = "Hourglass vortex model"
     level = Standard
-    tolerance = 0.15
+    tolerance = 0
 
     commentary = (
         "COMPLETION ORDER AND THE HOURGLASS: "
@@ -287,11 +298,15 @@ class NeckVsBulbCompletionOrder(Test):
         )
 
     def observations(self):
+        # Facts about pi's first digits: the first TIME face completes at step
+        # 11, after 2 SPATIAL faces. These are not structural: by symmetry TIME
+        # and SPATIAL faces complete in random order, and 28% of random digit
+        # sequences also have 2 or more SPATIAL faces complete first.
         return (
             Observed()
-            .add("Expected SPATIAL before TIME", 4)
+            .add("First TIME completion step", 11)
+            .add("SPATIAL faces before first TIME", 2)
         )
-
 
 # =============================================================================
 # RUN ALL TESTS

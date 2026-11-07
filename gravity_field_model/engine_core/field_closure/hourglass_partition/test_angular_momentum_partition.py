@@ -21,6 +21,7 @@ Reference: ELECTRON_HALF_SPIN_HOURGLASS_VORTEX.md
 
 from collections import Counter
 
+from gravity_field_model.engine_core.field_closure import geometry_derivation as geo
 from gravity_field_model.framework import *
 from gravity_field_model.common import traverse_pi_base8, TET_A, TET_B, HBAR
 from gravity_field_model.common.geometry_constants import (
@@ -229,19 +230,23 @@ class TraversalPartitionTime(Test):
             .add("TetA stays", analysis['time_in_tetA'])
             .add("TetB stays", analysis['time_in_tetB'])
             .add("Crossings", analysis['time_crossing'])
-            .add("TetA fraction", analysis['tetA_fraction'])
-            .add("TetB fraction", analysis['tetB_fraction'])
-            .add("Crossing fraction", analysis['crossing_fraction'])
+            .add("TetA fraction", analysis['tetA_fraction'], tol=0.08)
+            .add("TetB fraction", analysis['tetB_fraction'], tol=0.08)
+            .add("Crossing fraction", analysis['crossing_fraction'], tol=0.03)
         )
 
     def observations(self):
+        # Uniform next vertex: half of the moves stay in the same chamber, split
+        # equally between A and B, and half cross. Over 10,000 transitions the
+        # within-chamber fractions have standard deviation about 0.0055 (2.2%)
+        # and the crossing fraction about 0.005 (1%); tolerances are about
+        # 3.3 standard deviations.
         return (
             Observed()
-            .add("Expected TetA fraction", 0.25)
-            .add("Expected TetB fraction", 0.25)
-            .add("Expected crossing fraction", 0.50)
+            .add("TetA fraction", 0.25)
+            .add("TetB fraction", 0.25)
+            .add("Crossing fraction", 0.5)
         )
-
 
 class SpinAsSharedConnection(Test):
     """
@@ -282,37 +287,37 @@ class SpinAsSharedConnection(Test):
         )
 
     def model(self):
-        # Angular momentum partition in units of hbar
+        # Face fractions counted from the coordinates (see geometry_derivation),
+        # applied to the model's total angular momentum of 2 hbar (an input of
+        # the hourglass picture, not derived here).
         L_total = 2.0
-
-        L_tetA_alone = (3/8) * L_total
-        L_tetB_alone = (3/8) * L_total
-        L_shared = (2/8) * L_total
-
-        # Verify
-        L_sum = L_tetA_alone + L_shared + L_tetB_alone
-
-        # The shared portion IS spin
-        spin = L_shared
-
+        faces = geo.tetrahedron_faces()
+        time = geo.time_faces()
+        tets = sorted(geo.regular_tetrahedra(), key=min)
+        n_total = len(faces)
+        spatial_a = sum(1 for v, f in faces.items() if v not in time and f <= tets[1])
+        spatial_b = sum(1 for v, f in faces.items() if v not in time and f <= tets[0])
+        L_tetA_alone = spatial_a / n_total * L_total
+        L_tetB_alone = spatial_b / n_total * L_total
+        L_shared = len(time) / n_total * L_total
         return (
             Model()
             .add("L_tetA (hbar)", L_tetA_alone)
             .add("L_tetB (hbar)", L_tetB_alone)
             .add("L_shared = SPIN (hbar)", L_shared)
-            .add("L_total (hbar)", L_sum)
-            .add("Spin is shared?", 1 if L_shared == 0.5 else 0)
+            .add("L_total (hbar)", L_tetA_alone + L_shared + L_tetB_alone)
         )
 
     def observations(self):
+        # The electron's spin is hbar/2. With L_total = 2 hbar the spatial faces
+        # carry 3/8 each side and the two TIME faces 2/8.
         return (
             Observed()
             .add("L_tetA (hbar)", 0.75)
             .add("L_tetB (hbar)", 0.75)
             .add("L_shared = SPIN (hbar)", 0.50)
-            .add("Spin is shared?", 1)
+            .add("L_total (hbar)", 2.0)
         )
-
 
 # =============================================================================
 # RUN ALL TESTS

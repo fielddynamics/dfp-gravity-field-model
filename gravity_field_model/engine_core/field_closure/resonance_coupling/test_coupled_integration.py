@@ -391,10 +391,10 @@ class TotalMerkabaConservation(Test):
         
         return (
             Model()
-            .add("TetA fraction", partition['TetA'])
-            .add("Neck fraction", partition['Neck'])
-            .add("TetB fraction", partition['TetB'])
-            .add("Total fraction", total_fraction)
+            .add("TetA fraction", partition['TetA'], tol=0.09)
+            .add("Neck fraction", partition['Neck'], tol=0.04)
+            .add("TetB fraction", partition['TetB'], tol=0.09)
+            .add("Total fraction", total_fraction, abs_tol=1e-9)
             .add("Conservation holds", 1.0 if conservation_holds else 0.0)
         )
 

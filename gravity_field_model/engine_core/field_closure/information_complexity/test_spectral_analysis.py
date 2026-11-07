@@ -373,32 +373,26 @@ class PowerSpectrumFlat(Test):
         
         return (
             Model()
-            .add("Mean power", round(analysis['mean'], 4))
+            .add("Mean power", round(analysis['mean'], 4), tol=0.13)
             .add("Std power", round(analysis['std'], 4))
-            .add("CV of power", round(analysis['cv'], 4))
-            .add("Max/mean ratio", round(analysis['max_ratio'], 2))
-            .add("Flat spectrum", flat_spectrum)
+            .add("CV of power", round(analysis['cv'], 4), tol=0.2)
+            .add("Max/mean ratio", round(analysis['max_ratio'], 2), tol=0.65)
+            .add("CV < 1 and max/mean < 4 (info)", flat_spectrum)
         )
     
     def observations(self):
-        traversal = traverse_pi_base8(512)
-        vertices = [step['vertex'] for step in traversal]
-        power = compute_power_spectrum_fft_friendly(vertices)
-        analysis = analyze_spectrum_flatness(power)
-        
-        flat_cv = 1 if analysis['cv'] < 1.0 else 0
-        flat_ratio = 1 if analysis['max_ratio'] < 4.0 else 0
-        flat_spectrum = 1 if flat_cv and flat_ratio else 0
-        
+        # White noise: periodogram ordinates are exponentially distributed, so
+        # their coefficient of variation is 1. The largest of 256 ordinates is
+        # typically about ln(256) = 5.5 to 6 times the mean, so the original
+        # criterion "max/mean < 4" fails for genuine white noise and is kept for
+        # information only. Expected values (mean over 150 random sequences):
+        # mean power 5.23, CV 0.99, max/mean 6.1.
         return (
             Observed()
-            .add("Mean power", round(analysis['mean'], 4))
-            .add("Std power", round(analysis['std'], 4))
-            .add("CV of power", round(analysis['cv'], 4))
-            .add("Max/mean ratio", round(analysis['max_ratio'], 2))
-            .add("Flat spectrum", flat_spectrum)
+            .add("Mean power", 5.23)
+            .add("CV of power", 1.0)
+            .add("Max/mean ratio", 6.1)
         )
-
 
 class NoPeriodicPeaks(Test):
     """
@@ -458,29 +452,23 @@ class NoPeriodicPeaks(Test):
         
         return (
             Model()
-            .add("Peaks above 4x mean", n_peaks)
+            .add("Peaks above 4x mean", n_peaks, abs_tol=4.4)
+            .add("Max/mean power ratio", analyze_spectrum_flatness(power)['max_ratio'], tol=0.65)
             .add("Expected (5%)", round(nist['expected'], 1))
             .add("NIST p-value", round(nist['p_value'], 4))
             .add("Passes NIST (p>0.01)", passes_nist)
         )
     
     def observations(self):
-        traversal = traverse_pi_base8(512)
-        vertices = [step['vertex'] for step in traversal]
-        power = compute_power_spectrum_fft_friendly(vertices)
-        peaks = detect_spectral_peaks(power, threshold_ratio=4.0)
-        nist = nist_spectral_test(power)
-        
-        passes_nist = 1 if nist['p_value'] > 0.01 else 0
-        
+        # For white noise each periodogram ordinate is exponentially distributed,
+        # so P(power > 4 x mean) = e^-4 = 0.018: about 4.7 of the 256 bins.
+        # The NIST spectral test should not reject at the 1% level.
         return (
             Observed()
-            .add("Peaks above 4x mean", len(peaks))
-            .add("Expected (5%)", round(nist['expected'], 1))
-            .add("NIST p-value", round(nist['p_value'], 4))
-            .add("Passes NIST (p>0.01)", passes_nist)
+            .add("Peaks above 4x mean", round(256 * math.exp(-4), 1))
+            .add("Max/mean power ratio", 6.1)  # largest of 256 exponential ordinates
+        .add("Passes NIST (p>0.01)", 1)
         )
-
 
 # =============================================================================
 # TESTS: ORBIT SIGNATURES
@@ -543,28 +531,25 @@ class OrbitSignatureDiversity(Test):
         
         return (
             Model()
-            .add("Total orbits", analysis['total'])
-            .add("Unique signatures", analysis['unique'])
-            .add("Diversity fraction", round(analysis['diversity'], 4))
-            .add("Mean signature size", round(analysis['mean_size'], 2))
-            .add("High diversity (>70%)", high_diversity)
+            .add("Total orbits", analysis['total'], tol=0.06)
+            .add("Unique signatures", analysis['unique'], tol=0.16)
+            .add("Diversity fraction", round(analysis['diversity'], 4), tol=0.17)
+            .add("Mean signature size", round(analysis['mean_size'], 2), tol=0.06)
+            .add("Diversity > 70% (info)", high_diversity)
         )
     
     def observations(self):
-        traversal = traverse_pi_base8(1000)
-        signatures = extract_orbit_signatures(traversal)
-        analysis = analyze_signature_diversity(signatures)
-        high_diversity = 1 if analysis['diversity'] > 0.7 else 0
-        
+        # Expected for independent uniform digits over 1001 steps (mean over 150
+        # random sequences): about 438 orbits, 93 distinct signatures, diversity
+        # 0.212 and mean signature size 2.0. (The original criterion, diversity
+        # above 70%, is not met by any random sequence of this length.)
         return (
             Observed()
-            .add("Total orbits", analysis['total'])
-            .add("Unique signatures", analysis['unique'])
-            .add("Diversity fraction", round(analysis['diversity'], 4))
-            .add("Mean signature size", round(analysis['mean_size'], 2))
-            .add("High diversity (>70%)", high_diversity)
+            .add("Total orbits", 438)
+            .add("Unique signatures", 93)
+            .add("Diversity fraction", 0.212)
+            .add("Mean signature size", 2.0)
         )
-
 
 class ComplementaryPairTiming(Test):
     """
@@ -626,33 +611,24 @@ class ComplementaryPairTiming(Test):
         
         return (
             Model()
-            .add("Mean complement delay", round(mean_delay, 2))
+            .add("Mean complement delay", round(mean_delay, 2), tol=0.13)
             .add("Expected (Kac)", expected)
             .add("Error %", round(error_pct, 1))
-            .add("Min delay", timing['min_delay'])
+            .add("Min delay", timing['min_delay'], abs_tol=0)
             .add("Max delay", timing['max_delay'])
             .add("Normal timing (<25%)", normal_timing)
         )
     
     def observations(self):
-        traversal = traverse_pi_base8(1000)
-        timing = compute_complementary_timing(traversal)
-        
-        mean_delay = timing['mean_delay']
-        expected = 8.0
-        error_pct = abs(mean_delay - expected) / expected * 100 if expected > 0 else 0
-        normal_timing = 1 if error_pct < 25 else 0
-        
+        # Kac: for independent uniform vertices the wait until the complementary
+        # vertex appears is geometric with p = 1/8, mean 8 steps. Over this
+        # sample 99% of random sequences give a mean between 7.3 and 8.9.
         return (
             Observed()
-            .add("Mean complement delay", round(mean_delay, 2))
-            .add("Expected (Kac)", expected)
-            .add("Error %", round(error_pct, 1))
-            .add("Min delay", timing['min_delay'])
-            .add("Max delay", timing['max_delay'])
-            .add("Normal timing (<25%)", normal_timing)
+            .add("Mean complement delay", 8.0)
+            .add("Min delay", 1)
+            .add("Normal timing (<25%)", 1)
         )
-
 
 # =============================================================================
 # RUNNER

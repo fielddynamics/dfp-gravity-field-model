@@ -29,6 +29,7 @@ one rooted in ancient cosmology (I Ching), another in modern physics (GR).
 from typing import Dict, List
 from collections import Counter
 
+from gravity_field_model.engine_core.field_closure import geometry_derivation as geo
 from gravity_field_model.framework import *
 from gravity_field_model.common.pi_data import get_pi_base8
 from gravity_field_model.common.geometry_constants import (
@@ -220,23 +221,23 @@ class KMinus1Ratio(Test):
     )
     
     def model(self):
-        vertices_per_face = 3  # = k-1
-        implicit_per_face = 1  # Gained at 2nd read
-        ratio = vertices_per_face / implicit_per_face
-        
-        # k encodes in structure
-        faces_per_tet = 4  # = k
-        vertices_per_face_check = 3  # = k-1
-        
+        # Counted from the coordinates: vertices on each face, faces on each
+        # tetrahedron (k), and the single vertex not on a given face.
+        faces = geo.tetrahedron_faces()
+        tet = sorted(geo.regular_tetrahedra(), key=min)[1]
+        vertices_per_face = len(next(iter(faces.values())))
+        faces_per_tet = sum(1 for f in faces.values() if f <= tet)
+        implicit_per_face = len(tet) - vertices_per_face
         return (
             Model()
             .add("Vertices per face", vertices_per_face)
             .add("Implicit per face", implicit_per_face)
-            .add("Ratio", ratio)
-            .add("k", K)
-            .add("k-1", K - 1)
+            .add("Ratio", vertices_per_face / implicit_per_face)
+            .add("k", faces_per_tet)
+            .add("k-1", faces_per_tet - 1)
+            .add("Matches stored K", 1 if faces_per_tet == K else 0)
         )
-    
+
     def observations(self):
         return (
             Observed()
@@ -245,6 +246,7 @@ class KMinus1Ratio(Test):
             .add("Ratio", 3)
             .add("k", 4)
             .add("k-1", 3)
+            .add("Matches stored K", 1)
         )
 
 
@@ -309,17 +311,20 @@ class ThreePlusOneStructure(Test):
     )
     
     def model(self):
-        spatial_per_tet = 3  # A1, A2, A4 or B3, B5, B6
-        time_per_tet = 1     # A7 or B0
-        total = spatial_per_tet + time_per_tet
-        
+        # Counted from the coordinates: of the four faces of one tetrahedron,
+        # how many are perpendicular to the 0-7 body diagonal (TIME) and how many
+        # are not (SPATIAL).
+        tet = sorted(geo.regular_tetrahedra(), key=min)[1]
+        faces = {v: f for v, f in geo.tetrahedron_faces().items() if f <= tet}
+        time_per_tet = sum(1 for v in faces if v in geo.time_faces())
+        spatial_per_tet = len(faces) - time_per_tet
         return (
             Model()
             .add("Spatial faces per tet", spatial_per_tet)
             .add("TIME faces per tet", time_per_tet)
-            .add("Total (k)", total)
+            .add("Total (k)", spatial_per_tet + time_per_tet)
         )
-    
+
     def observations(self):
         return (
             Observed()

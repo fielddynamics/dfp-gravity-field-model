@@ -677,55 +677,43 @@ class BootstrapUncertainty(Test):
         )
 
     def model(self):
-        # Collect face-specific activation counts per 100-step windows
+        # Bootstrap the activation rate of the two TIME faces, window by window.
+        # (Averaging over all eight faces, as before, gives exactly 1 for any
+        # digit sequence, because every vertex lies on three faces; the TIME
+        # faces alone depend on where the traversal actually goes.)
         traversal = traverse_pi_base8(10000)
         window_size = 100
         n_windows = len(traversal) // window_size
-        
-        # Compute activation rate per window for each face
-        face_names = list(FACES.keys())
+        time_faces = list(TIME_FACES)
         window_rates = []
-        
         for w in range(n_windows):
-            start = w * window_size
-            end = start + window_size
-            face_counts = Counter()
-            for step in traversal[start:end]:
-                vertex = step['vertex']
-                for face in get_faces_for_vertex(vertex):
-                    face_counts[face] += 1
-            # Average rate across faces for this window
-            rates = [face_counts[f] / (window_size * 3 / 8) for f in face_names]
-            window_rates.append(np.mean(rates))
-        
+            steps = traversal[w * window_size:(w + 1) * window_size]
+            hits = sum(1 for step in steps for f in get_faces_for_vertex(step['vertex']) if f in time_faces)
+            # Normalised so that the uniform expectation (3/8 per face) is 1
+            window_rates.append(hits / (window_size * len(time_faces) * 3 / 8))
         window_rates = np.array(window_rates)
-        
-        # Bootstrap the window means
-        point, lower, upper = bootstrap_confidence_interval(
-            window_rates, np.mean, n_bootstrap=5000
-        )
-        
-        ci_width = upper - lower
-        
-        # Pass criterion: point estimate close to 1.0 (normalized)
-        point_near_one = 1.0 if abs(point - 1.0) < 0.05 else 0.0
-        
+        point, lower, upper = bootstrap_confidence_interval(window_rates, np.mean, n_bootstrap=5000)
         return (
             Model()
-            .add("Bootstrap estimate valid", point_near_one)
-            .add("Point estimate (normalized)", round(point, 4))
+            .add("Point estimate (normalized)", round(point, 4), tol=0.02)
             .add("95% CI lower", round(lower, 4))
             .add("95% CI upper", round(upper, 4))
-            .add("CI width", round(ci_width, 4))
+            .add("CI width", round(upper - lower, 4), tol=0.35)
+            .add("CI contains 1", 1 if lower <= 1.0 <= upper else 0)
             .add("Number of windows", n_windows)
         )
 
     def observations(self):
+        # Uniform vertices: each TIME face is active 3/8 of the time, normalised
+        # rate 1. A window of 100 steps has rate sd sqrt(0.75*0.25*100)/75 = 0.058;
+        # over 100 windows the 95% interval is about 4 * 0.058/10 = 0.023 wide.
+        # Up to one run in twenty may miss 1 by chance; the point estimate is
+        # the main check (2%, about 3.5 standard errors).
         return (
             Observed()
-            .add("Bootstrap estimate valid", 1.0)
+            .add("Point estimate (normalized)", 1.0)
+            .add("CI width", 0.023)
         )
-
 
 class TransferOperatorSpectrum(Test):
     """
@@ -934,52 +922,40 @@ class MonteCarloUncertaintyPropagation(Test):
         )
 
     def model(self):
-        # Since pi traversal is deterministic, we measure variation across
-        # different windows of the trajectory (simulating what different
-        # experimental runs would show if they sampled different time periods)
-        
+        # Spread of the TIME-face activation rate across windows of the
+        # trajectory. (The rate averaged over all faces is 3/8 for any digit
+        # sequence and so cannot test anything.)
         traversal = traverse_pi_base8(10000)
         window_size = 200
         n_windows = len(traversal) // window_size
-        
-        activation_rates = []
-        
+        time_faces = list(TIME_FACES)
+        rates = []
         for w in range(n_windows):
-            start = w * window_size
-            end = start + window_size
-            
-            total_activations = 0
-            for step in traversal[start:end]:
-                vertex = step['vertex']
-                total_activations += len(get_faces_for_vertex(vertex))
-            
-            rate = total_activations / (window_size * 8)
-            activation_rates.append(rate)
-        
-        rates = np.array(activation_rates)
-        mean_rate = np.mean(rates)
-        std_rate = np.std(rates)
+            steps = traversal[w * window_size:(w + 1) * window_size]
+            hits = sum(1 for step in steps for f in get_faces_for_vertex(step['vertex']) if f in time_faces)
+            rates.append(hits / (window_size * len(time_faces)))
+        rates = np.array(rates)
+        mean_rate = float(np.mean(rates))
+        std_rate = float(np.std(rates))
         cv = std_rate / mean_rate if mean_rate > 0 else 0
-        
-        # Pass if mean is close to theoretical 3/8 = 0.375
-        mean_correct = 1.0 if abs(mean_rate - 0.375) < 0.01 else 0.0
-        
         return (
             Model()
-            .add("Mean rate matches theory", mean_correct)
-            .add("Mean activation rate", round(mean_rate, 4))
+            .add("Mean TIME-face activation rate", round(mean_rate, 4), tol=0.03)
             .add("Std across windows", round(std_rate, 4))
-            .add("Coefficient of variation", round(cv, 4))
+            .add("Coefficient of variation", round(cv, 4), tol=0.4)
             .add("Number of windows", n_windows)
             .add("Window size", window_size)
         )
 
     def observations(self):
+        # Each TIME face is active when the vertex is one of its 3 corners: rate
+        # 3/8. Per 200-step window, hits ~ Binomial(200, 3/4) over 400 face
+        # slots: sd sqrt(200 * 0.75 * 0.25) / 400 = 0.0153, CV 0.041.
         return (
             Observed()
-            .add("Mean rate matches theory", 1.0)
+            .add("Mean TIME-face activation rate", 0.375)
+            .add("Coefficient of variation", 0.041)
         )
-
 
 # =============================================================================
 # TEST RUNNER

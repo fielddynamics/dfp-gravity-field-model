@@ -364,33 +364,28 @@ class ChamberDwellSymmetry(Test):
         
         return (
             Model()
-            .add("Mean Tet A run length", round(mean_a, 3))
-            .add("Mean Tet B run length", round(mean_b, 3))
-            .add("Max Tet A run", analysis['max_a_run'])
-            .add("Max Tet B run", analysis['max_b_run'])
-            .add("A/B ratio", round(asymmetry_ratio, 3))
+            .add("Mean Tet A run length", round(mean_a, 3), tol=0.14)
+            .add("Mean Tet B run length", round(mean_b, 3), tol=0.14)
+            .add("Max Tet A run", analysis['max_a_run'], abs_tol=6)
+            .add("Max Tet B run", analysis['max_b_run'], abs_tol=6)
+            .add("A/B ratio", round(asymmetry_ratio, 3), tol=0.19)
             .add("Symmetric (0.8-1.2)", is_symmetric)
         )
     
     def observations(self):
-        # Calculate actual values for empirical baseline
-        analysis = analyze_chamber_dwell(1000)
-        
-        mean_a = analysis['mean_a_run']
-        mean_b = analysis['mean_b_run']
-        asymmetry_ratio = mean_a / mean_b if mean_b > 0 else 0
-        is_symmetric = 1 if 0.8 < asymmetry_ratio < 1.2 else 0
-        
+        # Independent uniform vertices: each step stays in the same chamber with
+        # probability 1/2, so run lengths are geometric with mean 2 in both
+        # chambers and the A/B ratio is 1. The longest of about 250 runs per
+        # chamber is typically 8 to 9 steps.
         return (
             Observed()
-            .add("Mean Tet A run length", round(mean_a, 3))
-            .add("Mean Tet B run length", round(mean_b, 3))
-            .add("Max Tet A run", analysis['max_a_run'])
-            .add("Max Tet B run", analysis['max_b_run'])
-            .add("A/B ratio", round(asymmetry_ratio, 3))
-            .add("Symmetric (0.8-1.2)", is_symmetric)
+            .add("Mean Tet A run length", 2.0)
+            .add("Mean Tet B run length", 2.0)
+            .add("Max Tet A run", 9)
+            .add("Max Tet B run", 9)
+            .add("A/B ratio", 1.0)
+            .add("Symmetric (0.8-1.2)", 1)
         )
-
 
 # =============================================================================
 # TEST 2: CROSS-CHAMBER ORIGIN PROXIMITY
@@ -455,32 +450,27 @@ class CrossChamberOriginProximity(Test):
         
         return (
             Model()
-            .add("Mean A->B distance to origin", round(analysis['mean_a_to_b_dist'], 4))
-            .add("Mean B->A distance to origin", round(analysis['mean_b_to_a_dist'], 4))
-            .add("Mean within-A distance", round(analysis['mean_within_a_dist'], 4))
-            .add("Mean within-B distance", round(analysis['mean_within_b_dist'], 4))
-            .add("Cross/Within ratio", round(ratio, 4))
+            .add("Mean A->B distance to origin", round(analysis['mean_a_to_b_dist'], 4), tol=0.12)
+            .add("Mean B->A distance to origin", round(analysis['mean_b_to_a_dist'], 4), tol=0.13)
+            .add("Mean within-A distance", round(analysis['mean_within_a_dist'], 4), tol=0.06)
+            .add("Mean within-B distance", round(analysis['mean_within_b_dist'], 4), tol=0.06)
+            .add("Cross/Within ratio", round(ratio, 4), tol=0.07)
             .add("Cross-chamber closer (ratio<1)", cross_closer)
         )
     
     def observations(self):
-        analysis = analyze_cross_chamber_transitions(1000)
-        
-        cross_mean = (analysis['mean_a_to_b_dist'] + analysis['mean_b_to_a_dist']) / 2
-        within_mean = (analysis['mean_within_a_dist'] + analysis['mean_within_b_dist']) / 2
-        ratio = cross_mean / within_mean if within_mean > 0 else 0
-        cross_closer = 1 if ratio < 1.0 else 0
-        
+        # Expected mean distances for independent uniform vertices, from the
+        # geometry alone (mean over 100 random sequences): 1.06 for cross-chamber
+        # steps, 1.18 for within-chamber steps, ratio 0.896.
         return (
             Observed()
-            .add("Mean A->B distance to origin", round(analysis['mean_a_to_b_dist'], 4))
-            .add("Mean B->A distance to origin", round(analysis['mean_b_to_a_dist'], 4))
-            .add("Mean within-A distance", round(analysis['mean_within_a_dist'], 4))
-            .add("Mean within-B distance", round(analysis['mean_within_b_dist'], 4))
-            .add("Cross/Within ratio", round(ratio, 4))
-            .add("Cross-chamber closer (ratio<1)", cross_closer)
+            .add("Mean A->B distance to origin", 1.06)
+            .add("Mean B->A distance to origin", 1.06)
+            .add("Mean within-A distance", 1.18)
+            .add("Mean within-B distance", 1.18)
+            .add("Cross/Within ratio", 0.896)
+            .add("Cross-chamber closer (ratio<1)", 1)
         )
-
 
 # =============================================================================
 # TEST 3: 3D WINDING NUMBER
@@ -543,29 +533,22 @@ class WindingNumber3D(Test):
             Model()
             .add("Total winding (radians)", round(analysis['total_winding_radians'], 2))
             .add("Full rotations", round(full_rots, 2))
-            .add("Positive steps (CCW)", analysis['positive_steps'])
-            .add("Negative steps (CW)", analysis['negative_steps'])
+            .add("Positive steps (CCW)", analysis['positive_steps'], tol=0.12)
+            .add("Negative steps (CW)", analysis['negative_steps'], tol=0.12)
             .add("Net direction", direction)
-            .add("Has net winding (>1 rot)", has_net_winding)
+            .add("Has net winding (>1 rot, info)", has_net_winding)
         )
     
     def observations(self):
-        analysis = analyze_3d_winding(1000)
-        
-        full_rots = analysis['full_rotations']
-        direction = 1 if analysis['net_direction'] == 'counterclockwise' else -1
-        has_net_winding = 1 if abs(full_rots) > 1.0 else 0
-        
+        # For independent steps, clockwise and counter-clockwise steps are
+        # equally likely (about 375 each in 1000 steps), and the total winding
+        # is a random walk with mean 0. A net winding of a few rotations either
+        # way is therefore expected, and is reported for information only.
         return (
             Observed()
-            .add("Total winding (radians)", round(analysis['total_winding_radians'], 2))
-            .add("Full rotations", round(full_rots, 2))
-            .add("Positive steps (CCW)", analysis['positive_steps'])
-            .add("Negative steps (CW)", analysis['negative_steps'])
-            .add("Net direction", direction)
-            .add("Has net winding (>1 rot)", has_net_winding)
+            .add("Positive steps (CCW)", 375)
+            .add("Negative steps (CW)", 375)
         )
-
 
 # =============================================================================
 # TEST 4: CHAMBER TRANSITION FREQUENCY
@@ -643,45 +626,23 @@ class ChamberTransitionFrequency(Test):
         
         return (
             Model()
-            .add("Chamber switches", switches)
-            .add("Chamber stays", stays)
-            .add("Switch rate", round(switch_rate, 4))
+            .add("Chamber switches", switches, tol=0.1)
+            .add("Chamber stays", stays, tol=0.1)
+            .add("Switch rate", round(switch_rate, 4), tol=0.1)
             .add("Expected (uniform)", 0.5)
             .add("Symmetric (45-55%)", is_symmetric)
         )
     
     def observations(self):
-        traversal = traverse_pi_base8(1000)
-        
-        switches = 0
-        stays = 0
-        prev_chamber = None
-        
-        for step in traversal:
-            vertex = step['vertex']
-            chamber = 'A' if vertex in TET_A else 'B'
-            
-            if prev_chamber is not None:
-                if chamber == prev_chamber:
-                    stays += 1
-                else:
-                    switches += 1
-            
-            prev_chamber = chamber
-        
-        total = switches + stays
-        switch_rate = switches / total if total > 0 else 0
-        is_symmetric = 1 if 0.45 < switch_rate < 0.55 else 0
-        
+        # Half of the possible next vertices are in the other chamber: about 500
+        # switches and 500 stays in 1000 transitions (standard deviation 16).
         return (
             Observed()
-            .add("Chamber switches", switches)
-            .add("Chamber stays", stays)
-            .add("Switch rate", round(switch_rate, 4))
-            .add("Expected (uniform)", 0.5)
-            .add("Symmetric (45-55%)", is_symmetric)
+            .add("Chamber switches", 500)
+            .add("Chamber stays", 500)
+            .add("Switch rate", 0.5)
+            .add("Symmetric (45-55%)", 1)
         )
-
 
 # =============================================================================
 # RUNNER

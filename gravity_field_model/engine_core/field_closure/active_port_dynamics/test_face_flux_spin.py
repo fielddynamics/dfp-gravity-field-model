@@ -352,7 +352,7 @@ class AngularMomentumProjectionBalance(Test):
     )
     reference = "Angular momentum geometry, face normal distribution"
     level = Standard
-    tolerance = 0.25
+    tolerance = 1e-9
 
     commentary = (
         "THE VERDICT: Perfect balance. TIME/SPATIAL ratio = 1.0 exactly. "
@@ -405,12 +405,18 @@ class AngularMomentumProjectionBalance(Test):
         )
 
     def observations(self):
-        # Expect some ratio, to be calibrated
+        # Every face normal of the stellated octahedron lies along a body
+        # diagonal (+-1, +-1, +-1)/sqrt(3), so the projection of L = z onto any
+        # face has magnitude 1/sqrt(3) = 0.5774. TIME and SPATIAL faces project
+        # equally (ratio exactly 1) and the total over 8 faces is 8/sqrt(3).
+        r = 1 / math.sqrt(3)
         return (
             Observed()
-            .add("TIME/SPATIAL ratio", 1.0)  # Placeholder, will calibrate
+            .add("TIME face mean |L projection|", r)
+            .add("SPATIAL face mean |L projection|", r)
+            .add("TIME/SPATIAL ratio", 1.0)
+            .add("Total flux (sum of |projections|)", 8 * r)
         )
-
 
 class FaceSpinRateDistribution(Test):
     """

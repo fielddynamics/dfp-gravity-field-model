@@ -294,17 +294,19 @@ class MaximumDwellBounded(Test):
         
         return (
             Model()
-            .add("Maximum dwell time", max_dwell)
+            .add("Maximum dwell time", max_dwell, abs_tol=5)
             .add("Below 15 threshold", bounded)
         )
     
     def observations(self):
+        # About 500 runs, each geometric with p = 1/2: the longest is typically
+        # log2(500) = 9 steps, and lies between 4 and 14 for nearly all random
+        # sequences. A run of 15 or more has probability of about 3%.
         return (
             Observed()
-            .add("Maximum dwell time", 10)
+            .add("Maximum dwell time", 9)
             .add("Below 15 threshold", 1)
         )
-
 
 class DwellTimeDistribution(Test):
     """
@@ -350,29 +352,21 @@ class DwellTimeDistribution(Test):
         
         return (
             Model()
-            .add("Short dwells (<=2) fraction", short_fraction)
-            .add("Long dwells (>5) fraction", long_fraction)
+            .add("Short dwells (<=2) fraction", short_fraction, tol=0.08)
+            .add("Long dwells (>5) fraction", long_fraction, abs_tol=0.02)
             .add("Long fraction < 15%", 1 if long_fraction < 0.15 else 0)
         )
     
     def observations(self):
-        # Compute actual values dynamically
-        traversal = traverse_pi_base8(1000)
-        chamber_seq = compute_chamber_sequence(traversal)
-        dwell_times = compute_dwell_times(chamber_seq)
-        
-        all_dwells = dwell_times['A'] + dwell_times['B']
-        long_fraction = compute_long_dwell_fraction(all_dwells, threshold=5)
-        short_count = sum(1 for d in all_dwells if d <= 2)
-        short_fraction = short_count / len(all_dwells) if all_dwells else 0
-        
+        # Independent uniform vertices: each step stays in the same chamber with
+        # probability 1/2, so dwell times are geometric with p = 1/2:
+        # P(dwell <= 2) = 3/4 and P(dwell > 5) = (1/2)^5 = 0.031.
         return (
             Observed()
-            .add("Short dwells (<=2) fraction", short_fraction)
-            .add("Long dwells (>5) fraction", long_fraction)
-            .add("Long fraction < 15%", 1 if long_fraction < 0.15 else 0)
+            .add("Short dwells (<=2) fraction", 0.75)
+            .add("Long dwells (>5) fraction", 0.03125)
+            .add("Long fraction < 15%", 1)
         )
-
 
 class CrossingFrequency(Test):
     """
@@ -416,23 +410,19 @@ class CrossingFrequency(Test):
         
         return (
             Model()
-            .add("Total crossings", crossings)
-            .add("Crossing rate", rate)
+            .add("Total crossings", crossings, tol=0.1)
+            .add("Crossing rate", rate, tol=0.1)
         )
     
     def observations(self):
-        # Compute actual expected based on digit distribution
-        traversal = traverse_pi_base8(1000)
-        chamber_seq = compute_chamber_sequence(traversal)
-        crossings = compute_crossing_count(chamber_seq)
-        total_transitions = len(chamber_seq) - 1
-        
+        # Independent uniform vertices: the next vertex is in the other chamber
+        # with probability 1/2, so about 500 of the 1000 transitions cross
+        # (standard deviation 16, so 10% is about 3 standard deviations).
         return (
             Observed()
-            .add("Total crossings", crossings)
-            .add("Crossing rate", crossings / total_transitions if total_transitions > 0 else 0)
+            .add("Total crossings", 500)
+            .add("Crossing rate", 0.5)
         )
-
 
 class AlternationRuns(Test):
     """
@@ -482,8 +472,8 @@ class AlternationRuns(Test):
         
         return (
             Model()
-            .add("Alternation triplets", alternations)
-            .add("Alternation rate", rate)
+            .add("Alternation triplets", alternations, tol=0.2)
+            .add("Alternation rate", rate, tol=0.2)
         )
     
     def observations(self):

@@ -348,24 +348,25 @@ class ZeroNetFieldAtOrigin(Test):
         
         return (
             Model()
-            .add("Sum of means magnitude", sum_magnitude)
-            .add("TetA mean magnitude", teta_magnitude)
-            .add("TetB mean magnitude", tetb_magnitude)
-            .add("TetA visit fraction", result['teta_count'] / (result['teta_count'] + result['tetb_count']))
+            .add("Sum of means magnitude", sum_magnitude, abs_tol=0.1)
+            .add("TetA mean magnitude", teta_magnitude, abs_tol=0.08)
+            .add("TetB mean magnitude", tetb_magnitude, abs_tol=0.08)
+            .add("TetA visit fraction", result['teta_count'] / (result['teta_count'] + result['tetb_count']), tol=0.037)
         )
 
     def observations(self):
-        # PROBING: What do we expect?
-        # If lemniscate topology, sum should be NEAR zero
-        # Allow for statistical fluctuation
+        # The mean position vectors of each chamber's vertices are exactly zero
+        # for uniform visits, so the measured means are sampling noise: for
+        # random sequences of 5001 steps the magnitude of their sum lies below
+        # 0.1 and each chamber's below 0.08 (99%). These near-zero quantities are
+        # checked against 0 with absolute bounds.
         return (
             Observed()
-            .add("Sum of means magnitude", 0.03)  # Near zero (allow fluctuation)
-            .add("TetA mean magnitude", 0.02)     # Small but nonzero
-            .add("TetB mean magnitude", 0.02)     # Similar to TetA
-            .add("TetA visit fraction", 0.5)      # Equal visits
+            .add("Sum of means magnitude", 0.0)
+            .add("TetA mean magnitude", 0.0)
+            .add("TetB mean magnitude", 0.0)
+            .add("TetA visit fraction", 0.5)
         )
-
 
 class ExactHalfPartition(Test):
     """
@@ -379,7 +380,7 @@ class ExactHalfPartition(Test):
     )
     reference = "Mitosis symmetry, partition theory"
     level = Critical
-    tolerance = 0.02
+    tolerance = 0.037
 
     commentary = (
         "DISCOVERY: Testing the 'mitosis' metaphor. Perfect mitosis gives "
@@ -414,21 +415,22 @@ class ExactHalfPartition(Test):
             Model()
             .add("TetA fraction", result['teta_fraction'])
             .add("TetB fraction", result['tetb_fraction'])
-            .add("Visit asymmetry", result['visit_asymmetry'])
-            .add("Is symmetric (< 2%)", 1.0 if result['is_symmetric'] else 0.0)
+            .add("Visit asymmetry", result['visit_asymmetry'], abs_tol=0.035)
+            .add("Is symmetric (< 2%, info)", 1.0 if result['is_symmetric'] else 0.0)
         )
 
     def observations(self):
-        # PROBING: Is it NEAR 50/50?
-        # Allow for statistical fluctuation (~1%)
+        # Uniform vertices: each chamber holds half of them, so each is visited
+        # half the time. Over 5001 steps the fraction has standard deviation
+        # 0.007; tolerances are about 3.3 standard deviations. The asymmetry
+        # |f_A - f_B| is a near-zero quantity, so it is checked against 0 with
+        # an absolute bound (0.035) rather than by relative error against 0.01.
         return (
             Observed()
-            .add("TetA fraction", 0.495)          # Near 50%
-            .add("TetB fraction", 0.505)          # Near 50%
-            .add("Visit asymmetry", 0.01)         # ~1% asymmetry (statistical)
-            .add("Is symmetric (< 2%)", 1.0)
+            .add("TetA fraction", 0.5)
+            .add("TetB fraction", 0.5)
+            .add("Visit asymmetry", 0.0)
         )
-
 
 class LemniscateCirculationPattern(Test):
     """
@@ -476,27 +478,26 @@ class LemniscateCirculationPattern(Test):
         
         return (
             Model()
-            .add("Crossing rate", crossings['crossing_rate'])
-            .add("Flow asymmetry (A->B vs B->A)", crossings['flow_asymmetry'])
-            .add("TetA mean loop length", loops['teta_mean_loop'])
-            .add("TetB mean loop length", loops['tetb_mean_loop'])
-            .add("Loop length symmetry", loops['loop_symmetry'])
+            .add("Crossing rate", crossings['crossing_rate'], tol=0.045)
+            .add("Flow asymmetry (A->B vs B->A, info)", crossings['flow_asymmetry'])
+            .add("TetA mean loop length", loops['teta_mean_loop'], tol=0.085)
+            .add("TetB mean loop length", loops['tetb_mean_loop'], tol=0.085)
+            .add("Loop length symmetry", loops['loop_symmetry'], abs_tol=0.035)
         )
 
     def observations(self):
-        # PROBING: What does lemniscate predict?
-        # ~50% crossing rate (every other step crosses)
-        # Near-zero flow asymmetry (equal A->B and B->A)
-        # Similar loop lengths
+        # Crossing rate 1/2; mean loop length in each chamber 2 (geometric,
+        # p = 1/2); loop-length symmetry about 0.98 for random sequences. The
+        # A->B and B->A counts can differ by at most one (every crossing out
+        # must be followed by a crossing back), so the flow asymmetry is near 0
+        # by construction and is reported for information only.
         return (
             Observed()
             .add("Crossing rate", 0.5)
-            .add("Flow asymmetry (A->B vs B->A)", 0.02)  # Near zero
-            .add("TetA mean loop length", 2.0)           # ~2 steps per loop
-            .add("TetB mean loop length", 2.0)           # Similar
-            .add("Loop length symmetry", 0.95)           # High symmetry
+            .add("TetA mean loop length", 2.0)
+            .add("TetB mean loop length", 2.0)
+            .add("Loop length symmetry", 0.979)
         )
-
 
 class HolographicMirror(Test):
     """
@@ -609,23 +610,24 @@ class MitosisAsymmetryProbe(Test):
         
         return (
             Model()
-            .add("First visit is TetA", first_is_teta)
+            .add("First visit is TetA", first_is_teta, abs_tol=0)
             .add("TetA internal CV", result['teta_internal_cv'])
             .add("TetB internal CV", result['tetb_internal_cv'])
-            .add("CV ratio (TetA/TetB)", cv_ratio)
-            .add("Visit asymmetry", result['visit_asymmetry'])
+            .add("CV ratio (TetA/TetB, info)", cv_ratio)
+            .add("Visit asymmetry", result['visit_asymmetry'], abs_tol=0.035)
         )
 
     def observations(self):
-        # PROBING: We don't know what to expect
-        # Use neutral values - deviations are discoveries
+        # The traversal always starts at vertex 3 (pi's integer part), which is
+        # in TetB, so "first visit is TetA" is 0, not a 50% chance. The visit
+        # asymmetry is checked against 0 with an absolute bound of 0.035. The
+        # CV ratio varies between 0.2 and 6.5 for random sequences and is
+        # reported for information only.
         return (
             Observed()
-            .add("First visit is TetA", 0.5)  # 50% chance
-            .add("CV ratio (TetA/TetB)", 1.0)  # Equal uniformity
-            .add("Visit asymmetry", 0.0)  # Perfect symmetry
+            .add("First visit is TetA", 0.0)
+            .add("Visit asymmetry", 0.0)
         )
-
 
 # =============================================================================
 # TEST RUNNER

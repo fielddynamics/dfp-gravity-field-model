@@ -15,6 +15,7 @@ machine treating pi-driven traversal as a deterministic system. Tests validate:
 from typing import Dict, Optional, List
 from collections import Counter
 
+from gravity_field_model.engine_core.field_closure import geometry_derivation as geo
 from gravity_field_model.framework import *
 from gravity_field_model.common import K
 from gravity_field_model.common.pi_data import PI_BASE8_FRACTIONAL, get_pi_base8
@@ -508,15 +509,16 @@ class DigitDistributionReasonable(Test):
         
         return (
             Model()
-            .add("Max deviation from expected", max_dev)
+            .add("Max deviation from expected", max_dev, abs_tol=0.1)
             .add("Expected per digit", expected)
             .add("Sample size", n)
         )
     
     def observations(self):
-        # Expect small deviation from uniform distribution
-        return Observed().add("Max deviation from expected", 0.027)
-
+        # Largest relative deviation of a digit count from n/8 for independent
+        # uniform digits: about 0.046 on average, below 0.10 for 99% of random
+        # sequences. (The earlier reference, 0.027, was pi's own value.)
+        return Observed().add("Max deviation from expected", 0.0)
 
 class VertexErgodicity(Test):
     """
@@ -576,12 +578,13 @@ class VertexErgodicity(Test):
         expected = len(states) / 8
         max_dev = max(abs(vertex_counts.get(v, 0) - expected) / expected for v in range(8))
         
-        return Model().add("Max vertex deviation", max_dev)
+        return Model().add("Max vertex deviation", max_dev, abs_tol=0.26)
     
     def observations(self):
-        # Expect reasonable vertex ergodicity
-        return Observed().add("Max vertex deviation", 0.15)
-
+        # Largest relative deviation of a vertex count from the uniform
+        # expectation: about 0.14 on average for independent uniform digits at
+        # this sample size, below 0.26 for 99% of random sequences.
+        return Observed().add("Max vertex deviation", 0.0)
 
 class TetrahedronBalance(Test):
     """
@@ -666,7 +669,10 @@ class AlphaFromOrbits(Test):
     )
     reference = "Fine structure constant"
     tolerance = 0.01
-    level = Standard
+    level = Ignore
+    ignore_reason = (
+        "The orbit count 137 is typed in, so 'derived alpha' is 1/137 by construction; observations() repeat the same numbers."
+    )
     audit_score = 85
     audit_notes = (
         "Question: 15/15 - Excellent 'why does 137 keep appearing' mystery hook. "
@@ -773,26 +779,27 @@ class SpinFromFaces(Test):
     )
     
     def model(self):
-        time_faces = len(TIME_FACES)
-        total_faces = len(FACES)
-        time_fraction = time_faces / total_faces
-        spin = time_fraction * 2
-        
+        # Face counts derived from the coordinates (see geometry_derivation):
+        # the fraction of faces on the time axis, times 2, compared with the
+        # electron's spin of 1/2.
+        time_faces = len(geo.time_faces())
+        total_faces = len(geo.tetrahedron_faces())
+        spin = 2 * time_faces / total_faces
         return (
             Model()
             .add("TIME faces", time_faces)
             .add("Total faces", total_faces)
             .add("Spin", spin)
         )
-    
+
     def observations(self):
+        # The electron's spin quantum number is 1/2.
         return (
             Observed()
             .add("TIME faces", 2)
             .add("Total faces", 8)
             .add("Spin", 0.5)
         )
-
 
 class KFromTopology(Test):
     """
@@ -806,7 +813,7 @@ class KFromTopology(Test):
         "not just a constant but the organizing principle of the entire structure."
     )
     reference = "Tetrahedral structure"
-    tolerance = 0.0
+    tolerance = 0
     level = Critical
     audit_score = 87
     audit_notes = (
@@ -847,21 +854,27 @@ class KFromTopology(Test):
     )
     
     def model(self):
+        # Derived from the eight cube coordinates: the two regular tetrahedra
+        # inscribed in the cube, their vertex count and face count.
+        tets = geo.regular_tetrahedra()
         return (
             Model()
-            .add("Vertices per tet", len(TET_A))
-            .add("Base 8 = 2k", 8)
-            .add("k", K)
+            .add("Inscribed regular tetrahedra", len(tets))
+            .add("Vertices per tet", len(tets[0]))
+            .add("Base 8 = cube vertices", len(geo.cube_vertices()))
+            .add("k = faces per tet", sum(1 for f in geo.tetrahedron_faces().values() if f <= tets[0]))
+            .add("Tables match geometry", 1 if {frozenset(TET_A), frozenset(TET_B)} == set(tets) else 0)
         )
-    
+
     def observations(self):
         return (
             Observed()
+            .add("Inscribed regular tetrahedra", 2)
             .add("Vertices per tet", 4)
-            .add("Base 8 = 2k", 8)
-            .add("k", 4)
+            .add("Base 8 = cube vertices", 8)
+            .add("k = faces per tet", 4)
+            .add("Tables match geometry", 1)
         )
-
 
 # =============================================================================
 # RUNNER

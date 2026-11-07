@@ -167,17 +167,22 @@ class TwoOrbitPhasePeriod(Test):
             .add("Total orbits", analysis['total_orbits'])
             .add("1-orbit returns", analysis['one_orbit_returns'])
             .add("2-orbit returns", analysis['two_orbit_returns'])
-            .add("1-orbit return rate", analysis['one_orbit_return_rate'])
-            .add("2-orbit return rate", analysis['two_orbit_return_rate'])
+            .add("1-orbit return rate", analysis['one_orbit_return_rate'], tol=0.12)
+            .add("2-orbit return rate", analysis['two_orbit_return_rate'], tol=0.09)
         )
     
     def observations(self):
+        # Return rates at orbit boundaries for independent uniform digits (mean
+        # of 60 random sequences): 0.143 after one orbit and 0.175 after two.
+        # Both differ from 1/8 because orbit boundaries are correlated, and the
+        # 2-orbit rate exceeds the 1-orbit rate for random digits too, so a
+        # higher 2-orbit return rate is not by itself evidence of a spinor
+        # period. Pi is compared with this baseline.
         return (
             Observed()
-            .add("Expected 1-orbit return (random)", 0.125)
-            .add("Expected 2-orbit return (random)", 0.125)
+            .add("1-orbit return rate", 0.143)
+            .add("2-orbit return rate", 0.175)
         )
-
 
 class ChamberAlternation(Test):
     """
@@ -221,17 +226,21 @@ class ChamberAlternation(Test):
         return (
             Model()
             .add("Total orbits", analysis['total_orbits'])
-            .add("Alternation rate", analysis['alternating_rate'])
-            .add("2-orbit match rate", analysis['two_orbit_match_rate'])
+            .add("Alternation rate", analysis['alternating_rate'], tol=0.04)
+            .add("2-orbit match rate", analysis['two_orbit_match_rate'], tol=0.05)
         )
     
     def observations(self):
+        # Expected for independent uniform digits (mean of 60 random sequences):
+        # chamber alternation at orbit boundaries 0.526 and 2-orbit match 0.497.
+        # These differ slightly from 0.5 because orbit boundaries are not
+        # independent draws. A real 2-orbit (spinor) period would push the
+        # 2-orbit match rate well above this baseline.
         return (
             Observed()
-            .add("Expected alternation (random)", 0.50)
-            .add("Expected 2-orbit match (random)", 0.50)
+            .add("Alternation rate", 0.526)
+            .add("2-orbit match rate", 0.497)
         )
-
 
 class SpinorFrequencyRatio(Test):
     """
@@ -245,7 +254,10 @@ class SpinorFrequencyRatio(Test):
         "This is a direct consequence of the 720-degree phase period."
     )
     reference = "Spinor mathematics"
-    level = Critical
+    level = Ignore
+    ignore_reason = (
+        'f_orbit is typed in (5.1e19 Hz) and f_spinor is defined as f_orbit / 2, so the ratio is 2 by definition.'
+    )
     tolerance = 0.001
     
     commentary = (

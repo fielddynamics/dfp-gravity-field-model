@@ -50,6 +50,8 @@ Usage:
 """
 
 from __future__ import annotations
+
+import numbers
 """
 GFM Model Test Framework
 ========================
@@ -400,6 +402,7 @@ class _Metric:
     name: str
     value: float
     tolerance: Optional[float] = None
+    abs_tolerance: Optional[float] = None
 
 
 class Model:
@@ -417,16 +420,20 @@ class Model:
         self._metrics: List[_Metric] = []
         self._tables: List[Dict] = []
     
-    def add(self, name: str, value: float, tol: Optional[float] = None) -> 'Model':
+    def add(self, name: str, value: float, tol: Optional[float] = None,
+            abs_tol: Optional[float] = None) -> 'Model':
         """
         Add a metric.
         
         Args:
             name: Metric name
             value: Calculated value
-            tol: Optional custom tolerance (overrides class default)
+            tol: Optional custom relative tolerance (overrides class default)
+            abs_tol: Optional absolute tolerance. When given, the metric passes
+                if |model - observed| <= abs_tol. Use it for quantities expected
+                to be zero or near zero, where a relative error is meaningless.
         """
-        self._metrics.append(_Metric(name, value, tol))
+        self._metrics.append(_Metric(name, value, tol, abs_tol))
         return self
     
     def add_table(self, data: Dict = None, *, title: str = None, 
@@ -528,6 +535,7 @@ class TestResult:
     commentary: Optional[str] = None
     tables: List[Dict] = field(default_factory=list)
     metric_tolerances: Dict[str, float] = field(default_factory=dict)
+    metric_abs_tolerances: Dict[str, float] = field(default_factory=dict)
     level: Level = Level.STANDARD
     class_name: Optional[str] = None  # The Python class name for CLI runner
     
@@ -539,17 +547,30 @@ class TestResult:
     def __post_init__(self):
         self.comparisons = []
         
+        def _numeric(v):
+            return isinstance(v, numbers.Number)
+
         for name, model_val in self.model_values.items():
             # Get tolerance: metric-specific or default
             tol = self.metric_tolerances.get(name, self.tolerance)
+            abs_tol = self.metric_abs_tolerances.get(name)
             
             if self.observations and name in self.observations:
                 ref_val = self.observations[name]
-                if ref_val != 0:
+                if not (_numeric(model_val) and _numeric(ref_val)):
+                    # Non-numeric values (e.g. "> 0.05") cannot be compared
+                    # numerically; they must match exactly.
+                    item_passed = str(model_val) == str(ref_val)
+                    error = 0.0 if item_passed else float('inf')
+                elif abs_tol is not None:
+                    error = abs(model_val - ref_val)
+                    item_passed = error <= abs_tol
+                elif ref_val != 0:
                     error = abs(model_val - ref_val) / abs(ref_val)
+                    item_passed = error <= tol
                 else:
                     error = 0.0 if model_val == 0 else float('inf')
-                item_passed = error <= tol
+                    item_passed = error <= tol
                 self.comparisons.append((name, model_val, ref_val, error, item_passed))
             else:
                 self.comparisons.append((name, model_val, None, None, True))
@@ -702,6 +723,11 @@ class Test(ABC):
             for m in model_result.get_metrics() 
             if m.tolerance is not None
         }
+        metric_abs_tols = {
+            m.name: m.abs_tolerance
+            for m in model_result.get_metrics()
+            if m.abs_tolerance is not None
+        }
         
         # Get observations
         obs_result = self.observations()
@@ -720,6 +746,7 @@ class Test(ABC):
             commentary=self.commentary,
             tables=tables,
             metric_tolerances=metric_tols,
+            metric_abs_tolerances=metric_abs_tols,
             level=self.level,
             class_name=self.__class__.__name__,
         )
@@ -944,7 +971,12 @@ class Renderer:
             for name, model, ref, error, passed in result.comparisons:
                 if ref is not None:
                     status = _c(_Colors.GREEN, "OK") if passed else _c(_Colors.RED, "FAIL")
-                    err_str = f"{error:.2%}" if error is not None else "--"
+                    if error is None:
+                        err_str = "--"
+                    elif name in result.metric_abs_tolerances:
+                        err_str = f"{_fmt(error)} (absolute)"
+                    else:
+                        err_str = f"{error:.2%}"
                     print(f"    [{status}] {name}: {err_str} error")
             print()
         

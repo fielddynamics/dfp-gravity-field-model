@@ -145,7 +145,7 @@ class MeanDigitsPerOrbit(Test):
     )
     reference = "Orbit statistics from pi-base-8 traversal"
     level = Standard
-    tolerance = 0.05
+    tolerance = 0.02
 
     commentary = (
         "ORBIT LENGTH AND MERKABA SPIN: "
@@ -180,15 +180,15 @@ class MeanDigitsPerOrbit(Test):
         )
 
     def observations(self):
-        # Theoretical values
-        pi_mean_digit = 3.31  # Empirical for pi
-        theoretical_orbit_length = 8 / pi_mean_digit
+        # Uniform digits 0-7 have mean 3.5, so an orbit of 8 takes 8 / 3.5 =
+        # 2.2857 digits on average. Pi's measured mean digit over 10,000 digits
+        # is 3.504. (The earlier references, 3.31 and 2.417, are not pi's
+        # values and are replaced.)
         return (
             Observed()
-            .add("Mean digits per orbit", theoretical_orbit_length)
-            .add("Mean digit value", pi_mean_digit)
+            .add("Mean digits per orbit", 8 / 3.5)
+            .add("Mean digit value", 3.5)
         )
-
 
 class OrbitFrequency(Test):
     """

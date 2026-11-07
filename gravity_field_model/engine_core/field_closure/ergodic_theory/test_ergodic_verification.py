@@ -149,30 +149,32 @@ class BirkhoffErgodicTheorem(Test):
     def model(self) -> Model:
         traversal = traverse_pi_base8(1000)
         vertices = [s['vertex'] for s in traversal]
-        
         stats = compute_ergodic_statistics(vertices, n_states=8, expected_freq=1/8)
-        
+        # The criteria are upper bounds, so each is reported as a pass flag;
+        # the measured values are shown for information.
         return (
             Model()
             .add("Mean Absolute Deviation (MAD)", stats['mad'])
             .add("Root Mean Square Deviation (RMSD)", stats['rmsd'])
             .add("Maximum Deviation", stats['max_dev'])
             .add("Chi-squared statistic", stats['chi2_statistic'])
-            .add("Chi-squared p-value", stats['chi2_p_value'])
+            .add("MAD < 0.02", 1 if stats['mad'] < 0.02 else 0)
+            .add("RMSD < 0.025", 1 if stats['rmsd'] < 0.025 else 0)
+            .add("Max deviation < 0.05", 1 if stats['max_dev'] < 0.05 else 0)
+            .add("Chi-squared < 14.07 (p > 0.05)", 1 if stats['chi2_statistic'] < 14.07 else 0)
             .add("All criteria pass", 1 if stats['all_pass'] else 0)
         )
-    
+
     def observations(self):
         return (
             Observed()
-            .add("Mean Absolute Deviation (MAD)", "< 0.02")
-            .add("Root Mean Square Deviation (RMSD)", "< 0.025")
-            .add("Maximum Deviation", "< 0.05")
-            .add("Chi-squared statistic", "< 14.07")
-            .add("Chi-squared p-value", "> 0.05")
+            .add("MAD < 0.02", 1)
+            .add("RMSD < 0.025", 1)
+            .add("Max deviation < 0.05", 1)
+            .add("Chi-squared < 14.07 (p > 0.05)", 1)
             .add("All criteria pass", 1)
         )
-    
+
     commentary = (
         "Birkhoff's Ergodic Theorem is fundamental to statistical mechanics and dynamical systems. "
         "It states that for ergodic systems, following one trajectory over time (time average) gives "
@@ -217,34 +219,31 @@ class TimeAverageConvergence(Test):
     def model(self) -> Model:
         traversal = traverse_pi_base8(1000)
         vertices = [s['vertex'] for s in traversal]
-        
         stats = compute_ergodic_statistics(vertices, n_states=8, expected_freq=1/8)
-        
-        # Check each vertex individually
         vertex_deviations = {
             i: abs(stats['frequencies'][i] - stats['expected_frequency'])
             for i in range(8)
         }
-        
-        vertices_within_bounds = sum(
-            1 for dev in vertex_deviations.values() if dev < 0.05
-        )
-        
+        vertices_within_bounds = sum(1 for dev in vertex_deviations.values() if dev < 0.05)
+        max_dev = max(vertex_deviations.values())
+        mean_dev = sum(vertex_deviations.values()) / 8
         return (
             Model()
             .add("Vertices within ±5% bounds", vertices_within_bounds)
-            .add("Maximum vertex deviation", max(vertex_deviations.values()))
-            .add("Mean vertex deviation", sum(vertex_deviations.values()) / 8)
+            .add("Maximum vertex deviation", max_dev)
+            .add("Mean vertex deviation", mean_dev)
+            .add("Maximum deviation < 0.05", 1 if max_dev < 0.05 else 0)
+            .add("Mean deviation < 0.02", 1 if mean_dev < 0.02 else 0)
         )
-    
+
     def observations(self):
         return (
             Observed()
             .add("Vertices within ±5% bounds", 8)
-            .add("Maximum vertex deviation", "< 0.05")
-            .add("Mean vertex deviation", "< 0.02")
+            .add("Maximum deviation < 0.05", 1)
+            .add("Mean deviation < 0.02", 1)
         )
-    
+
     commentary = (
         "Time average convergence is the core prediction of Birkhoff's theorem. "
         "For an ergodic system, the fraction of time spent in each state should equal "
@@ -291,28 +290,25 @@ class ChiSquaredGoodnessOfFit(Test):
     def model(self) -> Model:
         traversal = traverse_pi_base8(1000)
         vertices = [s['vertex'] for s in traversal]
-        
         stats = compute_ergodic_statistics(vertices, n_states=8, expected_freq=1/8)
-        
         return (
             Model()
             .add("Chi-squared statistic", stats['chi2_statistic'])
-            .add("Critical value (5%)", stats['chi2_critical_05'])
-            .add("Critical value (1%)", stats['chi2_critical_01'])
-            .add("P-value interpretation", stats['chi2_p_value'])
+            .add("Critical value (5%)", stats['chi2_critical_05'], tol=0.001)
+            .add("Critical value (1%)", stats['chi2_critical_01'], tol=0.001)
             .add("Test passes (χ² < 14.07)", 1 if stats['pass_criteria']['chi2'] else 0)
         )
-    
+
     def observations(self):
+        # Chi-squared distribution with 7 degrees of freedom: critical values
+        # 14.067 (5%) and 18.475 (1%).
         return (
             Observed()
-            .add("Chi-squared statistic", "< 14.07")
-            .add("Critical value (5%)", 14.07)
-            .add("Critical value (1%)", 18.48)
-            .add("P-value interpretation", "> 0.05")
+            .add("Critical value (5%)", 14.067)
+            .add("Critical value (1%)", 18.475)
             .add("Test passes (χ² < 14.07)", 1)
         )
-    
+
     commentary = (
         "The chi-squared goodness-of-fit test provides a rigorous statistical framework "
         "for testing whether observed frequencies match the expected uniform distribution. "
@@ -358,35 +354,30 @@ class SampleSizeAdequacy(Test):
         )
     
     def model(self) -> Model:
-        n = 1000
-        pi_star = 1/8
-        
-        # Check adequacy
-        adequate = n > 10 / pi_star  # n >> 1/π_* means n > 10/π_*
-        
-        # Expected statistical power (approximate)
-        # For detecting 5% deviation with 80% power, need n ≈ 1155
-        power_adequate = n >= 1155
-        
+        # Use the sample size the ergodic tests actually draw, not a constant.
+        n = len(traverse_pi_base8(1000))
+        pi_star = min(compute_ergodic_statistics(
+            [s['vertex'] for s in traverse_pi_base8(1000)], n_states=8, expected_freq=1/8
+        )['frequencies'].values())
+        adequate = n > 10 / (1 / 8)  # n >> 1/pi_* means n > 10/pi_*
         return (
             Model()
             .add("Sample size n", n)
-            .add("Minimum probability π_*", pi_star)
-            .add("Threshold (10/π_*)", 10 / pi_star)
+            .add("Smallest observed vertex frequency", round(pi_star, 4))
+            .add("Threshold (10/π_*)", 10 / (1 / 8))
             .add("Adequate (n > 10/π_*)", 1 if adequate else 0)
-            .add("Power adequate (n ≥ 1155)", 1 if power_adequate else 0)
+            .add("Every vertex observed", 1 if pi_star > 0 else 0)
         )
-    
+
     def observations(self):
         return (
             Observed()
-            .add("Sample size n", 1000)
-            .add("Minimum probability π_*", 0.125)
+            .add("Sample size n", 1001)  # 1 integer digit + 1000 fractional digits
             .add("Threshold (10/π_*)", 80)
             .add("Adequate (n > 10/π_*)", 1)
-            .add("Power adequate (n ≥ 1155)", 0)  # n=1000 is slightly below ideal
+            .add("Every vertex observed", 1)
         )
-    
+
     commentary = (
         "Sample size adequacy is crucial for reliable statistical inference. "
         "For ergodic verification, we need sufficient observations to detect deviations "

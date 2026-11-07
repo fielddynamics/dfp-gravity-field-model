@@ -43,6 +43,8 @@ moved to cosmological_correspondence/test_spacetime_correspondence.py
 from typing import Dict, Optional, List
 from collections import Counter
 
+from gravity_field_model.engine_core.field_closure import geometry_derivation as geo
+from gravity_field_model.common.geometry_constants import get_vertex_coords
 from gravity_field_model.framework import *
 from gravity_field_model.common.pi_data import PI_BASE8_FRACTIONAL, get_pi_base8
 from gravity_field_model.common.geometry_constants import (
@@ -138,17 +140,31 @@ class PiDigitIsTriad(Test):
     )
     
     def model(self):
-        all_correct = True
-        for digit in range(8):
-            triad = format(digit, '03b')
-            reconstructed = int(triad, 2)
-            if reconstructed != digit:
-                all_correct = False
-        return Model().add("All digits encode correctly", 1 if all_correct else 0)
-    
-    def observations(self):
-        return Observed().add("All digits encode correctly", 1)
+        # A digit's three bits (x, y, z) should be the signs of the vertex it
+        # addresses: bit 1 -> +1, bit 0 -> -1. Check the stored vertex table
+        # against that rule for all eight digits, and the chamber against the
+        # bit parity. (Before, the test only converted each digit to binary and
+        # back, which cannot fail.)
+        coords_ok = sum(
+            1 for d in range(8)
+            if tuple(1 if b == '1' else -1 for b in format(d, '03b')) == tuple(get_vertex_coords(d))
+        )
+        chamber_ok = sum(
+            1 for d in range(8)
+            if (format(d, '03b').count('1') % 2 == 1) == (d in TET_A)
+        )
+        return (
+            Model()
+            .add("Digits whose bits match vertex coordinates", coords_ok)
+            .add("Digits whose bit parity matches chamber", chamber_ok)
+        )
 
+    def observations(self):
+        return (
+            Observed()
+            .add("Digits whose bits match vertex coordinates", 8)
+            .add("Digits whose bit parity matches chamber", 8)
+        )
 
 class VertexBelongsToThreeFaces(Test):
     """

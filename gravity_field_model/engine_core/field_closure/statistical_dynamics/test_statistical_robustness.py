@@ -376,31 +376,27 @@ class ConcentrationBounds(Test):
             Model()
             .add("Sample size", len(vertices))
             .add("Expected per vertex", round(result['expected'], 1))
-            .add("Hoeffding bound (95%)", round(result['bound'], 1))
+            .add("Hoeffding bound (95%)", round(result['bound'], 1), tol=0.01)
             .add("Max observed deviation", round(result['max_deviation'], 1))
-            .add("Mean deviation", round(result['mean_deviation'], 1))
+            .add("Mean deviation", round(result['mean_deviation'], 1), tol=0.75)
             .add("Violations", result['violations'])
             .add("All within bounds", 1 if result['all_within_bounds'] else 0)
         )
     
     def observations(self):
-        traversal = traverse_pi_base8(1000)
-        vertices = [step['vertex'] for step in traversal]
-        counts = Counter(vertices)
-        
-        result = check_concentration_bounds(counts, len(vertices), 0.95)
-        
+        # n = 1001 steps, 1/8 per vertex: expected count 125.1. Hoeffding's bound
+        # at 95% confidence is n * sqrt(ln(2/0.05) / (2n)) = 43.0. For a binomial
+        # count the expected absolute deviation is sqrt(2/pi) * sqrt(n * 7/64)
+        # = 8.4.
+        n = 1001
         return (
             Observed()
-            .add("Sample size", len(vertices))
-            .add("Expected per vertex", round(result['expected'], 1))
-            .add("Hoeffding bound (95%)", round(result['bound'], 1))
-            .add("Max observed deviation", round(result['max_deviation'], 1))
-            .add("Mean deviation", round(result['mean_deviation'], 1))
-            .add("Violations", result['violations'])
-            .add("All within bounds", 1 if result['all_within_bounds'] else 0)
+            .add("Expected per vertex", round(n / 8, 1))
+            .add("Hoeffding bound (95%)", round(n * math.sqrt(math.log(2 / 0.05) / (2 * n)), 1))
+            .add("Mean deviation", round(math.sqrt(2 / math.pi) * math.sqrt(n * 7 / 64), 1))
+            .add("Violations", 0)
+            .add("All within bounds", 1)
         )
-
 
 class SubsampleStability(Test):
     """
@@ -452,43 +448,33 @@ class SubsampleStability(Test):
     def model(self):
         traversal = traverse_pi_base8(1000)
         vertices = [step['vertex'] for step in traversal]
-        
         result = subsample_stability_test(vertices)
-        
-        half_similar = 1 if result['half_split']['similar'] else 0
-        odd_even_similar = 1 if result['odd_even']['similar'] else 0
+        # Judged at the 99% critical value (18.475, 7 degrees of freedom) so
+        # that two independent comparisons together give about a 2% false-alarm
+        # rate; at 95% each, a genuinely stable sequence fails one in ten times.
+        critical_99 = 18.475
+        half_similar = 1 if result['half_split']['chi_squared'] < critical_99 else 0
+        odd_even_similar = 1 if result['odd_even']['chi_squared'] < critical_99 else 0
         both_stable = 1 if half_similar and odd_even_similar else 0
-        
         return (
             Model()
             .add("Half split chi-sq", round(result['half_split']['chi_squared'], 2))
             .add("Half split similar", half_similar)
             .add("Odd/even chi-sq", round(result['odd_even']['chi_squared'], 2))
             .add("Odd/even similar", odd_even_similar)
-            .add("Critical value", result['half_split']['critical'])
-            .add("Both stable", both_stable)
-        )
-    
-    def observations(self):
-        traversal = traverse_pi_base8(1000)
-        vertices = [step['vertex'] for step in traversal]
-        
-        result = subsample_stability_test(vertices)
-        
-        half_similar = 1 if result['half_split']['similar'] else 0
-        odd_even_similar = 1 if result['odd_even']['similar'] else 0
-        both_stable = 1 if half_similar and odd_even_similar else 0
-        
-        return (
-            Observed()
-            .add("Half split chi-sq", round(result['half_split']['chi_squared'], 2))
-            .add("Half split similar", half_similar)
-            .add("Odd/even chi-sq", round(result['odd_even']['chi_squared'], 2))
-            .add("Odd/even similar", odd_even_similar)
-            .add("Critical value", result['half_split']['critical'])
+            .add("Critical value (99%)", critical_99)
             .add("Both stable", both_stable)
         )
 
+    def observations(self):
+        # Two halves (or odd and even positions) of the same stationary sequence
+        # should have indistinguishable vertex distributions.
+        return (
+            Observed()
+            .add("Half split similar", 1)
+            .add("Odd/even similar", 1)
+            .add("Both stable", 1)
+        )
 
 class LongRangeCorrelations(Test):
     """
@@ -553,42 +539,31 @@ class LongRangeCorrelations(Test):
         
         return (
             Model()
-            .add("R(10)", round(r10, 4))
-            .add("R(50)", round(r50, 4))
-            .add("R(100)", round(r100, 4))
-            .add("R(200)", round(r200, 4))
-            .add("R(500)", round(r500, 4))
+            .add("R(10)", round(r10, 4), abs_tol=0.13)
+            .add("R(50)", round(r50, 4), abs_tol=0.13)
+            .add("R(100)", round(r100, 4), abs_tol=0.13)
+            .add("R(200)", round(r200, 4), abs_tol=0.13)
+            .add("R(500)", round(r500, 4), abs_tol=0.13)
             .add("Threshold (95%)", round(result['threshold'], 4))
             .add("Significant count", result['significant_count'])
-            .add("No long-range patterns", no_long_range)
+            .add("No lag significant (info)", no_long_range)
+            .add("At most 2 of 5 lags significant", 1 if result['significant_count'] <= 2 else 0)
         )
     
     def observations(self):
-        traversal = traverse_pi_base8(1000)
-        vertices = [step['vertex'] for step in traversal]
-        
-        result = long_range_correlation_test(vertices)
-        
-        r10 = result['correlations'].get('R(10)', 0)
-        r50 = result['correlations'].get('R(50)', 0)
-        r100 = result['correlations'].get('R(100)', 0)
-        r200 = result['correlations'].get('R(200)', 0)
-        r500 = result['correlations'].get('R(500)', 0)
-        
-        no_long_range = 1 if result['no_long_range'] else 0
-        
+        # Independent vertices: R(k) = 0 at every lag, with standard error about
+        # 1/sqrt(N - k). Each lag is checked against 0 with an absolute bound of
+        # 0.13. At the 95% threshold, about 5% of lags (0.25 of 5) are flagged
+        # by chance; 99% of random sequences flag at most 2.
         return (
             Observed()
-            .add("R(10)", round(r10, 4))
-            .add("R(50)", round(r50, 4))
-            .add("R(100)", round(r100, 4))
-            .add("R(200)", round(r200, 4))
-            .add("R(500)", round(r500, 4))
-            .add("Threshold (95%)", round(result['threshold'], 4))
-            .add("Significant count", result['significant_count'])
-            .add("No long-range patterns", no_long_range)
+            .add("R(10)", 0.0)
+            .add("R(50)", 0.0)
+            .add("R(100)", 0.0)
+            .add("R(200)", 0.0)
+            .add("R(500)", 0.0)
+            .add("At most 2 of 5 lags significant", 1)
         )
-
 
 class BootstrapConfidence(Test):
     """
@@ -651,35 +626,27 @@ class BootstrapConfidence(Test):
         
         return (
             Model()
-            .add("Entropy estimate", round(result['point_estimate'], 3))
+            .add("Entropy estimate", round(result['point_estimate'], 3), tol=0.005)
             .add("CI lower (95%)", round(result['ci_lower'], 3))
             .add("CI upper (95%)", round(result['ci_upper'], 3))
-            .add("CI width", round(result['ci_width'], 4))
+            .add("CI width", round(result['ci_width'], 4), tol=0.5)
             .add("Max entropy", result['max_entropy'])
             .add("Narrow CI (<0.1)", narrow_ci)
             .add("Near maximum (>2.9)", near_max)
         )
     
     def observations(self):
-        traversal = traverse_pi_base8(1000)
-        vertices = [step['vertex'] for step in traversal]
-        
-        result = bootstrap_entropy_ci(vertices, n_bootstrap=500)
-        
-        narrow_ci = 1 if result['ci_width'] < 0.1 else 0
-        near_max = 1 if result['point_estimate'] > 2.9 else 0
-        
+        # Entropy of independent uniform vertices: 3 bits, 2.995 expected at
+        # 1001 samples (plug-in bias). Bootstrap 95% interval width at this
+        # sample size: about 0.018 bits (mean over 40 random sequences).
         return (
             Observed()
-            .add("Entropy estimate", round(result['point_estimate'], 3))
-            .add("CI lower (95%)", round(result['ci_lower'], 3))
-            .add("CI upper (95%)", round(result['ci_upper'], 3))
-            .add("CI width", round(result['ci_width'], 4))
-            .add("Max entropy", result['max_entropy'])
-            .add("Narrow CI (<0.1)", narrow_ci)
-            .add("Near maximum (>2.9)", near_max)
+            .add("Entropy estimate", 2.995)
+            .add("CI width", 0.018)
+            .add("Max entropy", 3.0)
+            .add("Narrow CI (<0.1)", 1)
+            .add("Near maximum (>2.9)", 1)
         )
-
 
 # =============================================================================
 # RUNNER

@@ -712,7 +712,7 @@ class TetrahedralCoherenceAnalysis(Test):
         "and 25% each for within-A and within-B."
     )
     reference = "Random walk on bipartite graph"
-    tolerance = 0.05
+    tolerance = 0.24
     level = Standard
     
     def derivation(self):
@@ -753,6 +753,11 @@ class TetrahedralCoherenceAnalysis(Test):
         )
     
     def observations(self):
+        # Expected rates for the uniform chain: 1/4 within A, 1/4 within B,
+        # 1/2 across. Correlated transitions give the within-chamber rates a
+        # standard deviation of about 0.018 over 1000 steps; the tolerance is
+        # 3.3 standard deviations. (The original 5% tolerance failed more
+        # than a third of genuinely uniform random sequences.)
         expected = expected_transition_type_rates()
         return (
             Observed()
@@ -794,7 +799,6 @@ class SymmetryPreservationTest(Test):
     )
     
     def model(self):
-        # Generate traversal
         digits = get_pi_base8(1000, include_integer=True)
         traversal = []
         cumsum = 0
@@ -802,23 +806,34 @@ class SymmetryPreservationTest(Test):
             cumsum += digit
             vertex = cumsum % 8
             traversal.append(vertex)
-        
         symmetries = generate_octahedral_symmetries()
         result = check_symmetry_preservation(traversal, symmetries)
-        
+        # check_symmetry_preservation counts any difference above 1e-6 between
+        # empirical probabilities as a violation, which every finite sample
+        # produces. The size of the differences is what matters: for a
+        # symmetric chain they should be no larger than sampling noise.
+        diffs = [abs(v['prob_original'] - v['prob_transformed']) for v in result['violations']]
+        n_checked = min(10, len(symmetries)) * 64
+        mean_diff = sum(diffs) / n_checked
+        max_diff = max(diffs) if diffs else 0.0
         return (
             Model()
-            .add("Symmetry preserved", 1 if result['symmetry_preserved'] else 0)
-            .add("Violation count", result['violation_count'])
-        )
-    
-    def observations(self):
-        # For uniform random, symmetry should be preserved (within statistical error)
-        return (
-            Observed()
-            .add("Symmetry preserved", 1)  # Ideally, but may have small violations
+            .add("Mean |P(i->j) - P(gi->gj)|", round(mean_diff, 4), abs_tol=0.05)
+            .add("Max |P(i->j) - P(gi->gj)| (info)", round(max_diff, 4))
+            .add("Exact equality pairs violated (info)", result['violation_count'])
+            .add("Symmetry preserved within noise", 1 if mean_diff < 0.05 else 0)
         )
 
+    def observations(self):
+        # The uniform chain is invariant under every symmetry of the cube, so
+        # the differences should be sampling noise only: with about 16
+        # transitions per row, each empirical probability has standard error
+        # near 0.08, and the mean difference is about 0.04.
+        return (
+            Observed()
+            .add("Mean |P(i->j) - P(gi->gj)|", 0.0)
+            .add("Symmetry preserved within noise", 1)
+        )
 
 class WindingDistributionAnalysis(Test):
     """
@@ -865,21 +880,28 @@ class WindingDistributionAnalysis(Test):
         
         return (
             Model()
-            .add("Mean increment", analysis.get('mean', 0))
-            .add("Std increment", analysis.get('std', 0))
-            .add("Min increment", analysis.get('min', 0))
-            .add("Max increment", analysis.get('max', 0))
+            .add("Mean increment", analysis.get('mean', 0), tol=0.045)
+            .add("Std increment", analysis.get('std', 0), tol=0.07)
+            .add("Min increment", analysis.get('min', 0), abs_tol=1e-9)
+            .add("Max increment", analysis.get('max', 0), tol=1e-9)
         )
     
     def observations(self):
-        # Expected mean should be around tetrahedral angle
-        tetrahedral_angle = np.arccos(-1/3)
+        # The next vertex is uniform, so the angle to it is 0 (prob 1/8),
+        # arccos(1/3) = 70.5 deg (3/8), arccos(-1/3) = 109.5 deg (3/8) or pi
+        # (1/8). The mean is exactly pi/2 and the standard deviation 0.839 rad.
+        # (The original reference, the tetrahedral angle 1.91 rad, is the angle
+        # to a face-diagonal neighbour only, not the mean over all moves.)
+        a1, a2 = np.arccos(1 / 3), np.arccos(-1 / 3)
+        mean = (3 * a1 + 3 * a2 + np.pi) / 8
+        second = (3 * a1 ** 2 + 3 * a2 ** 2 + np.pi ** 2) / 8
         return (
             Observed()
-            .add("Mean increment", tetrahedral_angle)  # Approximate
-            .add("Max increment", np.pi)  # Opposite vertices, pi radians
+            .add("Mean increment", float(mean))
+            .add("Std increment", float(np.sqrt(second - mean ** 2)))
+            .add("Min increment", 0.0)
+            .add("Max increment", float(np.pi))
         )
-
 
 # =============================================================================
 # RUNNER
