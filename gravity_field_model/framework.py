@@ -862,6 +862,8 @@ def _c(color: str, text: str) -> str:
 def _fmt(v) -> str:
     if v is None:
         return "--"
+    if not isinstance(v, numbers.Number):
+        return str(v)
     if abs(v) >= 1e6 or (abs(v) < 0.001 and v != 0):
         return f"{v:.3e}"
     elif v == int(v):
