@@ -3,7 +3,8 @@ BBP Structure: tests of the hypothesis that the BBP formula is the
 stellated-octahedron structure.
 
 PROOF.md states the theorems (I Ching and BBP as the stellated octahedron realizing pi);
-test_octahedron_pi_theorems.py checks them exactly.
+test_octahedron_pi_theorems.py and test_bbp_completeness_proof.py check them exactly
+(the latter proves the Adamchik-Wagon family complete, via Baker's theorem).
 
 Each test states a consequence of the hypothesis that could fail, and checks
 it against mathematics independent of the model.
