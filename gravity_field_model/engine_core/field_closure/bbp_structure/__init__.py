@@ -16,9 +16,15 @@ it against mathematics independent of the model.
 - test_reading_weight_rule.py: can an agreement rule give the BBP numerators?
   (fails: no; the coded rule is ordered)
 - test_hexagram_closure_null.py: does the I Ching closure walk need pi? (no: random digits close it alike)
+- test_iching_visit_order.py: is the Shuo Gua family sequence the BBP reading order? (yes, in both
+  tetrahedra; the only documented arrangement that is)
+- test_iching_encoding_selection.py: which I Ching facts fix the trigram encoding? (the Fu Xi numbering
+  and the birth order do; parity, opposites and the TIME-face step hold under all six)
+- test_pi_walk_visit_order.py: does the pi walk visit the vertices in the Shuo Gua order? (fails: no)
 
-The two failing tests are EXPLORATORY and fail on purpose: their expected
-values are the predictions of the claim that the geometry alone forces pi.
+The three failing tests are EXPLORATORY and fail on purpose: their expected
+values are predictions of the claims under test (the geometry alone forces pi;
+the pi walk follows the I Ching's order).
 
 Requires mpmath (PSLQ and 100-digit arithmetic).
 """

@@ -35,6 +35,10 @@ TETA_NORMALS: Dict[int, Tuple[int, int, int]] = {
     2: (-1, +1, -1),
     1: (-1, -1, +1),
 }
+# TetB normals: the complements 7 - v of the TetA ones, i.e. negated signs.
+TETB_NORMALS: Dict[int, Tuple[int, int, int]] = {
+    7 - v: tuple(-x for x in n) for v, n in TETA_NORMALS.items()
+}
 PAPER_ORDER = (7, 4, 2, 1)
 PAPER_AXES = (0, 1, 2)          # (x, y) give magnitudes, z gives positions
 
@@ -63,15 +67,27 @@ def read(order: Sequence[int] = PAPER_ORDER,
          axes: Sequence[int] = PAPER_AXES,
          rule: Callable[[int, int], int] = paper_rule,
          start: int = 1,
-         normals: Dict[int, Tuple[int, int, int]] = TETA_NORMALS):
+         normals: Dict[int, Tuple[int, int, int]] = None,
+         complement: bool = False):
     """
     Run the mechanism. Returns (weights by slot 1..8, positions, magnitudes, signs).
 
     axes[0], axes[1] are the axes read for magnitudes, axes[2] the axis read
     for sector positions.
+
+    complement=True reads TetB through the complement map, as the derivation
+    prescribes: its normals are the negated TetA normals, - is read as D and
+    + as 1, and the temporal face is the all-minus one (vertex 0, Kun).
     """
+    if normals is None:
+        normals = TETB_NORMALS if complement else TETA_NORMALS
     rows = [normals[v] for v in order]
-    val = lambda s: D if s > 0 else 1
+    if complement:
+        val = lambda s: D if s < 0 else 1
+        temporal = lambda r: all(s < 0 for s in r)
+    else:
+        val = lambda s: D if s > 0 else 1
+        temporal = lambda r: all(s > 0 for s in r)
     x = [val(r[axes[0]]) for r in rows]
     y = [val(r[axes[1]]) for r in rows]
     z = [val(r[axes[2]]) for r in rows]
@@ -80,7 +96,7 @@ def read(order: Sequence[int] = PAPER_ORDER,
         positions.append(p)
         p += step
     mags = [rule(a, b) for a, b in zip(x, y)]
-    signs = [1 if all(s > 0 for s in r) else -1 for r in rows]
+    signs = [1 if temporal(r) else -1 for r in rows]
     weights = {j: Fraction(0) for j in range(1, 9)}
     for pos, m, s in zip(positions, mags, signs):
         slot = ((pos - 1) % 8) + 1          # residue 0 is slot 8
