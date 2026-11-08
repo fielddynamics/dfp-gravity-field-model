@@ -56,7 +56,8 @@ class BBPLadderBase8(Test):
         "position directly from the BBP formula, without computing the digits before them?"
     )
     reference = (
-        "Bailey, Borwein, Plouffe (1997), Math. Comp. 66, 903-913; Borwein, Borwein, Galway "
+        "Bailey, Borwein, Plouffe (1997), Math. Comp. 66, 903-913; Bailey, 'The BBP algorithm "
+        "for pi' (2006), Table 1; Borwein, Borwein, Galway "
         "(2004), Canad. J. Math. 56, 897-925; stored digits: mpmath, common/pi_data.py"
     )
     tolerance = 0.0
@@ -69,12 +70,14 @@ class BBPLadderBase8(Test):
             .step("Octal digit m is bits 3m-2..3m of pi's binary expansion; read them from the rung holding those bits.")
             .step("Compare with the mpmath digits at 300 random positions up to 10,000, and the first 64 hex digits.")
             .step("Repeat in bases 2, 4, 16, 32 and 64.")
+            .step("Go to rung one million and compare with the published digits there.")
             .conclude("Hex and octal regroup the same bits; they realign every lcm(4, 3) = 12 bits.")
         )
 
     commentary = (
         "Every digit checked is right: the BBP formula reaches any base-8 digit of pi on its "
-        "own, without the digits below it, at positions up to 10,000. So the trigram stream "
+        "own, without the digits below it, at positions up to 10,000, and at the millionth "
+        "hexadecimal place it returns the published digits 26C65E52. So the trigram stream "
         "of pi is addressable, rung by rung, from the formula's four slots. That is a "
         "property random digits do not have: a random sequence has no formula that produces "
         "its millionth digit. It works because 8 = 2^3 and 16 = 2^4 are powers of two, so the "
@@ -102,12 +105,16 @@ class BBPLadderBase8(Test):
             ref = _mp_digits(2 ** k, 100)
             bases_ok += all(base_2k_digit_at(m, k) == ref[m - 1] for m in range(1, 101))
         bases_ok += oct_ok == N_POSITIONS
+        # Rung one million: hex digits starting at position 10^6, i.e. after the
+        # first 999,999 (Bailey 2006, Table 1, lists 26C65E52CB4593 there).
+        far = "".join("%X" % d for d in hex_digits_at(10 ** 6 - 1, 8))
         window = 4 * D // gcd(4, D)
         return (
             Model()
             .add("Octal digits from the ladder that match (fraction)", oct_ok / N_POSITIONS)
             .add("Hex digits 1-64 from the ladder that match (fraction)", hex_ok / len(stored_hex))
             .add("Power-of-two bases 2^1..2^6 where the ladder works", bases_ok)
+            .add("Hex digits from position 1,000,000", far)
             .add("Bits per hex/octal realignment", window)
             .add("Octal digits per window", window // D)
             .add("Hex digits per window", window // 4)
@@ -121,6 +128,8 @@ class BBPLadderBase8(Test):
             .add("Octal digits from the ladder that match (fraction)", 1.0, abs_tol=0.0)
             .add("Hex digits 1-64 from the ladder that match (fraction)", 1.0, abs_tol=0.0)
             .add("Power-of-two bases 2^1..2^6 where the ladder works", 6)
+            # D. H. Bailey, "The BBP algorithm for pi" (2006), Table 1: 26C65E52CB4593.
+            .add("Hex digits from position 1,000,000", "26C65E52")
             # lcm(4, 3) = 12.
             .add("Bits per hex/octal realignment", 12)
             .add("Octal digits per window", 4)

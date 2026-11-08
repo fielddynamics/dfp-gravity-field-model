@@ -28,9 +28,12 @@ Proof outline (each step checked here):
    Adamchik-Wagon relation.
 
 Theorem 3 (selection). In the I Ching encoding, slot 7 is Qian (father) and
-slot 8 is Kun (mother): the TIME apices. Exactly one formula for pi leaves
-both silent: BBP. It then follows, without being assumed, that the formula
-has four active slots, two in each tetrahedron, and weights summing to zero.
+slot 8 is Kun (mother): the TIME apices. Kun's slot is empty in every formula
+for pi of this kind; Qian's is empty in exactly one, BBP. It then follows,
+without being assumed, that the formula has four active slots, two in each
+tetrahedron, and weights summing to zero. For comparison, the test also
+silences each of the other three body diagonals: one admits a single formula
+(Gen-Dui, r = -1/2, split 3+1), the other two admit none.
 """
 
 import sympy as sp
@@ -203,6 +206,20 @@ class BBPCompletenessProof(Test):
         m.add("Thm 3 consequence: two active in each tetrahedron (1=yes)",
               int(len(active & t1) == 2 and len(active & t2) == 2))
         m.add("Thm 3 consequence: weights sum to zero (1=yes)", int(sum(w0) == 0))
+        # The mother's corner (slot 8) is empty in every formula; the father's (slot 7) in one.
+        m.add("Thm 3: formulas using Kun's corner (slot 8)", 0 if sp.simplify(fam[7]) == 0 else "all but finitely many")
+        # Silencing each body diagonal (v, 7 - v), with vertex 0 = slot 8.
+        slot = lambda v: 8 if v == 0 else v
+        diag = {}
+        for v in (0, 1, 2, 3):
+            conds = [fam[slot(v) - 1], fam[slot(7 - v) - 1]]
+            conds = [c for c in conds if sp.simplify(c) != 0]
+            sols = sp.solve(conds, r, dict=True) if conds else [{}]
+            diag[v] = [d[r] for d in sols if r in d]
+        m.add("Thm 3 remark: diagonal Kun-Qian silent at r", str(diag[0]))
+        m.add("Thm 3 remark: diagonal Gen-Dui silent at r", str(diag[1]))
+        m.add("Thm 3 remark: diagonal Kan-Li silent at r", str(diag[2]))
+        m.add("Thm 3 remark: diagonal Xun-Zhen silent at r", str(diag[3]))
         return m
 
     def observations(self):
@@ -224,6 +241,15 @@ class BBPCompletenessProof(Test):
             .add("Thm 3 consequence: active slots", 4)
             .add("Thm 3 consequence: two active in each tetrahedron (1=yes)", 1)
             .add("Thm 3 consequence: weights sum to zero (1=yes)", 1)
+            # Read off the family's coefficients: slot 8 has weight 0 + 0*r.
+            .add("Thm 3: formulas using Kun's corner (slot 8)", 0)
+            # Slot weights of w(r): 1: 4+8r, 2: -8r, 3: -4r, 4: -2-8r, 5: -1-2r, 6: -1-2r, 7: r, 8: 0.
+            # Kun-Qian: r = 0. Gen-Dui (slots 1, 6): 4+8r = 0 and -1-2r = 0 give r = -1/2.
+            # Kan-Li (2, 5): r = 0 and r = -1/2, none. Xun-Zhen (3, 4): r = 0 and r = -1/4, none.
+            .add("Thm 3 remark: diagonal Kun-Qian silent at r", "[0]")
+            .add("Thm 3 remark: diagonal Gen-Dui silent at r", "[-1/2]")
+            .add("Thm 3 remark: diagonal Kan-Li silent at r", "[]")
+            .add("Thm 3 remark: diagonal Xun-Zhen silent at r", "[]")
         )
 
 
