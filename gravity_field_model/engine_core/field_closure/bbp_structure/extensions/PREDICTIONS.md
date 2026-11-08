@@ -69,3 +69,22 @@ Two predictions failed, and the tests record that rather than being adjusted to 
 - **Test 25.** The grammar is less flexible than expected. Exploring afterwards (and labelled as such in the test): the agreement comes from one step, the denominator 1 + α/2 of Form II, which fits as closely as it does about 1 time in 150. The α² and α³ terms add no evidence. With the denominator and the ratios tried counted as trials, the global significance is about 2σ at most (local p ≈ 0.007, times a trials factor of at least six).
 - **Test 26.** The count was 9, not more than 10. The conclusion does not change: every fake value in the range has a menu formula within 1σ, and (3/13)(1 + α/4 + 8α²) fits the current value by changing one coefficient.
 - **Procedure note, test 26.** The first run used a menu without denominator 8, which left out the formula's own coefficient 13/8. That was a construction error, so the menu was corrected and the test rerun. Both runs' counts are given in the test.
+
+---
+
+## Test 28: does π balance itself faster than random digits? (added 2026-11-07, before running)
+
+**Hypothesis under test** (Stephen Nelson): π "self-balances with every new digit", so the right statistics should separate it from random digits.
+
+**Precise form.** For random digits, any count drifts from its balanced value by about $\sqrt n$ after $n$ digits. Self-balancing means π's drift is systematically *smaller*. Five balance measures, over the first 100,000 base-8 digits, each scaled by $\sqrt n$ and taken as the maximum over checkpoints $n = 1000, 2000, \ldots, 100{,}000$:
+
+1. digit balance: $\max_k |c_k(n) - n/8|$;
+2. chamber balance: (walk visits to TetA) − (visits to TetB);
+3. TIME-axis balance: (walk visits to Qian or Kun) − $n/4$;
+4. digit-sum balance: $\sum_{i\le n} (d_i - 3.5)$;
+5. hexagram balance: χ² of the 64 hexagram counts at $n = 100{,}000$ (not scaled).
+
+Compared with 1,000 random sequences, and with ln 2, √2 and e. Lower-tail p-value: the share of random sequences at least as balanced as π.
+
+- **Prediction:** π is not more balanced than random digits. Its smallest lower-tail p is above 0.01, and the global p (smallest p, against the random sequences' own smallest p) is above 0.05.
+- **What would support the hypothesis:** a global p below 0.01 in the "more balanced" direction, or π below the 5th percentile on at least three of the five measures.
