@@ -1,4 +1,4 @@
 """
-Extensions: twenty-eight tests that take the BBP / I Ching / stellated-octahedron
+Extensions: twenty-nine tests that take the BBP / I Ching / stellated-octahedron
 results further. See README.md in this folder for the list and findings.
 """

@@ -239,7 +239,7 @@ So the rules of Theorem 5 are the unique admissible reading whose output is a si
 
 ## 9. Further results (the `extensions/` tests)
 
-Twenty-eight further tests ([`extensions/README.md`](extensions/README.md)) sharpen the statements above.
+Twenty-nine further tests ([`extensions/README.md`](extensions/README.md)) sharpen the statements above.
 
 - **Uniqueness is generic; the shape is not.** Fixing $w_7 = 0$ leaves at most one formula for *any* constant, because the only relation among the slots (Theorem 2) involves $S_7$. What is particular to π is that its unique TIME-silent formula has the octahedral shape (test 04).
 - **Closure singles out π among the basis constants.** Every formula of type $(\ast)$ evaluates in the rational span of π, ln 2, ln 3, ln 5, arctan(1/2), √2 ln(1+√2) and √2 arctan(1/√2) (test 01). Of these seven, six have TIME-silent formulas, and only π has one whose weights sum to zero (test 02).
@@ -291,6 +291,44 @@ So do the walks of ln 2, √2 and e (tests 16, 27). This is empirical, not a the
 3. *Not by the statistics:* frequencies, closure time and the other aggregate properties of the walk are those of random digits (Proposition 9), and do not distinguish π from other constants.
 
 In one line: **the sequence is π, exactly and verifiably. The walk's statistics are ordinary, so they are not where the evidence for π lies.**
+
+## 11. The Clifford reading: the TIME axis carries BBP's base, period and pole
+
+Read each yang line as a basis vector of space: bottom $e_1$, middle $e_2$, top $e_3$. Each trigram becomes a basis element of the geometric algebra $\mathrm{Cl}(3,0)$:
+
+| Grade | Trigrams | Blades |
+|---|---|---|
+| 0 | Kun (mother) | $1$ |
+| 1 | Zhen, Kan, Gen (sons) | $e_1, e_2, e_3$ |
+| 2 | Xun, Li, Dui (daughters) | $e_2e_3,\ e_1e_3,\ e_1e_2$ |
+| 3 | Qian (father) | $I = e_1e_2e_3$ |
+
+**Proposition 10 (the structure).**
+- **(a)** The grades are $1, 3, 3, 1$: the layers mother, sons, daughters, father along the TIME axis.
+- **(b)** The centre of the algebra, the elements that commute with everything, is spanned by Kun and Qian, and $I^2 = -1$. The TIME axis is therefore a copy of $\mathbb C$, canonical up to the orientation $I \leftrightarrow -I$.
+- **(c)** The mother's family is the even subalgebra. It is closed under multiplication, and each daughter squares to $-1$: these are the quaternions. The father's family is the odd part.
+- **(d)** Multiplying by $I$ sends each trigram to its Fu Xi opposite, up to sign.
+- **(e)** Every element with grades 1 and 2 only (TIME-silent) squares onto the TIME axis: $(v + B)^2 = |v|^2 - |B|^2 + 2\,v\wedge B$. For BBP's weighting $W = 4e_3 - 2e_1 - e_1e_3 - e_1e_2$ this gives $W^2 = 18 - 8I$.
+
+**Proposition 11 (BBP's denominator lives on the TIME axis).** Let $z = (1+I)/\sqrt2$, which is Kun + Qian, normalised. Then:
+- $(1+I)^2 = 2I$ and $(1+I)^8 = 16$: the BBP base;
+- $z$ has order exactly 8: the BBP period;
+- the eight roots of $y^8 = 16$ in the centre are $(1+I)z^m$ for $m = 0, \ldots, 7$. These are the poles of the slot integrand (Theorem 2, Step 1), and the root $1 + I$ is the one that produces π (Theorem 4).
+
+*Proof.* Exact computation in $\mathrm{Cl}(3,0)$ (test 29); (e) is the identity $vB + Bv = 2\,v\wedge B$. $\square$
+
+**What this does and does not say.**
+- **It says** the complex numbers in which BBP's poles live can be taken to be the octahedron's own TIME axis, the centre of its algebra, and not an external $\mathbb C$. Kun + Qian is the number BBP is built on.
+- **The orientation.** The identification is fixed up to $I \leftrightarrow -I$, which swaps $1+I$ and $1-I$. The poles come in this conjugate pair and BBP is real, so its value does not depend on the orientation. This agrees with the achirality of the reading (test 22).
+- **It does not say** the weights come from $1+I$. Multiplying by $1+I$ does not produce BBP's weights from a simpler element. The link runs through the denominator: base, period, pole. The weights live on the ring of six children, and they square back onto the axis.
+
+**Two group structures.** The eight trigrams carry two additions:
+- **XOR**, line by line: changing lines, Clifford products, Hamming distance, the opposites. This is $\mathbb Z_2^3$.
+- **Addition mod 8**: the walk, BBP's slots, the eighth roots $z^m$. This is $\mathbb Z_8$.
+
+Place value, the *Shuo Gua*'s ranking, is the bijection between them. They agree on 36 of the 64 pairs, and agree for every trigram only for the steps 0 and 4, i.e. staying put or changing the bottom line.
+
+BBP and the walk are $\mathbb Z_8$ objects: cyclic, made of roots of unity, circular. The octahedron's selection conditions (parity, complement, TIME axis) are $\mathbb Z_2^3$ objects: they belong to the cube. Theorem 3 is where the two meet.
 
 ## References
 
