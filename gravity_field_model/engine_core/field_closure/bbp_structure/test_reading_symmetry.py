@@ -48,7 +48,7 @@ class ReadingSymmetry(Test):
         "reading still give pi after each such relabelling?"
     )
     reference = (
-        "Mechanism: research/exploratory/i-ching/why_pi_formal_derivation.md and "
+        "Mechanism: research/exploratory/i-ching/notes/why_pi_formal_derivation.md and "
         "why_pi_verification.py; series values to 100 digits with mpmath"
     )
     tolerance = 0.0

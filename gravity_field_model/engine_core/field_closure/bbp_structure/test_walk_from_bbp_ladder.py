@@ -48,7 +48,7 @@ class WalkFromBBPLadder(Test):
         "digit from its own rung, and is it then the same walk?"
     )
     reference = (
-        "Walk: research/exploratory/i-ching/closure_walk_proof_iching.py (closure at step 332); "
+        "Walk: research/exploratory/i-ching/scripts/closure_walk_proof_iching.py (closure at step 332); "
         "ladder: Bailey, Borwein, Plouffe (1997)"
     )
     tolerance = 0.0

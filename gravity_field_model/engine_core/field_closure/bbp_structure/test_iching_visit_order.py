@@ -84,7 +84,7 @@ class IChingVisitOrder(Test):
     )
     reference = (
         "Wilhelm, The I Ching or Book of Changes, trans. Baynes (1950), Shuo Kua chs. 3, 5, 10; "
-        "reading mechanism: research/exploratory/i-ching/why_pi_formal_derivation.md"
+        "reading mechanism: research/exploratory/i-ching/notes/why_pi_formal_derivation.md"
     )
     tolerance = 0.0
     level = Level.STANDARD
