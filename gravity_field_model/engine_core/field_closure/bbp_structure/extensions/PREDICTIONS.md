@@ -88,3 +88,5 @@ Compared with 1,000 random sequences, and with ln 2, √2 and e. Lower-tail p-va
 
 - **Prediction:** π is not more balanced than random digits. Its smallest lower-tail p is above 0.01, and the global p (smallest p, against the random sequences' own smallest p) is above 0.05.
 - **What would support the hypothesis:** a global p below 0.01 in the "more balanced" direction, or π below the 5th percentile on at least three of the five measures.
+
+**Outcome (test 28).** Prediction met. π's lower-tail p-values are 0.079 (digit balance), 0.73 (chamber), 0.39 (TIME axis), 0.64 (digit sum) and 0.75 (hexagram χ²); none is below the 5th percentile, and the global p is 0.34. ln 2, √2 and e are likewise ordinary (smallest p 0.27, 0.18, 0.30). On these five measures π balances exactly as random digits do, drifting by about √n.

@@ -1,6 +1,6 @@
-# Extensions: twenty-seven tests that take the results further
+# Extensions: twenty-eight tests that take the results further
 
-These tests build on [`../PROOF.md`](../PROOF.md). Each starts with a **Role** line, naming what it extends, and an **Expected** line, saying what a pass means. All twenty-seven pass. Tests 23–26 were pre-registered in [`PREDICTIONS.md`](PREDICTIONS.md), and two of their predictions failed; those tests record the outcome rather than being adjusted.
+These tests build on [`../PROOF.md`](../PROOF.md). Each starts with a **Role** line, naming what it extends, and an **Expected** line, saying what a pass means. All twenty-eight pass. Tests 23–26 and 28 were pre-registered in [`PREDICTIONS.md`](PREDICTIONS.md), and two of their predictions failed; those tests record the outcome rather than being adjusted.
 
 ## What they add
 
@@ -43,6 +43,7 @@ Silence on the TIME axis fixes one formula for *any* constant (test 04). What si
 | 16 Walk for other constants | π, ln 2, √2 and e all fall inside the random-digit range on the walk's closure step and chamber share. The walk does not single out π. |
 | 17 Octal digit uniformity | π's first 10,000 trigrams, singly (p = 0.94) and in consecutive pairs (p = 0.80), are as evenly spread as random digits. |
 | 27 The walk is π | The walk is a lossless re-encoding of π's digits: $d_n = (v_n - v_{n-1}) \bmod 8$ recovers all 10,000. Each step can be checked on its own against the BBP ladder: π's walk passes 200 of 200 checks, e's walk 24 (one in eight, as for unrelated digits). The 64 hexagram frequencies of both are as even as random digits. **The sequence identifies π exactly; the walk's statistics do not** (PROOF.md §10). |
+| 28 Self-balancing | Pre-registered. Does π stay closer to balance, digit by digit, than random digits? Five measures over 100,000 base-8 digits (digit counts, the two chambers, the TIME axis, the digit sum, the 64 hexagrams), scaled by √n: smallest lower-tail p = 0.079, global p = 0.34. **π drifts from balance by about √n, like random digits**, and so do ln 2, √2 and e. |
 
 ### 5. The reading rules confirmed, and rotation
 

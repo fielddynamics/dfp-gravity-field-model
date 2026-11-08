@@ -239,7 +239,7 @@ So the rules of Theorem 5 are the unique admissible reading whose output is a si
 
 ## 9. Further results (the `extensions/` tests)
 
-Twenty-seven further tests ([`extensions/README.md`](extensions/README.md)) sharpen the statements above.
+Twenty-eight further tests ([`extensions/README.md`](extensions/README.md)) sharpen the statements above.
 
 - **Uniqueness is generic; the shape is not.** Fixing $w_7 = 0$ leaves at most one formula for *any* constant, because the only relation among the slots (Theorem 2) involves $S_7$. What is particular to π is that its unique TIME-silent formula has the octahedral shape (test 04).
 - **Closure singles out π among the basis constants.** Every formula of type $(\ast)$ evaluates in the rational span of π, ln 2, ln 3, ln 5, arctan(1/2), √2 ln(1+√2) and √2 arctan(1/√2) (test 01). Of these seven, six have TIME-silent formulas, and only π has one whose weights sum to zero (test 02).
@@ -280,7 +280,8 @@ and $d_n$ is computable from the BBP formula alone, without $d_1, \ldots, d_{n-1
 - the closure step (test `test_hexagram_closure_null.py`);
 - digit and pair frequencies (test 17);
 - ten pre-registered properties of the pre-closure walk, with a trials factor (test 24);
-- the 64 hexagram frequencies (test 27).
+- the 64 hexagram frequencies (test 27);
+- five balance measures over 100,000 digits, pre-registered: π drifts from balance by about $\sqrt n$, as random digits do (test 28).
 
 So do the walks of ln 2, √2 and e (tests 16, 27). This is empirical, not a theorem. Even normality of π in base 8, which is unproved, would not by itself imply it, because $v_n$ depends on the whole prefix of digits and not on a block of fixed length.
 

@@ -86,7 +86,7 @@ These are documented by tests in this folder.
 
 ## 4. The tests
 
-Twenty-seven further tests, which sharpen these results, are in [`extensions/`](extensions/README.md). Tests 23–26 apply the standard of a particle-physics analysis: pre-registered predictions ([`extensions/PREDICTIONS.md`](extensions/PREDICTIONS.md)), a trials factor, a power check, and look-elsewhere audits of GFD's particle formulas.
+Twenty-eight further tests, which sharpen these results, are in [`extensions/`](extensions/README.md). Tests 23–26 apply the standard of a particle-physics analysis: pre-registered predictions ([`extensions/PREDICTIONS.md`](extensions/PREDICTIONS.md)), a trials factor, a power check, and look-elsewhere audits of GFD's particle formulas.
 
 Every test module starts with a **Role** line, naming the statement it checks, and an **Expected** line, saying what a pass means. All tests are expected to pass.
 
