@@ -16,6 +16,8 @@ Helpers:
 - closure_reading.py: the six-constraint face reading of why_pi_formal_derivation.md
 - iching_orders.py: the documented trigram orders, with sources
 
+The extensions/ subpackage holds twenty further tests (extensions/README.md).
+
 Every test module begins with a Role line (which theorem or finding it
 supports) and an Expected line (what a pass means). All tests are expected to
 pass.
