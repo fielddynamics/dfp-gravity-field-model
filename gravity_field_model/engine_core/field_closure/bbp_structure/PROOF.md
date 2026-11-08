@@ -239,7 +239,7 @@ So the rules of Theorem 5 are the unique admissible reading whose output is a si
 
 ## 9. Further results (the `extensions/` tests)
 
-Twenty-six further tests ([`extensions/README.md`](extensions/README.md)) sharpen the statements above.
+Twenty-seven further tests ([`extensions/README.md`](extensions/README.md)) sharpen the statements above.
 
 - **Uniqueness is generic; the shape is not.** Fixing $w_7 = 0$ leaves at most one formula for *any* constant, because the only relation among the slots (Theorem 2) involves $S_7$. What is particular to π is that its unique TIME-silent formula has the octahedral shape (test 04).
 - **Closure singles out π among the basis constants.** Every formula of type $(\ast)$ evaluates in the rational span of π, ln 2, ln 3, ln 5, arctan(1/2), √2 ln(1+√2) and √2 arctan(1/√2) (test 01). Of these seven, six have TIME-silent formulas, and only π has one whose weights sum to zero (test 02).
@@ -250,6 +250,46 @@ Twenty-six further tests ([`extensions/README.md`](extensions/README.md)) sharpe
 - **Where π comes from, more sharply.** The BBP numerator is $-(y-1)(y^2+2)(y^2+2y+2)$. It cancels four of the eight poles of the slot integrand and keeps $\pm\sqrt2$ and $1 \pm i$ (test 18).
 - **Only three dimensions.** Generalise BBP to base $2^{D+1}$ and period $2^D$. The poles of the slot integrand are the roots of $y^{2^D} = 2^{D+1}$, at radius $2^{(D+1)/2^D}$. The radius is $\sqrt2$, and the poles include the Gaussian integer $1+i$ that produces π, exactly when $2(D+1) = 2^D$, i.e. only at $D = 3$. PSLQ finds no formula for π at $D = 1, 2, 4$ (coefficients up to $10^6$) and recovers BBP at $D = 3$ (test 23). The condition $2(D+1) = 2^D$ is the one GFD uses for spatial uniqueness; here it is the condition for a Gaussian-integer pole.
 - **The walk before closure, at a blind-analysis standard.** Ten statistics of π's pre-closure segment, fixed in advance (`extensions/PREDICTIONS.md`), give a smallest local p of 0.33 and a global p of 0.97 after the trials factor. The same battery detects a walk with a 60% tendency to stay in one tetrahedron in 59% of trials, so a modest real effect would have been seen (test 24).
+
+## 10. The sequence that drives the walk
+
+This section states exactly in what sense the closure walk "is π", so that no ambiguity remains between the formula, the digits and the walk's statistics.
+
+**Definitions.** Let $d_0 = 3$ and let $d_1, d_2, \ldots \in \{0,\ldots,7\}$ be the base-8 digits of π, so $\pi = \sum_{n\ge0} d_n 8^{-n}$. The **walk** is
+$$v_n = (d_0 + d_1 + \cdots + d_n) \bmod 8, \qquad n \ge 0,$$
+a sequence of trigrams (vertices of the cube). The **hexagrams** are the pairs $h_n = (v_{n-1}, v_n)$, $n \ge 1$. The walk **closes** at the least $N$ with $\{h_1, \ldots, h_N\}$ equal to all $64$ pairs; for π, $N = 332$.
+
+Three levels must be kept apart:
+- **the rule** that produces the number (Theorems 2–6),
+- **the sequence** of its digits and the walk built from them,
+- **the statistics** of that walk.
+
+**Theorem 2–3, restated as a selection.** Among formulas of type $(\ast)$, those that are TIME-silent, closed and split $2+2$ across the families evaluate to a rational multiple of a single basis constant only for π, and the formula is BBP; the I Ching's rank order is the only order of the children that writes it out (Theorems 3, 5, 6; tests 02–04, 21). *The rule selects π.*
+
+**Proposition 7 (the walk is the sequence).** The map $\Phi : (d_n)_{n\ge0} \mapsto (v_n)_{n\ge0}$ is a bijection from digit sequences with $d_0 = 3$ to walks with $v_0 = 3$. Its inverse is
+$$d_n = (v_n - v_{n-1}) \bmod 8 \quad (n \ge 1).$$
+*Proof.* $v_n - v_{n-1} \equiv d_n \pmod 8$ and $0 \le d_n \le 7$. $\square$
+
+So the walk of π loses nothing: it is π, re-encoded as a path on the cube.
+
+**Proposition 8 (each step is checkable on its own).** For every $n \ge 1$,
+$$v_n - v_{n-1} \equiv d_n \pmod 8,$$
+and $d_n$ is computable from the BBP formula alone, without $d_1, \ldots, d_{n-1}$ (§6; `bbp_ladder.py`). Hence any proposed walk $w$ can be tested at any step $n$ independently of all other steps. If $w$ is not π's walk, it fails at every step where its increment differs from $d_n$. For the walk of an unrelated constant the increments agree with π's digits about one time in eight, so $k$ independent checks accept it with probability about $8^{-k}$. For e, 24 of 200 checks pass (0.12), and π's walk passes all 200 (test 27).
+
+**Proposition 9 (the statistics are those of random digits).** If the digits were independent and uniform, $(v_n)$ would be a uniform random walk on $\mathbb Z_8$; each $v_n$ would be uniform and independent of $d_{n+1}$, so every hexagram would have frequency $1/64$, and the closure time would be close to the coupon-collector value $64 H_{64} \approx 304$. π's walk agrees with this model in every statistic tested:
+- the closure step (test `test_hexagram_closure_null.py`);
+- digit and pair frequencies (test 17);
+- ten pre-registered properties of the pre-closure walk, with a trials factor (test 24);
+- the 64 hexagram frequencies (test 27).
+
+So do the walks of ln 2, √2 and e (tests 16, 27). This is empirical, not a theorem. Even normality of π in base 8, which is unproved, would not by itself imply it, because $v_n$ depends on the whole prefix of digits and not on a block of fixed length.
+
+**Corollary (where the identification lives).**
+1. *By the rule:* the stellated octahedron, read by its own conditions, selects π (Theorems 2–6).
+2. *By the sequence:* the walk is π's digits (Proposition 7), and any step can be verified against π alone (Proposition 8).
+3. *Not by the statistics:* frequencies, closure time and the other aggregate properties of the walk are those of random digits (Proposition 9), and do not distinguish π from other constants.
+
+In one line: **the sequence is π, exactly and verifiably. The walk's statistics are ordinary, so they are not where the evidence for π lies.**
 
 ## References
 
