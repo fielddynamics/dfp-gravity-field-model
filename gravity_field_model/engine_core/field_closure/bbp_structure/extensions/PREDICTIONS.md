@@ -48,3 +48,24 @@ Research note `33_weinberg_angle_planck_mass_from_K4.md` gives
 $\sin^2\theta_W = \tfrac{3}{13}(1 + \alpha/4 + 13\alpha^2/8) = 0.231210$, compared there with the MS-bar value 0.23121(4).
 
 - **Prediction:** the current PDG value (2024) differs from the one used. The formula will be more than 1.5σ from it. With the same grammar, more than ten menu formulas lie within 1σ of the current value, so a formula of this form can be found for either value.
+
+---
+
+## Outcomes (added after the runs; the predictions above are unchanged)
+
+| Test | Prediction | Outcome | Met? |
+|---|---|---|---|
+| 23 | Pole radius √2, and the pole 1 + i, only at D = 3 (D ≤ 64) | Only D = 3 | yes |
+| 23 | No π formula at D = 1, 2, 4; BBP recovered at D = 3 | As predicted | yes (not blind) |
+| 24 | Smallest local p > 0.01 | 0.33 (TIME-axis share) | yes |
+| 24 | Global p > 0.05 | 0.97 | yes |
+| 24 | Injected signal (60% same-tetrahedron) detected in most trials | 59% of trials | yes |
+| 25 | More than 20% of fake targets fitted as closely as Form IV | 2% | **no** |
+| 26 | Formula more than 1.5σ from PDG 2024 | 2.0σ low | yes |
+| 26 | More than ten menu formulas within 1σ of PDG 2024 | 9 | **no** |
+
+Two predictions failed, and the tests record that rather than being adjusted to pass.
+
+- **Test 25.** The grammar is less flexible than expected. Exploring afterwards (and labelled as such in the test): the agreement comes from one step, the denominator 1 + α/2 of Form II, which fits as closely as it does about 1 time in 150. The α² and α³ terms add no evidence. With the denominator and the ratios tried counted as trials, the global significance is about 2σ at most (local p ≈ 0.007, times a trials factor of at least six).
+- **Test 26.** The count was 9, not more than 10. The conclusion does not change: every fake value in the range has a menu formula within 1σ, and (3/13)(1 + α/4 + 8α²) fits the current value by changing one coefficient.
+- **Procedure note, test 26.** The first run used a menu without denominator 8, which left out the formula's own coefficient 13/8. That was a construction error, so the menu was corrected and the test rerun. Both runs' counts are given in the test.
